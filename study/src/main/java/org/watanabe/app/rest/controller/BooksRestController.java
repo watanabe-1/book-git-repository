@@ -266,7 +266,8 @@ public class BooksRestController {
     bdddByMonthSumAmount.setBackgroundColor(Arrays.asList(RGB_WHITE));
     bdddByMonthSumAmount.setBorderColor(Arrays.asList(borderColorsByLine.get(indexByLine)));
     bdddByMonthSumAmount.setData(new ArrayList<Long>(booksByMonthSumAmountData.values()));
-    dataSets.add(bdddByMonthSumAmount);
+    // lineの先頭に追加
+    dataSets.add(booksByMethodMap.keySet().size(), bdddByMonthSumAmount);
 
 
     BooksChartByMonthData bdd = new BooksChartByMonthData();
