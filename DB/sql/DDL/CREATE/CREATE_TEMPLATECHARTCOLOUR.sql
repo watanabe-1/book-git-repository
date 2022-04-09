@@ -1,0 +1,20 @@
+-- チャートカラーマスタテーブル削除
+DROP TABLE IF EXISTS TEMPLATECHARTCOLOUR;
+-- チャートカラーマスタ(図の表示に使用するrgbaの組み合わせを管理するマスタ)
+CREATE TABLE TEMPLATECHARTCOLOUR (
+  SERIAL_KEY SERIAL NOT NULL UNIQUE, -- シリアルキー
+  TEMPLATE_ID VARCHAR(50) NOT NULL, -- 色の組み合わせID
+  TEMPLATE_NAME VARCHAR(255) NOT NULL, -- 色の組み合わせ名
+  USER_ID VARCHAR(50) NOT NULL, -- ユーザーID
+  ACTIVE VARCHAR(100) NOT NULL DEFAULT '0', -- 有効化フラグ(現在設定されている 1 = 有効 それ以外 = 無効)
+  SEED_COEFF_R INTEGER NOT NULL, -- シード値算出に使用する係数(R)(この係数を用いてシード値を算出しRGBAのRの値を算出する)
+  SEED_COEFF_G INTEGER NOT NULL, -- シード値算出に使用する係数(G)(この係数を用いてシード値を算出しRGBAのGの値を算出する)
+  SEED_COEFF_B INTEGER NOT NULL, -- シード値算出に使用する係数(B)(この係数を用いてシード値を算出しRGBAのBの値を算出する)
+  NOTE VARCHAR(255) NULL, -- メモ
+  INS_DATE TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 登録日時
+  INS_USER VARCHAR(50) NOT NULL DEFAULT CURRENT_USER, -- 登録ユーザー
+  UPD_DATE TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- 更新日時
+  UPD_USER VARCHAR(50) NOT NULL DEFAULT CURRENT_USER, -- 更新ユーザー
+  PRIMARY KEY (TEMPLATE_ID) -- プライマリーキー
+);
+
