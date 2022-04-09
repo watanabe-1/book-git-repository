@@ -1,3 +1,7 @@
+#試し
+test copy.html
+test.html
+
 #db
 database.properties
 
@@ -65,3 +69,4 @@ hs_err_pid*
 
 
 
+/.metadata/
