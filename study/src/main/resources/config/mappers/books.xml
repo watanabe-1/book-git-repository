@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.watanabe.app.study.mapper.BooksMapper">
+	<select id="findAll"
+		resultType="org.watanabe.app.study.entity.Books">
+		select SERIAL_KEY, BOOKS_ID, BOOKS_TYPE, BOOKS_DATE,
+		BOOKS_PLACE, CAT_CODE, BOOKS_METHOD, BOOKS_AMMOUNT, INS_DATE,
+		INS_USER, UPD_DATE, UPD_USER from BOOKS
+		order by BOOKS_ID
+	</select>
+	<select id="findOne"
+		resultType="org.watanabe.app.study.entity.Books">
+		select SERIAL_KEY, BOOKS_ID, BOOKS_TYPE, BOOKS_DATE,
+		BOOKS_PLACE, CAT_CODE, BOOKS_METHOD, BOOKS_AMMOUNT, INS_DATE,
+		INS_USER, UPD_DATE, UPD_USER from BOOKS
+		where BOOKS_ID = #{booksId}
+	</select>
+	<insert id="saveBulk" parameterType="java.util.List">
+		insert into BOOKS (BOOKS_ID, BOOKS_TYPE, BOOKS_DATE, BOOKS_PLACE,
+		CAT_CODE, BOOKS_METHOD, BOOKS_AMMOUNT, INS_DATE, INS_USER, UPD_DATE,
+		UPD_USER) values
+		<foreach collection="booList" item="boo" separator=",">
+			(#{boo.booksId}, #{boo.booksType}, #{boo.booksDate},
+			#{boo.booksPlace}, #{boo.catCode}, #{boo.booksMethod},
+			#{boo.booksAmmount}, #{boo.insDate}, #{boo.insUser}, #{boo.updDate},
+			#{boo.updUser})
+		</foreach>
+	</insert>
+	<insert id="saveOne">
+		insert into BOOKS (BOOKS_ID, BOOKS_TYPE, BOOKS_DATE,
+		BOOKS_PLACE, CAT_CODE, BOOKS_METHOD, BOOKS_AMMOUNT, INS_DATE,
+		INS_USER, UPD_DATE, UPD_USER)
+		values (#{booksId}, #{booksType}, #{booksDate}, #{booksPlace}, #{catCode},
+		#{booksMethod}, #{booksAmmount}, #{insDate}, #{insUser}, #{updDate},
+		#{updUser})
+	</insert>
+	<update id="updateAll">
+		update BOOKS set BOOKS_ID = #{booksId}, BOOKS_TYPE =
+		#{booksType}, BOOKS_DATE = #{booksDate}, BOOKS_PLACE = #{booksPlace},
+		CAT_CODE = #{catCode}, BOOKS_METHOD = #{booksMethod}, BOOKS_AMMOUNT =
+		#{booksAmmount}, INS_DATE = #{insDate}, INS_USER = #{insUser},
+		UPD_DATE = #{updDate}, UPD_USER = #{updUser}
+	</update>
+	<update id="updateOne">
+		update BOOKS set BOOKS_ID = #{booksId}, BOOKS_TYPE =
+		#{booksType}, BOOKS_DATE = #{booksDate}, BOOKS_PLACE = #{booksPlace},
+		CAT_CODE = #{catCode}, BOOKS_METHOD = #{booksMethod}, BOOKS_AMMOUNT =
+		#{booksAmmount}, INS_DATE = #{insDate}, INS_USER = #{insUser},
+		UPD_DATE = #{updDate}, UPD_USER = #{updUser}
+		where BOOKS_ID = #{booksId}
+	</update>
+	<delete id="deleteAll">
+		delete from BOOKS
+	</delete>
+	<delete id="deleteOne">
+		delete from BOOKS
+		where BOOKS_ID = #{booksId}
+	</delete>
+	<delete id="deleteByBooksDateAndBooksType">
+		delete from BOOKS
+		where BOOKS_DATE BETWEEN #{start} AND #{end}
+		AND BOOKS_TYPE = #{booksType}
+	</delete>
+
+	<select id="findByBooksDateAndBooksTypeJoinCategory"
+		resultMap="byBooksDateAndBooksTypeMap">
+		select
+			B.BOOKS_ID -- 家計簿ID
+			, B.BOOKS_TYPE -- 帳簿の種類(収入、支出を選ぶ)
+			, B.BOOKS_DATE -- 日付(収入日、購入日)
+			, B.BOOKS_PLACE -- 場所(収入元、購入先)
+			, B.CAT_CODE -- カテゴリーコード
+			, C.CAT_NAME -- カテゴリー名
+			, C.IMG_ID -- 画像ID
+			, I.IMG_PATH --画像パス
+			, I.IMG_NAME --画像名
+			, B.BOOKS_METHOD -- 方法(受け取り方、支払い方)
+			, B.BOOKS_AMMOUNT -- 金額
+			, B.INS_DATE -- 登録日時
+			, B.INS_USER -- 登録ユーザー
+			, B.UPD_DATE -- 更新日時
+			, B.UPD_USER -- 更新ユーザー
+		from
+			BOOKS B
+				left outer join CATEGORY C
+					on B.CAT_CODE = C.CAT_CODE
+				left outer join IMAGE I
+					on C.IMG_ID = I.IMG_ID
+		where
+			B.BOOKS_DATE BETWEEN #{start} AND #{end}
+			and B.BOOKS_TYPE = #{booksType}
+		order by
+			BOOKS_DATE
+	</select>
+
+	<!-- テーブルのSELECT結果をどのようにマッピングするか指定 -->
+	<resultMap id="byBooksDateAndBooksTypeMap"
+		type="org.watanabe.app.study.entity.Books">
+		<id property="booksId" column="BOOKS_ID" />
+		<result property="booksType" column="BOOKS_TYPE" />
+		<result property="booksDate" column="BOOKS_DATE" />
+		<result property="booksPlace" column="BOOKS_PLACE" />
+		<result property="catCode" column="CAT_CODE" />
+		<result property="booksMethod" column="BOOKS_METHOD" />
+		<result property="booksAmmount" column="BOOKS_AMMOUNT" />
+		<result property="insDate" column="INS_DATE" />
+		<result property="insUser" column="INS_USER" />
+		<result property="updDate" column="UPD_DATE" />
+		<result property="updUser" column="UPD_USER" />
+		<association property="catCodes"
+			resultMap="byBooksDateAndBooksTypeMapdetailResultCategory" />
+	</resultMap>
+
+	<resultMap
+		id="byBooksDateAndBooksTypeMapdetailResultCategory"
+		type="org.watanabe.app.study.entity.Category">
+		<result property="catCode" column="CAT_CODE" />
+		<result property="catName" column="CAT_NAME" />
+		<association property="imgIds"
+			resultMap="byBooksDateAndBooksTypeMapdetailResultImage" />
+	</resultMap>
+
+	<resultMap id="byBooksDateAndBooksTypeMapdetailResultImage"
+		type="org.watanabe.app.study.entity.Image">
+		<result property="imgId" column="IMG_ID" />
+		<result property="imgPath" column="IMG_PATH" />
+		<result property="imgName" column="IMG_NAME" />
+	</resultMap>
+</mapper>

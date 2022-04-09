@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <title>確認画面</title>
+  </head>
+
+  <body>
+    <form th:action="@{/hoge/result}" th:object="${hogeForm}" method="post">
+      <input type="text" th:field="*{hogeName}" readonly="readonly" />
+      <p th:if="${#fields.hasErrors('hogeName')}" th:errors="*{hogeName}"></p>
+      <input type="submit" />
+      <br />
+      <select id="singleSelect" name="selectedItem" disabled>
+        <option value="">---</option>
+        <option
+          th:each="item : ${selectHogeItems}"
+          th:value="${item.key}"
+          th:text="${item.value}"
+          th:selected="${item.key} == *{selectedHogeItem}"
+        ></option>
+      </select>
+      <input type="hidden" name="selectedItem" value="*{selectedHogeItem}" />
+      <br />
+      <input
+        type="radio"
+        name="hogeRadio"
+        th:each="item : ${selectHogeRadioItems}"
+        th:value="${item.key}"
+        th:text="${item.value}"
+        th:field="*{hogeRadio}"
+        disabled
+      />
+      <input type="hidden" name="hogeRadio" value="*{hogeRadio}" />
+      <br />
+      <input
+        type="checkbox"
+        name="hogeCheckBox"
+        th:each="item : ${selectHogeCheckBoxItems}"
+        th:value="${item.key}"
+        th:text="${item.value}"
+        th:field="*{hogeCheckBox}"
+        disabled
+      />
+      <input type="hidden" name="hogeCheckBox" value="*{hogeCheckBox}" />
+      <div class="button">
+        <button type="submit">内容を送信</button>
+      </div>
+    </form>
+    <span th:text="${message}"></span>
+  </body>
+</html>

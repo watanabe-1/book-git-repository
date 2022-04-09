@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <title>入力画面</title>
+  </head>
+  <body>
+    <form th:action="@{/hoge/confirm}" th:object="${hogeForm}" method="post">
+      <p>
+        名前：<br />
+        <input type="text" th:field="*{hogeName}" />
+      </p>
+
+      <p th:if="${#fields.hasErrors('hogeName')}" th:errors="*{hogeName}"></p>
+      <br />
+      <select id="singleHogeSelect" name="selectedHogeItem">
+        <option value="">---</option>
+        <option
+          th:each="item : ${selectHogeItems}"
+          th:value="${item.key}"
+          th:text="${item.value}"
+          th:selected="${item.key} == *{selectedHogeItem}"
+        ></option>
+      </select>
+      <p
+        th:if="${#fields.hasErrors('selectedHogeItem')}"
+        th:errors="*{selectedHogeItem}"
+      ></p>
+      <br />
+      <input
+        type="radio"
+        name="hogeRadio"
+        th:each="item : ${selectHogeRadioItems}"
+        th:value="${item.key}"
+        th:text="${item.value}"
+        th:field="*{hogeRadio}"
+      />
+      <p th:if="${#fields.hasErrors('hogeRadio')}" th:errors="*{hogeRadio}"></p>
+      <br />
+      <input
+        type="checkbox"
+        name="hogeCheckBox"
+        th:each="item : ${selectHogeCheckBoxItems}"
+        th:value="${item.key}"
+        th:text="${item.value}"
+        th:field="*{hogeCheckBox}"
+      />
+      <p
+        th:if="${#fields.hasErrors('hogeCheckBox')}"
+        th:errors="*{hogeCheckBox}"
+      ></p>
+      <div class="button">
+        <button type="submit">内容を送信</button>
+      </div>
+    </form>
+    <span th:text="${message}"></span>
+  </body>
+</html>

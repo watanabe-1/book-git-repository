@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ja">
+
+<head>
+  <style th:fragment="sidebar_css_fragment">
+    .side-navbar {
+      margin-left: -260px;
+      transition: 0.5s;
+    }
+
+    .my-container {
+      transition: 0.5s;
+    }
+
+    /* for sidebar section */
+    .active-nav {
+      margin-left: 0;
+    }
+
+    /* for main section */
+    .active-cont {
+      width: 100%;
+      margin-left: 0;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div>
+    <a th:fragment="sidebar_btn_fragment" class="btn" id="menu-btn">
+      <img src="/study/images/sidebar/sidebar_menu_icon.jpg" class="mh-10 mw-10" width="30" height="30">
+    </a>
+  </div>
+  <nav th:fragment="sidebar_fragment" id="sidebarMenu"
+    class="active-nav col-md-3 col-lg-2 d-md-block bg-light side-navbar collapse">
+    <div class="position-sticky pt-3">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" th:href="@{/}">
+            <span data-feather="home"></span>
+            ダッシュボード
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/hoge/input}">
+            <span data-feather="package"></span>
+            課題1(hoge)
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/category/input}">
+            <span data-feather="package"></span>
+            カテゴリー_登録
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/category/list}">
+            <span data-feather="package"></span>
+            カテゴリー_確認
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/books/input}">
+            <span data-feather="package"></span>
+            家計簿_登録
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/books/list}">
+            <span data-feather="package"></span>
+            家計簿_一覧
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/chartColour/index}">
+            <span data-feather="package"></span>
+            図の色確認
+          </a>
+        </li>
+        <li class="nav-item" sec:authorize="hasRole('ROLE_SYSTEM')">
+          <a class="nav-link" th:href="@{/system/account/}">
+            <span data-feather="users"></span>
+            アカウント
+          </a>
+        </li>
+        <li class="nav-item">
+          <form th:action="@{/logout}" name="logout" method="post">
+            <a class="nav-link" href="javascript:logout.submit()">
+              <span data-feather="log-out"></span>
+              ログアウト
+            </a>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- CSS script ボタンクリック時にクラスがなかったら付与あったら削除することで、出し入れを行う-->
+  <script th:fragment='sidebar_js_fragment'>
+    const menu_btn = document.querySelector('#menu-btn');
+    const sidebar = document.querySelector('#sidebarMenu');
+    const container = document.querySelector('.my-container');
+    menu_btn.addEventListener('click', () => {
+      sidebar.classList.toggle('active-nav');
+      container.classList.toggle('active-cont');
+    });
+  </script>
+
+</body>
+
+
+</html>

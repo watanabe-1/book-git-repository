@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}">
+
+<head>
+	<title>登録済みカテゴリー情報一覧</title>
+</head>
+
+<body>
+	<div
+		class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+		<h1 class="h3">カテゴリー一覧</h1>
+		<div class="btn-group ml-auto">
+			<a class="btn btn-link" th:href="@{/category/input}">
+				<span data-feather="user-plus"></span>
+				カテゴリー登録
+			</a>
+		</div>
+	</div>
+	<div class="container">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>カテゴリーコード</th>
+					<th>カテゴリー名</th>
+					<th>カテゴリータイプ</th>
+					<th>メモ</th>
+					<th>画像タイプ</th>
+					<th>画像ID</th>
+					<th>アクティブフラグ</th>
+					<th>挿入日時</th>
+					<th>挿入ユーザー</th>
+					<th>更新日時</th>
+					<th>更新ユーザー</th>
+					<th>画像</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="cat : ${catlist}" th:object="${cat}">
+					<td class="center" th:text="${cat.catCode}"></td>
+					<td th:text="${cat.catName}"></td>
+					<td class="center" th:text="${cat.catType}"></td>
+					<td class="center" th:text="${cat.note}"></td>
+					<td th:text="${cat.imgType}"></td>
+					<td th:text="${cat.imgIds.imgId}"></td>
+					<td th:text="${cat.active}"></td>
+					<td class="center" th:text="${#dates.format(cat.updDate, 'yyyy/MM/dd')}"></td>
+					<td th:text="${cat.updUser}"></td>
+					<td class="center" th:text="${#dates.format(cat.insDate, 'yyyy/MM/dd')}"></td>
+					<td th:text="${cat.insUser}"></td>
+					<td><img th:src="@{${cat.imgIds.imgPath + '/' + cat.imgIds.imgName}}" class="mh-100 mw-100"
+							width="50" height="30" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</body>
+
+</html>

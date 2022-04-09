@@ -1,0 +1,175 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.watanabe.app</groupId>
+	<artifactId>study</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<properties>
+		<!-- Generic properties -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+		<!-- Servlet version -->
+		<servlet.version>4.0.1</servlet.version>
+		<!-- Spring framework version -->
+		<spring-framework.version>5.3.16</spring-framework.version>
+		<!-- Thymeleaf -->
+		<thymeleaf.version>3.0.14.RELEASE</thymeleaf.version>
+		<!-- Bean Validation API version -->
+		<validation-api.version>2.0.1.Final</validation-api.version>
+		<!-- Hibernate Validator version -->
+		<hibernate-validator.version>5.3.6.Final</hibernate-validator.version>
+		<!-- PostgreSQL version -->
+		<postgresql.version>42.3.3</postgresql.version>
+		<!-- Commons DBCP2 version -->
+		<commons-dbcp2.version>2.9.0</commons-dbcp2.version>
+		<!-- MyBatis version -->
+		<mybatis.version>3.5.6</mybatis.version>
+		<!-- MyBatis Spring version -->
+		<mybatis-spring.version>2.0.0</mybatis-spring.version>
+		<!-- Apache Commons IO version -->
+		<apache-commons-io.version>2.11.0</apache-commons-io.version>
+		<!-- Lombok version -->
+		<lombok.version>1.18.22</lombok.version>
+		<!-- Logback version -->
+		<logback.version>1.2.10</logback.version>
+		<!-- 例外ハンドリング -->
+		<!-- terasoluna-gfw version -->
+		<terasoluna-gfw.version>5.7.0.RELEASE</terasoluna-gfw.version>
+	</properties>
+
+	<dependencies>
+		<!-- Servlet -->
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet.version}</version>
+			<!-- コンパイル時のみ依存 -->
+			<!-- 実行時はTomcatライブラリを使用するため -->
+			<scope>provided</scope>
+		</dependency>
+		<!-- Spring MVC -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${spring-framework.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-web</artifactId>
+			<version>${spring-framework.version}</version>
+		</dependency>
+		<!-- Thymeleaf -->
+		<dependency>
+			<groupId>org.thymeleaf</groupId>
+			<artifactId>thymeleaf</artifactId>
+			<version>${thymeleaf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.thymeleaf</groupId>
+			<artifactId>thymeleaf-spring5</artifactId>
+			<version>${thymeleaf.version}</version>
+		</dependency>
+		<!-- Bean Validation API -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>${validation-api.version}</version>
+		</dependency>
+		<!-- hibernate-validator ver up のために追加したが結局あげれなかった
+		    <dependency>
+			    <groupId>jakarta.validation</groupId>
+			    <artifactId>jakarta.validation-api</artifactId>
+			    <version>3.0.1</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.glassfish</groupId>
+			    <artifactId>jakarta.el</artifactId>
+			    <version>4.0.1</version>
+			</dependency>
+		-->
+		<!-- Hibernate Validator -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>${hibernate-validator.version}</version>
+		</dependency>
+		<!-- Spring JDBC -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring-framework.version}</version>
+		</dependency>
+		<!-- PostgreSQL -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>${postgresql.version}</version>
+		</dependency>
+		<!-- Commons DBCP2 -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<version>${commons-dbcp2.version}</version>
+		</dependency>
+		<!-- MyBatis -->
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis</artifactId>
+			<version>${mybatis.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mybatis</groupId>
+			<artifactId>mybatis-spring</artifactId>
+			<version>${mybatis-spring.version}</version>
+		</dependency>
+		<!-- Spring Aspects -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aspects</artifactId>
+			<version>${spring-framework.version}</version>
+		</dependency>
+		<!-- Apache Commons IO  -->
+		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>${apache-commons-io.version}</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+		<!--terasoluna-gfw-web-->
+		<!--https://jar-download.com/artifacts/org.terasoluna.gfw/terasoluna-gfw-web/5.7.0.RELEASE-->
+		<dependency>
+			<groupId>org.terasoluna.gfw</groupId>
+			<artifactId>terasoluna-gfw-web</artifactId>
+			<version>${terasoluna-gfw.version}</version>
+		</dependency>
+
+		<!--terasoluna-gfw-common-->
+		<!--https://jar-download.com/artifacts/org.terasoluna.gfw/terasoluna-gfw-common/5.7.0.RELEASE-->
+		<dependency>
+			<groupId>org.terasoluna.gfw</groupId>
+			<artifactId>terasoluna-gfw-common</artifactId>
+			<version>${terasoluna-gfw.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+			<version>2.13.2</version>
+		</dependency>
+	</dependencies>
+</project>

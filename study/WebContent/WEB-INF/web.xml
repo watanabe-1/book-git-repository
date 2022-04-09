@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" version="4.0">
+
+	<!-- ビジネスロジックのBean定義ファイル -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:/config/spring.xml</param-value>
+	</context-param>
+
+	<!-- リスナーを登録 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!--org.terasoluna.gfw.web.logging.HttpSessionEventLoggingListenerは、
+	セッションの生成・破棄・活性・非活性、セッションへの属性の追加・削除のタイミング
+	でdebugログを出力するためのリスナークラスである。 -->
+	<!--
+    <listener>
+        <listener-class>org.terasoluna.gfw.web.logging.HttpSessionEventLoggingListener</listener-class>
+    </listener>
+	-->
+
+	<!-- エンコーディングフィルタ  -->
+	<filter>
+		<filter-name>characterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+
+	<!-- multipart-config(ファイルアップロード用フィルタ) -->
+	<filter>
+		<filter-name>MultipartFilter</filter-name>
+		<filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+	</filter>
+
+	<!-- 致命的なエラー、Spring MVC管理外で発生する例外を、
+	 ログに出力するためのFilterクラス（ExceptionLoggingFilter）を、bean定義とweb.xmlに追加する。-->
+	<!--
+	<filter>
+-->
+	<!-- フィルター名を指定する。spring-mvc.xmlに定義したExceptionLoggingFilterのbean名と、一致させる-->
+	<!--
+	    <filter-name>exceptionLoggingFilter</filter-name>
+-->
+	<!-- フィルタークラスを指定する。org.springframework.web.filter.DelegatingFilterProxy固定。-->
+	<!--
+	    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+-->
+
+	<!--MDCの内容をクリアするMDCClearFilterを設定する。
+        各種MDCPutFilterが追加したMDCへの値を、このFilterが消去する。 -->
+	<!--
+	<filter>
+    <filter-name>MDCClearFilter</filter-name>
+    <filter-class>org.terasoluna.gfw.web.logging.mdc.MDCClearFilter</filter-class>
+	</filter>
+	-->
+
+	<!-- XTrackMDCPutFilterを設定する。XTrackMDCPutFilterはキー”X-Track”にリクエストIDをputする。 -->
+	<!--
+	<filter>
+	    <filter-name>XTrackMDCPutFilter</filter-name>
+	    <filter-class>org.terasoluna.gfw.web.logging.mdc.XTrackMDCPutFilter</filter-class>
+	</filter>
+	-->
+
+	<!-- UserIdMDCPutFilterを設定する。UserIdMDCPutFilterはキー”USER”にユーザーIDをputする。 -->
+	<!--
+	<filter>
+	    <filter-name>UserIdMDCPutFilter</filter-name>
+	    <filter-class>org.terasoluna.gfw.security.web.logging.UserIdMDCPutFilter</filter-class>
+	</filter>
+	-->
+
+	<!-- フィルタは以下のfilter-mappingに記載した順に実行される -->
+	<filter-mapping>
+		<filter-name>characterEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+		<filter-name>MultipartFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!--
+	<filter-mapping>
+	    <filter-name>exceptionLoggingFilter</filter-name>
+-->
+	<!-- フィルターを適用するURLパターンを指定する。
+        致命的なエラー、Spring MVC管理外をログ出力するため、/*を推奨する。-->
+	<!--
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+-->
+	<!--
+	<filter-mapping>
+	    <filter-name>MDCClearFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+	    <filter-name>XTrackMDCPutFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<filter-mapping>
+	    <filter-name>UserIdMDCPutFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	</filter-mapping>
+	-->
+
+	<!-- ディスパッチャーサーブレット -->
+	<servlet>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- Spring MVCのBean定義ファイル -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:/config/spring-mvc.xml</param-value>
+		</init-param>
+		<!-- multipart-config(ファイルアップロード用) -->
+		<multipart-config>
+			<!-- location>/WebContent/temp</location> -->
+			<max-file-size>20848820</max-file-size>
+			<max-request-size>418018841</max-request-size>
+			<file-size-threshold>1048576</file-size-threshold>
+		</multipart-config>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	<error-page>
+		<location>/errors</location>
+	</error-page>
+
+</web-app>

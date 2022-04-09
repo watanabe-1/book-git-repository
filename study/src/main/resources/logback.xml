@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<!-- プロパティファイルの読み込み(環境依存の外部化) -->
+	<!-- <property> タグの file 属性を指定すれば、別途作成したプロパティファイルを読み込める。 -->
+	<!-- property file="config/properties/logger.properties" /> -->
+	<!-- file 属性の代わりに resource 属性を指定すれば、クラスパス上のファイルを指定することもできる。 -->
+	<property resource="./config/properties/logger.properties" />
+	<!-- 以下の用に直接変数宣言も可 -->
+	<!-- property name="app.log.dir" value="/logs" /> -->
+
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<!-- (1) -->
+		<encoder>
+			<pattern>
+				<![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tthread:%thread\tX-Track:%X{X-Track}\tlevel:%-5level\tlogger:%-48logger{48}\tmessage:%msg%n]]>
+			</pattern>			<!-- (2) -->
+		</encoder>
+	</appender>
+
+	<appender name="APPLICATION_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- (3) -->
+		<!-- ${<変数名>:-<デフォルト値>} という形式で、変数が定義されていなかった場合のデフォルト値を指定できる。 -->
+		<file>${app.log.dir:-/logs}/projectName-application.log</file>		<!-- (4) -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${app.log.dir:-/logs}${app.log.bk:-/bk}/projectName-application-%d{yyyyMMddHH}.log</fileNamePattern>			<!-- (5)　HHまでしていしているため1時間ごとにファイルが切り替わる -->
+			<maxHistory>25</maxHistory>			<!-- (6) 今は削除されないように25にしておく -->
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>			<!-- (7) -->
+			<pattern>
+				<![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tthread:%thread\tUSER:%X{USER}\tX-Track:%X{X-Track}\tlevel:%-5level\tlogger:%-48logger{48}\tmessage:%msg%n]]>
+			</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="MONITORING_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- (8) -->
+		<file>${app.log.dir:-/logs}/projectName-monitoring.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${app.log.dir:-/logs}${app.log.bk:-/bk}/projectName-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>
+				<![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tX-Track:%X{X-Track}\tlevel:%-5level\tmessage:%msg%n]]>
+			</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Application Loggers -->
+	<logger name="org.watanabe.app">
+		<!-- (9) -->
+		<level value="debug" />
+	</logger>
+
+	<logger name="org.watanabe.app.study.helper">
+		<level value="trace" />
+	</logger>
+
+	<!-- TERASOLUNA -->
+	<logger name="org.terasoluna.gfw">
+		<level value="info" />
+	</logger>
+	<logger name="org.terasoluna.gfw.web.logging.TraceLoggingInterceptor">
+		<level value="trace" />
+	</logger>
+	<logger name="org.terasoluna.gfw.common.exception.ExceptionLogger">
+		<level value="info" />
+	</logger>
+	<logger name="org.terasoluna.gfw.common.exception.ExceptionLogger.Monitoring" additivity="false">
+		<!-- (10) -->
+		<level value="error" />
+		<appender-ref ref="MONITORING_LOG_FILE" />
+	</logger>
+
+	<!-- 3rdparty Loggers -->
+	<logger name="org.springframework">
+		<level value="warn" />
+	</logger>
+
+	<logger name="org.springframework.web.servlet">
+		<level value="info" />
+	</logger>
+
+	<logger name="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+		<level value="trace" />
+	</logger>
+
+	<logger name="org.springframework.jdbc.core.JdbcTemplate">
+		<level value="debug" />
+	</logger>
+
+	<!-- org.terasoluna.gfw.web.logging.HttpSessionEventLoggingListenerは、 セッションの生成・破棄・活性・非活性、セッションへの属性の追加・削除のタイミングで
+		debugログを出力するためのリスナークラスである。 logback.xmlには、以下のようにorg.terasoluna.gfw.web.logging.HttpSessionEventLoggingListenerを、
+		debugレベルで設定する。 -->
+	<logger name="org.terasoluna.gfw.web.logging.HttpSessionEventLoggingListener">
+		<level value="debug" />
+	</logger>
+
+	<!--org.terasoluna.gfw.web.logging.TraceLoggingInterceptorは、 Controllerの処理開始、終了をログ出力するHandlerInterceptorである。
+		終了時にはControllerが返却したView名とModelに追加された属性、 およびControllerの処理に要した時間も出力する。 spring-mvc.xmlの<mvc:interceptors>内にTraceLoggingInterceptorを追加する。
+		デフォルトでは、Controllerの処理に3秒以上かかった場合にWARNログを出力する。 この閾値を変える場合は、warnHandlingNanosプロパティにナノ秒単位で指定する。
+		logback.xmlには、以下のように、org.terasoluna.gfw.web.logging.TraceLoggingInterceptor
+		をtraceレベルで設定する。 -->
+	<logger name="org.terasoluna.gfw.web.logging.TraceLoggingInterceptor">
+		<level value="trace" />
+	</logger>
+
+	<!-- REMOVE THIS LINE IF YOU USE JPA <logger name="org.hibernate.SQL" additivity="true">
+		<level value="debug" /> </logger> <logger name="org.hibernate.type"> <level value="trace" /> </logger> <logger name="org.hibernate.engine.transaction">
+		<level value="debug" /> </logger> REMOVE THIS LINE IF YOU USE JPA -->
+	<!-- REMOVE THIS LINE IF YOU USE MyBatis3 <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<level value="debug" /> </logger> REMOVE THIS LINE IF YOU USE MyBatis3 -->
+
+	<root level="warn">
+		<!-- (11) -->
+		<appender-ref ref="STDOUT" />
+		<!-- (12) -->
+		<appender-ref ref="APPLICATION_LOG_FILE" />
+	</root>
+
+</configuration>
+<!-- (1) コンソールにログを出力するための、アペンダ定義を指定する。 出力先を標準出力にするか、標準エラーにするか選べるが、指定しない場合は、標準出力となる。
+	(2) ログの出力形式を指定する。何も記述しなければ、メッセージだけが出力される。 時刻やメッセージレベルなど、業務要件に合わせて出力させる。 ここでは”ラベル:値<TAB>ラベル:値<TAB>…”形式のLTSV(Labeled
+	Tab Separated Value)フォーマットを設定している。 (3) アプリケーションログを出力するための、アペンダ定義を指定する。 どのアペンダを使用するかは、<logger>に指定することもできるが、ここではアプリケーションログはデフォルトで使用するため、root（11）に参照させている。
+	アプリケーションログを出力する際によく使用されるのは、RollingFileAppenderであるが、ログのローテーションをlogrotateなど別機能で実施する場合、FileAppenderを使用することもある。
+	(4) カレントファイル名(出力中のログのファイル名)を指定する。固定のファイル名としたい場合は指定すること。 <file>ログファイル名</file>を指定しないと、(5)のパターンの名称で出力される。
+	(5) ローテーション後のファイル名を指定する。通常は、日付か時間の形式が、多く採用される。 誤ってHHをhhと設定してしまうと、24時間表記されないため注意すること。
+	(6) ローテーションしたファイルをいくつ残すかを指定する。 (7) ログファイルの文字コードを指定する。 (8) デフォルトでアプリケーションログが出力されるように設定する。
+	(9) ロガー名は、com.example.sample以下のロガーが、debugレベル以上のログを出力するように設定する。 (10) 監視ログの設定を行う。例外ハンドリングの共通設定を参照されたい。
+	Warning additivityの設定値について falseを指定すること。true(デフォルト値)を指定すると、上位のロガー(例えば、root)によって、同じログが出力されてしまう。
+	具体的には、監視ログは3つのアペンダー(MONITORING_LOG_FILE、STDOUT、APPLICATION_LOG_FILE)によって出力される。
+	(11) <logger>の指定が無いロガーが、warnレベル以上のログを出力するように設定する。 (12) デフォルトでConsoleAppender,
+	RollingFileAppender(アプリケーションログ)が使用されるように設定する。 -->

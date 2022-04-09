@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}">
+
+<head>
+  <title>カテゴリー情報登録</title>
+</head>
+
+<body>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h3">カテゴリー情報登録フォーム</h1>
+    <div class="btn-group ml-auto">
+    </div>
+  </div>
+  <form class="needs-validation" th:action="@{/category/confirm}" th:object="${categoryForm}"
+    enctype="multipart/form-data" method="post">
+    <div class="col-md-7 col-lg-8">
+      <div class="row g-3">
+        <div class="col-sm-6">
+          <label for="catCode" class="form-label">カテゴリーコード</label>
+          <input type="text" th:field="*{catCode}" class="form-control" placeholder="" required>
+          <p th:if="${#fields.hasErrors('catCode')}" th:errors="*{catCode}" class="input-error"></p>
+        </div>
+        <div class="col-sm-6">
+          <label for="catName" class="form-label">カテゴリー名</label>
+          <input type="text" th:field="*{catName}" class="form-control" placeholder="" required>
+          <p th:if="${#fields.hasErrors('catName')}" th:errors="*{catName}" class="input-error"></p>
+        </div>
+        <div class="col-12">
+          <label for="note" class="form-label">メモ</label>
+          <textarea th:field="*{note}" class="form-control" rows="3"></textarea>
+          <p th:if="${#fields.hasErrors('note')}" th:errors="*{note}" class="input-error"></p>
+        </div>
+        <div class="col-12">
+          <label for="itemType" class="form-label">画像タイプ</label>
+          <select th:field="*{imgType}" class="form-select" required>
+            <option th:each="cat : ${imgTypes}" th:value="${cat.key}" th:text="${cat.value}"
+              th:selected="${cat.key} == *{imgType}"></option>
+          </select>
+          <p th:if="${#fields.hasErrors('imgType')}" th:errors="*{imgType}" class="input-error"></p>
+        </div>
+      </div>
+      <hr class="my-4">
+      <div class="row g-3">
+        <div class="col-md-4">
+          カテゴリータイプ<br />
+          <input type="radio" name="catType" th:each="cat : ${catTypes}" th:value="${cat.key}" th:text="${cat.value}"
+            th:field="*{catType}" />
+          <p th:if="${#fields.hasErrors('catType')}" th:errors="*{catType}" class="input-error"></p>
+        </div>
+        <div class="col-md-4">
+          <input type="checkbox" name="active" th:each="cat : ${actives}" th:value="${cat.key}" th:text="${cat.value}"
+            th:field="*{active}" />
+          <p th:if="${#fields.hasErrors('active')}" th:errors="*{active}" class="input-error"></p>
+        </div>
+      </div>
+      <hr class="my-4">
+      <div class="row g-3">
+        <div class="col-12">
+          <label for="catIcon" class="form-label">アイコンのアップロード</label>
+          <input type="file" class="form-control" th:field="*{catIcon}" accept="image/*" />
+          <p th:if="${#fields.hasErrors('catIcon')}" th:errors="*{catIcon}" class="input-error"></p>
+        </div>
+      </div>
+      <hr class="my-4">
+      <button class="w-80 btn btn-primary btn-lg" type="submit">確認</button>
+    </div>
+  </form>
+</body>
+
+</html>
