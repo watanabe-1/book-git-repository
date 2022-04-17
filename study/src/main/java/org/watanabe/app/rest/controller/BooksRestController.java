@@ -159,16 +159,20 @@ public class BooksRestController {
     final String LINE = "line";
 
     // 対象を取得
-    List<Books> books =
+    List<Books> booksByExpenses =
         booksService.findByBooksDateAndBooksTypeJoinCategory(booksHelper.getOneYearAgoMonth(date),
             booksHelper.getEndDate(date), BooksHelper.BOOKS_TYPE_EXPENSES);
+    // 対象を取得
+    List<Books> booksByIncome =
+        booksService.findByBooksDateAndBooksTypeJoinCategory(booksHelper.getOneYearAgoMonth(date),
+            booksHelper.getEndDate(date), BooksHelper.BOOKS_TYPE_INCOME);
 
     List<BooksChartByMonthDatasets> dataSets = new ArrayList<>();
 
     // bar
     // 方法ごとに集約し金額の合計を求め、金額が大きい順に並び替え、
     // 順番が保証されるLinkedHashMapに詰める
-    Map<String, List<Books>> booksByMethodMap = books.stream()
+    Map<String, List<Books>> booksByMethodMap = booksByExpenses.stream()
         // 集約
         .collect(Collectors.groupingBy(Books::getBooksMethod))
         // 集約された結果が詰まったマップをソート
@@ -195,6 +199,8 @@ public class BooksRestController {
           // 順番が保証されるLinkedHashMapに詰める
           .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
               LinkedHashMap::new));
+      booksByMethodAndMonthMap = chartColourHelper.setEntityMapByYear(booksByMethodAndMonthMap,
+          booksHelper.getOneYearAgoMonth(date));
       booksByMethodAndMonthMap.forEach((keyByMonth, valueBymethod) -> {
         data.add(valueBymethod);
       });
@@ -210,7 +216,7 @@ public class BooksRestController {
 
     // line
     // カテゴリー
-    Map<String, List<Books>> booksByCategoryMap = books.stream()
+    Map<String, List<Books>> booksByCategoryMap = booksByExpenses.stream()
         // 集約
         .collect(Collectors.groupingBy(getCatName))
         // 集約された結果が詰まったマップをソート
@@ -219,9 +225,9 @@ public class BooksRestController {
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
             LinkedHashMap::new));
 
-    // 総支出分でもを使用のため+1
+    // 総支出、総収入、貯金額分も使用のため+3
     List<String> borderColorsByLine =
-        chartColourHelper.getActiveRgbaList(booksByCategoryMap.keySet().size() + 1, (float) 1);
+        chartColourHelper.getActiveRgbaList(booksByCategoryMap.keySet().size() + 3, (float) 1);
 
     // 方法ごとに集約したのちにさらに月ごとに集約
     int indexByLine = 0;
@@ -237,6 +243,8 @@ public class BooksRestController {
           // 順番が保証されるLinkedHashMapに詰める
           .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
               LinkedHashMap::new));
+      booksByCategoryAndMonthMap = chartColourHelper.setEntityMapByYear(booksByCategoryAndMonthMap,
+          booksHelper.getOneYearAgoMonth(date));
       booksByCategoryAndMonthMap.forEach((keyByMonth, valueBymethod) -> {
         data.add(valueBymethod);
       });
@@ -252,7 +260,7 @@ public class BooksRestController {
     }
 
     // 総支出
-    Map<String, Long> booksByMonthSumAmountData = books.stream()
+    Map<String, Long> _booksByMonthSumAmountDataByExpenses = booksByExpenses.stream()
         // 集約
         .collect(Collectors.groupingBy(getMonth, Collectors.summingLong(Books::getBooksAmmount)))
         // 集約された結果が詰まったマップをソート
@@ -260,20 +268,70 @@ public class BooksRestController {
         // 順番が保証されるLinkedHashMapに詰める
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
             LinkedHashMap::new));
-    BooksChartByMonthDatasets bdddByMonthSumAmount = new BooksChartByMonthDatasets();
-    bdddByMonthSumAmount.setLabel("総支出");
-    bdddByMonthSumAmount.setType(LINE);
-    bdddByMonthSumAmount.setBackgroundColor(Arrays.asList(RGB_WHITE));
-    bdddByMonthSumAmount.setBorderColor(Arrays.asList(borderColorsByLine.get(indexByLine)));
-    bdddByMonthSumAmount.setData(new ArrayList<Long>(booksByMonthSumAmountData.values()));
+    Map<String, Long> booksByMonthSumAmountDataByExpenses = chartColourHelper.setEntityMapByYear(
+        _booksByMonthSumAmountDataByExpenses, booksHelper.getOneYearAgoMonth(date));
+    BooksChartByMonthDatasets bdddByMonthSumAmountByExpenses = new BooksChartByMonthDatasets();
+    bdddByMonthSumAmountByExpenses.setLabel("総支出");
+    bdddByMonthSumAmountByExpenses.setType(LINE);
+    bdddByMonthSumAmountByExpenses.setBackgroundColor(Arrays.asList(RGB_WHITE));
+    bdddByMonthSumAmountByExpenses
+        .setBorderColor(Arrays.asList(borderColorsByLine.get(indexByLine++)));
+    bdddByMonthSumAmountByExpenses
+        .setData(new ArrayList<Long>(booksByMonthSumAmountDataByExpenses.values()));
     // lineの先頭に追加
-    dataSets.add(booksByMethodMap.keySet().size(), bdddByMonthSumAmount);
+    dataSets.add(booksByMethodMap.keySet().size(), bdddByMonthSumAmountByExpenses);
+
+    // 総収入
+    Map<String, Long> booksByMonthSumAmountDataByIncome = booksByIncome.stream()
+        // 集約
+        .collect(Collectors.groupingBy(getMonth, Collectors.summingLong(Books::getBooksAmmount)))
+        // 集約された結果が詰まったマップをソート
+        .entrySet().stream().sorted(Map.Entry.<String, Long>comparingByKey())
+        // 順番が保証されるLinkedHashMapに詰める
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
+            LinkedHashMap::new));
+    booksByMonthSumAmountDataByIncome = chartColourHelper.setEntityMapByYear(
+        booksByMonthSumAmountDataByIncome, booksHelper.getOneYearAgoMonth(date));
+    BooksChartByMonthDatasets bdddByMonthSumAmountByIncome = new BooksChartByMonthDatasets();
+    bdddByMonthSumAmountByIncome.setLabel("総収入");
+    bdddByMonthSumAmountByIncome.setType(LINE);
+    bdddByMonthSumAmountByIncome.setBackgroundColor(Arrays.asList(RGB_WHITE));
+    bdddByMonthSumAmountByIncome
+        .setBorderColor(Arrays.asList(borderColorsByLine.get(indexByLine++)));
+    bdddByMonthSumAmountByIncome
+        .setData(new ArrayList<Long>(booksByMonthSumAmountDataByIncome.values()));
+    // lineの先頭に追加
+    dataSets.add(booksByMethodMap.keySet().size(), bdddByMonthSumAmountByIncome);
+
+    // 貯金額
+    Map<String, Long> differenceBooksByMonthSumAmountData = new LinkedHashMap<>();
+    // 差額
+    booksByMonthSumAmountDataByIncome.forEach((k, valueByIncome) -> {
+      Long valueByExpenses = booksByMonthSumAmountDataByExpenses.get(k);
+      if (valueByExpenses != null) {
+        differenceBooksByMonthSumAmountData.put(k, valueByIncome - valueByExpenses);
+      } else {
+        differenceBooksByMonthSumAmountData.put(k, valueByIncome);
+      }
+    });
+    BooksChartByMonthDatasets differenceBdddByMonthSumAmount = new BooksChartByMonthDatasets();
+    differenceBdddByMonthSumAmount.setLabel("貯金額");
+    differenceBdddByMonthSumAmount.setType(LINE);
+    differenceBdddByMonthSumAmount.setBackgroundColor(Arrays.asList(RGB_WHITE));
+    differenceBdddByMonthSumAmount
+        .setBorderColor(Arrays.asList(borderColorsByLine.get(indexByLine)));
+    differenceBdddByMonthSumAmount
+        .setData(new ArrayList<Long>(differenceBooksByMonthSumAmountData.values()));
+    // lineの先頭に追加
+    dataSets.add(booksByMethodMap.keySet().size(), differenceBdddByMonthSumAmount);
 
 
     BooksChartByMonthData bdd = new BooksChartByMonthData();
     bdd.setDatasets(dataSets);
-    bdd.setLabels(new ArrayList<String>(booksByMonthSumAmountData.keySet()));
+    bdd.setLabels(new ArrayList<String>(booksByMonthSumAmountDataByExpenses.keySet()));
     return bdd;
   }
+
+
 
 }

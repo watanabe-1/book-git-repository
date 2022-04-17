@@ -171,5 +171,11 @@
 			<artifactId>jackson-dataformat-xml</artifactId>
 			<version>2.13.2</version>
 		</dependency>
+		<!--文字コード判定用-->
+		<dependency>
+			<groupId>com.googlecode.juniversalchardet</groupId>
+			<artifactId>juniversalchardet</artifactId>
+			<version>1.0.3</version>
+		</dependency>
 	</dependencies>
 </project>

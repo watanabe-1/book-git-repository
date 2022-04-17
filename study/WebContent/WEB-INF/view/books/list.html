@@ -19,18 +19,21 @@
 	</div>
 	<ul class="nav nav-tabs">
 		<li class="nav-item">
-			<a href="#tab1" class="nav-link" th:classappend="${tab1}" data-bs-toggle="tab">リスト</a>
+			<a href="#tab1" class="nav-link" th:classappend="${tab1}" data-bs-toggle="tab">リスト_支出</a>
 		</li>
 		<li class="nav-item">
-			<a href="#tab2" class="nav-link" th:classappend="${tab2}" data-bs-toggle="tab">グラフ</a>
+			<a href="#tab2" class="nav-link" th:classappend="${tab2}" data-bs-toggle="tab">リスト_収入</a>
 		</li>
 		<li class="nav-item">
-			<a href="#tab3" class="nav-link" th:classappend="${tab3}" data-bs-toggle="tab">グラフ2</a>
+			<a href="#tab3" class="nav-link" th:classappend="${tab3}" data-bs-toggle="tab">グラフ</a>
+		</li>
+		<li class="nav-item">
+			<a href="#tab4" class="nav-link" th:classappend="${tab4}" data-bs-toggle="tab">グラフ2</a>
 		</li>
 	</ul>
 	<div class="container">
 		<div class="row">
-			<div class="col-10">
+			<div class="col-6">
 				<a class="btn btn-link"
 					th:href="@{/books/list(date = ${#dates.format(backDate, 'yyyy/MM/dd')}, tab = ${tab})}"
 					id="datepicker-right">
@@ -46,15 +49,25 @@
 				<a hidden th:href="@{/books/list}" id="datepicker"></a>
 			</div>
 			<div class="col-2">
-				<span data-feather="user-plus">総支出：[[${sumAmount}]]</span>
+				<span data-feather="user-plus">総支出：[[${sumAmountByExpenses}]]</span>
 				<!-- 総支出保存タグ -->
-				<span hidden id="sumAmount">[[${sumAmount}]]</span>
+				<span hidden id="sumAmountByExpenses">[[${sumAmountByExpenses}]]</span>
+			</div>
+			<div class="col-2">
+				<span data-feather="user-plus">総収入：[[${sumAmountByIncome}]]</span>
+				<!-- 総収入保存タグ -->
+				<span hidden id="sumAmountByIncome">[[${sumAmountByIncome}]]</span>
+			</div>
+			<div class="col-2">
+				<span data-feather="user-plus">貯金額：[[${differenceSumAmount}]]</span>
+				<!-- 貯金額保存タグ -->
+				<span hidden id="differenceSumAmount">[[${differenceSumAmount}]]</span>
 			</div>
 		</div>
 	</div>
 	<div class="tab-content">
 		<div id="tab1" class="tab-pane" th:classappend="${tab1}">
-			<!-- タブ1(リスト)のコンテンツが入ります -->
+			<!-- タブ1(リスト_支出)のコンテンツが入ります -->
 			<div class="container">
 				<table class="table table-bordered">
 					<thead>
@@ -67,7 +80,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="books : ${bookslist}" th:object="${books}">
+						<tr th:each="books : ${bookslistByExpenses}" th:object="${books}">
 							<td class="center" th:text="${#dates.format(books.booksDate, 'yyyy/MM/dd')}"></td>
 							<td th:text="${books.booksPlace}"></td>
 							<td class="center">
@@ -83,13 +96,46 @@
 			</div>
 		</div>
 		<div id="tab2" class="tab-pane" th:classappend="${tab2}">
-			<!-- タブ2(リグラフ)のコンテンツが入ります -->
+			<!-- タブ2(リスト_収入)のコンテンツが入ります -->
+			<div class="container">
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>日付</th>
+							<th>名称</th>
+							<th>カテゴリー</th>
+							<th>決済方法</th>
+							<th>金額</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="books : ${bookslistByIncome}" th:object="${books}">
+							<td class="center" th:text="${#dates.format(books.booksDate, 'yyyy/MM/dd')}"></td>
+							<td th:text="${books.booksPlace}"></td>
+							<td class="center">
+								<span th:text="${books.catCodes.catName}"></span>
+								<img th:src="@{${books.catCodes.imgIds.imgPath + '/' + books.catCodes.imgIds.imgName}}"
+									class="mh-100 mw-100" width="40" height="30" />
+							</td>
+							<td th:text="${books.booksMethod}"></td>
+							<td th:text="${books.booksAmmount}"></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div id="tab3" class="tab-pane" th:classappend="${tab3}">
+			<!-- タブ3(リグラフ)のコンテンツが入ります -->
 			<div class="container">
 				<div class="row">
 					<div class="col-12">
 						<canvas id="barAndLineByYear"></canvas>
 					</div>
 					<a hiidden id="restBarAndLineByYear" th:href="@{/books/rest/chart/byYear/all}"></a>
+				</div>
+				<div class="row border-bottom my-2"></div>
+				<div class="row">
+					<h1 class="h4">以下 支出のみ</h1>
 				</div>
 				<div class="row border-bottom my-2"></div>
 				<div class="row">
@@ -113,8 +159,8 @@
 				</div>
 			</div>
 		</div>
-		<div id="tab3" class="tab-pane" th:classappend="${tab3}">
-			タブ3(グラフ)のコンテンツが入ります
+		<div id="tab4" class="tab-pane" th:classappend="${tab4}">
+			タブ4(グラフ)のコンテンツが入ります
 		</div>
 	</div>
 	<script>

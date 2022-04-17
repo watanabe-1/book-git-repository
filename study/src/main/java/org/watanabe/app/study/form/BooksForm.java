@@ -2,6 +2,7 @@ package org.watanabe.app.study.form;
 
 import java.io.Serializable;
 import java.util.Date;
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 import org.watanabe.app.common.validation.UploadFileMaxSize;
 import org.watanabe.app.common.validation.UploadFileMediaType;
@@ -37,6 +38,7 @@ public class BooksForm implements Serializable {
   /**
    * 帳簿の種類(収入、支出を選ぶ)
    */
+  @NotBlank
   private String booksType;
 
   /**

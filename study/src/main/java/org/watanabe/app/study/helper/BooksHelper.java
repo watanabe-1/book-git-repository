@@ -1,7 +1,9 @@
 package org.watanabe.app.study.helper;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,6 +12,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import org.mozilla.universalchardet.UniversalDetector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -59,23 +62,26 @@ public class BooksHelper {
    * アップロードされたファイルデータをもとにentytiにセットし返却
    * 
    * @param booksFile アップロードされたデータ
+   * @param booksType アップロードされたデータの種類
+   * @param charset 文字コード
    * @return Books セットされたentity
    */
-  public List<Books> getBooksByRakutenCsv(MultipartFile booksFile) {
+  public List<Books> getBooksByCsv(MultipartFile booksFile, String booksType) {
     // 現在日時取得
     Date now = StudyUtil.getNowDate();
     // ログインユーザー取得
     String user = StudyUtil.getLoginUser();
     SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd");
     List<Books> booksList = new ArrayList<Books>();
+    String charset = detectFileEncoding(booksFile);
     try (BufferedReader br =
-        new BufferedReader(new InputStreamReader(booksFile.getInputStream(), "SJIS"))) {
+        new BufferedReader(new InputStreamReader(booksFile.getInputStream(), charset))) {
       String line = null;
       while ((line = br.readLine()) != null) {
         final String[] split = line.split(",");
         Books books = new Books();
         books.setBooksId(UUID.randomUUID().toString());
-        books.setBooksType("2");
+        books.setBooksType(booksType);
         books.setBooksDate(sdFormat.parse(StudyUtil.trimDoubleQuot(split[0])));
         books.setBooksPlace(StudyUtil.trimDoubleQuot(split[1]));
         books.setCatCode(getCatCode(StudyUtil.trimDoubleQuot(split[2])));
@@ -93,6 +99,45 @@ public class BooksHelper {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
     }
     return booksList;
+  }
+
+  /**
+   * ファイルの文字コードを判定
+   * 
+   * @param file アップロードされたfileデータ
+   * @return result 文字コード
+   */
+  public String detectFileEncoding(MultipartFile file) {
+    String result = null;
+    byte[] buf = new byte[4096];
+    try (InputStream fis = file.getInputStream()) {
+
+      UniversalDetector detector = new UniversalDetector(null);
+      int nread;
+      while ((nread = fis.read(buf)) > 0 && !detector.isDone()) {
+        detector.handleData(buf, 0, nread);
+      }
+      detector.dataEnd();
+      result = detector.getDetectedCharset();
+      detector.reset();
+
+    } catch (IOException e) {
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+    }
+
+    return result;
+  }
+
+  /**
+   * MultipartFileからfileに変換
+   * 
+   * @param multipart MultipartFile
+   * @return convFile file
+   */
+  public File multipartToFile(MultipartFile multipart) throws IllegalStateException, IOException {
+    File convFile = new File(multipart.getOriginalFilename());
+    multipart.transferTo(convFile);
+    return convFile;
   }
 
   /**
@@ -167,7 +212,7 @@ public class BooksHelper {
    * @param date 加算したい日付
    * @return Date 変換語の日付
    */
-  public Date getNextMonth(Date date) {
+  public static Date getNextMonth(Date date) {
     // SimpleDateFormat sdNewFormat = new SimpleDateFormat("yyyy/MM/dd");
     return StudyUtil.calculateDate(date, Calendar.MONTH, 1);
   }

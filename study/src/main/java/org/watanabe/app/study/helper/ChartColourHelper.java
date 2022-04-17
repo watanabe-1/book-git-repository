@@ -1,13 +1,19 @@
 package org.watanabe.app.study.helper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.terasoluna.gfw.common.exception.BusinessException;
+import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.common.logger.LogIdBasedLogger;
 import org.watanabe.app.study.entity.Templatechartcolour;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
@@ -203,6 +209,35 @@ public class ChartColourHelper {
     newColorTemp.setUpdDate(now);
 
     return newColorTemp;
+  }
+
+  /**
+   * 画面から取得したデータをentytiにセット
+   * 
+   * @param form 画面から取得した値
+   * @return Books セットされたentity
+   */
+  public Map<String, Long> setEntityMapByYear(Map<String, Long> map, Date minMonth) {
+    Map<String, Long> newMap = new LinkedHashMap<>();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM");
+    Date newDate = new Date();
+    String cureentMonth = dateFormat.format(minMonth);
+    for (int i = 0; i <= 12; i++) {
+      Long value = map.get(cureentMonth);
+      if (value == null) {
+        value = (long) 0;
+      }
+      newMap.put(cureentMonth, value);
+
+      try {
+        newDate = dateFormat.parse(cureentMonth);
+      } catch (ParseException e) {
+        throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+      }
+      cureentMonth = dateFormat.format(BooksHelper.getNextMonth(newDate));
+    }
+
+    return newMap;
   }
 
 }
