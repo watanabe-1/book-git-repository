@@ -43,7 +43,7 @@ public class BooksRestController {
   private BooksHelper booksHelper;
 
   /**
-   * チャート色テンプレート Helper
+   * 図の色 Helper
    */
   @Autowired
   private ChartColourHelper chartColourHelper;
@@ -91,6 +91,7 @@ public class BooksRestController {
     BooksChartByMonthData bdd = new BooksChartByMonthData();
     bdd.setLabels(new ArrayList<String>(booksByCatMap.keySet()));
     bdd.setDatasets(dataSets);
+
     return bdd;
   }
 
@@ -132,6 +133,7 @@ public class BooksRestController {
     BooksChartByMonthData bdd = new BooksChartByMonthData();
     bdd.setLabels(new ArrayList<String>(booksByMethodMap.keySet()));
     bdd.setDatasets(dataSets);
+
     return bdd;
   }
 
@@ -322,13 +324,14 @@ public class BooksRestController {
         .setBorderColor(Arrays.asList(borderColorsByLine.get(indexByLine)));
     differenceBdddByMonthSumAmount
         .setData(new ArrayList<Long>(differenceBooksByMonthSumAmountData.values()));
-    // lineの先頭に追加
+    differenceBdddByMonthSumAmount.setHidden(true);
+    // lineの先頭
     dataSets.add(booksByMethodMap.keySet().size(), differenceBdddByMonthSumAmount);
-
 
     BooksChartByMonthData bdd = new BooksChartByMonthData();
     bdd.setDatasets(dataSets);
     bdd.setLabels(new ArrayList<String>(booksByMonthSumAmountDataByExpenses.keySet()));
+
     return bdd;
   }
 

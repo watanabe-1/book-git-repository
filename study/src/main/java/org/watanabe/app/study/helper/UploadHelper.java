@@ -38,7 +38,6 @@ public class UploadHelper {
    * @throws IOException
    */
   public String saveTemporaryFile(MultipartFile multipartFile) throws IOException {
-
     // 画像IDの発番
     String uploadTmpFileId = UUID.randomUUID().toString();
     File uploadTemporaryFile = new File(uploadTmpDir, uploadTmpFileId);
@@ -58,7 +57,6 @@ public class UploadHelper {
    */
   public String moveTemporaryFileToImagesFolder(String newFileName, String uploadTmpFileId)
       throws IOException {
-
     return moveTemporaryFileToImagesFolder(newFileName, uploadTmpFileId, null);
   }
 
@@ -73,7 +71,6 @@ public class UploadHelper {
    */
   public String moveTemporaryFileToImagesFolder(String newFileName, String uploadTmpFileId,
       String addFilePath) throws IOException {
-
     File newFile = null;
     String newFilePath = null;
     // 追加ファイルパスがnullもしくは空文字の場合
@@ -106,6 +103,7 @@ public class UploadHelper {
     StringBuffer data = new StringBuffer();
     String base64 = new String(Base64.getEncoder().encode(multipartFile.getBytes()), "ASCII");
     data.append("data:image/").append(expand).append(";base64,").append(base64);
+
     return data.toString();
   }
 

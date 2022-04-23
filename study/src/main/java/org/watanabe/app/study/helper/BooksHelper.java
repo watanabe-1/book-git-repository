@@ -74,6 +74,7 @@ public class BooksHelper {
     SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd");
     List<Books> booksList = new ArrayList<Books>();
     String charset = detectFileEncoding(booksFile);
+
     try (BufferedReader br =
         new BufferedReader(new InputStreamReader(booksFile.getInputStream(), charset))) {
       String line = null;
@@ -98,6 +99,7 @@ public class BooksHelper {
     } catch (IOException e) {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
     }
+
     return booksList;
   }
 
@@ -110,6 +112,7 @@ public class BooksHelper {
   public String detectFileEncoding(MultipartFile file) {
     String result = null;
     byte[] buf = new byte[4096];
+
     try (InputStream fis = file.getInputStream()) {
 
       UniversalDetector detector = new UniversalDetector(null);
@@ -137,6 +140,7 @@ public class BooksHelper {
   public File multipartToFile(MultipartFile multipart) throws IllegalStateException, IOException {
     File convFile = new File(multipart.getOriginalFilename());
     multipart.transferTo(convFile);
+
     return convFile;
   }
 
@@ -172,6 +176,7 @@ public class BooksHelper {
 
     categoryService.save(catForm);
     catList = categoryService.findAll();
+
     return catCode;
   }
 
@@ -223,7 +228,7 @@ public class BooksHelper {
    * @param date 減算したい日付
    * @return Date 変換語の日付
    */
-  public Date getBackMonth(Date date) {
+  public static Date getBackMonth(Date date) {
     return StudyUtil.calculateDate(date, Calendar.MONTH, -1);
   }
 

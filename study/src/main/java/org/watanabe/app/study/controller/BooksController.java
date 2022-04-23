@@ -88,6 +88,7 @@ public class BooksController {
     if (StudyUtil.isNullOrEmpty(tab)) {
       tab = DEFALT_TAB;
     }
+
     List<Books> booksByExpenses =
         booksService.findByBooksDateAndBooksTypeJoinCategory(booksHelper.getStartDate(date),
             booksHelper.getEndDate(date), BooksHelper.BOOKS_TYPE_EXPENSES);
@@ -103,18 +104,18 @@ public class BooksController {
     model.addObject("sumAmountByIncome", sumAmountByIncome);
     model.addObject("differenceSumAmount", sumAmountByIncome - sumAmountByExpenses);
     model.addObject("date", date);
-    model.addObject("nextDate", booksHelper.getNextMonth(date));
-    model.addObject("backDate", booksHelper.getBackMonth(date));
+    model.addObject("nextDate", BooksHelper.getNextMonth(date));
+    model.addObject("backDate", BooksHelper.getBackMonth(date));
     model.addObject("tab", tab);
     model.addObject(tab, "active");
-    /*
-     * Map<String, String> nextParm = new HashMap<>(); nextParm.put("date",
-     * booksHelper.getNextMonth(date)); nextParm.put("tab", tab); model.addObject("nextParm",
-     * StudyUtil.CreateUrlParam(nextParm)); Map<String, String> backParm = new HashMap<>();
-     * backParm.put("date", booksHelper.getBackMonth(date)); backParm.put("tab", tab);
-     * model.addObject("backParm", StudyUtil.CreateUrlParam(backParm)); model.addObject(tab,
-     * "active");
-     */
+
+    // Map<String, String> nextParm = new HashMap<>(); nextParm.put("date",
+    // booksHelper.getNextMonth(date)); nextParm.put("tab", tab); model.addObject("nextParm",
+    // StudyUtil.createUrlParam(nextParm)); Map<String, String> backParm = new HashMap<>();
+    // backParm.put("date", booksHelper.getBackMonth(date)); backParm.put("tab", tab);
+    // model.addObject("backParm", StudyUtil.createUrlParam(backParm)); model.addObject(tab,
+    // "active");
+
     return model;
   }
 
@@ -122,6 +123,7 @@ public class BooksController {
     Map<String, String> selectMap = new LinkedHashMap<String, String>();
     selectMap.put(BooksHelper.BOOKS_TYPE_INCOME, "収入");
     selectMap.put(BooksHelper.BOOKS_TYPE_EXPENSES, "支出");
+
     return selectMap;
   }
 

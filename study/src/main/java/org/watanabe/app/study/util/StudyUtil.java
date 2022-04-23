@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
-import org.springframework.web.util.UriUtils;
 
 /**
  * 便利メソッドクラス
@@ -45,10 +44,10 @@ public class StudyUtil {
    * @return String 結合したパス
    */
   public static String pathJoin(String basePath, String addPath) {
-
     final String SLASH = "/";
     final String ENMARK = "\\";
     StringBuffer sb = new StringBuffer();
+
     // 「/」が文字列の先頭ににあった場合そのまま結合、なければ「/」をはさんで結合
     if (addPath.indexOf(SLASH) == 0 || addPath.indexOf(ENMARK) == 0) {
       return sb.append(basePath).append(addPath).toString();
@@ -66,7 +65,6 @@ public class StudyUtil {
    * @return String 結合したパス
    */
   public static String replaceFirstOneLeft(String str, String target, String replaceMent) {
-
     // 置換対象が文字列の先頭ににあった場合のみ置換、それ以外は置換せずに返却
     if (Objects.equals(target.indexOf(replaceMent), 0)) {
       return str.replace(target, replaceMent);
@@ -85,7 +83,6 @@ public class StudyUtil {
    * @return String 結合したパス
    */
   public static String replaceFirstOneRight(String str, String target, String replaceMent) {
-
     // 置換対象が文字列の最後尾ににあった場合のみ置換、それ以外は置換せずに返却
     if (Objects.equals(target.lastIndexOf(replaceMent), replaceMent.length())) {
       return str.replace(target, replaceMent);
@@ -143,12 +140,14 @@ public class StudyUtil {
     SimpleDateFormat sdNewFormat = new SimpleDateFormat("yyyy/MM/dd");
     Date newdate = new Date();
     StringBuffer sb = new StringBuffer();
+
     sb.append(sdFormat.format(date)).append(newDay);
     try {
       newdate = sdNewFormat.parse(sb.toString());
     } catch (ParseException e) {
       e.printStackTrace();
     }
+
     return newdate;
   }
 
@@ -164,11 +163,13 @@ public class StudyUtil {
     if (START.equals(type)) {
       amount = -1;
     }
+
     SimpleDateFormat sdfMm = new SimpleDateFormat("MM");
     Date currentDate = date;
     String month = sdfMm.format(date);
     String currentMonth = month;
     int cnt = 0;
+
     // 無限ループ防止のため1000周以下の条件を追加
     while (cnt < 1000) {
       currentDate = StudyUtil.calculateDate(date, Calendar.DATE, amount);
@@ -197,6 +198,7 @@ public class StudyUtil {
     cal.setTime(date);
     // 計算
     cal.add(field, amount);
+
     return cal.getTime();
   }
 
@@ -208,6 +210,7 @@ public class StudyUtil {
    */
   public static String trimDoubleQuot(String str) {
     char c = '"';
+
     if (str.charAt(0) == c && str.charAt(str.length() - 1) == c) {
       return str.substring(1, str.length() - 1);
     } else {
@@ -221,9 +224,10 @@ public class StudyUtil {
    * @param param keyにパラム名、itemにvalue
    * @return String urlにセットするパラム
    */
-  public static String CreateUrlParam(Map<String, String> param) {
+  public static String createUrlParam(Map<String, String> param) {
     int index = 0;
     StringBuffer sb = new StringBuffer();
+
     for (String key : param.keySet()) {
       if (index == 0) {
         sb.append("?");
@@ -233,11 +237,8 @@ public class StudyUtil {
       sb.append(key).append("=").append(param.get(key));
       index++;
     }
-    return sb.toString();
-  }
 
-  public static String encodeUrlString(String target) {
-    return UriUtils.encode(target, "UTF-8");
+    return sb.toString();
   }
 
 }

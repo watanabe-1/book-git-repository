@@ -65,17 +65,16 @@ public class CategoryController {
 
   @RequestMapping(value = "/category/input", method = RequestMethod.GET)
   public ModelAndView input(@ModelAttribute CategoryForm form, ModelAndView model) {
-
     model.setViewName("category/input");
     // 画面にセット
     model = setInputConfirm(model);
 
-    /*
-     * ResultMessages messages = ResultMessages.error(); messages.add("e.ad.od.5001", "s"); throw
-     * new BusinessException(messages);
-     */
+    //
+    // ResultMessages messages = ResultMessages.error(); messages.add("e.ad.od.5001", "s"); throw
+    // new BusinessException(messages);
 
     model.addObject("selectedCategory", "key_B");
+
     return model;
   }
 
@@ -84,7 +83,6 @@ public class CategoryController {
       ModelAndView model
   // , MultipartFile catIcon
   ) throws IOException {
-
     // エラーがあったら画面を返す
     if (result.hasErrors()) {
       return input(form, model);
@@ -120,7 +118,6 @@ public class CategoryController {
       ModelAndView model
   // , MultipartFile catIcon
   ) throws IOException {
-
     model.setViewName("/category/result");
 
     // エラー画面遷移確認用
@@ -170,7 +167,6 @@ public class CategoryController {
 
   @RequestMapping(value = "/category/list", method = RequestMethod.GET)
   public ModelAndView list(@ModelAttribute CategoryForm form, ModelAndView model) {
-
     model.setViewName("category/list");
 
     List<Category> catlist = categoryService.findAlljoinImage();
@@ -194,7 +190,6 @@ public class CategoryController {
   // test
   @RequestMapping(value = "/category/test", method = RequestMethod.GET)
   public ModelAndView test(@ModelAttribute CategoryForm form, ModelAndView model) {
-
     model.setViewName("category/test");
     // 画面にセット
     model = setInputConfirm(model);
@@ -220,6 +215,7 @@ public class CategoryController {
   private Map<String, String> getImgTypes() {
     Map<String, String> selectMap = new LinkedHashMap<String, String>();
     selectMap.put("CATEGORY_ICON", "カテゴリーアイコン");
+
     return selectMap;
   }
 
@@ -227,12 +223,14 @@ public class CategoryController {
     Map<String, String> selectMap = new LinkedHashMap<String, String>();
     selectMap.put("1", "TEST1");
     selectMap.put("2", "TEST2");
+
     return selectMap;
   }
 
   private Map<String, String> getActives() {
     Map<String, String> selectMap = new LinkedHashMap<String, String>();
     selectMap.put("1", "有効");
+
     return selectMap;
   }
 

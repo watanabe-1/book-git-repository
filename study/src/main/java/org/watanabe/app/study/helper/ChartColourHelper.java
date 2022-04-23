@@ -38,12 +38,12 @@ public class ChartColourHelper {
   /**
    * ダミーデータ作成用基準値
    */
-  private final int STANDARD_DATA = 10000;
+  private static final int STANDARD_DATA = 10000;
 
   /**
    * ダミーデータラベル作成用基準値
    */
-  private final String STANDARD_DATA_LABEL = "項目";
+  private static final String STANDARD_DATA_LABEL = "項目";
 
   /**
    * 設定されている色テンプレートを取得
@@ -57,11 +57,13 @@ public class ChartColourHelper {
     // デフォルトユーザーのテンプレートを取得
     List<Templatechartcolour> defTempColours =
         TemplatechartcolourService.findByUserIdAndActive(StudyUtil.getCommonUser(), "1");
+
     // デフォルト以外のテンプレートを設定していなかったらデフォルトを設定してることになる
     if (activeTempColour.isEmpty()) {
       // デフォルトのテンプレートを設定しているテンプレートとしてセット
       activeTempColour = defTempColours;
     }
+
     return activeTempColour.get(0);
   }
 
@@ -73,6 +75,7 @@ public class ChartColourHelper {
    */
   public List<Long> getDummyChartData(int qty) {
     List<Long> dummyDataList = new ArrayList<Long>();
+
     for (int i = 0; i < qty; i++) {
       long data = STANDARD_DATA * (i + 1);
       // if (i % 2 == 0) {
@@ -84,6 +87,7 @@ public class ChartColourHelper {
     }
     // 降順に並び替え
     Collections.sort(dummyDataList, Collections.reverseOrder());
+
     return dummyDataList;
   }
 
@@ -95,11 +99,13 @@ public class ChartColourHelper {
    */
   public List<String> getDummyChartDataLable(int qty) {
     List<String> dummyDataLabelList = new ArrayList<String>();
+
     for (int i = 0; i < qty; i++) {
       StringBuffer sb = new StringBuffer();
       sb.append(STANDARD_DATA_LABEL).append(i + 1);
       dummyDataLabelList.add(sb.toString());
     }
+
     return dummyDataLabelList;
   }
 
@@ -131,6 +137,7 @@ public class ChartColourHelper {
   public List<String> getRgbaList(int standard, float transparency, int coeffR, int coeffG,
       int coeffB) {
     List<String> result = new ArrayList<>();
+
     for (int i = 1; i < standard + 1; i++) {
       StringBuffer sb = new StringBuffer();
       // シード値を固定にすることによりこのメソッドの返す結果を固定にしている
@@ -157,6 +164,7 @@ public class ChartColourHelper {
           .append(",").append(transparency).append(")");
       result.add(sb.toString());
     }
+
     return result;
   }
 
@@ -212,16 +220,17 @@ public class ChartColourHelper {
   }
 
   /**
-   * 画面から取得したデータをentytiにセット
+   * データがない月があった場合、空のデータをセット
    * 
-   * @param form 画面から取得した値
-   * @return Books セットされたentity
+   * @param map セット対象のmap
+   * @return minMonth 基準となる最小月
    */
   public Map<String, Long> setEntityMapByYear(Map<String, Long> map, Date minMonth) {
     Map<String, Long> newMap = new LinkedHashMap<>();
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM");
     Date newDate = new Date();
     String cureentMonth = dateFormat.format(minMonth);
+
     for (int i = 0; i <= 12; i++) {
       Long value = map.get(cureentMonth);
       if (value == null) {

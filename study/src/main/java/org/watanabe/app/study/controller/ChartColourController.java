@@ -34,11 +34,10 @@ public class ChartColourController {
   private TemplatechartcolourService TemplatechartcolourService;
 
   /**
-   * チャート色テンプレート Helper
+   * 図の色 Helper
    */
   @Autowired
   private ChartColourHelper chartColourHelper;
-
 
   /**
    * /books/indexのデフォルトのタブ
@@ -53,7 +52,6 @@ public class ChartColourController {
   @RequestMapping(value = "/chartColour/input", method = RequestMethod.POST)
   public String result(@ModelAttribute @Validated TemplatechartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
-
     Templatechartcolour newColorTemp = chartColourHelper.getTemplatechartcolourByForm(form);
     // 保存
     TemplatechartcolourService.saveOne(newColorTemp);
@@ -66,6 +64,7 @@ public class ChartColourController {
     modelMap.addAttribute("map", map);
     modelMap.addAttribute("tab", RESULT_TAB);
     redirectAttributes.addFlashAttribute("model", modelMap);
+
     return "redirect:/chartColour/index";
     // return index(form, model, RESULT_TAB);
   }
@@ -73,7 +72,6 @@ public class ChartColourController {
   @RequestMapping(value = "/chartColour/delete", method = RequestMethod.POST)
   public String delete(@ModelAttribute @Validated TemplatechartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
-
     // 保存
     TemplatechartcolourService.deleteOne(form.getTemplateId());
 
@@ -84,6 +82,7 @@ public class ChartColourController {
     modelMap.addAttribute("map", map);
     modelMap.addAttribute("tab", RESULT_TAB);
     redirectAttributes.addFlashAttribute("model", modelMap);
+
     return "redirect:/chartColour/index";
     // return index(form, model, RESULT_TAB);
   }
@@ -91,9 +90,7 @@ public class ChartColourController {
   @RequestMapping(value = "/chartColour/changeActive", method = RequestMethod.POST)
   public String changeActive(@ModelAttribute @Validated TemplatechartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
-
     String user = StudyUtil.getLoginUser();
-
     Date date = StudyUtil.getNowDate();
 
     // ユーザーごとに作成し設定しているテンプレートを取得
@@ -116,6 +113,7 @@ public class ChartColourController {
     modelMap.addAttribute("map", map);
     modelMap.addAttribute("tab", DEFALT_TAB);
     redirectAttributes.addFlashAttribute("model", modelMap);
+
     return "redirect:/chartColour/index";
     // return index(form, model, DEFALT_TAB);
   }
@@ -124,7 +122,6 @@ public class ChartColourController {
   public ModelAndView index(@ModelAttribute TemplatechartcolourForm form, ModelAndView model,
       String tab, @ModelAttribute("model") ModelMap modelMap) {
     model.setViewName("chartColour/index");
-
     // リダイレクトで呼ばれたときのパrメータ-
     String redirectTab = (String) modelMap.get("tab");
 
@@ -154,7 +151,6 @@ public class ChartColourController {
     // ユーザーごとに作成したテンプレートを取得しデフォルトのテンプレートのリストと結合
     allTempColours.addAll(TemplatechartcolourService.findByUserId(StudyUtil.getLoginUser()));
 
-
     model.addObject("activeColour", activeTempColour.get(0));
     model.addObject("tempColourList", allTempColours);
     model.addObject("randomColourList", chartColourHelper.getRandomColourSeedCoef(4));
@@ -162,6 +158,7 @@ public class ChartColourController {
     model.addObject(tab, "active");
     // リダイレクトされたとき
     model = setModelMap(model, modelMap);
+
     return model;
   }
 
@@ -173,7 +170,6 @@ public class ChartColourController {
    */
   @SuppressWarnings("unchecked")
   private ModelAndView setModelMap(ModelAndView model, ModelMap modelMap) {
-
     Map<String, String> map = (Map<String, String>) modelMap.get("map");
     if (map != null) {
       map.forEach((k, v) -> {

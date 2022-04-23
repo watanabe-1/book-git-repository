@@ -15,7 +15,6 @@ import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.form.rest.BooksChartByMonthData;
 import org.watanabe.app.study.form.rest.BooksChartByMonthDatasets;
 import org.watanabe.app.study.helper.ChartColourHelper;
-import org.watanabe.app.study.service.TemplatechartcolourService;
 
 @RestController
 public class ChartColourRestController {
@@ -24,22 +23,15 @@ public class ChartColourRestController {
       LogIdBasedLogger.getLogger(ChartColourRestController.class);
 
   /**
-   * チャート色テンプレート Service
+   * 図に表紙する色確認用データの個数
    */
-  @Autowired
-  private TemplatechartcolourService TemplatechartcolourService;
+  private static final int DEFALT_DATA_CNT = 20;
 
   /**
-   * チャート色テンプレート Helper
+   * 図の色 Helper
    */
   @Autowired
   private ChartColourHelper chartColourHelper;
-
-  /**
-   * 図に表紙する色確認用データの個数
-   */
-  private final int DEFALT_DATA_CNT = 20;
-
 
   /**
    * 色見本の図用
@@ -51,7 +43,6 @@ public class ChartColourRestController {
   public BooksChartByMonthData chartColourByActive(
       @ModelAttribute @Validated TemplatechartcolourForm form, BindingResult result,
       ModelAndView model, Integer qty) {
-
     if (qty == null || qty == 0 || qty > 1000) {
       qty = DEFALT_DATA_CNT;
     }
@@ -67,6 +58,7 @@ public class ChartColourRestController {
     BooksChartByMonthData bdd = new BooksChartByMonthData();
     bdd.setLabels(chartColourHelper.getDummyChartDataLable(qty));
     bdd.setDatasets(dataSets);
+
     return bdd;
   }
 
@@ -79,7 +71,6 @@ public class ChartColourRestController {
   @RequestMapping(value = "/chartColour/rest/confirm", method = RequestMethod.POST)
   public BooksChartByMonthData chartColourBySeed(
       @ModelAttribute @Validated TemplatechartcolourForm form, ModelAndView model, Integer qty) {
-
     if (qty == null || qty == 0 || qty > 1000) {
       qty = DEFALT_DATA_CNT;
     }
@@ -97,6 +88,7 @@ public class ChartColourRestController {
     BooksChartByMonthData bdd = new BooksChartByMonthData();
     bdd.setLabels(chartColourHelper.getDummyChartDataLable(qty));
     bdd.setDatasets(dataSets);
+
     return bdd;
   }
 
