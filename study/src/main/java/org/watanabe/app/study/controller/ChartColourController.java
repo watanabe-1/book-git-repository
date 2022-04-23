@@ -72,12 +72,19 @@ public class ChartColourController {
   @RequestMapping(value = "/chartColour/delete", method = RequestMethod.POST)
   public String delete(@ModelAttribute @Validated TemplatechartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
-    // 保存
-    TemplatechartcolourService.deleteOne(form.getTemplateId());
-
+    // 共通ユーザーの取得
+    String commonuser = StudyUtil.getCommonUser();
     // redirect時に値を渡すための処理
     Map<String, String> map = new HashMap<>();
-    map.put("inputResultMessage", "削除が完了しました!");
+
+    if (commonuser.equals(form.getUserId())) {
+      map.put("inputResultMessage", "デフォルトのテンプレートは削除できません!");
+    } else {
+      // 削除
+      TemplatechartcolourService.deleteOne(form.getTemplateId());
+      map.put("inputResultMessage", "削除が完了しました!");
+    }
+
     ModelMap modelMap = new ModelMap();
     modelMap.addAttribute("map", map);
     modelMap.addAttribute("tab", RESULT_TAB);

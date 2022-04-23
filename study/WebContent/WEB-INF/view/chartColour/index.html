@@ -99,6 +99,7 @@
 								<th>シード値係数(R)</th>
 								<th>シード値係数(G)</th>
 								<th>シード値係数(B)</th>
+								<th>ユーザー</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -112,7 +113,9 @@
 								</td>
 								<td th:text="${tempColour.templateName}"></td>
 								<th:block th:if="${tempColour.active == '1'}">
-									<td>設定されています</td>
+									<td>
+										<span class="text-danger">設定されています</span>
+									</td>
 								</th:block>
 								<th:block th:if="${tempColour.active != '1'}">
 									<td>設定されていません</td>
@@ -120,6 +123,7 @@
 								<td th:text="${tempColour.seedCoeffR}"></td>
 								<td th:text="${tempColour.seedCoeffG}"></td>
 								<td th:text="${tempColour.seedCoeffB}"></td>
+								<td th:text="${tempColour.userId}"></td>
 							</tr>
 						</tbody>
 					</table>
@@ -137,6 +141,7 @@
 							<label>テンプレート名：</label>
 							<input type="text" id="templateNameList">
 							<input hidden type="text" id="templateIdList">
+							<input hidden type="text" id="templateUserId">
 							<div class="container">
 								<div class="row">
 									<div class="col-12">
@@ -563,6 +568,7 @@
 		//model内に入力したテンプレート名の値を挿入
 		document.getElementById('templateIdList').value = tdValues[0]
 		document.getElementById('templateNameList').value = tdValues[2];
+		document.getElementById('templateUserId').value = tdValues[7];
 
 		//chartのupdate
 		//確認用パラム
@@ -619,6 +625,7 @@
 		const listDeleteParams = {
 			'qty': qty,
 			'templateId': document.getElementById('templateIdList').value,
+			'userId': document.getElementById('templateUserId').value,
 		}
 		const submitUrl = document.getElementById('deletelistModalUrl').href;
 		//削除処理実行

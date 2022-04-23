@@ -46,6 +46,7 @@ public class ApiErrorPageController {
     // 取得したエラーコードに対応するエラー情報を生成
     ApiError apiError =
         apiErrorCreator.createApiError(request, errorCode, httpStatus.getReasonPhrase());
+
     // 生成したエラー情報を応答
     return ResponseEntity.status(httpStatus).body(apiError);
   }

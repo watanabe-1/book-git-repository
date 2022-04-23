@@ -25,6 +25,7 @@ public class ApiErrorCreator {
     // エラーメッセージは、MessageSourceより取得する
     String localizedMessage =
         messageSource.getMessage(errorCode, arguments, defaultErrorMessage, request.getLocale());
+
     return new ApiError(errorCode, localizedMessage);
   }
 
@@ -40,6 +41,7 @@ public class ApiErrorCreator {
     for (ObjectError objectError : bindingResult.getGlobalErrors()) {
       apiError.addDetail(createApiError(request, objectError, objectError.getObjectName()));
     }
+
     return apiError;
   }
 
@@ -49,6 +51,7 @@ public class ApiErrorCreator {
   private ApiError createApiError(WebRequest request,
       DefaultMessageSourceResolvable messageResolvable, String target) {
     String localizedMessage = messageSource.getMessage(messageResolvable, request.getLocale());
+
     return new ApiError(messageResolvable.getCode(), localizedMessage, target);
   }
 
@@ -73,6 +76,7 @@ public class ApiErrorCreator {
             resultMessage.getArgs()));
       }
     }
+
     return apiError;
   }
 

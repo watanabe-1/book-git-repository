@@ -258,7 +258,7 @@
 	const date = paaramDate == null ? new Date() : new Date(paaramDate);
 	//barとline（年ごとのチャート）
 	const restBarAndLineByYearUrl = setAtagHrefParm('#restBarAndLineByYear', 'date', date);
-	let functionArgs = ['barAndLineByYear', '最大過去12ヶ月'];
+	let functionArgs = ['barAndLineByYear', '過去12ヶ月'];
 	ajax('POST', restBarAndLineByYearUrl, '', PARALLEL, barAndLineChart, functionArgs);
 
 	//表示するchart

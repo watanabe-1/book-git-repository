@@ -38,6 +38,7 @@ public class ApiGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     } else {
       apiError = body;
     }
+
     return ResponseEntity.status(status).headers(headers).body(apiError);
   }
 
@@ -151,6 +152,7 @@ public class ApiGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     String errorCode = exceptionCodeResolver.resolveExceptionCode(ex);
     ApiError apiError = apiErrorCreator.createResultMessagesApiError(request, errorCode,
         ex.getResultMessages(), ex.getMessage());
+
     return handleExceptionInternal(ex, apiError, headers, status, request);
   }
 
@@ -163,6 +165,7 @@ public class ApiGlobalExceptionHandler extends ResponseEntityExceptionHandler {
     String errorCode = exceptionCodeResolver.resolveExceptionCode(ex);
     ApiError apiError = apiErrorCreator.createBindingResultApiError(request, errorCode,
         bindingResult, ex.getMessage());
+
     return handleExceptionInternal(ex, apiError, headers, status, request);
   }
 
