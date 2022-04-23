@@ -302,6 +302,7 @@ public class BooksRestController {
         .setBorderColor(Arrays.asList(borderColorsByLine.get(indexByLine++)));
     bdddByMonthSumAmountByIncome
         .setData(new ArrayList<Long>(booksByMonthSumAmountDataByIncome.values()));
+    bdddByMonthSumAmountByIncome.setHidden(true);
     // lineの先頭に追加
     dataSets.add(booksByMethodMap.keySet().size(), bdddByMonthSumAmountByIncome);
 
@@ -324,7 +325,7 @@ public class BooksRestController {
         .setBorderColor(Arrays.asList(borderColorsByLine.get(indexByLine)));
     differenceBdddByMonthSumAmount
         .setData(new ArrayList<Long>(differenceBooksByMonthSumAmountData.values()));
-    differenceBdddByMonthSumAmount.setHidden(true);
+    differenceBdddByMonthSumAmount.setHidden(false);
     // lineの先頭
     dataSets.add(booksByMethodMap.keySet().size(), differenceBdddByMonthSumAmount);
 
