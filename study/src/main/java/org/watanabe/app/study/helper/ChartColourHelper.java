@@ -139,30 +139,14 @@ public class ChartColourHelper {
     List<String> result = new ArrayList<>();
 
     for (int i = 1; i < standard + 1; i++) {
-      StringBuffer sb = new StringBuffer();
       // シード値を固定にすることによりこのメソッドの返す結果を固定にしている
-      // 19,91,255
       Random rand = new Random(i * coeffR);
       int r = rand.nextInt(255);
       Random rand2 = new Random(i * coeffG);
       int g = rand2.nextInt(255);
       Random rand3 = new Random(i * coeffB);
       int b = rand3.nextInt(255);
-      // Random rand = new Random(i);
-      // int r = rand.nextInt(255);
-      // Random rand2 = new Random(i * 2);
-      // int g = rand2.nextInt(255);
-      // Random rand3 = new Random(i * 3);
-      // int b = rand3.nextInt(255);
-      // 要素を適当に入れ替え
-      int[] rgb = {r, g, b};
-      // for (int j = 1; j < i + 1; j++) {
-      // int[] newRgb = {rgb[1], rgb[2], rgb[0]};
-      // rgb = newRgb;
-      // }
-      sb.append("rgba(").append(rgb[0]).append(",").append(rgb[1]).append(",").append(rgb[2])
-          .append(",").append(transparency).append(")");
-      result.add(sb.toString());
+      result.add(String.format("rgba(%s,%s,%s,%s)", r, g, b, transparency));
     }
 
     return result;
@@ -171,14 +155,13 @@ public class ChartColourHelper {
   /**
    * ランダムにシード値係数を発番
    * 
-   * @param cnt 発番する組み合わせの個数
+   * @param maxCnt 発番する組み合わせの個数
    * @return List<Templatechartcolour> 発番した色の組み合わせ
    */
-  public List<Templatechartcolour> getRandomColourSeedCoef(int cnt) {
-
+  public List<Templatechartcolour> getRandomColourSeedCoef(int maxCnt) {
     List<Templatechartcolour> ret = new ArrayList<>();
 
-    for (int i = 0; i < cnt; i++) {
+    for (int i = 0; i < maxCnt; i++) {
       Templatechartcolour tc = new Templatechartcolour();
       Random rand = new Random();
       tc.setSeedCoeffR(rand.nextInt(999999999));
@@ -197,7 +180,6 @@ public class ChartColourHelper {
    * @return Books セットされたentity
    */
   public Templatechartcolour getTemplatechartcolourByForm(TemplatechartcolourForm form) {
-
     // 現在日時取得
     Date now = StudyUtil.getNowDate();
     // ログインユーザー取得
