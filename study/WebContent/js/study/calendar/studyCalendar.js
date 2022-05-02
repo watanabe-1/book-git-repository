@@ -1,5 +1,3 @@
-//週の定義
-const weekByCalendar = ['日', '月', '火', '水', '木', '金', '土'];
 // let selectDayByCalendar = new Date();
 //studyUtil.getStudyDate()の呼び出し
 let selectDayByCalendar = getStudyDate();
@@ -203,6 +201,8 @@ function addCalendarStyle() {
  * @return {string} 作成したカレンダーのhtml
  */
 function createCalendarProcess(year, month) {
+  //週の定義
+  const weekByCalendar = ['日', '月', '火', '水', '木', '金', '土'];
   // 曜日
   let calendar = "<table class='table table-bordered'><tr class='dayOfWeek'>";
   for (let i = 0; i < weekByCalendar.length; i++) {

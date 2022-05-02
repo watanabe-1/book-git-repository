@@ -83,7 +83,7 @@ public class BooksController {
     // 日付がパラメーターで指定されていないとき
     if (date == null) {
       // 現在の日付を取得
-      date = StudyUtil.getNowDate();
+      date = booksHelper.getStartDate(StudyUtil.getNowDate());
     }
     if (StudyUtil.isNullOrEmpty(tab)) {
       tab = DEFALT_TAB;
