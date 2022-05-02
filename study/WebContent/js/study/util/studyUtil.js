@@ -87,6 +87,14 @@ function getBaseUrl() {
 }
 
 /**
+ * urlの初期部分を取得
+ */
+function getFirstUrl() {
+  const target = document.querySelector('#firstLink');
+  return target.getAttribute('href');
+}
+
+/**
  * urlのパラメーターを取得
  * @param {string} paramName - パラメーター名
  */
@@ -181,7 +189,7 @@ function ajax(
   method,
   url,
   params = '',
-  type = PARALLEL,
+  type = SERIES,
   functions = [],
   functionArgs = []
 ) {
@@ -225,31 +233,33 @@ function ajax(
   // 追加の処理の実施
   // 並列実行
   if (type === PARALLEL) {
-    ajaxPromise = ajaxPromise.then(
-      //前の処理が成功した時
-      function (response) {
-        //Promise.allを使用して並列実行
-        return Promise.all(
-          functions.map(function (func, i) {
-            return new Promise(function (fulfilled, rejected) {
-              //追加の引数があるかどうかを判定(jsはnull判定をifの条件に指定するだけで勝手にやってくれる)
-              if (functionArgs[i]) {
-                //追加の引数指定があったとき
-                func(response, functionArgs[i]);
-              } else {
-                //追加の引数指定がなかった時
-                func(response);
-              }
-              fulfilled(response);
-            });
-          })
-        );
-      },
-      //前の処理がエラーの時はthrowを行い後続の処理を実行しないようにする
-      function (error) {
-        throw new Error(error);
-      }
-    );
+    if (functions.length > 0) {
+      ajaxPromise = ajaxPromise.then(
+        //前の処理が成功した時
+        function (response) {
+          //Promise.allを使用して並列実行
+          return Promise.all(
+            functions.map(function (func, i) {
+              return new Promise(function (fulfilled, rejected) {
+                //追加の引数があるかどうかを判定(jsはnull判定をifの条件に指定するだけで勝手にやってくれる)
+                if (functionArgs[i]) {
+                  //追加の引数指定があったとき
+                  func(response, functionArgs[i]);
+                } else {
+                  //追加の引数指定がなかった時
+                  func(response);
+                }
+                fulfilled(response);
+              });
+            })
+          );
+        },
+        //前の処理がエラーの時はthrowを行い後続の処理を実行しないようにする
+        function (error) {
+          throw new Error(error);
+        }
+      );
+    }
   } else {
     //直列実行
     for (let i = 0; i < functions.length; i++) {
@@ -321,4 +331,40 @@ function submit(method, url, params = '') {
   document.body.appendChild(submitMe);
   //送信
   submitMe.submit();
+}
+
+/**
+ * 画面内に使用するための日付けを取得
+ *
+ */
+function getStudyDate() {
+  // urlからパラメーターを取得
+  const paaramDate = getLocationHrefParm('date');
+  //dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
+  const date = paaramDate == null ? new Date() : new Date(paaramDate);
+
+  return date;
+}
+
+/**
+ * 日付けをyyyyMMdd形式に変換
+ *
+ * @param {Date} date 対象日付け
+ * @param {String} delim 区切り文字
+ */
+function formatDateBtYyyyMmDd(date, delim = null) {
+  //日付け型ではなかったら
+  if (typeof date != 'Date') {
+    date = new Date(date);
+  }
+  const result =
+    delim == null
+      ? date.getFullYear() + (date.getMonth() + 1) + date.getDate()
+      : date.getFullYear() +
+        delim +
+        (date.getMonth() + 1) +
+        delim +
+        date.getDate();
+
+  return result;
 }

@@ -124,11 +124,9 @@ function doughnutChart(jsonData, args) {
           usePointStyle: true,
           callbacks: {
             label: function (context) {
-              // location.hrefからパラメーターを取得
-              const paaramDate = getLocationHrefParm('date');
               //dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
-              const date =
-                paaramDate == null ? new Date() : new Date(paaramDate);
+              //studyUtil.getStudyDate()の呼び出し
+              const date = getStudyDate();
               return date.getFullYear() + '/' + date.getMonth();
             },
             /*
@@ -276,11 +274,9 @@ function barChart(jsonData, args) {
             title: function (context) {
               //console.log(context);
               const label = context[0].label;
-              // location.hrefからパラメーターを取得
-              const paaramDate = getLocationHrefParm('date');
               //dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
-              const date =
-                paaramDate == null ? new Date() : new Date(paaramDate);
+              //studyUtil.getStudyDate()の呼び出し
+              const date = getStudyDate();
               return (
                 label + '(' + date.getFullYear() + '/' + date.getMonth() + ')'
               );

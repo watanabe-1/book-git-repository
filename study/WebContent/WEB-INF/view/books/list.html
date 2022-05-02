@@ -28,7 +28,7 @@
 			<a href="#tab3" class="nav-link" th:classappend="${tab3}" data-bs-toggle="tab">グラフ</a>
 		</li>
 		<li class="nav-item">
-			<a href="#tab4" class="nav-link" th:classappend="${tab4}" data-bs-toggle="tab">グラフ2</a>
+			<a href="#tab4" class="nav-link" th:classappend="${tab4}" data-bs-toggle="tab">カレンダー_支出</a>
 		</li>
 	</ul>
 	<div class="container">
@@ -160,17 +160,37 @@
 			</div>
 		</div>
 		<div id="tab4" class="tab-pane" th:classappend="${tab4}">
-			タブ4(グラフ)のコンテンツが入ります
+			<!-- タブ4(グラフ)のコンテンツが入ります -->
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<!-- xxxx年xx月を表示 -->
+						<h1 id="tabCalendarHeader"></h1>
+
+						<!-- ボタンクリックで月移動 -->
+						<!-- <div id="next-prev-button">
+							<button id="prev" onclick="prev()">‹</button>
+							<button id="next" onclick="next()">›</button>
+						</div> -->
+
+						<!-- カレンダー -->
+						<div id="tabCalendar"></div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12">
+						<!-- 家計簿 -->
+						<div id="booksListbytabCalendar"></div>
+					</div>
+				</div>
+				<a hiidden id="syukujitsuList" th:href="@{/books/rest/calendar/syukujitsu}"></a>
+				<a hiidden id="AmountByDayList" th:href="@{/books/rest/calendar/AmountByDay}"></a>
+			</div>
 		</div>
 	</div>
 	<script>
 		//flatpickr
 		document.addEventListener('DOMContentLoaded', function () {
-			// urlからパラメーターを取得
-			const paaramDate = getLocationHrefParm('date');
-
-			//dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
-			const date = paaramDate == null ? new Date() : new Date(paaramDate);
 
 			/* 同画面内の全flatpickerの設定値を変更する場合
 			const defaltConfig = {
@@ -212,11 +232,11 @@
 
 				//月を選択して値が書き換えられたときに発火
 				onValueUpdate: [function () {
-					const date = this.selectedDates[0]; // 入力値を取得 選択した日付
+					const selectDate = this.selectedDates[0]; // 入力値を取得 選択した日付
 					//ページ遷移
 					//次月へのaタグからurlを取得し、日付けだけ書き換えて送信
 					//uriはエンコードしている
-					window.location.href = setAtagHrefParm("#datepicker-right", 'date', date);
+					window.location.href = setAtagHrefParm("#datepicker-right", 'date', selectDate);
 				}]
 			};
 			//カレンダー(月だけ)
@@ -245,17 +265,17 @@
 			});
 		}
 	</script>
-
 </body>
 
 </html>
 <script>
+	//グローバル日付けの定義
+	//dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
+	const date = getStudyDate();
+</script>
+<script>
 	//chart
 	//処理の実行
-	// urlからパラメーターを取得
-	const paaramDate = getLocationHrefParm('date');
-	//dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
-	const date = paaramDate == null ? new Date() : new Date(paaramDate);
 	//barとline（年ごとのチャート）
 	const restBarAndLineByYearUrl = setAtagHrefParm('#restBarAndLineByYear', 'date', date);
 	let functionArgs = ['barAndLineByYear', '過去12ヶ月'];
@@ -282,4 +302,12 @@
 			['barMethod', '支払い別']
 		];
 	ajax('POST', restMethodUrl, '', PARALLEL, functions, functionArgs);
+</script>
+<script>
+	//祝日リスト取得用url
+	const syukujitsuUrl = setAtagHrefParm('#syukujitsuList', 'date', date);
+	//日にちごとのお金取得用url
+	const AmountByDayUrl = setAtagHrefParm('#AmountByDayList', 'date', date);
+	//tab4 カレンダーの表示
+	initStudyCalendar(date, 'tabCalendar', 'booksListbytabCalendar', syukujitsuUrl, AmountByDayUrl)
 </script>

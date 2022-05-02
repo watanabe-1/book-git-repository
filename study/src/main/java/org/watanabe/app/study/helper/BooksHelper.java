@@ -3,7 +3,6 @@ package org.watanabe.app.study.helper;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,7 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import org.mozilla.universalchardet.UniversalDetector;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -73,7 +71,7 @@ public class BooksHelper {
     String user = StudyUtil.getLoginUser();
     SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd");
     List<Books> booksList = new ArrayList<Books>();
-    String charset = detectFileEncoding(booksFile);
+    String charset = StudyUtil.detectFileEncoding(booksFile);
 
     try (BufferedReader br =
         new BufferedReader(new InputStreamReader(booksFile.getInputStream(), charset))) {
@@ -101,34 +99,6 @@ public class BooksHelper {
     }
 
     return booksList;
-  }
-
-  /**
-   * ファイルの文字コードを判定
-   * 
-   * @param file アップロードされたfileデータ
-   * @return result 文字コード
-   */
-  public String detectFileEncoding(MultipartFile file) {
-    String result = null;
-    byte[] buf = new byte[4096];
-
-    try (InputStream fis = file.getInputStream()) {
-
-      UniversalDetector detector = new UniversalDetector(null);
-      int nread;
-      while ((nread = fis.read(buf)) > 0 && !detector.isDone()) {
-        detector.handleData(buf, 0, nread);
-      }
-      detector.dataEnd();
-      result = detector.getDetectedCharset();
-      detector.reset();
-
-    } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
-    }
-
-    return result;
   }
 
   /**

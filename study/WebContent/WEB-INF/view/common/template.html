@@ -19,6 +19,9 @@
 </head>
 
 <body>
+  <!-- jsで利用するurlの頭部分の定義 -->
+  <a hiidden id="firstLink" th:href="@{/}"></a>
+
   <!--共通ヘッダーの読み込み -->
   <div th:replace="common/header :: header_fragment"></div>
   <div class="container-fluid">
@@ -41,6 +44,7 @@
   <script th:src="@{/js/chart.js/dist/chart.js}"></script>
   <script th:src="@{/js/study/util/studyUtil.js}"></script>
   <script th:src="@{/js/study/chart/studyChart.js}"></script>
+  <script th:src="@{/js/study/calendar/studyCalendar.js}"></script>
 
   <!-- 各画面専用のjavascriptを定義 -->
   <th:block th:if="${#!strings.isEmpty(scripts)}" th:replace="${scripts}"></th:block>
