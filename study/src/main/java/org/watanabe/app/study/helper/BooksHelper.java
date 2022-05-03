@@ -151,7 +151,7 @@ public class BooksHelper {
   }
 
   /**
-   * 日を01日に変換して返却
+   * その月の最初の日に変換して返却
    * 
    * @param date 変更したい日付
    * @return Date 変換語の日付
@@ -161,7 +161,7 @@ public class BooksHelper {
   }
 
   /**
-   * 日を31日に変換して返却
+   * その月の最後の日に変換して返却
    * 
    * @param date 変更したい日付
    * @return Date 変換語の日付
@@ -171,7 +171,7 @@ public class BooksHelper {
   }
 
   /**
-   * 1年前の月の1日を取得
+   * 1年前の月の最初の日を取得
    * 
    * @param date 変更したい日付
    * @return Date 変換語の日付

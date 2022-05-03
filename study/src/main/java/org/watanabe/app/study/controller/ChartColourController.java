@@ -129,7 +129,7 @@ public class ChartColourController {
   public ModelAndView index(@ModelAttribute TemplatechartcolourForm form, ModelAndView model,
       String tab, @ModelAttribute("model") ModelMap modelMap) {
     model.setViewName("chartColour/index");
-    // リダイレクトで呼ばれたときのパrメータ-
+    // リダイレクトで呼ばれたときのパラメータ-
     String redirectTab = (String) modelMap.get("tab");
 
     if (redirectTab != null) {

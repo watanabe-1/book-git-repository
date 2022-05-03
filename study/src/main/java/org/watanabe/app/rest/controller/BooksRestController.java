@@ -160,11 +160,11 @@ public class BooksRestController {
     final String BAR = "bar";
     final String LINE = "line";
 
-    // 対象を取得
+    // 支出を取得
     List<Books> booksByExpenses =
         booksService.findByBooksDateAndBooksTypeJoinCategory(booksHelper.getOneYearAgoMonth(date),
             booksHelper.getEndDate(date), BooksHelper.BOOKS_TYPE_EXPENSES);
-    // 対象を取得
+    // 収入を取得
     List<Books> booksByIncome =
         booksService.findByBooksDateAndBooksTypeJoinCategory(booksHelper.getOneYearAgoMonth(date),
             booksHelper.getEndDate(date), BooksHelper.BOOKS_TYPE_INCOME);

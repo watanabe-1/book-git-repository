@@ -164,7 +164,7 @@ public class StudyUtil {
    * 月初もしくは月末の日付けを取得
    * 
    * @param date 変更したい日付
-   * @param type "START" or "END"
+   * @param type "start" or "end"
    * @return Date 変換語の日付
    */
   public static Date getEdgeDate(Date date, String type) {

@@ -354,9 +354,6 @@
 	</div>
 	</div>
 	<script>
-
-	</script>
-	<script>
 		//bootstrap タブ切り替え時のイベントを取得し、現在開いているタブを記憶するように変更
 		//https://getbootstrap.jp/docs/5.0/components/navs-tabs/ のイベントを参照
 		const tabEl = document.querySelectorAll('[data-bs-toggle="tab"]');
@@ -381,9 +378,9 @@
 	//chart
 	//処理の実行
 	// urlからパラメーターを取得
-	const paaramDate = getLocationHrefParm('qty');
+	const paaramQty = getLocationHrefParm('qty');
 	//qty java側で0の時は置換
-	const qty = paaramDate == null ? 0 : paaramDate;
+	const qty = paaramQty == null ? 0 : paaramQty;
 	//ドーナツ
 	const DOUGHNUT = 'ドーナッツ';
 	//ホライゾンバー
