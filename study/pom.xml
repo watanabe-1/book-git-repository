@@ -1,135 +1,107 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.watanabe.app</groupId>
 	<artifactId>study</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<!-- プロジェクト名 -->
+	<name>study</name>
+	<description>Sample project for Spring Boot</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.6.7</version>
+		<relativePath />
+		<!-- lookup parent from repository -->
+	</parent>
 
 	<properties>
-		<!-- Generic properties -->
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<maven.compiler.source>11</maven.compiler.source>
-		<maven.compiler.target>11</maven.compiler.target>
-		<!-- Servlet version -->
-		<servlet.version>4.0.1</servlet.version>
-		<!-- Spring framework version -->
-		<spring-framework.version>5.3.16</spring-framework.version>
-		<!-- Thymeleaf -->
-		<thymeleaf.version>3.0.14.RELEASE</thymeleaf.version>
-		<!-- Bean Validation API version -->
-		<validation-api.version>2.0.1.Final</validation-api.version>
-		<!-- Hibernate Validator version -->
-		<hibernate-validator.version>5.3.6.Final</hibernate-validator.version>
-		<!-- PostgreSQL version -->
-		<postgresql.version>42.3.3</postgresql.version>
-		<!-- Commons DBCP2 version -->
-		<commons-dbcp2.version>2.9.0</commons-dbcp2.version>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>16</java.version>
+		<!-- juniversalchardet -->
+		<juniversalchardet.version>1.0.3</juniversalchardet.version>
 		<!-- MyBatis version -->
-		<mybatis.version>3.5.6</mybatis.version>
-		<!-- MyBatis Spring version -->
-		<mybatis-spring.version>2.0.0</mybatis-spring.version>
-		<!-- Apache Commons IO version -->
-		<apache-commons-io.version>2.11.0</apache-commons-io.version>
-		<!-- Lombok version -->
-		<lombok.version>1.18.22</lombok.version>
-		<!-- Logback version -->
-		<logback.version>1.2.10</logback.version>
+		<mybatis.version>2.2.2</mybatis.version>
 		<!-- 例外ハンドリング -->
 		<!-- terasoluna-gfw version -->
 		<terasoluna-gfw.version>5.7.0.RELEASE</terasoluna-gfw.version>
+		<!-- Apache Commons IO version -->
+		<apache-commons-io.version>2.11.0</apache-commons-io.version>
+
 	</properties>
 
 	<dependencies>
-		<!-- Servlet -->
+		<!-- SpringBoot のWebアプリケーション用ライブラリ
+           SpringBoot のWebAppに関するすべての機能をまとめている -->
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>${servlet.version}</version>
-			<!-- コンパイル時のみ依存 -->
-			<!-- 実行時はTomcatライブラリを使用するため -->
-			<scope>provided</scope>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!-- Spring MVC -->
+
+		<!-- SpringBoot のThymeleaf用のライブラリ -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-			<version>${spring-framework.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
+
+		<!-- Thymeleaf（テンプレートエンジン）ライブラリ -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>${spring-framework.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
-		<!-- Thymeleaf -->
+
+		<!-- SpringBoot でのDB関連一式 -->
 		<dependency>
-			<groupId>org.thymeleaf</groupId>
-			<artifactId>thymeleaf</artifactId>
-			<version>${thymeleaf.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
+		<!-- validation -->
 		<dependency>
-			<groupId>org.thymeleaf</groupId>
-			<artifactId>thymeleaf-spring5</artifactId>
-			<version>${thymeleaf.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
 		</dependency>
-		<!-- Bean Validation API -->
+
+		<!-- MyBatis -->
+		<!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
 		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>${validation-api.version}</version>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>${mybatis.version}</version>
 		</dependency>
-		<!-- hibernate-validator ver up のために追加したが結局あげれなかった
-		    <dependency>
-			    <groupId>jakarta.validation</groupId>
-			    <artifactId>jakarta.validation-api</artifactId>
-			    <version>3.0.1</version>
-			</dependency>
-			<dependency>
-			    <groupId>org.glassfish</groupId>
-			    <artifactId>jakarta.el</artifactId>
-			    <version>4.0.1</version>
-			</dependency>
-		-->
-		<!-- Hibernate Validator -->
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-validator</artifactId>
-			<version>${hibernate-validator.version}</version>
-		</dependency>
-		<!-- Spring JDBC -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-			<version>${spring-framework.version}</version>
-		</dependency>
-		<!-- PostgreSQL -->
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>${postgresql.version}</version>
-		</dependency>
+
+		<!-- DB -->
 		<!-- Commons DBCP2 -->
 		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-dbcp2</artifactId>
-			<version>${commons-dbcp2.version}</version>
 		</dependency>
-		<!-- MyBatis -->
+
+		<!-- ホットデプロイの為のツール -->
 		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis</artifactId>
-			<version>${mybatis.version}</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
+
+		<!--文字コード判定用-->
 		<dependency>
-			<groupId>org.mybatis</groupId>
-			<artifactId>mybatis-spring</artifactId>
-			<version>${mybatis-spring.version}</version>
+			<groupId>com.googlecode.juniversalchardet</groupId>
+			<artifactId>juniversalchardet</artifactId>
+			<version>${juniversalchardet.version}</version>
 		</dependency>
-		<!-- Spring Aspects -->
+
+		<!-- PostgreSQL -->
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-aspects</artifactId>
-			<version>${spring-framework.version}</version>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
 		</dependency>
+
 		<!-- Apache Commons IO  -->
 		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
@@ -137,20 +109,14 @@
 			<artifactId>commons-io</artifactId>
 			<version>${apache-commons-io.version}</version>
 		</dependency>
+
 		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>${lombok.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>${logback.version}</version>
-		</dependency>
 		<!--terasoluna-gfw-web-->
 		<!--https://jar-download.com/artifacts/org.terasoluna.gfw/terasoluna-gfw-web/5.7.0.RELEASE-->
 		<dependency>
@@ -166,16 +132,17 @@
 			<artifactId>terasoluna-gfw-common</artifactId>
 			<version>${terasoluna-gfw.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>com.fasterxml.jackson.dataformat</groupId>
-			<artifactId>jackson-dataformat-xml</artifactId>
-			<version>2.13.2</version>
-		</dependency>
-		<!--文字コード判定用-->
-		<dependency>
-			<groupId>com.googlecode.juniversalchardet</groupId>
-			<artifactId>juniversalchardet</artifactId>
-			<version>1.0.3</version>
-		</dependency>
+
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+
 </project>
