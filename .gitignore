@@ -35,6 +35,7 @@ build
 bin
 
 # Other
+/study/WebContent/temp/
 *.log
 *.swp
 *.bak
