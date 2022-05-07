@@ -177,6 +177,29 @@ function concatMap(map, prioritizeMap) {
   return map;
 }
 
+/**
+ * 文字列の中から対象文字列を切り抜き
+ * @param {string} str 文字列
+ * @param {string} startStr 開始
+ * @param {string} lastStr 終了
+ * @return 切り抜いた文字列
+ */
+function substringBetweenStr(str, startStr, lastStr) {
+  const startIndex = str.indexOf(startStr) > 0 ? str.indexOf(startStr) + startStr.length : 0;
+  const lastIndex = str.lastIndexOf(lastStr) > 0 ? str.lastIndexOf(lastStr) : str.length;
+  return str.substring(startIndex, lastIndex);
+}
+
+/**
+ * 0埋めを行う
+ * @param {integer} num 値
+ * @param {integer} len 桁数
+ * @return 0埋めした文字列
+ */
+function zeroPadding(num, len){
+	return ( Array(len).join('0') + num ).slice( -len );
+}
+
 
 
 

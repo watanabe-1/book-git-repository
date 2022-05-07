@@ -192,9 +192,12 @@ function getJavaEntity(sheetName) {
   //entityのパッケージの取得
   let javaStrHead = "package " + getProperty("java_entity_package") + ";" + repeatConcatStr(javaKaigyo, 2);
 
+  //固定impot文の挿入
+  importMap.set("Serializable", "java.io.Serializable");
+
   //クラス名宣言
   let javaStrBody = getJavaDoc(tbEnName + ":" + tbJaName + "(" + tbNote + ")のentityクラス") + getProperty("java_entity_lombok")
-    + javaKaigyo + "public class " + entityName + " {" + repeatConcatStr(javaKaigyo, 2);
+    + javaKaigyo + "public class " + entityName + " implements Serializable {" + repeatConcatStr(javaKaigyo, 2);
   //フィールド宣言
   for (var j = 5; j <= lastRow; j++) {
     const dbTeigi = new DbTeigi(values[j - 1]);
@@ -224,7 +227,6 @@ function getJavaEntity(sheetName) {
     }
   }
 
-  //date型があるときは下記のクラスをimport
   javaStrHead += getJavaImport(importMap) + "import " + getProperty("java_import_entity_lombok")
     + ";" + repeatConcatStr(javaKaigyo, 2);
   javaStrBody += "}";
