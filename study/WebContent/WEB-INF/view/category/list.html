@@ -18,42 +18,312 @@
 		</div>
 	</div>
 	<div class="container">
-		<table class="table table-bordered">
-			<thead>
-				<tr>
-					<th>カテゴリーコード</th>
-					<th>カテゴリー名</th>
-					<th>カテゴリータイプ</th>
-					<th>メモ</th>
-					<th>画像タイプ</th>
-					<th>画像ID</th>
-					<th>アクティブフラグ</th>
-					<th>挿入日時</th>
-					<th>挿入ユーザー</th>
-					<th>更新日時</th>
-					<th>更新ユーザー</th>
-					<th>画像</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr th:each="cat : ${catlist}" th:object="${cat}">
-					<td class="center" th:text="${cat.catCode}"></td>
-					<td th:text="${cat.catName}"></td>
-					<td class="center" th:text="${cat.catType}"></td>
-					<td class="center" th:text="${cat.note}"></td>
-					<td th:text="${cat.imgType}"></td>
-					<td th:text="${cat.imgIds.imgId}"></td>
-					<td th:text="${cat.active}"></td>
-					<td class="center" th:text="${#dates.format(cat.updDate, 'yyyy/MM/dd')}"></td>
-					<td th:text="${cat.updUser}"></td>
-					<td class="center" th:text="${#dates.format(cat.insDate, 'yyyy/MM/dd')}"></td>
-					<td th:text="${cat.insUser}"></td>
-					<td><img th:src="@{${cat.imgIds.imgPath + '/' + cat.imgIds.imgName}}" class="mh-100 mw-100"
-							width="50" height="30" /></td>
-				</tr>
-			</tbody>
-		</table>
+		<div th:if="${validationError}" th:each="error : ${validationError}">
+			<label class="text-danger" th:text="${error}"></label>
+		</div>
+		<form th:action="@{/category/listUpdate}" th:object="${catListParam}" enctype="multipart/form-data"
+			th:method="post">
+			<div class="text-end">
+				<input type="submit" class="btn btn-primary" value="　更新　">
+			</div>
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>削除</th>
+						<th hidden>カテゴリーコード</th>
+						<th>カテゴリー名</th>
+						<th>カテゴリータイプ</th>
+						<th>メモ</th>
+						<th>画像タイプ</th>
+						<th>画像ID</th>
+						<th>アクティブフラグ</th>
+						<th hidden>挿入日時</th>
+						<th hidden>挿入ユーザー</th>
+						<th hidden>更新日時</th>
+						<th hidden>更新ユーザー</th>
+						<th>画像</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="cat, st : *{catDataList}" class="align-middle">
+						<td class="center">
+							<input type="checkbox" name="active" th:each="cat : ${isDeleteList}" th:value="${cat.key}"
+								th:text="${cat.value}" th:field="*{catDataList[__${st.index}__].isDelete}" />
+						</td>
+						<td class="center" hidden>
+							<label th:text="${cat.CatCode}"></label>
+							<input type="hidden" th:field="*{catDataList[__${st.index}__].CatCode}">
+						</td>
+						<td class="center">
+							<input type="text" class="form-control" th:field="*{catDataList[__${st.index}__].catName}">
+						</td>
+						<td class="center">
+							<input type="radio" name="catType" th:each="cat : ${catTypes}" th:value="${cat.key}"
+								th:text="${cat.value}" th:field="*{catDataList[__${st.index}__].catType}" />
+						</td>
+						<td class="center">
+							<textarea class="form-control" th:field="*{catDataList[__${st.index}__].note}"
+								rows="3"></textarea>
+						</td>
+						<td>
+							<select th:field="*{catDataList[__${st.index}__].imgType}" class="form-select">
+								<option th:each="cat : ${imgTypes}" th:value="${cat.key}" th:text="${cat.value}"
+									th:selected="${cat.key} == *{catDataList[__${st.index}__].imgType}"></option>
+							</select>
+						</td>
+						<td>
+							<label th:text="${cat.imgIds.imgId}"></label>
+							<input type="hidden" th:field="*{catDataList[__${st.index}__].imgIds.imgId}">
+							<button type="button" class="btn btn-primary" data-bs-toggle="modal"
+								data-bs-target="#listModal">
+								確認
+							</button>
+						</td>
+						<td>
+							<input type="checkbox" name="active" th:each="cat : ${actives}" th:value="${cat.key}"
+								th:text="${cat.value}" th:field="*{catDataList[__${st.index}__].active}" />
+						</td>
+						<td class="center" hidden>
+							<label th:text="${#dates.format(cat.updDate, 'yyyy/MM/dd')}"></label>
+						</td>
+						<td hidden>
+							<label th:text="${cat.updUser}"></label>
+						</td>
+						<td class="center" hidden>
+							<label th:text="${#dates.format(cat.insDate, 'yyyy/MM/dd')}"></label>
+						</td>
+						<td hidden>
+							<label th:text="${cat.insUser}"></label>
+						</td>
+						<td><img th:src="@{${cat.imgIds.imgPath + '/' + cat.imgIds.imgName}}" class="mh-100 mw-100"
+								width="50" height="30" />
+							<input type="file" class="form-control" th:field="*{catDataList[__${st.index}__].catIcon}"
+								accept="image/*" />
+						</td>
+
+					</tr>
+				</tbody>
+			</table>
+		</form>
+		<!--hidden model -->
+		<div class="modal fade" tabindex="-1" id="listModal">
+			<div class="modal-dialog modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">変更したいアイコンを選んでください</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						<div class="container">
+							<div class="row">
+								<div class="col-1">
+									<button type="button" class="btn btn-primary float-start" id="backImg">＜</button>
+								</div>
+								<div class="col-10" id="imgCanvas"></div>
+								<div class="col-1">
+									<button type="button" class="btn btn-primary float-end" id="nextImg">＞</button>
+								</div>
+							</div>
+							<!-- 変更 -->
+							<a hiidden id="restConfirmTempList" th:href="@{/chartColour/rest/confirm}"></a>
+						</div>
+						<div class="row border-bottom my-2"></div>
+					</div>
+					<div class="modal-footer">
+						<div class="container">
+							<div class="row">
+								<div class="col-3">
+									<button type="button" class="btn btn-danger float-start"
+										data-bs-target="#listModalDelete" data-bs-toggle="modal"
+										data-bs-dismiss="modal">削除</button>
+								</div>
+								<div class="col-9">
+									<button type="button" class="btn btn-secondary float-end"
+										data-bs-dismiss="modal">閉じる</button>
+									<button type="button" class="btn btn-primary float-end"
+										id="saveListModal">変更</button>
+									<a hiidden id="savelistModalUrl" th:href="@{/chartColour/changeActive}"></a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--hidden model 削除確認用-->
+		<div class="modal fade" id="listModalDelete" aria-hidden="true" aria-labelledby="listModalDelete" tabindex="-1">
+			<div class="modal-dialog modal-dialog-centered">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">本当に削除してもよろしいでしょうか？</h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body">
+						削除されたアイコンはもとに戻すことができません。ご注意ください
+					</div>
+					<div class="modal-footer">
+						<div class="container">
+							<div class="row">
+								<div class="col-3">
+									<button type="button" class="btn btn-danger float-start"
+										id="deleteListModal">削除</button>
+								</div>
+								<div class="col-9">
+									<!-- 確認 -->
+									<a hiidden id="deletelistModalUrl" th:href="@{/chartColour/delete}"></a>
+									<button class="btn btn-primary float-end" data-bs-target="#listModal"
+										data-bs-toggle="modal" data-bs-dismiss="modal">戻る</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 
 </html>
+<script type="text/javascript" th:inline="javascript">
+	//tymeleafを使用してjsコードの中身を動的に変更
+	/*<![CDATA[*/
+	let imgList = JSON.parse(/*[[${imgList}]]*/);
+	/*]]>*/
+	let imgNum = 0;
+	//クリックした時のボタン
+	let imgConfirmButton;
+
+	/**
+	* イメージタグの作成
+	*
+	* @param {HTMLElement} imgJson 画像パス
+	*/
+	function createImgTag(imgJson) {
+		//画面描画用imageタグの作成
+		const imgElement = document.createElement('img');
+		imgElement.src =
+			//studyUtilのgetFirstUrl()
+			getFirstUrl() +
+			imgJson.imgPath +
+			'/' +
+			imgJson.imgName; // 画像パス
+		imgElement.alt = imgJson.imgName; // 代替テキスト
+		imgElement.width = 600; // 横サイズ（px）
+		imgElement.height = 450; // 縦サイズ（px）
+		imgElement.className = 'mh-100 mw-100';
+		//modal内に描画
+		const imgCanvas = document.getElementById('imgCanvas');
+		//StudyUtil.appendOrReplaceChild
+		appendOrReplaceChild(imgCanvas, imgElement, 'img');
+	}
+
+	/**
+	* 画像を前の画像に変更
+	*
+	* @param {String} selectedImgId 設定されている画像Id
+	*/
+	function defaultImgtag(selectedImgId) {
+		let num = 0;
+		imgList.forEach((value, index) => {
+			//console.log(selectedImgId);
+			//console.log(value.imgId);
+			if (value.imgId == selectedImgId) {
+				//console.log(num);
+				num = index;
+			}
+		});
+		imgNum = num;
+		createImgTag(imgList[imgNum]);
+	}
+
+	/**
+	* 画像を次の画像に変更
+	*
+	*/
+	function nextImgtag() {
+		if (imgNum < imgList.length - 1) {
+			imgNum++;
+		} else {
+			imgNum = 0;
+		}
+		createImgTag(imgList[imgNum]);
+	}
+
+	/**
+	* 画像を前の画像に変更
+	*
+	*/
+	function backImgtag() {
+		if (imgNum > 0) {
+			imgNum--;
+		} else {
+			imgNum = imgList.length - 1;
+		}
+		createImgTag(imgList[imgNum]);
+	}
+</script>
+
+<script>
+	//list model
+	const listModalEl = document.getElementById('listModal');
+	//modalが開き始めるとき
+	listModalEl.addEventListener('show.bs.modal', function (event) {
+		//クリックした時のボタン
+		imgConfirmButton = event.relatedTarget;
+		//imgConfirmButtonから同じtdタグ内に存在するラベル、インプットタグを取得
+		const inputElment = imgConfirmButton.parentNode.querySelector('input');
+
+		//画面描画用imageタグの作成
+		defaultImgtag(inputElment.value);
+
+		//次へボタン
+		const nextButton = listModalEl.querySelector('#nextImg');
+		nextButton.addEventListener('click', function (event) {
+			nextImgtag();
+		});
+		//前へボタン
+		const backButton = listModalEl.querySelector('#backImg');
+		backButton.addEventListener('click', function (event) {
+			backImgtag();
+		});
+	})
+
+	//model内のボタンにイベントの追加
+	//confirm model-change-button
+	const listModalSaveButton = listModalEl.querySelector('#saveListModal');
+	listModalSaveButton.addEventListener('click', function (event) {
+		const imgId = imgList[imgNum].imgId;
+		//行を指定して取得
+		const tds = imgConfirmButton.parentNode.parentNode.querySelectorAll('td');
+		//行内に表示している画像の変更
+		const imgElement = tds[tds.length - 1].querySelector('img');
+		imgElement.src =
+			//studyUtilのgetFirstUrl()
+			getFirstUrl() +
+			imgList[imgNum].imgPath +
+			'/' +
+			imgList[imgNum].imgName; // 画像パス
+		//imgConfirmButtonから同じtdタグ内に存在するラベル、インプットタグを取得
+		const labelElment = imgConfirmButton.parentNode.querySelector('label');
+		const inputElment = imgConfirmButton.parentNode.querySelector('input');
+		labelElment.innerText = imgId;
+		inputElment.value = imgId;
+
+		//modelを閉じる
+		bootstrap.Modal.getInstance(listModalEl).hide()
+	})
+
+	//list model delete
+	const listModalDeleteEl = document.getElementById('listModalDelete');
+	const listModaldeleteButton = listModalDeleteEl.querySelector('#deleteListModal');
+	listModaldeleteButton.addEventListener('click', function (event) {
+		//入力パラム
+		const listDeleteParams = {
+			'imgId': imgList[imgNum].imgId,
+		}
+		const submitUrl = document.getElementById('deletelistModalUrl').href;
+		//削除処理実行
+		submit('POST', submitUrl, listDeleteParams);
+	})
+
+</script>

@@ -78,11 +78,6 @@ public class ChartColourHelper {
 
     for (int i = 0; i < qty; i++) {
       long data = STANDARD_DATA * (i + 1);
-      // if (i % 2 == 0) {
-      // data = STANDARD_DATA * i + 5000;
-      // } else {
-      // data = STANDARD_DATA * i;
-      // }
       dummyDataList.add(data);
     }
     // 降順に並び替え

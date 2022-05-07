@@ -2,7 +2,7 @@ package org.watanabe.app.study.form;
 
 import java.io.Serializable;
 import java.util.Date;
-import org.hibernate.validator.constraints.NotBlank;
+import javax.validation.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 import org.watanabe.app.common.validation.UploadFileMaxSize;
 import org.watanabe.app.common.validation.UploadFileMediaType;

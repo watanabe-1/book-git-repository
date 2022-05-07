@@ -58,12 +58,7 @@
 								<tr>
 									<td hidden class="center" th:text="${activeColour.templateId}"></td>
 									<td th:text="${activeColour.templateName}"></td>
-									<th:block th:if="${activeColour.active == '1'}">
-										<td>設定されています</td>
-									</th:block>
-									<th:block th:if="${activeColour.active != '1'}">
-										<td>設定されていません</td>
-									</th:block>
+									<td th:text="${activeColour.active == '1'} ? '設定されています' : '設定されていません'">
 									<td th:text="${activeColour.seedCoeffR}"></td>
 									<td th:text="${activeColour.seedCoeffG}"></td>
 									<td th:text="${activeColour.seedCoeffB}"></td>
@@ -112,14 +107,8 @@
 									</button>
 								</td>
 								<td th:text="${tempColour.templateName}"></td>
-								<th:block th:if="${tempColour.active == '1'}">
-									<td>
-										<span class="text-danger">設定されています</span>
-									</td>
-								</th:block>
-								<th:block th:if="${tempColour.active != '1'}">
-									<td>設定されていません</td>
-								</th:block>
+								<td th:text="${tempColour.active == '1'} ? '設定されています' : '設定されていません'"
+									th:classappend="${tempColour.active == '1'} ? 'text-danger' : ''">
 								<td th:text="${tempColour.seedCoeffR}"></td>
 								<td th:text="${tempColour.seedCoeffG}"></td>
 								<td th:text="${tempColour.seedCoeffB}"></td>
@@ -233,12 +222,8 @@
 									</button>
 								</td>
 								<td><input type="text" class="form-control" placeholder="名称を入力してください" required></td>
-								<th:block th:if="${randomColour.active == '1'}">
-									<td hidden>設定されています</td>
-								</th:block>
-								<th:block th:if="${randomColour.active != '1'}">
-									<td hidden>設定されていません</td>
-								</th:block>
+								<td hidden th:text="${randomColour.active == '1'} ? '設定されています' : '設定されていません'">
+								</td>
 								<td th:text="${randomColour.seedCoeffR}"></td>
 								<td th:text="${randomColour.seedCoeffG}"></td>
 								<td th:text="${randomColour.seedCoeffB}"></td>
@@ -630,4 +615,3 @@
 	})
 
 </script>
-0

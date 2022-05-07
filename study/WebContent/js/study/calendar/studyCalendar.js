@@ -120,14 +120,8 @@ function showCalendarProcess(date, targetId, targetBooksID) {
     getSelectedAmountByDayList()
   );
   const targetBooksElement = document.querySelector('#' + targetBooksID);
-  if (targetBooksElement.childElementCount > 0) {
-    targetBooksElement.replaceChild(
-      booksList,
-      targetBooksElement.querySelector('table')
-    );
-  } else {
-    targetBooksElement.appendChild(booksList);
-  }
+  //StudyUtil.appendOrReplaceChild
+  appendOrReplaceChild(targetBooksElement, booksList, 'table');
 
   //クリックイベントの追加
   const tabCalendarTableBody = document

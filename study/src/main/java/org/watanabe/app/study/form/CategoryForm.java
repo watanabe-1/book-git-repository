@@ -2,14 +2,16 @@ package org.watanabe.app.study.form;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.web.multipart.MultipartFile;
 import org.watanabe.app.common.validation.UploadFileMaxSize;
 import org.watanabe.app.common.validation.UploadFileMediaType;
 import org.watanabe.app.common.validation.UploadFileNotEmpty;
-import org.watanabe.app.common.validation.UploadFileRequired;
+import org.watanabe.app.study.entity.Image;
 import org.watanabe.app.study.util.StudyUtil;
+import lombok.Getter;
+import lombok.Setter;
 
 public class CategoryForm implements Serializable {
 
@@ -57,11 +59,18 @@ public class CategoryForm implements Serializable {
   private String updUser;
 
   /* ICON. */
-  @UploadFileRequired
   @UploadFileNotEmpty
   @UploadFileMaxSize
   @UploadFileMediaType(exts = "jpg,jpeg,png,gif", mediaTypes = "image/jpeg,image/png,image/gif")
   private MultipartFile catIcon;
+
+  /* 画像クラスの要素(親1対子1). */
+  private Image imgIds;
+
+  /* 削除フラグ. */
+  @Getter
+  @Setter
+  private Boolean isDelete;
 
 
   /**
@@ -318,6 +327,24 @@ public class CategoryForm implements Serializable {
    */
   public void setCatIcon(MultipartFile catIcon) {
     this.catIcon = catIcon;
+  }
+
+  /**
+   * 画像クラスの要素(親1対子1)を取得します.
+   * 
+   * @return Icon
+   */
+  public Image getImgIds() {
+    return imgIds;
+  }
+
+  /**
+   * 画像クラスの要素(親1対子1)を設定します.
+   * 
+   * @param Image imgIds
+   */
+  public void setImgIds(Image imgIds) {
+    this.imgIds = imgIds;
   }
 
 }

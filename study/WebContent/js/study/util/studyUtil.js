@@ -368,3 +368,19 @@ function formatDateBtYyyyMmDd(date, delim = null) {
 
   return result;
 }
+
+/**
+ * 対象要素にまだ追加されていなかったら、追加
+ * 追加されていたら置換
+ *
+ * @param {HTMLElement} target 追加対象html要素
+ * @param {HTMLElement} child 追加html要素
+ * @param {String} childType 追加html要素のタイプ
+ */
+function appendOrReplaceChild(target, child, childType) {
+  if (target.childElementCount > 0) {
+    target.replaceChild(child, target.querySelector(childType));
+  } else {
+    target.appendChild(child);
+  }
+}

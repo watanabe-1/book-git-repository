@@ -61,7 +61,8 @@
       <div class="row g-3">
         <div class="col-12">
           <label for="catIcon" class="form-label">アップロードしたICON</label>
-          <img th:src="${uploadIcon}" class="mh-100 mw-100" width="100" height="100" />
+          <img th:src="${uploadIcon != null} ? ${uploadIcon} : @{*{imgIds.imgPath + '/' + imgIds.imgName}}"
+            class="mh-100 mw-100" width="100" height="100" />
           <p th:if="${#fields.hasErrors('catIcon')}" th:errors="*{catIcon}" class="input-error"></p>
           <input type="hidden" th:field="*{imgId}" />
           <input type="hidden" th:field="*{imgExt}" />
