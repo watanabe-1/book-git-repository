@@ -90,8 +90,8 @@ function getBaseUrl() {
  * urlの初期部分を取得
  */
 function getFirstUrl() {
-  const target = document.querySelector('#firstLink');
-  return target.getAttribute('href');
+  const href = document.getElementById('firstLink').getAttribute('href');
+  return href.slice(0, href.length - 1);
 }
 
 /**

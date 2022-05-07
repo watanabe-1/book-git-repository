@@ -124,55 +124,17 @@
 									<button type="button" class="btn btn-primary float-end" id="nextImg">＞</button>
 								</div>
 							</div>
-							<!-- 変更 -->
-							<a hiidden id="restConfirmTempList" th:href="@{/chartColour/rest/confirm}"></a>
 						</div>
 						<div class="row border-bottom my-2"></div>
 					</div>
 					<div class="modal-footer">
 						<div class="container">
 							<div class="row">
-								<div class="col-3">
-									<button type="button" class="btn btn-danger float-start"
-										data-bs-target="#listModalDelete" data-bs-toggle="modal"
-										data-bs-dismiss="modal">削除</button>
-								</div>
-								<div class="col-9">
+								<div class="col-12">
 									<button type="button" class="btn btn-secondary float-end"
 										data-bs-dismiss="modal">閉じる</button>
 									<button type="button" class="btn btn-primary float-end"
 										id="saveListModal">変更</button>
-									<a hiidden id="savelistModalUrl" th:href="@{/chartColour/changeActive}"></a>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--hidden model 削除確認用-->
-		<div class="modal fade" id="listModalDelete" aria-hidden="true" aria-labelledby="listModalDelete" tabindex="-1">
-			<div class="modal-dialog modal-dialog-centered">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">本当に削除してもよろしいでしょうか？</h5>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body">
-						削除されたアイコンはもとに戻すことができません。ご注意ください
-					</div>
-					<div class="modal-footer">
-						<div class="container">
-							<div class="row">
-								<div class="col-3">
-									<button type="button" class="btn btn-danger float-start"
-										id="deleteListModal">削除</button>
-								</div>
-								<div class="col-9">
-									<!-- 確認 -->
-									<a hiidden id="deletelistModalUrl" th:href="@{/chartColour/delete}"></a>
-									<button class="btn btn-primary float-end" data-bs-target="#listModal"
-										data-bs-toggle="modal" data-bs-dismiss="modal">戻る</button>
 								</div>
 							</div>
 						</div>
@@ -272,7 +234,7 @@
 		imgConfirmButton = event.relatedTarget;
 		//imgConfirmButtonから同じtdタグ内に存在するラベル、インプットタグを取得
 		const inputElment = imgConfirmButton.parentNode.querySelector('input');
-
+		//console.log(inputElment);
 		//画面描画用imageタグの作成
 		defaultImgtag(inputElment.value);
 
@@ -311,19 +273,6 @@
 
 		//modelを閉じる
 		bootstrap.Modal.getInstance(listModalEl).hide()
-	})
-
-	//list model delete
-	const listModalDeleteEl = document.getElementById('listModalDelete');
-	const listModaldeleteButton = listModalDeleteEl.querySelector('#deleteListModal');
-	listModaldeleteButton.addEventListener('click', function (event) {
-		//入力パラム
-		const listDeleteParams = {
-			'imgId': imgList[imgNum].imgId,
-		}
-		const submitUrl = document.getElementById('deletelistModalUrl').href;
-		//削除処理実行
-		submit('POST', submitUrl, listDeleteParams);
 	})
 
 </script>

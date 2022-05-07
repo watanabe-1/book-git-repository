@@ -1,6 +1,5 @@
 package org.watanabe.app.study.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,12 +38,6 @@ public class CategoryController {
 
   private final String ISJAERR = "エラー";
   private final String ISEAERR = "ERR";
-
-  /**
-   * icon保管ディレクトリパス
-   */
-  @Value("${app.upload.iconDirectoryPath}")
-  private String uploadIconDirPath;
 
   /**
    * カテゴリー情報 Service
@@ -83,7 +75,7 @@ public class CategoryController {
   public String confirm(@ModelAttribute @Validated CategoryForm form, BindingResult result,
       Model model
   // , MultipartFile catIcon
-  ) throws IOException {
+  ) {
     // エラーがあったら画面を返す
     if (result.hasErrors()) {
       return input(form, model);
@@ -307,27 +299,4 @@ public class CategoryController {
 
     return map;
   }
-
-  /*
-   * //パラメーターのセット private ModelAndView setSelectRadioChecks(ModelAndView model) { //select box
-   * model.addObject("selectCategorys",getSelectedCategorys());
-   * 
-   * //radio botan model.addObject("selectCategoryRadios",getSelectedCategoryRadios());
-   * 
-   * //check box model.addObject("selectCategoryCheckBoxs",getSelectedCategoryCheckBoxs());
-   * 
-   * return model; } private Map<String,String> getSelectedCategorys(){ Map<String, String>
-   * selectMap = new LinkedHashMap<String, String>(); selectMap.put("key_A", "選択肢Ａは、これですよ");
-   * selectMap.put("key_B", "選択肢Ｂは、これですよ"); selectMap.put("key_C", "選択肢Ｃは、これですよ");
-   * selectMap.put("key_D", "選択肢Ｄは、これですよ"); selectMap.put("key_E", "選択肢Ｅは、これですよ"); return selectMap;
-   * }
-   * 
-   * private Map<String,String> getSelectedCategoryRadios(){ Map<String, String> selectMap = new
-   * LinkedHashMap<String, String>(); selectMap.put("required", "必須"); selectMap.put("notRequired",
-   * "必須ではない"); return selectMap; }
-   * 
-   * private Map<String,String> getSelectedCategoryCheckBoxs(){ Map<String, String> selectMap = new
-   * LinkedHashMap<String, String>(); selectMap.put("blue", "青"); selectMap.put("red", "赤");
-   * selectMap.put("yellow", "黄色"); return selectMap; }
-   */
 }

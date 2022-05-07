@@ -24,16 +24,21 @@ import org.watanabe.app.study.util.StudyUtil;
 @Component
 public class UploadHelper {
 
-  // プロパティファイルから読み取り
-  // 一時ファイル保管ディレクトリ
+  /**
+   * プロパティファイルから読み取り 一時ファイル保管ディレクトリ
+   */
   @Value("${app.upload.temporaryDirectoryPath}")
   private File uploadTmpDir;
 
-  // 本ファイル保管ディレクトリ
+  /**
+   * 本ファイル保管ディレクトリ
+   */
   @Value("${app.upload.imagesBaseDirectoryPath}")
   private File uploadImgDefDir;
 
-  // 本ファイル保管ディレクトリパス
+  /**
+   * 本ファイル保管ディレクトリパス
+   */
   @Value("${app.upload.imagesBaseDirectoryPath}")
   private String uploadImgDefDirPath;
 
@@ -87,19 +92,22 @@ public class UploadHelper {
    * 
    * @param uploadDirPath 保管ディレクトリパス
    * @param baseNameCode 新ファイル名のベースとなるコード
+   * @param imgId 画像ID
+   * @param ImgExt 画像拡張子
+   * @param ingType 画像タイプ
    * @return String 発番した画像ID
    */
   public void saveImageFile(String uploadDirPath, String baseNameCode, String imgId, String ImgExt,
       String ingType) {
-
     String uploadIconDir = StudyUtil.replaceFirstOneLeft(uploadDirPath, "/", "");
-    // 画像テーブル登録元情報をセット
-    ImageForm imgForm = new ImageForm();
     StringBuffer sb = new StringBuffer();
     String newImgName = sb.append(baseNameCode).append("_").append(uploadIconDir).append("_")
         .append(imgId).append(".").append(ImgExt).toString();
+
     // 仮保存していた画像を本保存
     String newImgFilePath = moveTemporaryFileToImagesFolder(newImgName, imgId, uploadIconDir);
+    // 画像テーブル登録元情報をセット
+    ImageForm imgForm = new ImageForm();
     imgForm.setImgId(imgId);
     imgForm.setImgName(newImgName);
     imgForm.setImgPath(newImgFilePath);
@@ -120,8 +128,7 @@ public class UploadHelper {
    * @param String 新ファイル名
    * @param String 一時ファイル保存時に発番した画像ID
    */
-  public String moveTemporaryFileToImagesFolder(String newFileName, String uploadTmpFileId)
-      throws IOException {
+  public String moveTemporaryFileToImagesFolder(String newFileName, String uploadTmpFileId) {
     return moveTemporaryFileToImagesFolder(newFileName, uploadTmpFileId, null);
   }
 
@@ -165,11 +172,15 @@ public class UploadHelper {
    * @param imageForm アップロードされたデータ
    * @param String アップロードされたファイルの拡張子
    * @return String
-   * @throws IOException
    */
-  public String encodeBase64(MultipartFile multipartFile, String expand) throws IOException {
+  public String encodeBase64(MultipartFile multipartFile, String expand) {
     StringBuffer data = new StringBuffer();
-    String base64 = new String(Base64.getEncoder().encode(multipartFile.getBytes()), "ASCII");
+    String base64 = null;
+    try {
+      base64 = new String(Base64.getEncoder().encode(multipartFile.getBytes()), "ASCII");
+    } catch (IOException e) {
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+    }
     data.append("data:image/").append(expand).append(";base64,").append(base64);
 
     return data.toString();
