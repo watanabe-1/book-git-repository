@@ -1,10 +1,11 @@
 package org.watanabe.app.study.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import org.springframework.web.multipart.MultipartFile;
 import org.watanabe.app.study.util.StudyUtil;
 
-public class Category {
+public class Category implements Serializable {
 
   /* シリアルキー. */
   private String serialKey;

@@ -1,5 +1,6 @@
 package org.watanabe.app.study.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import lombok.Data;
  * CODELKUP:コードルックアップ(コード定義テーブル(明細))のentityクラス
  */
 @Data
-public class Codelkup {
+public class Codelkup implements Serializable {
 
   /**
    * シリアルキー

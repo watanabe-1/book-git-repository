@@ -1,5 +1,6 @@
 package org.watanabe.app.study.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import lombok.Data;
  * BOOKS:家計簿(家計簿データ保存テーブル)のentityクラス
  */
 @Data
-public class Books {
+public class Books implements Serializable {
 
   /**
    * シリアルキー

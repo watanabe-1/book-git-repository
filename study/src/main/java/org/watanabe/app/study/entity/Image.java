@@ -1,8 +1,9 @@
 package org.watanabe.app.study.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Image {
+public class Image implements Serializable {
 
   /* シリアルキー. */
   private String serialKey;

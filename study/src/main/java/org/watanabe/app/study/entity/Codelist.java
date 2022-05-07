@@ -1,14 +1,14 @@
 package org.watanabe.app.study.entity;
 
+import java.io.Serializable;
 import java.util.Date;
-
 import lombok.Data;
 
 /**
  * CODELIST:コードリスト(コード定義テーブル(ヘッダー))のentityクラス
  */
 @Data
-public class Codelist {
+public class Codelist implements Serializable {
 
   /**
    * シリアルキー

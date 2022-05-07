@@ -1,5 +1,6 @@
 package org.watanabe.app.study.form;
 
+import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -9,7 +10,7 @@ import lombok.Data;
  * TEMPLATECHARTCOLOUR:チャートカラーマスタ(図の表示に使用するrgbaの組み合わせを管理するマスタ)のformクラス
  */
 @Data
-public class TemplatechartcolourForm {
+public class TemplatechartcolourForm implements Serializable {
 
   /**
    * シリアルキー

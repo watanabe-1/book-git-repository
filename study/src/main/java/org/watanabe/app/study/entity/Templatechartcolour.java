@@ -1,5 +1,6 @@
 package org.watanabe.app.study.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
@@ -7,7 +8,7 @@ import lombok.Data;
  * TEMPLATECHARTCOLOUR:チャートカラーマスタ(図の表示に使用するrgbaの組み合わせを管理するマスタ)のentityクラス
  */
 @Data
-public class Templatechartcolour {
+public class Templatechartcolour implements Serializable {
 
   /**
    * シリアルキー
@@ -75,4 +76,3 @@ public class Templatechartcolour {
   private String updUser;
 
 }
-
