@@ -38,11 +38,7 @@ public class StudyUtil {
    * @return String nullもしくは空白の時にtrue それ以外はfalse
    */
   public static boolean isNullOrEmpty(String value) {
-    if (value == null || value.isEmpty()) {
-      return true;
-    } else {
-      return false;
-    }
+    return value == null || value.isEmpty() ? true : false;
   }
 
   /**
@@ -58,11 +54,9 @@ public class StudyUtil {
     StringBuffer sb = new StringBuffer();
 
     // 「/」が文字列の先頭ににあった場合そのまま結合、なければ「/」をはさんで結合
-    if (addPath.indexOf(SLASH) == 0 || addPath.indexOf(ENMARK) == 0) {
-      return sb.append(basePath).append(addPath).toString();
-    } else {
-      return sb.append(basePath).append(SLASH).append(addPath).toString();
-    }
+    return addPath.indexOf(SLASH) == 0 || addPath.indexOf(ENMARK) == 0
+        ? sb.append(basePath).append(addPath).toString()
+        : sb.append(basePath).append(SLASH).append(addPath).toString();
   }
 
   /**
@@ -75,12 +69,7 @@ public class StudyUtil {
    */
   public static String replaceFirstOneLeft(String str, String target, String replaceMent) {
     // 置換対象が文字列の先頭ににあった場合のみ置換、それ以外は置換せずに返却
-    if (Objects.equals(target.indexOf(replaceMent), 0)) {
-      return str.replace(target, replaceMent);
-    } else {
-      return str;
-    }
-
+    return Objects.equals(target.indexOf(replaceMent), 0) ? str.replace(target, replaceMent) : str;
   }
 
   /**
@@ -93,11 +82,9 @@ public class StudyUtil {
    */
   public static String replaceFirstOneRight(String str, String target, String replaceMent) {
     // 置換対象が文字列の最後尾ににあった場合のみ置換、それ以外は置換せずに返却
-    if (Objects.equals(target.lastIndexOf(replaceMent), replaceMent.length())) {
-      return str.replace(target, replaceMent);
-    } else {
-      return str;
-    }
+    return Objects.equals(target.lastIndexOf(replaceMent), replaceMent.length())
+        ? str.replace(target, replaceMent)
+        : str;
 
   }
 
@@ -220,11 +207,9 @@ public class StudyUtil {
   public static String trimDoubleQuot(String str) {
     char c = '"';
 
-    if (str.charAt(0) == c && str.charAt(str.length() - 1) == c) {
-      return str.substring(1, str.length() - 1);
-    } else {
-      return str;
-    }
+    return str.charAt(0) == c && str.charAt(str.length() - 1) == c
+        ? str.substring(1, str.length() - 1)
+        : str;
   }
 
   /**

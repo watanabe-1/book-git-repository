@@ -54,17 +54,12 @@ public class ChartColourHelper {
     // ユーザーごとに作成し設定しているテンプレートを取得
     List<Templatechartcolour> activeTempColour =
         TemplatechartcolourService.findByUserIdAndActive(StudyUtil.getLoginUser(), "1");
-    // デフォルトユーザーのテンプレートを取得
-    List<Templatechartcolour> defTempColours =
-        TemplatechartcolourService.findByUserIdAndActive(StudyUtil.getCommonUser(), "1");
 
     // デフォルト以外のテンプレートを設定していなかったらデフォルトを設定してることになる
-    if (activeTempColour.isEmpty()) {
-      // デフォルトのテンプレートを設定しているテンプレートとしてセット
-      activeTempColour = defTempColours;
-    }
-
-    return activeTempColour.get(0);
+    return activeTempColour.isEmpty()
+        // デフォルトのテンプレートを設定しているテンプレートとしてセット
+        ? TemplatechartcolourService.findByUserIdAndActive(StudyUtil.getCommonUser(), "1").get(0)
+        : activeTempColour.get(0);
   }
 
   /**

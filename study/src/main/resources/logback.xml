@@ -24,7 +24,7 @@
 		<file>${app.log.dir:-/logs}/projectName-application.log</file>		<!-- (4) -->
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${app.log.dir:-/logs}${app.log.bk:-/bk}/projectName-application-%d{yyyyMMddHH}.log</fileNamePattern>			<!-- (5)　HHまでしていしているため1時間ごとにファイルが切り替わる -->
-			<maxHistory>25</maxHistory>			<!-- (6) 今は削除されないように25にしておく -->
+			<!-- <maxHistory>25</maxHistory>			(6) 今は削除されないように25にしておく -->
 		</rollingPolicy>
 		<encoder>
 			<charset>UTF-8</charset>			<!-- (7) -->
@@ -39,7 +39,7 @@
 		<file>${app.log.dir:-/logs}/projectName-monitoring.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${app.log.dir:-/logs}${app.log.bk:-/bk}/projectName-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
-			<maxHistory>7</maxHistory>
+			<!-- <maxHistory>7</maxHistory> -->
 		</rollingPolicy>
 		<encoder>
 			<charset>UTF-8</charset>

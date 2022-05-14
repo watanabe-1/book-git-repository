@@ -45,12 +45,6 @@ public class BooksHelper {
   private CategoryService categoryService;
 
   /**
-   * チャート色テンプレート Helper
-   */
-  @Autowired
-  private ChartColourHelper chartColourHelper;
-
-  /**
    * カテゴリー情報保存用リスト
    */
   private List<Category> catList = new ArrayList<Category>();
@@ -182,18 +176,17 @@ public class BooksHelper {
   }
 
   /**
-   * 1月加算して文字列に変換してから返却
+   * 1月加算してから返却
    * 
    * @param date 加算したい日付
    * @return Date 変換語の日付
    */
   public static Date getNextMonth(Date date) {
-    // SimpleDateFormat sdNewFormat = new SimpleDateFormat("yyyy/MM/dd");
     return StudyUtil.calculateDate(date, Calendar.MONTH, 1);
   }
 
   /**
-   * 1月減算して文字列に変換してから返却
+   * 1月減算してしてから返却
    * 
    * @param date 減算したい日付
    * @return Date 変換語の日付
