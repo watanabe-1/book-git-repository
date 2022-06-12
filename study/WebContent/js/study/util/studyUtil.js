@@ -355,7 +355,7 @@ function getCsrfTokenHeader() {
  * @return CSRF対策用のトークン送信用ヘッダー名CSRF対策用のトークン
  */
 function getCsrfTokenParmName() {
-  return '_csrf';
+  return document.querySelector('meta[name="_csrf_parameterName"]').content;
 }
 
 /**

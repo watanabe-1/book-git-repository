@@ -11,6 +11,7 @@
   <!-- CSRF対策用トークン AJAXで使用-->
   <meta name="_csrf" th:content="${_csrf.token}" />
   <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+  <meta name="_csrf_parameterName" th:content="${_csrf.parameterName}" />
   <title th:replace="${title}"></title>
   <!-- 全画面共通のcssを定義 -->
   <link th:href="@{/css/bootstrap/bootstrap.css}" rel="stylesheet">
