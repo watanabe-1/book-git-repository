@@ -122,7 +122,8 @@ function showCalendarProcess(date, targetId, targetBooksID) {
   const targetBooksElement = document.querySelector('#' + targetBooksID);
   //StudyUtil.appendOrReplaceChild
   appendOrReplaceChild(targetBooksElement, booksList, 'table');
-
+  //テーブルの内容を並び替えできるようにイベントを追加
+  addEventListenerBySortTable(booksList.id);
   //クリックイベントの追加
   const tabCalendarTableBody = document
     .getElementById('tabCalendar')
@@ -277,6 +278,7 @@ function createBooksListByCalendarProcess(booksList) {
   // <table> 要素と <tbody> 要素を作成
   const tbl = document.createElement('table');
   tbl.className = 'table table-bordered';
+  tbl.id = 'booksListByCalendarTable';
   const tblhead = document.createElement('thead');
   const tblBody = document.createElement('tbody');
   //家計簿の定義
@@ -294,9 +296,9 @@ function createBooksListByCalendarProcess(booksList) {
     const headRow = document.createElement('tr');
 
     for (let j = 0; j < booksListHeadByCalendar.length; j++) {
-      // <td> 要素とテキストノードを作成し、テキストノードを
-      // <td> の内容として、その <td> を表の行の末尾に追加
-      const headCell = document.createElement('td');
+      // <th> 要素とテキストノードを作成し、テキストノードを
+      // <th> の内容として、その <th> を表の行の末尾に追加
+      const headCell = document.createElement('th');
       const headCellText = document.createTextNode(booksListHeadByCalendar[j]);
       headCell.appendChild(headCellText);
       headRow.appendChild(headCell);

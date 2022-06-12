@@ -24,9 +24,9 @@
 		<form th:action="@{/category/listUpdate}" th:object="${catListParam}" enctype="multipart/form-data"
 			th:method="post">
 			<div class="text-end">
-				<input type="submit" class="btn btn-primary" value="　更新　">
+				<input type="submit" class="btn btn-primary" value="更新">
 			</div>
-			<table class="table table-bordered">
+			<table id="categoryListTable" class="table table-bordered">
 				<thead>
 					<tr>
 						<th>削除</th>
@@ -146,6 +146,11 @@
 </body>
 
 </html>
+<script>
+	//テーブルの内容を並び替えできるようにイベントを追加
+	//カテゴリーリスト
+	addEventListenerBySortTable('categoryListTable')
+</script>
 <script type="text/javascript" th:inline="javascript">
 	//tymeleafを使用してjsコードの中身を動的に変更
 	/*<![CDATA[*/

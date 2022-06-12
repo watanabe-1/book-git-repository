@@ -84,7 +84,7 @@
 					<span th:text="${inputResultMessage}" class="text-success"></span>
 				</div>
 				<div class="row">
-					<table class="table table-bordered">
+					<table id="randomColourListTable" class="table table-bordered">
 						<thead>
 							<tr>
 								<th hidden>ID</th>
@@ -359,6 +359,11 @@
 </body>
 
 </html>
+<script>
+	//テーブルの内容を並び替えできるようにイベントを追加
+	//テンプレートカラーリスト
+	addEventListenerBySortTable('randomColourListTable')
+</script>
 <script>
 	//chart
 	//処理の実行

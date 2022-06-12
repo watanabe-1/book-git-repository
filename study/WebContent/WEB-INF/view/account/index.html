@@ -20,7 +20,7 @@
     <div th:if="!${accountList.size()}">
       <p>アカウント情報が存在しません</p>
     </div>
-    <table class="table table-bordered" th:if="${accountList.size()}">
+    <table id="accountListTable" class="table table-bordered" th:if="${accountList.size()}">
       <thead>
         <tr>
           <th scope="col">#</th>
@@ -45,3 +45,8 @@
 </body>
 
 </html>
+<script>
+  //テーブルの内容を並び替えできるようにイベントを追加
+  //アカウントリスト
+  addEventListenerBySortTable('accountListTable')
+</script>
