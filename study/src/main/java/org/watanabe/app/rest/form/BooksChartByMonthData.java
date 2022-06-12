@@ -1,4 +1,4 @@
-package org.watanabe.app.study.form.rest;
+package org.watanabe.app.rest.form;
 
 import java.io.Serializable;
 import java.util.List;

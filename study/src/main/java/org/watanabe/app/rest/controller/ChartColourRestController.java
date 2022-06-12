@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.watanabe.app.common.logger.LogIdBasedLogger;
+import org.watanabe.app.rest.form.BooksChartByMonthData;
+import org.watanabe.app.rest.form.BooksChartByMonthDatasets;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
-import org.watanabe.app.study.form.rest.BooksChartByMonthData;
-import org.watanabe.app.study.form.rest.BooksChartByMonthDatasets;
 import org.watanabe.app.study.helper.ChartColourHelper;
 
 @RestController
