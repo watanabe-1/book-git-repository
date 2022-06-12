@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}">
+
+<head>
+  <title>アカウント登録 - 確認</title>
+</head>
+
+<body>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h3">アカウント情報登録確認</h1>
+    <div class="btn-group ml-auto">
+    </div>
+  </div>
+  <form th:action="@{/system/account/store}" th:object="${accountForm}" method="post">
+    <div class="col-md-7 col-lg-8">
+      <div class="row g-3">
+        <div class="col-sm-6">
+          ユーザID：<span th:text="*{userId}"></span>
+          <input type="hidden" th:field="*{userId}">
+        </div>
+        <div class="col-sm-6">
+          パスワード：**********
+          <input type="hidden" th:field="*{password}">
+        </div>
+        <div class="col-sm-6">
+          ユーザ名：<span th:text="*{userName}"></span>
+          <input type="hidden" th:field="*{userName}">
+        </div>
+        <div class="col-sm-6">
+          品目種別：
+          <span th:each="accountType : ${accountTypeList}" th:if="*{accountType} == ${accountType.code}"
+            th:text="${accountType.name}"></span>
+          <input type="hidden" th:field="*{accountType}">
+        </div>
+      </div>
+      <hr class="my-4">
+      <button class="btn btn-primary btn-lg px-3" type="submit">登録</button>
+      <button class="btn btn-secondary btn-lg px-3" type="button" onclick="history.back()">戻る</button>
+    </div>
+  </form>
+</body>
+
+</html>

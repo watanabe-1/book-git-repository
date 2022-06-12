@@ -12,9 +12,11 @@ import java.util.Map;
 import java.util.Objects;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.multipart.MultipartFile;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
+import org.watanabe.app.study.service.AppUserDetails;
 
 /**
  * 便利メソッドクラス
@@ -89,18 +91,21 @@ public class StudyUtil {
   }
 
   /**
-   * ログインユーザー名を取得する
+   * ログインユーザーIdを取得する
    * 
-   * @return String ログインユーザー名
+   * @return String ログインユーザーId
    */
   public static String getLoginUser() {
-    return "TEST";
+    AppUserDetails userDetails =
+        (AppUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+    return userDetails.getAccount().getUserId();// get logged in userId
   }
 
   /**
-   * 共通ユーザー名を取得する
+   * 共通ユーザーIdを取得する
    * 
-   * @return String 共通ユーザー名
+   * @return String 共通ユーザーId
    */
   public static String getCommonUser() {
     return "common";

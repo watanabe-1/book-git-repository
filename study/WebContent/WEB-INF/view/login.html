@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Spring学習 - ログイン</title>
+  <link th:href="@{/css/bootstrap/bootstrap.css}" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container text-center">
+    <div class="row row justify-content-center">
+      <div class="col-md-5">
+        <div class="login-form bg-light mt-4 p-4">
+          <main class="form-signin">
+            <form th:action="@{/login}" method="post">
+              <h1 class="h3 mb-3 fw-normal">Spring学習 ログイン</h1>
+              <div th:if="${param.containsKey('error')}"
+                th:with="exception = ${SPRING_SECURITY_LAST_EXCEPTION} ?: ${session[SPRING_SECURITY_LAST_EXCEPTION]}">
+                <ul th:if="${exception != null}" class="alert alert-danger">
+                  <li class="mx-3" th:text="${exception.message}"></li>
+                </ul>
+              </div>
+              <div class="form-floating">
+                <input type="text" id="userId" name="userId" class="form-control" placeholder="ユーザID" required>
+                <label for="userId">ユーザID</label>
+              </div>
+              <div class="form-floating">
+                <input type="password" id="password" name="password" class="form-control" placeholder="パスワード" required>
+                <label for="password">パスワード</label>
+              </div>
+              <button class="w-100 btn btn-lg btn-primary" type="submit">ログイン</button>
+            </form>
+            <hr class="mt-4">
+            <div class="col-12">
+              <p class="text-center mb-0">
+                <a class="nav-link" th:href="@{/system/account/}">
+                  <span data-feather="users"></span>
+                  アカウント登録はこちらから
+                </a>
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script th:src="@{/js/popper.js/dist/umd/popper.min.js}"></script>
+  <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
+</body>
+
+</html>

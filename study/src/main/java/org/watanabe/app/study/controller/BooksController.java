@@ -64,10 +64,10 @@ public class BooksController {
     List<Books> booksList = new ArrayList<Books>();
     booksList = booksHelper.getBooksByCsv(form.getBooksFile(), form.getBooksType());
     // 取得したファイル内の日付の最小値、最大値、帳票タイプ(支出)に合わせて今登録済みの内容を削除
-    booksService.deleteByBooksDateAndBooksType(
+    booksService.deleteByBooksDateAndBooksTypeAndUserId(
         booksList.stream().min(Comparator.comparing(Books::getBooksDate)).get().getBooksDate(),
         booksList.stream().max(Comparator.comparing(Books::getBooksDate)).get().getBooksDate(),
-        form.getBooksType());
+        form.getBooksType(), StudyUtil.getLoginUser());
     booksService.saveBulk(booksList);
 
     return model;
@@ -89,14 +89,14 @@ public class BooksController {
       tab = DEFALT_TAB;
     }
 
-    List<Books> booksByExpenses =
-        booksService.findByBooksDateAndBooksTypeJoinCategory(booksHelper.getStartDate(date),
-            booksHelper.getEndDate(date), BooksHelper.BOOKS_TYPE_EXPENSES);
+    List<Books> booksByExpenses = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
+        booksHelper.getStartDate(date), booksHelper.getEndDate(date),
+        BooksHelper.BOOKS_TYPE_EXPENSES, StudyUtil.getLoginUser());
     int sumAmountByExpenses =
         booksByExpenses.stream().mapToInt(book -> book.getBooksAmmount()).sum();
-    List<Books> booksByIncome =
-        booksService.findByBooksDateAndBooksTypeJoinCategory(booksHelper.getStartDate(date),
-            booksHelper.getEndDate(date), BooksHelper.BOOKS_TYPE_INCOME);
+    List<Books> booksByIncome = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
+        booksHelper.getStartDate(date), booksHelper.getEndDate(date), BooksHelper.BOOKS_TYPE_INCOME,
+        StudyUtil.getLoginUser());
     int sumAmountByIncome = booksByIncome.stream().mapToInt(book -> book.getBooksAmmount()).sum();
     model.addObject("bookslistByExpenses", booksByExpenses);
     model.addObject("bookslistByIncome", booksByIncome);

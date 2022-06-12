@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title,body,scripts,links)">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  th:fragment="layout (title,body,scripts,links)">
 <!-- th:replaceを使用して、 <head>用のフラグメントを読込み -->
 <!-- 引数は下記のように指定 -->
 <!--<head th:replace="common/head :: head_fragment(title = 'study top', scripts = ~{common/header}, links = ~{common/header})">-->
@@ -7,6 +8,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- CSRF対策用トークン AJAXで使用-->
+  <meta name="_csrf" th:content="${_csrf.token}" />
+  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
   <title th:replace="${title}"></title>
   <!-- 全画面共通のcssを定義 -->
   <link th:href="@{/css/bootstrap/bootstrap.css}" rel="stylesheet">

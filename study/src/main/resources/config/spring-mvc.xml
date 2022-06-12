@@ -22,6 +22,7 @@
 		</mvc:message-converters>
 		<!-- ページ検索機能を有効にするための設定を追加する。ページ検索が必要ない場合は、本設定は不要であるが、定義があっても問題はない。今のとこ実装してないからいらないかも-->
 		<mvc:argument-resolvers>
+			<bean class="org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver" />
 			<bean class="org.springframework.data.web.PageableHandlerMethodArgumentResolver" />
 		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
@@ -43,9 +44,11 @@
 		</mvc:interceptor>
 	</mvc:interceptors>
 
+	<context:annotation-config />
 	<!-- Beanクラスが格納されるパッケージのルートを宣言 -->
 	<context:component-scan base-package="org.watanabe.app.common" />
 	<context:component-scan base-package="org.watanabe.app.study" />
+	<context:component-scan base-package="org.watanabe.app.rest" />
 	<!-- DB設定(環境依存の外部化) -->
 	<context:property-placeholder location="classpath:config/properties/database.properties" order="1" ignore-unresolvable="true" />
 	<!-- DB設定以外のプロパティファイルの読み込み(環境依存の外部化) -->
@@ -233,32 +236,6 @@
 			<bean class="com.fasterxml.jackson.databind.util.StdDateFormat" />
 		</property>
 	</bean>
-
-	<!-- Register components of Spring MVC. -->
-	<!-- (3) -->
-	<mvc:annotation-driven>
-		<mvc:message-converters register-defaults="false">
-			<ref bean="jsonMessageConverter" />
-		</mvc:message-converters>
-		<!-- (4) -->
-		<mvc:argument-resolvers>
-			<bean class="org.springframework.data.web.PageableHandlerMethodArgumentResolver" />
-		</mvc:argument-resolvers>
-	</mvc:annotation-driven>
-
-	<!-- Register components of interceptor. -->
-	<!-- (5) -->
-	<mvc:interceptors>
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<bean class="org.terasoluna.gfw.web.logging.TraceLoggingInterceptor" />
-		</mvc:interceptor>
-		<!-- omitted -->
-	</mvc:interceptors>
-
-	<!-- Scan & register components of RESTful Web Service. -->
-	<!-- (6) -->
-	<context:component-scan base-package="org.watanabe.app" />
 
 	<!-- アノテーションでトランザクションを制御 -->
 	<tx:annotation-driven />

@@ -15,3 +15,10 @@ insert into IMAGE (IMG_ID, IMG_TYPE, IMG_PATH, IMG_NAME, NOTE)
 --図で使用する色を生成するためのデフォルトシード値を定義
 insert into TEMPLATECHARTCOLOUR (TEMPLATE_ID, TEMPLATE_NAME, USER_ID, ACTIVE, SEED_COEFF_R, SEED_COEFF_G, SEED_COEFF_B, NOTE)
     values ('default1', 'デフォルト1', 'common', '1', '1', '2', '3', '微妙');
+
+--test
+insert into ACCOUNT (USER_ID, PASSWORD, USER_NAME, ACCOUNT_TYPE)
+    values ('test', '$10$po.7dDhl7fWeu9wp4LcpkOAuBme9mugBW1Bo2HyVSSgWzGVTcuSCq', 'test', '03');
+--test2
+insert into ACCOUNT (USER_ID, PASSWORD, USER_NAME, ACCOUNT_TYPE)
+    values ('wata', '$2a$10$2b63yBRUi0F8fadJmZTkqu.k1Z.9tOLYsEjN/hgm8NMNgfr//LGSe', 'wata', '01');

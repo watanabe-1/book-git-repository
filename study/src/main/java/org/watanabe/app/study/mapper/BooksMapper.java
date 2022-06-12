@@ -24,9 +24,10 @@ public interface BooksMapper {
    * 1行検索(引数にプライマルキーを指定)
    * 
    * @param booksId BOOKS_ID(家計簿ID)
+   * @param userId USER_ID(ユーザーID)
    * @return 検索結果(1行)
    */
-  Books findOne(@Param("booksId") String booksId);
+  Books findOne(@Param("booksId") String booksId, @Param("userId") String userId);
 
   /**
    * 複数行insert
@@ -53,12 +54,16 @@ public interface BooksMapper {
   int updateAll(Books boo);
 
   /**
-   * 1行update プライマルキーをWhere句に指定 プライマルキー：@Param("booksId")String booksId
+   * 1行update プライマルキーをWhere句に指定 プライマルキー：@Param("booksIdWhere")String
+   * booksId, @Param("userIdWhere")String userId
    * 
    * @param boo entity(Books)
+   * @param booksId BOOKS_ID(家計簿ID)
+   * @param userId USER_ID(ユーザーID)
    * @return update行数
    */
-  int updateOne(Books boo);
+  int updateOne(Books boo, @Param("booksIdWhere") String booksId,
+      @Param("userIdWhere") String userId);
 
   /**
    * 全行delete
@@ -71,9 +76,11 @@ public interface BooksMapper {
    * 1行delete(引数にプライマルキーを指定)
    * 
    * @param booksId BOOKS_ID(家計簿ID)
+   * @param userId USER_ID(ユーザーID)
    * @return delete行数
    */
-  int deleteOne(@Param("booksId") String booksId);
+  int deleteOne(@Param("booksId") String booksId, @Param("userId") String userId);
+
 
   /**
    * 家計簿日付、家計簿種類を指定してdelete(引数にプライマルキーを指定)
@@ -81,10 +88,11 @@ public interface BooksMapper {
    * @param start から
    * @param end まで
    * @param booksType 家計簿の種類
+   * @param userId USER_ID(ユーザーID)
    * @return delete行数
    */
-  int deleteByBooksDateAndBooksType(@Param("start") Date start, @Param("end") Date end,
-      @Param("booksType") String booksType);
+  int deleteByBooksDateAndBooksTypeAndUserId(@Param("start") Date start, @Param("end") Date end,
+      @Param("booksType") String booksType, @Param("userId") String userId);
 
   /**
    * 家計簿日付、家計簿種類を指定して対象を取得
@@ -92,8 +100,9 @@ public interface BooksMapper {
    * @param start から
    * @param end まで
    * @param booksType 家計簿の種類
+   * @param userId USER_ID(ユーザーID)
    * @return 検索結果(複数行)
    */
-  List<Books> findByBooksDateAndBooksTypeJoinCategory(@Param("start") Date start,
-      @Param("end") Date end, @Param("booksType") String booksType);
+  List<Books> findByBooksDateAndBooksTypeAndUserIdJoinCategory(@Param("start") Date start,
+      @Param("end") Date end, @Param("booksType") String booksType, @Param("userId") String userId);
 }

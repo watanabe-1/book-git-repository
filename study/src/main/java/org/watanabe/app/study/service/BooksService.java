@@ -2,7 +2,6 @@ package org.watanabe.app.study.service;
 
 import java.util.Date;
 import java.util.List;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,10 +31,11 @@ public class BooksService {
    * 1行検索(引数にプライマルキーを指定)
    * 
    * @param booksId BOOKS_ID(家計簿ID)
+   * @param userId USER_ID(ユーザーID)
    * @return 検索結果(1行)
    */
-  public Books findOne(String booksId) {
-    return booksMapper.findOne(booksId);
+  public Books findOne(String booksId, String userId) {
+    return booksMapper.findOne(booksId, userId);
   }
 
   /**
@@ -72,14 +72,16 @@ public class BooksService {
   }
 
   /**
-   * 1行update プライマルキーをWhere句に指定 プライマルキー：String booksId
+   * 1行update プライマルキーをWhere句に指定 プライマルキー：String booksId, String userId
    * 
    * @param boo entity(Books)
+   * @param booksId BOOKS_ID(家計簿ID)
+   * @param userId USER_ID(ユーザーID)
    * @return update行数
    */
   @Transactional
-  public int updateOne(Books boo) {
-    return booksMapper.updateOne(boo);
+  public int updateOne(Books boo, String booksId, String userId) {
+    return booksMapper.updateOne(boo, booksId, userId);
   }
 
   /**
@@ -96,11 +98,12 @@ public class BooksService {
    * 1行delete(引数にプライマルキーを指定)
    * 
    * @param booksId BOOKS_ID(家計簿ID)
+   * @param userId USER_ID(ユーザーID)
    * @return delete行数
    */
   @Transactional
-  public int deleteOne(String booksId) {
-    return booksMapper.deleteOne(booksId);
+  public int deleteOne(String booksId, String userId) {
+    return booksMapper.deleteOne(booksId, userId);
   }
 
   /**
@@ -109,11 +112,13 @@ public class BooksService {
    * @param start から
    * @param end まで
    * @param booksType 家計簿の種類
+   * @param userId USER_ID(ユーザーID)
    * @return delete行数
    */
   @Transactional
-  public int deleteByBooksDateAndBooksType(Date start, Date end, String booksType) {
-    return booksMapper.deleteByBooksDateAndBooksType(start, end, booksType);
+  public int deleteByBooksDateAndBooksTypeAndUserId(Date start, Date end, String booksType,
+      String userId) {
+    return booksMapper.deleteByBooksDateAndBooksTypeAndUserId(start, end, booksType, userId);
   }
 
   /**
@@ -122,11 +127,13 @@ public class BooksService {
    * @param start から
    * @param end まで
    * @param booksType 家計簿の種類
+   * @param userId USER_ID(ユーザーID)
    * @return 検索結果(複数行)
    */
-  public List<Books> findByBooksDateAndBooksTypeJoinCategory(@Param("start") Date start,
-      @Param("end") Date end, @Param("booksType") String booksType) {
-    return booksMapper.findByBooksDateAndBooksTypeJoinCategory(start, end, booksType);
+  public List<Books> findByBooksDateAndBooksTypeAndUserIdJoinCategory(Date start, Date end,
+      String booksType, String userId) {
+    return booksMapper.findByBooksDateAndBooksTypeAndUserIdJoinCategory(start, end, booksType,
+        userId);
   };
 }
 

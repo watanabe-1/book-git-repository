@@ -3,7 +3,7 @@ SELECT
   SERIAL_KEY -- シリアルキー
   , CAT_CODE -- カテゴリーコード
   , CAT_NAME -- カテゴリー名
-  , CAT_TYPE -- タイプ(ラジオボタン用ー　用途はとりあえず決まってないけど何か別のカテゴリーを設定したくなった時用)
+  , CAT_TYPE -- タイプ(ラジオボタン用ー 用途はとりあえず決まってないけど何か別のカテゴリーを設定したくなった時用)
   , NOTE -- メモ
   , IMG_TYPE -- 画像タイプ(画像テーブル内のタイプと連動)
   , IMG_ID -- 画像ID
@@ -34,6 +34,7 @@ FROM
 SELECT 
   SERIAL_KEY -- シリアルキー
   , BOOKS_ID -- 家計簿ID
+  , USER_ID -- ユーザーID
   , BOOKS_TYPE -- 帳簿の種類(収入、支出を選ぶ)
   , BOOKS_DATE -- 日付(収入日、購入日)
   , BOOKS_PLACE -- 場所(収入元、購入先)
@@ -103,4 +104,18 @@ SELECT
   , UPD_USER -- 更新ユーザー
 FROM
   TEMPLATECHARTCOLOUR;
+
+-- アカウント(アカウント情報保持テーブル)
+SELECT 
+  SERIAL_KEY -- シリアルキー
+  , USER_ID -- ユーザーID
+  , PASSWORD -- パスワード
+  , USER_NAME -- ユーザー名
+  , ACCOUNT_TYPE -- アカウント種別
+  , INS_DATE -- 登録日時
+  , INS_USER -- 登録ユーザー
+  , UPD_DATE -- 更新日時
+  , UPD_USER -- 更新ユーザー
+FROM
+  ACCOUNT;
 

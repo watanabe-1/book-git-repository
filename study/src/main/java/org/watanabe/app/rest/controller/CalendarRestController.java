@@ -93,9 +93,9 @@ public class CalendarRestController {
   @RequestMapping(value = "/books/rest/calendar/AmountByDay", method = RequestMethod.POST)
   public List<Books> calendarByDay(@ModelAttribute BooksForm form, ModelAndView model, Date date) {
     // 対象を取得
-    List<Books> books =
-        booksService.findByBooksDateAndBooksTypeJoinCategory(booksHelper.getStartDate(date),
-            booksHelper.getEndDate(date), BooksHelper.BOOKS_TYPE_EXPENSES);
+    List<Books> books = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
+        booksHelper.getStartDate(date), booksHelper.getEndDate(date),
+        BooksHelper.BOOKS_TYPE_EXPENSES, StudyUtil.getLoginUser());
 
     return books;
   }

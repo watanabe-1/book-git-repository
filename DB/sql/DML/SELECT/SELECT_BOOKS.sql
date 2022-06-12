@@ -2,6 +2,7 @@
 SELECT 
   SERIAL_KEY -- シリアルキー
   , BOOKS_ID -- 家計簿ID
+  , USER_ID -- ユーザーID
   , BOOKS_TYPE -- 帳簿の種類(収入、支出を選ぶ)
   , BOOKS_DATE -- 日付(収入日、購入日)
   , BOOKS_PLACE -- 場所(収入元、購入先)

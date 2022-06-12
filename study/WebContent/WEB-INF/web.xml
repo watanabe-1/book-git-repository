@@ -5,7 +5,11 @@
 	<!-- ビジネスロジックのBean定義ファイル -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath:/config/spring.xml</param-value>
+		<param-value>
+			classpath:/config/spring.xml
+			classpath:/config/spring-mvc.xml
+			classpath:/config/spring-security.xml
+		</param-value>
 	</context-param>
 
 	<!-- リスナーを登録 -->
@@ -36,6 +40,15 @@
 		<filter-name>MultipartFilter</filter-name>
 		<filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
 	</filter>
+
+	<!-- Spring Frameworkから提供されているDelegatingFilterProxyを使用して、 SpringのDIコンテナで管理されているbean(FilterChainProxy)をサーブレットコンテナに登録する。 サーブレットフィルタの名前には、SpringのDIコンテナで管理されているbeanのbean名(springSecurityFilterChain)を指定する。 -->
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>
+			org.springframework.web.filter.DelegatingFilterProxy
+		</filter-class>
+	</filter>
+
 
 	<!-- 致命的なエラー、Spring MVC管理外で発生する例外を、
 	 ログに出力するためのFilterクラス（ExceptionLoggingFilter）を、bean定義とweb.xmlに追加する。-->
@@ -85,6 +98,12 @@
 
 	<filter-mapping>
 		<filter-name>MultipartFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- Spring Securityを適用するURLのパターンを指定する。 上記例では、すべてのリクエストに対してSpring Securityを適用する。 -->
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 

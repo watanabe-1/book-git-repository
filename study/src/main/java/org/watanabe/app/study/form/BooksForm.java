@@ -36,6 +36,11 @@ public class BooksForm implements Serializable {
   private String booksId;
 
   /**
+   * ユーザーID
+   */
+  private String userId;
+
+  /**
    * 帳簿の種類(収入、支出を選ぶ)
    */
   @NotBlank

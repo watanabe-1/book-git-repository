@@ -6,7 +6,7 @@
 そのため、 画面レイアウトを合成するなかで使用されるのはパラメータとして渡したtitle タグ、body タグの内容
 場合に応じてscriptタグ、cssが記載されたhtmlのフラグメント指定文(もしくは~{::body/content()} などでタグ内のコンテンツなどを指定)のみである。
 ここでは、単独でHTMLとして表示できるようにbodyタグ以上のタグも記述し仮のタイトルを記述している。*/-->
-<html xmlns:th="http://www.thymeleaf.org"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
   th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}">
 
 <head>

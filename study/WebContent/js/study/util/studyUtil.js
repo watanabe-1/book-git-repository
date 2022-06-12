@@ -1,8 +1,10 @@
 /**
  * aタグにセットされているhref属性にパラメーターをセットする共通関数
+ *
  * @param {string} aTagQualifiedName - aタグ一意に指定できるquerySelectorのelement
  * @param {string} paramName - パラメーター名
  * @param {string} param - パラメーター値
+ * @return セットしたurl
  */
 function setAtagHrefParm(aTagQualifiedName, paramName, param) {
   const target = document.querySelector(aTagQualifiedName);
@@ -45,8 +47,10 @@ function setAtagHrefParm(aTagQualifiedName, paramName, param) {
 
 /**
  * aタグにセットされているhref属性にパラメーターをセットする共通関数
+ *
  * @param {string} aTagQualifiedName - aタグ一意に指定できるquerySelectorのelement
  * @param {JSON} params - {パラメータ名: パラメーター値}
+ * @return セットしたurl
  */
 function setAtagHrefParms(aTagQualifiedName, params) {
   const target = document.querySelector(aTagQualifiedName);
@@ -72,8 +76,37 @@ function setAtagHrefParms(aTagQualifiedName, params) {
 }
 
 /**
+ * urlにパラメータを追加
+ *
+ * @param {string} targetUrl - url
+ * @param {JSON} params - {パラメータ名: パラメーター値}
+ * @return セットしたurl
+ */
+function addUrlParms(targetUrl, params) {
+  const baseUrl = getBaseUrl();
+  const url = new URL(targetUrl, baseUrl);
+  //const json = JSON.parse(params);
+
+  for (const key in params) {
+    //console.log(key + ': ' + params[key]);
+    url.searchParams.set(key, params[key]);
+  }
+  // params.keys(param).forEach(function (key) {
+  //   console.log([key] + ': ' + param[key]);
+  //   url.searchParams.set(key, param[key]);
+  // });
+
+  //別に置換しなくても絶対urlがaタグにセットされるだけだけど見た目的に一応置換して相対urlに
+  const newHref = url.href.replace(baseUrl, '');
+
+  return newHref;
+}
+
+/**
  * 文字列の中の正規表現などをエスケープする
+ *
  * @param {string} string - エスケープ対象
+ * @return エスケープ後の文字列
  */
 function escapeRegExp(string) {
   return string.replace(/[.*+?^=!:${}()|[\]\/\\]/g, '\\$&'); // $&はマッチした部分文字列全体を意味します
@@ -81,6 +114,8 @@ function escapeRegExp(string) {
 
 /**
  * urlのプロトコルからホストまでを取得
+ *
+ * @return urlのプロトコルからホストまで
  */
 function getBaseUrl() {
   return location.protocol + '//' + location.host;
@@ -88,6 +123,8 @@ function getBaseUrl() {
 
 /**
  * urlの初期部分を取得
+ *
+ * @return urlの初期部分
  */
 function getFirstUrl() {
   const href = document.getElementById('firstLink').getAttribute('href');
@@ -96,7 +133,9 @@ function getFirstUrl() {
 
 /**
  * urlのパラメーターを取得
+ *
  * @param {string} paramName - パラメーター名
+ * @return urlのパラメータ
  */
 function getLocationHrefParm(paramName) {
   // URLを取得
@@ -188,7 +227,7 @@ const SERIES = 'series';
 function ajax(
   method,
   url,
-  params = '',
+  params = {},
   type = SERIES,
   functions = [],
   functionArgs = []
@@ -196,7 +235,12 @@ function ajax(
   //ajax送信を行い結果を配列に格納
   let ajaxPromise = new Promise(function (resolve, reject) {
     let httpRequest = new XMLHttpRequest(); // XMLHttpRequestのインスタンス作成
+    //CSRFトークンをセットで送信
+    // let csrfToken = {};
+    // csrfToken[getCsrfTokenParmName()] = getCsrfToken();
+    // const csrfUrl = addUrlParms(url, csrfToken);
     httpRequest.open(method, url, true); // open(HTTPメソッド, URL, 非同期通信[true:default]か同期通信[false]か）
+    httpRequest.setRequestHeader(getCsrfTokenHeader(), getCsrfToken()); // リクエストヘッダーを追加(CSRFトークンをセットで送信)
     httpRequest.setRequestHeader(
       'Content-Type',
       'application/x-www-form-urlencoded'
@@ -288,9 +332,37 @@ function ajax(
 }
 
 /**
+ * CSRF対策用のトークンを取得
+ *
+ * @return CSRF対策用のトークン
+ */
+function getCsrfToken() {
+  return document.querySelector('meta[name="_csrf"]').content;
+}
+
+/**
+ * CSRF対策用のトークン送信用ヘッダー名を取得
+ *
+ * @return CSRF対策用のトークン送信用ヘッダー名CSRF対策用のトークン
+ */
+function getCsrfTokenHeader() {
+  return document.querySelector('meta[name="_csrf_header"]').content;
+}
+
+/**
+ * CSRF対策用のトークン送信用パラム名を取得
+ *
+ * @return CSRF対策用のトークン送信用ヘッダー名CSRF対策用のトークン
+ */
+function getCsrfTokenParmName() {
+  return '_csrf';
+}
+
+/**
  * サーバーから帰ってきたエラーから画面に表示するようのメッセージの加工して返却
  *
  * @param {JSON} errJson -サーバーから帰ってきたエラー
+ * @return エラーメッセージ
  */
 function getErrMsg(errJson) {
   //console.log(errJson);
@@ -327,6 +399,12 @@ function submit(method, url, params = '') {
     output.name = key;
     submitMe.appendChild(output);
   }
+  //CSRF対策用トークン
+  const csrfOutPut = document.createElement('input');
+  csrfOutPut.value = getCsrfToken();
+  csrfOutPut.type = 'hidden';
+  csrfOutPut.name = getCsrfTokenParmName();
+  submitMe.appendChild(csrfOutPut);
   //bodeyに追加
   document.body.appendChild(submitMe);
   //送信
@@ -336,6 +414,7 @@ function submit(method, url, params = '') {
 /**
  * 画面内に使用するための日付けを取得
  *
+ * @return パラメータにセットされた日付け。なければ現在時刻。
  */
 function getStudyDate() {
   // urlからパラメーターを取得
@@ -351,6 +430,7 @@ function getStudyDate() {
  *
  * @param {Date} date 対象日付け
  * @param {String} delim 区切り文字
+ * @return yyyyMMdd形式に変換された日付け
  */
 function formatDateBtYyyyMmDd(date, delim = null) {
   //日付け型ではなかったら
