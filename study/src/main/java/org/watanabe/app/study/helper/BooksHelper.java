@@ -74,6 +74,7 @@ public class BooksHelper {
         final String[] split = line.split(",");
         Books books = new Books();
         books.setBooksId(UUID.randomUUID().toString());
+        books.setUserId(user);
         books.setBooksType(booksType);
         books.setBooksDate(sdFormat.parse(StudyUtil.trimDoubleQuot(split[0])));
         books.setBooksPlace(StudyUtil.trimDoubleQuot(split[1]));

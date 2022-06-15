@@ -26,9 +26,9 @@ public class AppUserDetailsService implements UserDetailsService {
 
     // パスワードのハッシュ化と認証の流れ
     // テストユーザーのパスワードはこれで作成可能
-    String pass = "wata";
-    String a = passwordEncoder.encode(pass);
-    boolean b = passwordEncoder.matches(pass, a);
+    // String pass = "wata";
+    // String a = passwordEncoder.encode(pass);
+    // boolean b = passwordEncoder.matches(pass, a);
 
     if (account == null) {
       throw new UsernameNotFoundException("User not found");
