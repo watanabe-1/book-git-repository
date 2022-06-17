@@ -9,32 +9,50 @@
  * @param {String} column_no_prev 前回クリックされた列番号
  */
 function addEventListenerBySortTable(targetId) {
-  //window.addEventListener('load', function () {
-  const targetThId = '#' + targetId + ' th';
-  //今回クリックされた列番号
-  let column_no = 0;
-  //前回クリックされた列番号
-  let column_no_prev = 0;
-  document.querySelectorAll(targetThId).forEach((elm) => {
+  const TARGET_TH_ID = '#' + targetId + ' th';
+  const ASC = 'bi-caret-up-fill';
+  const DESC = 'bi-caret-down-fill';
+  const NUMBER_SORT = 0;
+  const STRING_SORT = 1;
+  document.querySelectorAll(TARGET_TH_ID).forEach((elm) => {
     elm.onclick = function () {
-      column_no = this.cellIndex; //クリックされた列番号
-      let table = this.parentNode.parentNode.parentNode;
-      let sortType = 0; //0:数値 1:文字
+      const columnNo = this.cellIndex; //クリックされた列番号
+      const table = this.parentNode.parentNode.parentNode;
+      const beforeiEl =
+        table.querySelector('.' + ASC) != null
+          ? table.querySelector('.' + ASC)
+          : table.querySelector('.' + DESC); //前回付与されたソート順を示すアイコン
+      let sortType = NUMBER_SORT; //0:数値 1:文字
       let sortArray = new Array(); //クリックした列のデータを全て格納する配列
+      // 次のソート順を決定
+      const order =
+        beforeiEl == null ||
+        columnNo != beforeiEl.parentNode.cellIndex ||
+        beforeiEl.className != ASC
+          ? ASC
+          : DESC;
+      // 前回のソート順を示すアイコンを削除
+      if (beforeiEl != null) {
+        beforeiEl.remove();
+      }
+      // 今回のソート順を示すアイコンを付与
+      const iEl = document.createElement('i');
+      iEl.className = order;
+      this.appendChild(iEl);
       for (let r = 1; r < table.rows.length; r++) {
         //行番号と値を配列に格納
         let column = new Object();
         column.row = table.rows[r];
-        column.value = table.rows[r].cells[column_no].textContent;
+        column.value = table.rows[r].cells[columnNo].textContent;
         sortArray.push(column);
         //数値判定
         if (isNaN(Number(column.value))) {
-          sortType = 1; //値が数値変換できなかった場合は文字列ソート
+          sortType = STRING_SORT; //値が数値変換できなかった場合は文字列ソート
         }
       }
-      if (sortType == 0) {
+      if (sortType == NUMBER_SORT) {
         //数値ソート
-        if (column_no_prev == column_no) {
+        if (order == DESC) {
           //同じ列が2回クリックされた場合は降順ソート
           sortArray.sort(compareNumberDesc);
         } else {
@@ -42,28 +60,21 @@ function addEventListenerBySortTable(targetId) {
         }
       } else {
         //文字列ソート
-        if (column_no_prev == column_no) {
+        if (order == DESC) {
           //同じ列が2回クリックされた場合は降順ソート
           sortArray.sort(compareStringDesc);
         } else {
           sortArray.sort(compareString);
         }
       }
-      //ソート後のTRオブジェクトを順番にtbodyへ追加（移動）
+      //ソート後のTRオブジェクトをソート順にtbodyへ追加（移動）
       //let tbody = this.parentNode.parentNode;
       let tbody = table.querySelector('tbody');
       for (let i = 0; i < sortArray.length; i++) {
         tbody.appendChild(sortArray[i].row);
       }
-      //昇順／降順ソート切り替えのために列番号を保存
-      if (column_no_prev == column_no) {
-        column_no_prev = -1; //降順ソート
-      } else {
-        column_no_prev = column_no;
-      }
     };
   });
-  //});
 }
 
 /**
