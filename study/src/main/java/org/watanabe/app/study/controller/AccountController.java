@@ -19,6 +19,7 @@ import org.watanabe.app.study.enums.type.AccountType;
 import org.watanabe.app.study.form.AccountForm;
 import org.watanabe.app.study.service.AccountService;
 import org.watanabe.app.study.service.AppUserDetails;
+import org.watanabe.app.study.util.StudyUtil;
 
 /**
  * アカウントコントローラ.
@@ -117,7 +118,7 @@ public class AccountController {
     account.setPassword(passwordEncoder.encode(form.getPassword()));
 
     // 共通項目をセット
-    Date now = new Date();
+    Date now = StudyUtil.getNowDate();
     account.setInsDate(now);
     account.setInsUser(userDetail.getAccount().getUserId());
     account.setUpdDate(now);
