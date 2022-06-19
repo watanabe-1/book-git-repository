@@ -20,6 +20,7 @@ import org.watanabe.app.rest.form.BooksChartByMonthData;
 import org.watanabe.app.rest.form.BooksChartByMonthDatasets;
 import org.watanabe.app.study.controller.TopController;
 import org.watanabe.app.study.entity.Books;
+import org.watanabe.app.study.enums.type.BooksType;
 import org.watanabe.app.study.form.BooksForm;
 import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.helper.ChartColourHelper;
@@ -65,8 +66,8 @@ public class BooksRestController {
 
     // 対象を取得
     List<Books> books = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getStartDate(date), booksHelper.getEndDate(date),
-        BooksHelper.BOOKS_TYPE_EXPENSES, StudyUtil.getLoginUser());
+        booksHelper.getStartDate(date), booksHelper.getEndDate(date), BooksType.EXPENSES.getCode(),
+        StudyUtil.getLoginUser());
 
     // カテゴリーごとに集約し金額の合計を求め、金額が大きい順に並び替え、
     // 順番が保証されるLinkedHashMapに詰める
@@ -107,8 +108,8 @@ public class BooksRestController {
       ModelAndView model, Date date) {
     // 対象を取得
     List<Books> books = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getStartDate(date), booksHelper.getEndDate(date),
-        BooksHelper.BOOKS_TYPE_EXPENSES, StudyUtil.getLoginUser());
+        booksHelper.getStartDate(date), booksHelper.getEndDate(date), BooksType.EXPENSES.getCode(),
+        StudyUtil.getLoginUser());
     // 支払い方法ごとに集約し金額の合計を求め、金額が大きい順に並び替え、
     // 順番が保証されるLinkedHashMapに詰める
     Map<String, Long> booksByMethodMap = books.stream()
@@ -164,11 +165,11 @@ public class BooksRestController {
     // 支出を取得
     List<Books> booksByExpenses = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
         booksHelper.getOneYearAgoMonth(date), booksHelper.getEndDate(date),
-        BooksHelper.BOOKS_TYPE_EXPENSES, StudyUtil.getLoginUser());
+        BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
     // 収入を取得
     List<Books> booksByIncome = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
         booksHelper.getOneYearAgoMonth(date), booksHelper.getEndDate(date),
-        BooksHelper.BOOKS_TYPE_INCOME, StudyUtil.getLoginUser());
+        BooksType.INCOME.getCode(), StudyUtil.getLoginUser());
 
     List<BooksChartByMonthDatasets> dataSets = new ArrayList<>();
 

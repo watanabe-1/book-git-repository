@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.watanabe.app.study.entity.Account;
-import org.watanabe.app.study.enums.AccountType;
+import org.watanabe.app.study.enums.type.AccountType;
 import org.watanabe.app.study.form.AccountForm;
 import org.watanabe.app.study.service.AccountService;
 import org.watanabe.app.study.service.AppUserDetails;

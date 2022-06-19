@@ -70,7 +70,7 @@ public class CategoryForm implements Serializable {
   /* 削除フラグ. */
   @Getter
   @Setter
-  private Boolean isDelete;
+  private String deleteFlag;
 
 
   /**

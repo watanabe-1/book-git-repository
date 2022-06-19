@@ -3,7 +3,7 @@ package org.watanabe.app.study.service;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.watanabe.app.study.entity.Account;
-import org.watanabe.app.study.enums.AccountType;
+import org.watanabe.app.study.enums.type.AccountType;
 
 /**
  * ユーザ情報

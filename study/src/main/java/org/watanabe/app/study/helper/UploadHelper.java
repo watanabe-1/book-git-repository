@@ -17,7 +17,6 @@ import org.watanabe.app.study.form.ImageForm;
 import org.watanabe.app.study.service.ImageService;
 import org.watanabe.app.study.util.StudyUtil;
 
-
 /**
  * アップロードを行うためのHelperクラスを作成
  */

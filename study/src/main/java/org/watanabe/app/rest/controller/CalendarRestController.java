@@ -19,6 +19,7 @@ import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.rest.form.Syukujitsu;
 import org.watanabe.app.study.entity.Books;
+import org.watanabe.app.study.enums.type.BooksType;
 import org.watanabe.app.study.form.BooksForm;
 import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.service.BooksService;
@@ -94,8 +95,8 @@ public class CalendarRestController {
   public List<Books> calendarByDay(@ModelAttribute BooksForm form, ModelAndView model, Date date) {
     // 対象を取得
     List<Books> books = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getStartDate(date), booksHelper.getEndDate(date),
-        BooksHelper.BOOKS_TYPE_EXPENSES, StudyUtil.getLoginUser());
+        booksHelper.getStartDate(date), booksHelper.getEndDate(date), BooksType.EXPENSES.getCode(),
+        StudyUtil.getLoginUser());
 
     return books;
   }

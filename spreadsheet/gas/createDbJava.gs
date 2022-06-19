@@ -602,7 +602,7 @@ function getJavaService(sheetName) {
     //使用するクラスに合わせたimport文1、2
     + getJavaImport(importMap) + getJavaImport(importMap2)
     //クラス宣言
-    + javaKaigyo + getJavaDoc(tbEnName + ":" + tbJaName + "(" + tbNote + ")のserviceクラス") + "@Service" + javaKaigyo
+    + getJavaDoc(tbEnName + ":" + tbJaName + "(" + tbNote + ")のserviceクラス") + "@Service" + javaKaigyo
     + "public class " + entityName + "Service {" + repeatConcatStr(javaKaigyo, 2)
     //mappperクラスをDI
     + javaIndent + "@Autowired" + javaKaigyo

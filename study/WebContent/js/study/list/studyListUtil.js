@@ -5,7 +5,7 @@
  * 数字しか入っていない列は数字として扱われる（小数点付きも数字として扱われる）
  * 1行でも文字列が含まれている列は文字列としてソートされる
  *
- * @param {String} targetId 対処テーブルID #を頭につける
+ * @param {String} targetId 対象テーブルID
  * @param {String} column_no_prev 前回クリックされた列番号
  */
 function addEventListenerBySortTable(targetId) {

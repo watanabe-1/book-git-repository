@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.watanabe.app.study.entity.Templatechartcolour;
 import org.watanabe.app.study.mapper.TemplatechartcolourMapper;
 
-
 /**
  * TEMPLATECHARTCOLOUR:チャートカラーマスタ(図の表示に使用するrgbaの組み合わせを管理するマスタ)のserviceクラス
  */

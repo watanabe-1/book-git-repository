@@ -1,13 +1,11 @@
 package org.watanabe.app.study.service;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.watanabe.app.study.entity.Codelkup;
 import org.watanabe.app.study.mapper.CodelkupMapper;
-
 
 /**
  * CODELKUP:コードルックアップ(コード定義テーブル(明細))のserviceクラス
@@ -20,6 +18,7 @@ public class CodelkupService {
 
   /**
    * 全検索
+   * 
    * @return 検索結果(複数行)
    */
   public List<Codelkup> findAll() {
@@ -28,6 +27,7 @@ public class CodelkupService {
 
   /**
    * 1行検索(引数にプライマルキーを指定)
+   * 
    * @param listName LIST_NAME(リストネーム)
    * @param code CODE(コード)
    * @return 検索結果(1行)
@@ -38,6 +38,7 @@ public class CodelkupService {
 
   /**
    * 複数行insert
+   * 
    * @param codList entity(Codelkup)のList
    * @return insert行数
    */
@@ -48,6 +49,7 @@ public class CodelkupService {
 
   /**
    * 1行insert
+   * 
    * @param cod entity(Codelkup)
    * @return insert行数
    */
@@ -58,6 +60,7 @@ public class CodelkupService {
 
   /**
    * 全行update
+   * 
    * @param cod entity(Codelkup)
    * @return update行数
    */
@@ -67,9 +70,8 @@ public class CodelkupService {
   }
 
   /**
-   * 1行update
-   * プライマルキーをWhere句に指定
-   * プライマルキー：String listName, String code
+   * 1行update プライマルキーをWhere句に指定 プライマルキー：String listName, String code
+   * 
    * @param cod entity(Codelkup)
    * @return update行数
    */
@@ -80,6 +82,7 @@ public class CodelkupService {
 
   /**
    * 全行delete
+   * 
    * @return delete行数
    */
   @Transactional
@@ -89,6 +92,7 @@ public class CodelkupService {
 
   /**
    * 1行delete(引数にプライマルキーを指定)
+   * 
    * @param listName LIST_NAME(リストネーム)
    * @param code CODE(コード)
    * @return delete行数

@@ -29,16 +29,6 @@ import org.watanabe.app.study.util.StudyUtil;
 public class BooksHelper {
 
   /**
-   * 家計簿種類(収入)
-   */
-  public static final String BOOKS_TYPE_INCOME = "1";
-
-  /**
-   * 家計簿種類(支出)
-   */
-  public static final String BOOKS_TYPE_EXPENSES = "2";
-
-  /**
    * カテゴリー情報 Service
    */
   @Autowired

@@ -20,8 +20,8 @@
         <div class="col-12">
           <label for="booksType" class="form-label">収入or支出</label>
           <select th:field="*{booksType}" class="form-select" required>
-            <option th:each="type : ${booksTypes}" th:value="${type.key}" th:text="${type.value}"
-              th:selected="${type.key} == *{booksType}"></option>
+            <option th:each="type : ${booksTypes}" th:value="${type.code}" th:text="${type.name}"
+              th:selected="${type.code} == *{booksType}"></option>
           </select>
           <p th:if="${#fields.hasErrors('booksType')}" th:errors="*{booksType}" class="input-error"></p>
         </div>

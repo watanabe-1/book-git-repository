@@ -1,6 +1,5 @@
 package org.watanabe.app.study.service;
 
-
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

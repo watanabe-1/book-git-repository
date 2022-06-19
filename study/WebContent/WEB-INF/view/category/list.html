@@ -47,19 +47,19 @@
 				<tbody>
 					<tr th:each="cat, st : *{catDataList}" class="align-middle">
 						<td class="center">
-							<input type="checkbox" name="active" th:each="cat : ${isDeleteList}" th:value="${cat.key}"
-								th:text="${cat.value}" th:field="*{catDataList[__${st.index}__].isDelete}" />
+							<input type="checkbox" name="active" th:each="cat : ${isDeleteList}" th:value="${cat.value}"
+								th:text="${cat.name}" th:field="*{catDataList[__${st.index}__].deleteFlag}" />
 						</td>
 						<td class="center" hidden>
 							<label th:text="${cat.CatCode}"></label>
-							<input type="hidden" th:field="*{catDataList[__${st.index}__].CatCode}">
+							<input type="hidden" th:field="*{catDataList[__${st.index}__].catCode}">
 						</td>
 						<td class="center">
 							<input type="text" class="form-control" th:field="*{catDataList[__${st.index}__].catName}">
 						</td>
 						<td class="center">
-							<input type="radio" name="catType" th:each="cat : ${catTypes}" th:value="${cat.key}"
-								th:text="${cat.value}" th:field="*{catDataList[__${st.index}__].catType}" />
+							<input type="radio" name="catType" th:each="cat : ${catTypes}" th:value="${cat.code}"
+								th:text="${cat.name}" th:field="*{catDataList[__${st.index}__].catType}" />
 						</td>
 						<td class="center">
 							<textarea class="form-control" th:field="*{catDataList[__${st.index}__].note}"
@@ -67,8 +67,8 @@
 						</td>
 						<td>
 							<select th:field="*{catDataList[__${st.index}__].imgType}" class="form-select">
-								<option th:each="cat : ${imgTypes}" th:value="${cat.key}" th:text="${cat.value}"
-									th:selected="${cat.key} == *{catDataList[__${st.index}__].imgType}"></option>
+								<option th:each="cat : ${imgTypes}" th:value="${cat.code}" th:text="${cat.name}"
+									th:selected="${cat.code} == *{catDataList[__${st.index}__].imgType}"></option>
 							</select>
 						</td>
 						<td>
@@ -80,8 +80,8 @@
 							</button>
 						</td>
 						<td>
-							<input type="checkbox" name="active" th:each="cat : ${actives}" th:value="${cat.key}"
-								th:text="${cat.value}" th:field="*{catDataList[__${st.index}__].active}" />
+							<input type="checkbox" name="active" th:each="cat : ${actives}" th:value="${cat.value}"
+								th:text="${cat.name}" th:field="*{catDataList[__${st.index}__].active}" />
 						</td>
 						<td class="center" hidden>
 							<label th:text="${#dates.format(cat.updDate, 'yyyy/MM/dd')}"></label>

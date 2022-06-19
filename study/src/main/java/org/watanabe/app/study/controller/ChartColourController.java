@@ -40,12 +40,12 @@ public class ChartColourController {
   private ChartColourHelper chartColourHelper;
 
   /**
-   * /books/indexのデフォルトのタブ
+   * /chartColour/indexのデフォルトのタブ
    */
   private final String DEFALT_TAB = "tab1";
 
   /**
-   * /books/inputの保存後のタブ
+   * /chartColour/inputの保存後のタブ
    */
   private final String RESULT_TAB = "tab2";
 

@@ -3,9 +3,7 @@ package org.watanabe.app.study.controller;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.watanabe.app.common.logger.LogIdBasedLogger;
 import org.watanabe.app.study.entity.Books;
+import org.watanabe.app.study.enums.type.BooksType;
 import org.watanabe.app.study.form.BooksForm;
 import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.service.BooksService;
@@ -46,7 +45,7 @@ public class BooksController {
   @RequestMapping(value = "/books/input", method = RequestMethod.GET)
   public ModelAndView input(@ModelAttribute BooksForm form, ModelAndView model) {
     model.setViewName("books/input");
-    model.addObject("booksTypes", getBooksTypes());
+    model.addObject("booksTypes", BooksType.values());
 
     return model;
   }
@@ -90,12 +89,12 @@ public class BooksController {
     }
 
     List<Books> booksByExpenses = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getStartDate(date), booksHelper.getEndDate(date),
-        BooksHelper.BOOKS_TYPE_EXPENSES, StudyUtil.getLoginUser());
+        booksHelper.getStartDate(date), booksHelper.getEndDate(date), BooksType.EXPENSES.getCode(),
+        StudyUtil.getLoginUser());
     int sumAmountByExpenses =
         booksByExpenses.stream().mapToInt(book -> book.getBooksAmmount()).sum();
     List<Books> booksByIncome = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getStartDate(date), booksHelper.getEndDate(date), BooksHelper.BOOKS_TYPE_INCOME,
+        booksHelper.getStartDate(date), booksHelper.getEndDate(date), BooksType.INCOME.getCode(),
         StudyUtil.getLoginUser());
     int sumAmountByIncome = booksByIncome.stream().mapToInt(book -> book.getBooksAmmount()).sum();
     model.addObject("bookslistByExpenses", booksByExpenses);
@@ -117,14 +116,6 @@ public class BooksController {
     // "active");
 
     return model;
-  }
-
-  private Map<String, String> getBooksTypes() {
-    Map<String, String> selectMap = new LinkedHashMap<String, String>();
-    selectMap.put(BooksHelper.BOOKS_TYPE_INCOME, "収入");
-    selectMap.put(BooksHelper.BOOKS_TYPE_EXPENSES, "支出");
-
-    return selectMap;
   }
 
 }

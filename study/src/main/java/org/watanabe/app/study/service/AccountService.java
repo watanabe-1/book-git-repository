@@ -7,7 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.watanabe.app.study.entity.Account;
 import org.watanabe.app.study.mapper.AccountMapper;
 
-
 /**
  * ACCOUNT:アカウント(アカウント情報保持テーブル)のserviceクラス
  */

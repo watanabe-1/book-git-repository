@@ -34,8 +34,8 @@
         <div class="col-12">
           <label for="itemType" class="form-label">画像タイプ</label>
           <select th:field="*{imgType}" class="form-select" disabled>
-            <option th:each="cat : ${imgTypes}" th:value="${cat.key}" th:text="${cat.value}"
-              th:selected="${cat.key} == *{imgType}"></option>
+            <option th:each="cat : ${imgTypes}" th:value="${cat.code}" th:text="${cat.name}"
+              th:selected="${cat.code} == *{imgType}"></option>
           </select>
           <p th:if="${#fields.hasErrors('imgType')}" th:errors="*{imgType}" class="input-error"></p>
           <input type="hidden" th:field="*{imgType}" />
@@ -45,13 +45,13 @@
       <div class="row g-3">
         <div class="col-md-4">
           カテゴリータイプ<br />
-          <input type="radio" name="catType" th:each="cat : ${catTypes}" th:value="${cat.key}" th:text="${cat.value}"
+          <input type="radio" name="catType" th:each="cat : ${catTypes}" th:value="${cat.code}" th:text="${cat.name}"
             th:field="*{catType}" disabled />
           <p th:if="${#fields.hasErrors('catType')}" th:errors="*{catType}" class="input-error"></p>
           <input type="hidden" th:field="*{catType}" />
         </div>
         <div class="col-md-4">
-          <input type="checkbox" name="active" th:each="cat : ${actives}" th:value="${cat.key}" th:text="${cat.value}"
+          <input type="checkbox" name="active" th:each="cat : ${actives}" th:value="${cat.value}" th:text="${cat.name}"
             th:field="*{active}" disabled />
           <p th:if="${#fields.hasErrors('active')}" th:errors="*{active}" class="input-error"></p>
           <input type="hidden" th:field="*{active}" />

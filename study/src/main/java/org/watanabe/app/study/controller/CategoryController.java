@@ -1,9 +1,7 @@
 package org.watanabe.app.study.controller;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +21,10 @@ import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.common.logger.LogIdBasedLogger;
 import org.watanabe.app.study.dto.CategoryList;
 import org.watanabe.app.study.entity.Image;
+import org.watanabe.app.study.enums.flag.ActiveFlag;
+import org.watanabe.app.study.enums.flag.DeleteFlag;
+import org.watanabe.app.study.enums.type.CategoryType;
+import org.watanabe.app.study.enums.type.ImageType;
 import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.helper.UploadHelper;
 import org.watanabe.app.study.service.CategoryService;
@@ -61,10 +63,6 @@ public class CategoryController {
   public String input(@ModelAttribute CategoryForm form, Model model) {
     // 画面にセット
     model = setInputConfirm(model);
-
-    //
-    // ResultMessages messages = ResultMessages.error(); messages.add("e.ad.od.5001", "s"); throw
-    // new BusinessException(messages);
 
     model.addAttribute("selectedCategory", "key_B");
 
@@ -189,7 +187,7 @@ public class CategoryController {
     // カテゴリー情報の更新
     // 全件数送信されるため、変更してなくても更新される。とりあえず仮で実装
     for (CategoryForm catForm : catListParam.getCatDataList()) {
-      if (catForm.getIsDelete()) {
+      if (DeleteFlag.isDelete(catForm.getDeleteFlag())) {
         categoryService.delete(catForm);
       } else {
         // アップロードしたICON
@@ -217,86 +215,26 @@ public class CategoryController {
     return "redirect:/category/list";
   }
 
-
-  // test
-  // @PostMapping("/category/upload")
-  // @RequestMapping(value = "/category/upload", method = RequestMethod.POST)
-  // public String upload(CategoryForm uploadForm, Model model,
-  // @RequestParam("upload_file") MultipartFile multipartFile) {
-  // // model.addAttribute("originalFilename", uploadForm.getMultipartFile()
-  // // .getOriginalFilename());
-  //
-  // return "sample/result";
-  // }
-
-  // test
-  // @RequestMapping(value = "/category/test", method = RequestMethod.GET)
-  // public ModelAndView test(@ModelAttribute CategoryForm form, ModelAndView model) {
-  // model.setViewName("category/test");
-  // // 画面にセット
-  // model = setInputConfirm(model);
-  //
-  // // model.addObject("selectedCategory","key_B");
-  // return model;
-  // }
-
-  // パラメーターのセット
-  // private ModelAndView setInputConfirm(ModelAndView model) {
-  // // select box
-  // model.addObject("imgTypes", getImgTypes());
-  //
-  // // radio botan
-  // model.addObject("catTypes", getCatTypes());
-  //
-  // // check box
-  // model.addObject("actives", getActives());
-  //
-  // return model;
-  // }
-
-  // パラメーターのセット
+  /**
+   * パラメーターのセット
+   * 
+   * @param model Model
+   * @return model
+   */
   private Model setInputConfirm(Model model) {
     // select box
-    model.addAttribute("imgTypes", getImgTypes());
+    model.addAttribute("imgTypes", ImageType.values());
 
     // radio botan
-    model.addAttribute("catTypes", getCatTypes());
+    model.addAttribute("catTypes", CategoryType.values());
 
     // check box
-    model.addAttribute("actives", getActives());
+    model.addAttribute("actives", ActiveFlag.ACTIVE);
 
     // 削除確認
-    model.addAttribute("isDeleteList", getIsDeleteList());
+    model.addAttribute("isDeleteList", DeleteFlag.DELETE);
 
     return model;
   }
 
-  private Map<Boolean, String> getIsDeleteList() {
-    Map<Boolean, String> map = new LinkedHashMap<Boolean, String>();
-    map.put(true, "削除する");
-
-    return map;
-  }
-
-  private Map<String, String> getImgTypes() {
-    Map<String, String> map = new LinkedHashMap<String, String>();
-    map.put("CATEGORY_ICON", "カテゴリーアイコン");
-
-    return map;
-  }
-
-  private Map<String, String> getCatTypes() {
-    Map<String, String> map = new LinkedHashMap<String, String>();
-    map.put("1", "TEST1");
-    map.put("2", "TEST2");
-
-    return map;
-  }
-
-  private Map<String, String> getActives() {
-    Map<String, String> map = new LinkedHashMap<String, String>();
-    map.put("1", "有効");
-
-    return map;
-  }
 }

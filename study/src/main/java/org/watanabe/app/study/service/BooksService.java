@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.mapper.BooksMapper;
 
-
 /**
  * BOOKS:家計簿(家計簿データ保存テーブル)のserviceクラス
  */
