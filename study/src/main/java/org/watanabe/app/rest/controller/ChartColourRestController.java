@@ -16,6 +16,10 @@ import org.watanabe.app.rest.form.BooksChartByMonthDatasets;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.helper.ChartColourHelper;
 
+/**
+ * 図色確認画面で使用するajax応答クラス
+ * 
+ */
 @RestController
 public class ChartColourRestController {
 
@@ -36,6 +40,9 @@ public class ChartColourRestController {
   /**
    * 色見本の図用
    * 
+   * @param form 送信されたデータ
+   * @param result エラーチェック判定結果
+   * @param model モデル
    * @param qty 指定するデータの個数
    * @return json(カテゴリーごとの家計簿情報)
    */
@@ -65,6 +72,8 @@ public class ChartColourRestController {
   /**
    * 色見本の登録時の確認用
    * 
+   * @param form 送信されたデータ
+   * @param model モデル
    * @param qty 指定するデータの個数
    * @return json(カテゴリーごとの家計簿情報)
    */

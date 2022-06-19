@@ -20,6 +20,10 @@ import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.service.BooksService;
 import org.watanabe.app.study.util.StudyUtil;
 
+/**
+ * 家計簿コントローラ.
+ *
+ */
 @Controller
 public class BooksController {
 
@@ -42,6 +46,13 @@ public class BooksController {
    */
   private final String DEFALT_TAB = "tab1";
 
+  /**
+   * 家計簿登録画面
+   * 
+   * @param form 送信されたデータ
+   * @param model モデル
+   * @return 画面表示用モデル
+   */
   @RequestMapping(value = "/books/input", method = RequestMethod.GET)
   public ModelAndView input(@ModelAttribute BooksForm form, ModelAndView model) {
     model.setViewName("books/input");
@@ -50,6 +61,14 @@ public class BooksController {
     return model;
   }
 
+  /**
+   * 家計簿登録結果画面
+   * 
+   * @param form 送信されたデータ
+   * @param result エラーチェック結果
+   * @param model モデル
+   * @return 画面表示用モデル
+   */
   @RequestMapping(value = "/books/result", method = RequestMethod.POST)
   public ModelAndView result(@ModelAttribute @Validated BooksForm form, BindingResult result,
       ModelAndView model) {
@@ -70,10 +89,16 @@ public class BooksController {
     booksService.saveBulk(booksList);
 
     return model;
-
   }
 
-
+  /**
+   * 家計簿一覧画面
+   * 
+   * @param form 送信されたデータ
+   * @param model モデル
+   * @param date 日付け
+   * @return 画面表示用モデル
+   */
   @RequestMapping(value = "/books/list", method = RequestMethod.GET)
   public ModelAndView list(@ModelAttribute BooksForm form, ModelAndView model, Date date,
       String tab) {
@@ -107,13 +132,6 @@ public class BooksController {
     model.addObject("backDate", BooksHelper.getBackMonth(date));
     model.addObject("tab", tab);
     model.addObject(tab, "active");
-
-    // Map<String, String> nextParm = new HashMap<>(); nextParm.put("date",
-    // booksHelper.getNextMonth(date)); nextParm.put("tab", tab); model.addObject("nextParm",
-    // StudyUtil.createUrlParam(nextParm)); Map<String, String> backParm = new HashMap<>();
-    // backParm.put("date", booksHelper.getBackMonth(date)); backParm.put("tab", tab);
-    // model.addObject("backParm", StudyUtil.createUrlParam(backParm)); model.addObject(tab,
-    // "active");
 
     return model;
   }

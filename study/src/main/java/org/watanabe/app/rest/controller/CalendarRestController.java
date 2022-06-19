@@ -25,6 +25,10 @@ import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.service.BooksService;
 import org.watanabe.app.study.util.StudyUtil;
 
+/**
+ * カレンダー表示で使用するajax応答クラス
+ * 
+ */
 @RestController
 public class CalendarRestController {
 
@@ -43,6 +47,8 @@ public class CalendarRestController {
   /**
    * 祝日一覧の取得
    * 
+   * @param form 送信されたデータ
+   * @param model モデル
    * @param date 開いている画面の指定されている日付け
    * @return json(祝日一覧情報)
    */
@@ -88,6 +94,8 @@ public class CalendarRestController {
   /**
    * カレンダーで使用する日付けごとの料金一覧の取得
    * 
+   * @param form 送信されたデータ
+   * @param model モデル
    * @param date 開いている画面の指定されている日付け
    * @return json(カレンダーで使用する日付けごとの料金一覧情報)
    */

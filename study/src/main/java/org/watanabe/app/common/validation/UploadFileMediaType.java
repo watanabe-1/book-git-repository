@@ -10,8 +10,10 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.watanabe.app.common.validation.UploadFileMediaType.List;
 
-// ファイルの拡張子が供された拡張子であることを検証するためのバリデーションの実装
-// ファイルの拡張子が供された拡張子であることを検証するための、アノテーションを作成
+/**
+ * ファイルの拡張子が供された拡張子であることを検証するためのバリデーションの実装<br>
+ * ファイルの拡張子が供された拡張子であることを検証するための、アノテーションを作成
+ */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = UploadFileMediaTypeValidator.class)
@@ -25,12 +27,12 @@ public @interface UploadFileMediaType {
 
   Class<? extends Payload>[] payload() default {};
 
-  /*
+  /**
    * 指定する拡張子をカンマ区切りで指定
    */
   String exts() default "png";
 
-  /*
+  /**
    * メディアタイプをMediaType.IMAGE_PNG.toString()の値を指定する
    */
   String mediaTypes() default "image/png";

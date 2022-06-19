@@ -10,8 +10,10 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.watanabe.app.common.validation.UploadFileMaxSize.List;
 
-// ファイルのサイズが許容サイズ内であることを検証するためのバリデーションの実装
-// ファイルのサイズが、許容サイズ内であることを検証するための、アノテーションを作成
+/**
+ * ファイルのサイズが許容サイズ内であることを検証するためのバリデーションの実装<br>
+ * ファイルのサイズが、許容サイズ内であることを検証するための、アノテーションを作成
+ */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = UploadFileMaxSizeValidator.class)

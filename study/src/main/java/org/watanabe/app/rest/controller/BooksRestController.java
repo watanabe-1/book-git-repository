@@ -27,6 +27,10 @@ import org.watanabe.app.study.helper.ChartColourHelper;
 import org.watanabe.app.study.service.BooksService;
 import org.watanabe.app.study.util.StudyUtil;
 
+/**
+ * 家計簿画面で使用するajax応答クラス
+ * 
+ */
 @RestController
 public class BooksRestController {
 
@@ -53,6 +57,8 @@ public class BooksRestController {
   /**
    * 家計簿一覧画面内の1月ごとのカテゴリーごとの図用
    * 
+   * @param form 送信されたデータ
+   * @param model モデル
    * @param date 開いている画面の指定されている日付け
    * @return json(カテゴリーごとの家計簿情報)
    */
@@ -100,6 +106,8 @@ public class BooksRestController {
   /**
    * 家計簿一覧画面内の1月ごとの支払いごとの図用
    * 
+   * @param form 送信されたデータ
+   * @param model モデル
    * @param date 開いている画面の指定されている日付け
    * @return json(支払いごとの家計簿情報)
    */
@@ -142,6 +150,8 @@ public class BooksRestController {
   /**
    * 家計簿一覧画面内の1年ごとの図用
    * 
+   * @param form 送信されたデータ
+   * @param model モデル
    * @param date 開いている画面の指定されている日付け
    * @return json(カテゴリーごとの家計簿情報)
    */

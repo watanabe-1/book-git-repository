@@ -10,17 +10,19 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 
-// ファイルの拡張子が供された拡張子であることを検証するためのバリデーションの実装
-// ファイルの拡張子が供された拡張子であることを検証するための、実装を行うクラスを作成
+/**
+ * ファイルの拡張子が供された拡張子であることを検証するためのバリデーションの実装<br>
+ * ファイルの拡張子が供された拡張子であることを検証するための、実装を行うクラスを作成
+ */
 public class UploadFileMediaTypeValidator
     implements ConstraintValidator<UploadFileMediaType, MultipartFile> {
 
-  /*
+  /**
    * 指定する拡張子をカンマ区切りで指定
    */
   private String exts;
 
-  /*
+  /**
    * メディアタイプをMediaType.IMAGE_PNG.toString()の値を指定する
    */
   private String mediaTypes;

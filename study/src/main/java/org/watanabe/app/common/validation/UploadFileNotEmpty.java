@@ -10,8 +10,10 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.watanabe.app.common.validation.UploadFileNotEmpty.List;
 
-// ファイルが空でないことを検証するためのバリデーションの実装
-// ファイルが、空でないことを検証するための、アノテーションを作成
+/**
+ * ファイルが空でないことを検証するためのバリデーションの実装<br>
+ * ファイルが、空でないことを検証するための、アノテーションを作成
+ */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = UploadFileNotEmptyValidator.class)

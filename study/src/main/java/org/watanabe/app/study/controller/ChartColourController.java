@@ -21,6 +21,10 @@ import org.watanabe.app.study.helper.ChartColourHelper;
 import org.watanabe.app.study.service.TemplatechartcolourService;
 import org.watanabe.app.study.util.StudyUtil;
 
+/**
+ * 図の色確認コントローラ.
+ *
+ */
 @Controller
 public class ChartColourController {
 
@@ -49,6 +53,15 @@ public class ChartColourController {
    */
   private final String RESULT_TAB = "tab2";
 
+  /**
+   * 図の色登録
+   * 
+   * @param form 送信されたデータ
+   * @param result エラーチェック結果
+   * @param model モデル
+   * @param redirectAttributes リダイレクト先に引き継ぐパラメータ
+   * @return リダイレクト先
+   */
   @RequestMapping(value = "/chartColour/input", method = RequestMethod.POST)
   public String result(@ModelAttribute @Validated TemplatechartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
@@ -94,6 +107,15 @@ public class ChartColourController {
     // return index(form, model, RESULT_TAB);
   }
 
+  /**
+   * 図の色使用テンプレート更新
+   * 
+   * @param form 送信されたデータ
+   * @param result エラーチェック結果
+   * @param model モデル
+   * @param redirectAttributes リダイレクト先に引き継ぐパラメータ
+   * @return リダイレクト先
+   */
   @RequestMapping(value = "/chartColour/changeActive", method = RequestMethod.POST)
   public String changeActive(@ModelAttribute @Validated TemplatechartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {

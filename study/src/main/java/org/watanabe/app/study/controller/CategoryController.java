@@ -2,7 +2,6 @@ package org.watanabe.app.study.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
@@ -33,13 +32,14 @@ import org.watanabe.app.study.util.StudyUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * カテゴリーコントローラー
+ * 
+ */
 @Controller
 public class CategoryController {
 
   private static final LogIdBasedLogger logger = LogIdBasedLogger.getLogger(TopController.class);
-
-  private final String ISJAERR = "エラー";
-  private final String ISEAERR = "ERR";
 
   /**
    * カテゴリー情報 Service
@@ -59,6 +59,13 @@ public class CategoryController {
   @Autowired
   UploadHelper uploadHelper;
 
+  /**
+   * カテゴリー登録画面
+   * 
+   * @param form 送信されたデータ
+   * @param model モデル
+   * @return 入力画面HTML名
+   */
   @RequestMapping(value = "/category/input", method = RequestMethod.GET)
   public String input(@ModelAttribute CategoryForm form, Model model) {
     // 画面にセット
@@ -69,6 +76,14 @@ public class CategoryController {
     return "category/input";
   }
 
+  /**
+   * カテゴリー登録確認画面
+   * 
+   * @param form 送信されたデータ
+   * @param result エラーチェック結果
+   * @param model モデル
+   * @return 入力画面HTML名
+   */
   @RequestMapping(value = "/category/confirm", method = RequestMethod.POST)
   public String confirm(@ModelAttribute @Validated CategoryForm form, BindingResult result,
       Model model
@@ -110,18 +125,18 @@ public class CategoryController {
     return "category/confirm";
   }
 
+  /**
+   * カテゴリー登録結果画面
+   * 
+   * @param form 送信されたデータ
+   * @param result エラーチェック結果
+   * @param model モデル
+   * @return 入力画面HTML名
+   */
   @RequestMapping(value = "/category/result", method = RequestMethod.POST)
   public String result(@ModelAttribute CategoryForm form, BindingResult result, Model model
   // , MultipartFile catIcon
   ) {
-
-    // エラー画面遷移確認用
-    if (Objects.equals(form.getCatName(), ISJAERR)
-        || Objects.equals(form.getCatName().toUpperCase(), ISEAERR)) {
-      ResultMessages messages = ResultMessages.error();
-      messages.add("e.ab.cd.3001", "エラーです");
-      throw new BusinessException(messages);
-    }
 
     try {
       // dbのカテゴリーテーブルに登録
@@ -143,6 +158,12 @@ public class CategoryController {
 
   }
 
+  /**
+   * カテゴリー一覧画面
+   * 
+   * @param model モデル
+   * @return 入力画面HTML名
+   */
   @RequestMapping(value = "/category/list", method = RequestMethod.GET)
   public String displayList(Model model) {
     ObjectMapper mapper = new ObjectMapper();
@@ -164,11 +185,10 @@ public class CategoryController {
 
 
   /**
-   * ユーザー情報一覧更新
+   * カテゴリー情報一覧更新
    * 
-   * @param userRequest リクエストデータ
-   * @param model Model
-   * @return ユーザー情報詳細画面
+   * @param catListParam 画面送信情報
+   * @return リダイレクト先
    */
   @RequestMapping(value = "/category/listUpdate", method = RequestMethod.POST)
   public String listUpdate(@Validated @ModelAttribute CategoryList catListParam,

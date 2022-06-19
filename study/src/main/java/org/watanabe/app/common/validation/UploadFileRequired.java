@@ -10,8 +10,10 @@ import javax.validation.Constraint;
 import javax.validation.Payload;
 import org.watanabe.app.common.validation.UploadFileRequired.List;
 
-// ファイルが選択されていることを検証するためのバリデーションの実装
-// ファイルが、選択されていることを検証するための、アノテーションを作成
+/**
+ * ファイルが選択されていることを検証するためのバリデーションの実装<br>
+ * ファイルが、選択されていることを検証するための、アノテーションを作成
+ */
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = UploadFileRequiredValidator.class)

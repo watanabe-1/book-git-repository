@@ -6,6 +6,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.watanabe.app.common.logger.LogIdBasedLogger;
 
+/**
+ * トップコントローラー
+ * 
+ */
 @Controller
 public class TopController {
 

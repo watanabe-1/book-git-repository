@@ -5,8 +5,10 @@ import javax.validation.ConstraintValidatorContext;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-// ファイルが空でないことを検証するためのバリデーションの実装
-// ファイルが、空でないことを検証するための、実装を行うクラスを作成
+/**
+ * ファイルが空でないことを検証するためのバリデーションの実装<br>
+ * ファイルが、空でないことを検証するための、実装を行うクラスを作成
+ */
 public class UploadFileNotEmptyValidator
     implements ConstraintValidator<UploadFileNotEmpty, MultipartFile> {
 
