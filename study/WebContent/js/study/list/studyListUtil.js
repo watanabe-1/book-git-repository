@@ -9,21 +9,20 @@
  * @param {String} column_no_prev 前回クリックされた列番号
  */
 function addEventListenerBySortTable(targetId) {
-  const TARGET_TH_ID = '#' + targetId + ' th';
   const ASC = 'bi-caret-up-fill';
   const DESC = 'bi-caret-down-fill';
   const NUMBER_SORT = 0;
   const STRING_SORT = 1;
-  document.querySelectorAll(TARGET_TH_ID).forEach((elm) => {
+  document.querySelectorAll('#' + targetId + ' th').forEach((elm) => {
     elm.onclick = function () {
-      const columnNo = this.cellIndex; //クリックされた列番号
+      const columnNo = this.cellIndex; // クリックされた列番号
       const table = this.parentNode.parentNode.parentNode;
       const beforeiEl =
         table.querySelector('.' + ASC) != null
           ? table.querySelector('.' + ASC)
-          : table.querySelector('.' + DESC); //前回付与されたソート順を示すアイコン
-      let sortType = NUMBER_SORT; //0:数値 1:文字
-      let sortArray = new Array(); //クリックした列のデータを全て格納する配列
+          : table.querySelector('.' + DESC); // 前回付与されたソート順を示すアイコン
+      let sortType = NUMBER_SORT; // 0:数値 1:文字
+      let sortArray = new Array(); // クリックした列のデータを全て格納する配列
       // 次のソート順を決定
       const order =
         beforeiEl == null ||
@@ -47,32 +46,32 @@ function addEventListenerBySortTable(targetId) {
         sortArray.push(column);
         //数値判定
         if (isNaN(Number(column.value))) {
-          sortType = STRING_SORT; //値が数値変換できなかった場合は文字列ソート
+          sortType = 1; //値が数値変換できなかった場合は文字列ソート
         }
       }
       if (sortType == NUMBER_SORT) {
-        //数値ソート
+        // 数値ソート
         if (order == DESC) {
-          //同じ列が2回クリックされた場合は降順ソート
+          // 同じ列が2回クリックされた場合は降順ソート
           sortArray.sort(compareNumberDesc);
         } else {
           sortArray.sort(compareNumber);
         }
       } else {
-        //文字列ソート
+        // 文字列ソート
         if (order == DESC) {
-          //同じ列が2回クリックされた場合は降順ソート
+          // 同じ列が2回クリックされた場合は降順ソート
           sortArray.sort(compareStringDesc);
         } else {
           sortArray.sort(compareString);
         }
       }
-      //ソート後のTRオブジェクトをソート順にtbodyへ追加（移動）
-      //let tbody = this.parentNode.parentNode;
+      // ソート後のTRオブジェクトをソート順にtbodyへ追加（移動）
+      // let tbody = this.parentNode.parentNode;
       let tbody = table.querySelector('tbody');
-      for (let i = 0; i < sortArray.length; i++) {
-        tbody.appendChild(sortArray[i].row);
-      }
+      sortArray.forEach((column) => {
+        tbody.appendChild(column.row);
+      });
     };
   });
 }
@@ -107,12 +106,7 @@ function compareNumberDesc(a, b) {
  * @return ソート結果
  */
 function compareString(a, b) {
-  if (a.value < b.value) {
-    return -1;
-  } else {
-    return 1;
-  }
-  return 0;
+  return a.value < b.value ? -1 : 1;
 }
 
 /**
@@ -123,10 +117,5 @@ function compareString(a, b) {
  * @return ソート結果
  */
 function compareStringDesc(a, b) {
-  if (a.value > b.value) {
-    return -1;
-  } else {
-    return 1;
-  }
-  return 0;
+  return a.value > b.value ? -1 : 1;
 }

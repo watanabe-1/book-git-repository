@@ -37,7 +37,7 @@ public class StudyUtil {
    * null、もしくは空文字の判断を行う
    * 
    * @param value チェック対象
-   * @return String nullもしくは空白の時にtrue それ以外はfalse
+   * @return String nullもしくは空文字の時にtrue それ以外はfalse
    */
   public static boolean isNullOrEmpty(String value) {
     return value == null || value.isEmpty() ? true : false;
