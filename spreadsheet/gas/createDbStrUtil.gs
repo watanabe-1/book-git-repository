@@ -56,6 +56,40 @@ class DbTeigi {
   }
 }
 
+/**
+ * コード定義1シート内を定義したentity
+ */
+class CodeTeigi {
+
+  /**
+   * コンストラクター
+   * descriptionHead 親説明
+   * description 説明
+   * listName リストネーム
+   * code コード
+   * shortValue 値(短)
+   * longValue 値(長)
+   * editable 編集可否
+   * active 有効化フラグ
+   * sequence シークエンス
+   * udf1 備考(なんでも)1
+   * udf2 備考(なんでも)2
+   * udf3 備考(なんでも)3
+   * udf4 備考(なんでも)4
+   * udf5 備考(なんでも)5
+   * udf6 備考(なんでも)6
+   * udf7 備考(なんでも)7
+   * note メモ
+   *
+   * @param {string[]} record DB定義1シート内1行（配列）
+   */
+  constructor(record) {
+    [this.descriptionHead, this.description, this.listName, this.code, this.shortValue
+    , this.longValue, this.editable, this.active, this.sequence, this.udf1, this.udf2
+    , this.udf3, this.udf4, this.udf5, this.udf6, this.udf7, this.note] = record;
+  }
+}
+
 
 /**
  * ファイル書き出し
@@ -196,6 +230,7 @@ function substringBetweenStr(str, startStr, lastStr) {
  * @param {integer} len 桁数
  * @return 0埋めした文字列
  */
+// num=値 len=桁数
 function zeroPadding(num, len){
 	return ( Array(len).join('0') + num ).slice( -len );
 }

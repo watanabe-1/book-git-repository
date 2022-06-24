@@ -44,16 +44,6 @@ public class ChartColourController {
   private ChartColourHelper chartColourHelper;
 
   /**
-   * /chartColour/indexのデフォルトのタブ
-   */
-  private final String DEFALT_TAB = "tab1";
-
-  /**
-   * /chartColour/inputの保存後のタブ
-   */
-  private final String RESULT_TAB = "tab2";
-
-  /**
    * 図の色登録
    * 
    * @param form 送信されたデータ
@@ -75,11 +65,11 @@ public class ChartColourController {
     map.put("inputResultMessage", "保存が完了しました!");
     ModelMap modelMap = new ModelMap();
     modelMap.addAttribute("map", map);
-    modelMap.addAttribute("tab", RESULT_TAB);
+    modelMap.addAttribute("tab", chartColourHelper.getResultTab());
     redirectAttributes.addFlashAttribute("model", modelMap);
 
     return "redirect:/chartColour/index";
-    // return index(form, model, RESULT_TAB);
+    // return index(form, model, chartColourHelper.getResultTab());
   }
 
   @RequestMapping(value = "/chartColour/delete", method = RequestMethod.POST)
@@ -100,11 +90,11 @@ public class ChartColourController {
 
     ModelMap modelMap = new ModelMap();
     modelMap.addAttribute("map", map);
-    modelMap.addAttribute("tab", RESULT_TAB);
+    modelMap.addAttribute("tab", chartColourHelper.getResultTab());
     redirectAttributes.addFlashAttribute("model", modelMap);
 
     return "redirect:/chartColour/index";
-    // return index(form, model, RESULT_TAB);
+    // return index(form, model, chartColourHelper.getResultTab());
   }
 
   /**
@@ -140,11 +130,11 @@ public class ChartColourController {
     map.put("chartColourResultMessage", "保存が完了しました!");
     ModelMap modelMap = new ModelMap();
     modelMap.addAttribute("map", map);
-    modelMap.addAttribute("tab", DEFALT_TAB);
+    modelMap.addAttribute("tab", chartColourHelper.getDefaltTab());
     redirectAttributes.addFlashAttribute("model", modelMap);
 
     return "redirect:/chartColour/index";
-    // return index(form, model, DEFALT_TAB);
+    // return index(form, model, chartColourHelper.getDefaltTab());
   }
 
   @RequestMapping(value = "/chartColour/index", method = RequestMethod.GET)
@@ -157,7 +147,7 @@ public class ChartColourController {
     if (redirectTab != null) {
       tab = redirectTab;
     } else if (StudyUtil.isNullOrEmpty(tab)) {
-      tab = DEFALT_TAB;
+      tab = chartColourHelper.getDefaltTab();
     }
 
     // ユーザーごとに作成し設定しているテンプレートを取得

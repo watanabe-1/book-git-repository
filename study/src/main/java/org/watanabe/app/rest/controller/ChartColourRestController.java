@@ -27,11 +27,6 @@ public class ChartColourRestController {
       LogIdBasedLogger.getLogger(ChartColourRestController.class);
 
   /**
-   * 図に表紙する色確認用データの個数
-   */
-  private static final int DEFALT_DATA_CNT = 20;
-
-  /**
    * 図の色 Helper
    */
   @Autowired
@@ -50,9 +45,7 @@ public class ChartColourRestController {
   public BooksChartByMonthData chartColourByActive(
       @ModelAttribute @Validated TemplatechartcolourForm form, BindingResult result,
       ModelAndView model, Integer qty) {
-    if (qty == null || qty == 0 || qty > 1000) {
-      qty = DEFALT_DATA_CNT;
-    }
+    qty = chartColourHelper.getQty(qty);
 
     BooksChartByMonthDatasets bddd = new BooksChartByMonthDatasets();
     bddd.setBackgroundColor(chartColourHelper.getActiveRgbaList(qty, (float) 0.5));
@@ -80,9 +73,7 @@ public class ChartColourRestController {
   @RequestMapping(value = "/chartColour/rest/confirm", method = RequestMethod.POST)
   public BooksChartByMonthData chartColourBySeed(
       @ModelAttribute @Validated TemplatechartcolourForm form, ModelAndView model, Integer qty) {
-    if (qty == null || qty == 0 || qty > 1000) {
-      qty = DEFALT_DATA_CNT;
-    }
+    qty = chartColourHelper.getQty(qty);
 
     BooksChartByMonthDatasets bddd = new BooksChartByMonthDatasets();
     bddd.setBackgroundColor(chartColourHelper.getRgbaList(qty, (float) 0.5, form.getSeedCoeffR(),

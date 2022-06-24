@@ -16,8 +16,11 @@ import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.common.logger.LogIdBasedLogger;
 import org.watanabe.app.study.entity.Templatechartcolour;
+import org.watanabe.app.study.enums.dbcode.ChartColourNum;
+import org.watanabe.app.study.enums.dbcode.ChartColourTab;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.service.TemplatechartcolourService;
+import org.watanabe.app.study.util.CodeUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
 /**
@@ -219,6 +222,60 @@ public class ChartColourHelper {
     }
 
     return newMap;
+  }
+
+  /**
+   * 図に表紙する色確認用データの個数を取得
+   * 
+   * @return 図に表紙する色確認用データの個数
+   */
+  public int getDefaltDataCnt() {
+    return Integer.parseInt(CodeUtil.getCodeShort(ChartColourNum.DEFALT_DATA_CNT.getListName(),
+        ChartColourNum.DEFALT_DATA_CNT.getCode()));
+  }
+
+  /**
+   * 図に表紙する色確認用データの最大数を取得
+   * 
+   * @return 図に表紙する色確認用データの最大数
+   */
+  public int getMaxDataCnt() {
+    return Integer.parseInt(CodeUtil.getCodeShort(ChartColourNum.MAX_DATA_CNT.getListName(),
+        ChartColourNum.MAX_DATA_CNT.getCode()));
+  }
+
+  /**
+   * 家計簿画面の初期表示のタブを取得
+   * 
+   * @return 家計簿画面の初期表示のタブ
+   */
+  public String getDefaltTab() {
+    return CodeUtil.getCodeShort(ChartColourTab.DEFALT_TAB.getListName(),
+        ChartColourTab.DEFALT_TAB.getCode());
+  }
+
+  /**
+   * 家計簿画面の更新後のタブを取得
+   * 
+   * @return 家計簿画面の更新後のタブ
+   */
+  public String getResultTab() {
+    return CodeUtil.getCodeShort(ChartColourTab.RESULT_TAB.getListName(),
+        ChartColourTab.RESULT_TAB.getCode());
+  }
+
+  /**
+   * 個数を取得
+   * 
+   * @param qty 個数
+   * @return 図に表紙する色確認用データの最大数
+   */
+  public int getQty(Integer qty) {
+    if (qty == null || qty == 0 || qty > getMaxDataCnt()) {
+      qty = getDefaltDataCnt();
+    }
+
+    return qty;
   }
 
 }

@@ -42,11 +42,6 @@ public class BooksController {
   private BooksHelper booksHelper;
 
   /**
-   * /books/listのデフォルトのタブ
-   */
-  private final String DEFALT_TAB = "tab1";
-
-  /**
    * 家計簿登録画面
    * 
    * @param form 送信されたデータ
@@ -110,7 +105,7 @@ public class BooksController {
       date = booksHelper.getStartDate(StudyUtil.getNowDate());
     }
     if (StudyUtil.isNullOrEmpty(tab)) {
-      tab = DEFALT_TAB;
+      tab = booksHelper.getDefaltTab();
     }
 
     List<Books> booksByExpenses = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(

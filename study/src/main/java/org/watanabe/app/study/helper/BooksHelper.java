@@ -18,8 +18,10 @@ import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.entity.Category;
+import org.watanabe.app.study.enums.dbcode.BooksTab;
 import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.service.CategoryService;
+import org.watanabe.app.study.util.CodeUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
 /**
@@ -184,6 +186,15 @@ public class BooksHelper {
    */
   public static Date getBackMonth(Date date) {
     return StudyUtil.calculateDate(date, Calendar.MONTH, -1);
+  }
+
+  /**
+   * 家計簿画面の初期表示のタブを取得
+   * 
+   * @return 家計簿画面の初期表示のタブ
+   */
+  public String getDefaltTab() {
+    return CodeUtil.getCodeShort(BooksTab.DEFALT_TAB.getListName(), BooksTab.DEFALT_TAB.getCode());
   }
 
 }
