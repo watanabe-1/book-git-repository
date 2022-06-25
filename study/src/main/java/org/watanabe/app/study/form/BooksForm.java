@@ -91,4 +91,9 @@ public class BooksForm implements Serializable {
    */
   private String updUser;
 
+  /**
+   * 年
+   */
+  private String booksYear;
+
 }

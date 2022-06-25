@@ -134,5 +134,27 @@ public class BooksService {
     return booksMapper.findByBooksDateAndBooksTypeAndUserIdJoinCategory(start, end, booksType,
         userId);
   };
+
+  /**
+   * ユーザーIDで検索
+   * 
+   * @param booksId BOOKS_ID(家計簿ID)
+   * @param booksType 家計簿の種類
+   * @return 検索結果(複数行)
+   */
+  public List<Books> findByBooksTypeAndUserIdJoinCategory(String booksType, String userId) {
+    return booksMapper.findByBooksDateAndBooksTypeAndUserIdJoinCategory(null, null, booksType,
+        userId);
+  }
+
+  /**
+   * ユーザーIDで検索
+   * 
+   * @param booksId BOOKS_ID(家計簿ID)
+   * @return 検索結果(複数行)
+   */
+  public List<Books> findByUserId(String userId) {
+    return booksMapper.findByUserId(userId);
+  }
 }
 

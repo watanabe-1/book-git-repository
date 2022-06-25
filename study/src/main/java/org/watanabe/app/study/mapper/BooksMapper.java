@@ -105,4 +105,12 @@ public interface BooksMapper {
    */
   List<Books> findByBooksDateAndBooksTypeAndUserIdJoinCategory(@Param("start") Date start,
       @Param("end") Date end, @Param("booksType") String booksType, @Param("userId") String userId);
+
+  /**
+   * ユーザーIDで検索
+   * 
+   * @param booksId BOOKS_ID(家計簿ID)
+   * @return 検索結果(複数行)
+   */
+  public List<Books> findByUserId(@Param("userId") String userId);
 }

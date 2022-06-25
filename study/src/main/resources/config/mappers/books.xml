@@ -63,10 +63,17 @@
 					on B.CAT_CODE = C.CAT_CODE
 				left outer join IMAGE I
 					on C.IMG_ID = I.IMG_ID
-		where
-			B.BOOKS_DATE BETWEEN #{start} AND #{end}
-			and B.BOOKS_TYPE = #{booksType}
-			AND USER_ID = #{userId}
+		<where>
+			<if test="start != null and end != null">
+				B.BOOKS_DATE BETWEEN #{start} AND #{end}
+			</if>
+			<if test="booksType != null">
+				and B.BOOKS_TYPE = #{booksType}
+			</if>
+			<if test="userId != null">
+				AND USER_ID = #{userId}
+			</if>
+		</where>
 		order by
 			BOOKS_DATE
 	</select>
@@ -98,4 +105,9 @@
 		<result property="imgPath" column="IMG_PATH" />
 		<result property="imgName" column="IMG_NAME" />
 	</resultMap>
+
+	<select id="findByUserId" resultType="org.watanabe.app.study.entity.Books">
+		select SERIAL_KEY, BOOKS_ID, USER_ID, BOOKS_TYPE, BOOKS_DATE, BOOKS_PLACE, CAT_CODE, BOOKS_METHOD, BOOKS_AMMOUNT, INS_DATE, INS_USER, UPD_DATE, UPD_USER from BOOKS
+		where USER_ID = #{userId} order by BOOKS_ID, USER_ID
+	</select>
 </mapper>

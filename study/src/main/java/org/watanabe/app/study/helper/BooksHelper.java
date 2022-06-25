@@ -143,8 +143,8 @@ public class BooksHelper {
    * @param date 変更したい日付
    * @return Date 変換語の日付
    */
-  public Date getStartDate(Date date) {
-    return StudyUtil.getEdgeDate(date, StudyUtil.START);
+  public Date getStartDateByMonth(Date date) {
+    return StudyUtil.getEdgeDate(date, StudyUtil.START, Calendar.MONTH);
   }
 
   /**
@@ -153,8 +153,28 @@ public class BooksHelper {
    * @param date 変更したい日付
    * @return Date 変換語の日付
    */
-  public Date getEndDate(Date date) {
-    return StudyUtil.getEdgeDate(date, StudyUtil.END);
+  public Date getEndDateByMonth(Date date) {
+    return StudyUtil.getEdgeDate(date, StudyUtil.END, Calendar.MONTH);
+  }
+
+  /**
+   * その年の最初の日に変換して返却
+   * 
+   * @param date 変更したい日付
+   * @return Date 変換語の日付
+   */
+  public Date getStartDateByYear(Date date) {
+    return getStartDateByMonth(StudyUtil.getEdgeDate(date, StudyUtil.START, Calendar.YEAR));
+  }
+
+  /**
+   * その年の最後の日に変換して返却
+   * 
+   * @param date 変更したい日付
+   * @return Date 変換語の日付
+   */
+  public Date getEndDateByYear(Date date) {
+    return getEndDateByMonth(StudyUtil.getEdgeDate(date, StudyUtil.END, Calendar.YEAR));
   }
 
   /**
@@ -165,7 +185,7 @@ public class BooksHelper {
    */
   public Date getOneYearAgoMonth(Date date) {
     Date startMonth = StudyUtil.calculateDate(date, Calendar.MONTH, -12);
-    return StudyUtil.getEdgeDate(startMonth, StudyUtil.START);
+    return StudyUtil.getEdgeDate(startMonth, StudyUtil.START, Calendar.MONTH);
   }
 
   /**
@@ -195,6 +215,26 @@ public class BooksHelper {
    */
   public String getDefaltTab() {
     return CodeUtil.getCodeShort(BooksTab.DEFALT_TAB.getListName(), BooksTab.DEFALT_TAB.getCode());
+  }
+
+  /**
+   * 指定した日付けの最小値と最大値の間の年のリストを取得
+   * 
+   * @param min 最小日付
+   * @param max 最大日付
+   * @return 年のリスト
+   */
+  public List<String> getbetweenYears(Date min, Date max) {
+    List<String> result = new ArrayList<>();
+    SimpleDateFormat getYearFormat = new SimpleDateFormat("yyyy");
+    Date currentDate = min;
+
+    while (currentDate.compareTo(max) < 0) {
+      result.add(getYearFormat.format(currentDate));
+      currentDate = StudyUtil.calculateDate(currentDate, Calendar.YEAR, 1);
+    }
+
+    return result;
   }
 
 }

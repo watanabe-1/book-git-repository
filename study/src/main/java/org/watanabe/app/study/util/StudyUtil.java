@@ -153,29 +153,51 @@ public class StudyUtil {
   }
 
   /**
-   * 月初もしくは月末の日付けを取得
+   * 初もしくは末の日付けを取得
    * 
    * @param date 変更したい日付
    * @param type "start" or "end"
+   * @param field 計算したい日付の種類(年、月、日、時間、分) Calendar.YEARなどを利用して指定
    * @return Date 変換語の日付
    */
-  public static Date getEdgeDate(Date date, String type) {
+  public static Date getEdgeDate(Date date, String type, int dateType) {
     int amount = 1;
     if (START.equals(type)) {
       amount = -1;
     }
+    String fm = "";
+    int field = 0;
+    if (Objects.equals(Calendar.YEAR, dateType)) {
+      fm = "yyyy";
+      field = Calendar.MONTH;
+    } else if (Objects.equals(Calendar.MONTH, dateType)) {
+      fm = "MM";
+      field = Calendar.DATE;
+    } else if (Objects.equals(Calendar.DATE, dateType)) {
+      fm = "dd";
+      field = Calendar.HOUR;
+    } else if (Objects.equals(Calendar.HOUR, dateType)) {
+      fm = "hh";
+      field = Calendar.MINUTE;
+    } else if (Objects.equals(Calendar.MINUTE, dateType)) {
+      fm = "mm";
+      field = Calendar.SECOND;
+    } else {
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+    }
 
-    SimpleDateFormat sdfMm = new SimpleDateFormat("MM");
+
+    SimpleDateFormat sdfMm = new SimpleDateFormat(fm);
     Date currentDate = date;
-    String month = sdfMm.format(date);
-    String currentMonth = month;
+    String fmDate = sdfMm.format(date);
+    String currentFmDate = fmDate;
     int cnt = 0;
 
     // 無限ループ防止のため1000周以下の条件を追加
     while (cnt < 1000) {
-      currentDate = StudyUtil.calculateDate(date, Calendar.DATE, amount);
-      currentMonth = sdfMm.format(currentDate);
-      if (month.equals(currentMonth)) {
+      currentDate = StudyUtil.calculateDate(date, field, amount);
+      currentFmDate = sdfMm.format(currentDate);
+      if (fmDate.equals(currentFmDate)) {
         date = currentDate;
       } else {
         break;

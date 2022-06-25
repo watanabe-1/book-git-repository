@@ -17,7 +17,7 @@
 	<!-- Register components of Spring MVC. -->
 	<mvc:annotation-driven>
 		<!-- REST API の返却値のリソースのフォーマットとしてJSONを使用 -->
-		<mvc:message-converters register-defaults="false">
+		<mvc:message-converters register-defaults="true">
 			<ref bean="jsonMessageConverter" />
 		</mvc:message-converters>
 		<!-- ページ検索機能を有効にするための設定を追加する。ページ検索が必要ない場合は、本設定は不要であるが、定義があっても問題はない。今のとこ実装してないからいらないかも-->
@@ -188,12 +188,6 @@
 			を設定することを推奨する。 -->
 		<property name="defaultStatusCode" value="500" />
 	</bean>
-
-	<!-- Settings View Resolver. -->
-	<mvc:view-resolvers>
-		<!-- 実際に遷移するViewは、ViewResolverの設定に依存する。 -->
-		<mvc:jsp prefix="/WEB-INF/views/" />
-	</mvc:view-resolvers>
 
 	<!-- HandlerExceptionResolverでハンドリングされた例外を、 ログに出力するためのインタセプタクラス（HandlerExceptionResolverLoggingInterceptor）と、
 		AOPの設定を、bean定義に追加する。 -->

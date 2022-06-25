@@ -139,6 +139,12 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-csv -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-csv</artifactId>
+		</dependency>
+
 		<!--terasoluna-gfw-web-->
 		<!--https://jar-download.com/artifacts/org.terasoluna.gfw/terasoluna-gfw-web/5.7.0.RELEASE-->
 		<dependency>

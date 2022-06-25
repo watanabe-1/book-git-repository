@@ -72,8 +72,8 @@ public class CalendarRestController {
           final String[] split = line.split(",");
           Date syukujitsuDate = sdFormat.parse(StudyUtil.trimDoubleQuot(split[0]));
           // 対象範囲の日付けだけ設定
-          if (booksHelper.getStartDate(syukujitsuDate)
-              .compareTo(booksHelper.getStartDate(date)) == 0) {
+          if (booksHelper.getStartDateByMonth(syukujitsuDate)
+              .compareTo(booksHelper.getStartDateByMonth(date)) == 0) {
             Syukujitsu syukujitsu = new Syukujitsu();
             syukujitsu.setDate(syukujitsuDate);
             syukujitsu.setName(StudyUtil.trimDoubleQuot(split[1]));
@@ -103,8 +103,8 @@ public class CalendarRestController {
   public List<Books> calendarByDay(@ModelAttribute BooksForm form, ModelAndView model, Date date) {
     // 対象を取得
     List<Books> books = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getStartDate(date), booksHelper.getEndDate(date), BooksType.EXPENSES.getCode(),
-        StudyUtil.getLoginUser());
+        booksHelper.getStartDateByMonth(date), booksHelper.getEndDateByMonth(date),
+        BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
 
     return books;
   }
