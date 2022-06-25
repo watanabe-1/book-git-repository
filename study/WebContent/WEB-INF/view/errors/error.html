@@ -9,11 +9,13 @@
 <body>
   <h1>エラー</h1>
   <h3>予期せぬエラーが発生しました。</h3>
-  <tr th:if="${validationError}" th:each="error : ${validationError}">
-    <td>
-      <span class="text-danger" th:text="${error}"></span>
-    </td>
-  </tr>
+  <table>
+    <tr th:if="${validationError}" th:each="error : ${validationError}">
+      <td>
+        <span class="text-danger" th:text="${error}"></span>
+      </td>
+    </tr>
+  </table>
   <span th:each="message : ${resultMessages}"
     th:text="${message.code} != null ? ${'[' + message.code + ']' + #messages.msgWithParams(message.code, message.args)} : ${message.text}"></span>
   <p>

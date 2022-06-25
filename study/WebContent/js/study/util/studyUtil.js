@@ -464,3 +464,34 @@ function appendOrReplaceChild(target, child, childType) {
     target.appendChild(child);
   }
 }
+
+/**
+ * 対象要素のクラスを入れかえ
+ * クラス1があった場合は、クラス2に
+ * クラス2があった場合は、クラス1に
+ * 両クラスともになかった場合は、クラス2を追加
+ * 両クラスともあった場合は、クラス1を削除
+ *
+ * @param {HTMLElement} target クラス切り替え対象
+ * @param {String} classOne 切り替えクラス1
+ * @param {String} classTwo 切り替えクラス2
+ */
+function swichClass(target, classOne, classTwo) {
+  if (
+    target.classList.contains(classOne) &&
+    target.classList.contains(classTwo)
+  ) {
+    //どちらも含まれている
+    target.classList.toggle(classOne);
+  } else if (
+    !target.classList.contains(classOne) &&
+    !target.classList.contains(classTwo)
+  ) {
+    //どちらも含まれていない
+    target.classList.toggle(classTwo);
+  } else {
+    //片方は含まれている
+    target.classList.toggle(classOne);
+    target.classList.toggle(classTwo);
+  }
+}

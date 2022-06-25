@@ -30,7 +30,7 @@
 <body>
   <div>
     <a th:fragment="sidebar_btn_fragment" class="btn" id="menu-btn">
-      <img src="/study/images/sidebar/sidebar_menu_icon.jpg" class="mh-10 mw-10" width="30" height="30">
+      <i class="bi bi-text-left" style="font-size: 20px; color:white;"></i>
     </a>
   </div>
   <nav th:fragment="sidebar_fragment" id="sidebarMenu"
@@ -38,60 +38,138 @@
     <div class="position-sticky pt-3">
       <ul class="nav flex-column">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" th:href="@{/}">
-            <span data-feather="home"></span>
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+            aria-expanded="true" aria-controls="collapseOne">
             ダッシュボード
-          </a>
+          </button>
+          <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <ul class="nav flex-column">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" th:href="@{/}">
+                    <span data-feather="home"></span>
+                    ダッシュボード
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/hoge/input}">
-            <span data-feather="package"></span>
-            課題1(hoge)
-          </a>
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            課題
+          </button>
+          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <ul class="nav flex-column">
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{/hoge/input}">
+                    <span data-feather="package"></span>
+                    課題1(hoge)
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/category/input}">
-            <span data-feather="package"></span>
-            カテゴリー_登録
-          </a>
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            カテゴリー
+          </button>
+          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <ul class="nav flex-column">
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{/category/input}">
+                    <span data-feather="package"></span>
+                    カテゴリー_登録
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{/category/list}">
+                    <span data-feather="package"></span>
+                    カテゴリー_確認
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/category/list}">
-            <span data-feather="package"></span>
-            カテゴリー_確認
-          </a>
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+            家計簿
+          </button>
+          <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <ul class="nav flex-column">
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{/books/input}">
+                    <span data-feather="package"></span>
+                    家計簿_登録
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{/books/list}">
+                    <span data-feather="package"></span>
+                    家計簿_一覧
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/books/input}">
-            <span data-feather="package"></span>
-            家計簿_登録
-          </a>
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+            図色
+          </button>
+          <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <ul class="nav flex-column">
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{/chartColour/index}">
+                    <span data-feather="package"></span>
+                    図の色確認
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/books/list}">
-            <span data-feather="package"></span>
-            家計簿_一覧
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" th:href="@{/chartColour/index}">
-            <span data-feather="package"></span>
-            図の色確認
-          </a>
-        </li>
-        <li class="nav-item" sec:authorize="hasRole('ROLE_SYSTEM')">
-          <a class="nav-link" th:href="@{/system/account/}">
-            <span data-feather="users"></span>
-            アカウント
-          </a>
-        </li>
-        <li class="nav-item">
-          <form th:action="@{/logout}" name="logout" method="post">
-            <a class="nav-link" href="javascript:logout.submit()">
-              <span data-feather="log-out"></span>
-              ログアウト
-            </a>
-          </form>
+          <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+            data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+            システム
+          </button>
+          <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingOne"
+            data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <ul class="nav flex-column">
+                <li class="nav-item" sec:authorize="hasRole('ROLE_SYSTEM')">
+                  <a class="nav-link" th:href="@{/system/account/}">
+                    <span data-feather="users"></span>
+                    アカウント
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <form th:action="@{/logout}" name="logout" method="post">
+                    <a class="nav-link" href="javascript:logout.submit()">
+                      <span data-feather="log-out"></span>
+                      ログアウト
+                    </a>
+                  </form>
+                </li>
+              </ul>
+            </div>
+          </div>
         </li>
       </ul>
     </div>
@@ -99,11 +177,14 @@
   <!-- CSS script ボタンクリック時にクラスがなかったら付与あったら削除することで、出し入れを行う-->
   <script th:fragment='sidebar_js_fragment'>
     const menu_btn = document.querySelector('#menu-btn');
+    const menu_btn_i = menu_btn.querySelector('i')
     const sidebar = document.querySelector('#sidebarMenu');
     const container = document.querySelector('.my-container');
     menu_btn.addEventListener('click', () => {
       sidebar.classList.toggle('active-nav');
       container.classList.toggle('active-cont');
+      //StudyUtil
+      swichClass(menu_btn_i, 'bi-text-left', 'bi-text-right')
     });
   </script>
 

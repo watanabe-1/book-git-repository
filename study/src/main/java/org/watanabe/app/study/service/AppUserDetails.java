@@ -22,7 +22,7 @@ public class AppUserDetails extends User {
 
   private static String[] getAuthorityList(final String accountType) {
     for (AccountType accountTypeEnum : AccountType.values()) {
-      if (accountTypeEnum.toString().equals(accountType)) {
+      if (accountTypeEnum.getCode().equals(accountType)) {
         return new String[] {accountTypeEnum.getRole()};
       }
     }
