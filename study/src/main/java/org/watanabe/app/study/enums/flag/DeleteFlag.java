@@ -2,6 +2,7 @@ package org.watanabe.app.study.enums.flag;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -40,5 +41,25 @@ public enum DeleteFlag implements Flag {
    */
   public static Boolean isNonDelete(String value) {
     return Flag.isNonSetUp(value);
+  }
+
+  /**
+   * value値から適応する拡張Enumを生成する
+   *
+   * @param value テーブルや定数として指定しているvalue値
+   * @return valueに一致するEnumクラス
+   */
+  public static DeleteFlag valueOf(@NonNull Object value) {
+    return Flag.valueOf(DeleteFlag.class, value);
+  }
+
+  /**
+   * name値から適応する拡張Enumを生成する
+   *
+   * @param name テーブルや定数として指定しているname値
+   * @return nameに一致するEnumクラス
+   */
+  public static DeleteFlag nameOf(@NonNull String name) {
+    return Flag.nameOf(DeleteFlag.class, name);
   }
 }

@@ -1,5 +1,6 @@
 package org.watanabe.app.study.enums.type;
 
+import java.util.Arrays;
 import lombok.NonNull;
 
 /**
@@ -29,13 +30,10 @@ interface Type {
    * @param code テーブルや定数として指定しているcode値
    * @return codeに一致するEnumクラス
    */
-  public static <E extends Enum<E> & Type> E codeOf(Class<E> enumType, @NonNull Object code) {
-    for (E type : enumType.getEnumConstants()) {
-      if (type.getCode().equals(code)) {
-        return type;
-      }
-    }
-    throw new IllegalArgumentException("enum class has not code : " + code.toString());
+  public static <E extends Enum<E> & Type> E codeOf(Class<E> enumType, @NonNull String code) {
+    return Arrays.stream(enumType.getEnumConstants()).filter(type -> type.getCode().equals(code))
+        .findFirst()
+        .orElseThrow((() -> new IllegalArgumentException("enum class has not code : " + code)));
   }
 
   /**
@@ -46,13 +44,9 @@ interface Type {
    * @param property propertiesの検索に使用するname
    * @return nameに一致するEnumクラス
    */
-  public static <E extends Enum<E> & Type> E nameOf(Class<E> enumType, @NonNull String property) {
-    for (E type : enumType.getEnumConstants()) {
-      if (type.getName().equals(property)) {
-        return type;
-      }
-    }
-    throw new IllegalArgumentException("enum class has not name : " + property);
+  public static <E extends Enum<E> & Type> E nameOf(Class<E> enumType, @NonNull String name) {
+    return Arrays.stream(enumType.getEnumConstants()).filter(type -> type.getName().equals(name))
+        .findFirst()
+        .orElseThrow((() -> new IllegalArgumentException("enum class has not name : " + name)));
   }
-
 }

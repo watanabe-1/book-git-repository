@@ -1,6 +1,8 @@
 package org.watanabe.app.study.enums.flag;
 
+import java.util.Arrays;
 import java.util.Objects;
+import lombok.NonNull;
 
 /**
  * フラグの定義
@@ -74,4 +76,31 @@ interface Flag {
     return Objects.equals(flag.getValue(), value);
   }
 
+  /**
+   * タイプ用に拡張したEnumのcode値から取得した拡張Enumを生成する
+   *
+   * @param <E> Typeで拡張したEnumClass
+   * @param enumType 生成対象となるEnumClassの型となるClass
+   * @param value テーブルや定数として指定しているcode値
+   * @return valueに一致するEnumクラス
+   */
+  public static <E extends Enum<E> & Flag> E valueOf(Class<E> enumType, @NonNull Object value) {
+    return Arrays.stream(enumType.getEnumConstants()).filter(type -> type.getValue().equals(value))
+        .findFirst()
+        .orElseThrow((() -> new IllegalArgumentException("enum class has not value : " + value)));
+  }
+
+  /**
+   * タイプ用に拡張したEnumのname値から取得した拡張Enumを生成する
+   *
+   * @param <E> Typeで拡張したEnumClass
+   * @param enumType 生成対象となるEnumClassの型となるClass
+   * @param property propertiesの検索に使用するname
+   * @return nameに一致するEnumクラス
+   */
+  public static <E extends Enum<E> & Flag> E nameOf(Class<E> enumType, @NonNull String name) {
+    return Arrays.stream(enumType.getEnumConstants()).filter(type -> type.getName().equals(name))
+        .findFirst()
+        .orElseThrow((() -> new IllegalArgumentException("enum class has not name : " + name)));
+  }
 }
