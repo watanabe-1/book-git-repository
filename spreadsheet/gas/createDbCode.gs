@@ -122,10 +122,10 @@ function getPostgreCodeLkupInsertSql(values, lastRow) {
 
     sqlStr += sqlComment  + description + sqlKaigyo;
     sqlStr += "DELETE FROM " + tbEnName + " WHERE LIST_NAME = '" + codeTeigi.listName + "' AND CODE = '" + codeTeigi.code + "';" + sqlKaigyo;
-    sqlStr += "INSERT INTO " + tbEnName
+    sqlStr += "INSERT INTO " + tbEnName 
     + " (LIST_NAME, CODE, DESCRIPTION, SHORT_VALUE, LONG_VALUE, EDITABLE, ACTIVE, SEQUENCE, UDF1, UDF2, UDF3, UDF4, UDF5, UDF6, UDF7, NOTE)"
-    + sqlKaigyo + sqlIndent + "VALUES ('" + codeTeigi.listName + "', '" + codeTeigi.code + "', '" + description
-    + "', '" + codeTeigi.shortValue + "', '" + codeTeigi.longValue + "', '" + codeTeigi.editable + "', '" + codeTeigi.active
+    + sqlKaigyo + sqlIndent + "VALUES ('" + codeTeigi.listName + "', '" + codeTeigi.code + "', '" + description 
+    + "', '" + codeTeigi.shortValue + "', '" + codeTeigi.longValue + "', '" + codeTeigi.editable + "', '" + codeTeigi.active 
     + "', '" + codeTeigi.sequence + "', '" + codeTeigi.udf1 + "', '" + codeTeigi.udf2 + "', '" + codeTeigi.udf3 + "', '" + codeTeigi.udf4
     + "', '" + codeTeigi.udf5 + "', '" + codeTeigi.udf6 + "', '" + codeTeigi.udf7 + "', '" + codeTeigi.note + "');" + sqlKaigyo;
   }
@@ -153,16 +153,20 @@ function getCodeEnumJava(listName, description, map) {
   //固定impot文の挿入
   importMap.set("AllArgsConstructor", "lombok.AllArgsConstructor");
   importMap.set("Getter", "lombok.Getter");
+  importMap.set("NonNull", "lombok.NonNull");
+
+  const className = capitalize(toCamelCase(listName));
 
   //クラス名宣言
   let javaStrBody = getJavaDoc(listName + ":" + description + "のenumクラス") + "@AllArgsConstructor" + javaKaigyo
-    + "@Getter" + javaKaigyo + "public enum " + capitalize(toCamelCase(listName)) + " implements DbCode {" + repeatConcatStr(javaKaigyo, 2) + javaIndent;
-
+    + "@Getter" + javaKaigyo + "public enum " + className + " implements DbCode {" + repeatConcatStr(javaKaigyo, 2) 
+    + javaIndent;
+  
     //javadoc対象に引数(param)がある場合
   if (map) {
     // keysメソッドの戻り値(Iterator)を反復処理する
     for (const code of map.keys()) {
-      javaStrBody += code.toUpperCase() + "(\"" + listName + "\", \"" + code  + "\", \"" + map.get(code) + "\")"
+      javaStrBody += code.toUpperCase() + "(\"" + listName + "\", \"" + code  + "\", \"" + map.get(code) + "\")" 
       + javaKaigyo +  javaIndent + ", "
     }
   }
@@ -172,13 +176,21 @@ function getCodeEnumJava(listName, description, map) {
   fieldMap.set("listName", "リストネーム");
   fieldMap.set("code", "コード");
   fieldMap.set("description", "説明");
-  let javaStrFoot = "";
+  let javaField = "";
+  let javaMethod = "";
   // keysメソッドの戻り値(Iterator)を反復処理する
   for (const field of fieldMap.keys()) {
-    javaStrFoot += getJavaDoc(fieldMap.get(field) , 1) + javaIndent + "private final String " + field + ";" + repeatConcatStr(javaKaigyo, 2);
+    javaField += getJavaDoc(fieldMap.get(field) , 1) + javaIndent + "private final String " + field + ";" + repeatConcatStr(javaKaigyo, 2);
+    const paramMap = new Map();
+    paramMap.set(field, "テーブルや定数として指定している" + field);
+    javaMethod += getJavaDoc(field + "値から適応するEnumを生成する" , 1, paramMap, field + "に一致するEnumクラス") 
+    + javaIndent + "public static " + className + " " + field + "Of(@NonNull String " + field + ") {" + javaKaigyo
+    + repeatConcatStr(javaIndent, 2) + "return DbCode." + field + "Of(" + className + ".class, " + field + ");"
+    + javaKaigyo + javaIndent + "}" + repeatConcatStr(javaKaigyo, 2);
   }
-  javaStr = javaStrHead + getJavaImport(importMap) + deleteLastStr(javaStrBody, javaKaigyo +  javaIndent + ", ")
-  + ";" + repeatConcatStr(javaKaigyo, 2) + deleteLastStr(javaStrFoot, javaKaigyo) + "}"
+  const javaStrFoot = javaField + deleteLastStr(javaMethod, javaKaigyo);
+  javaStr = javaStrHead + getJavaImport(importMap) + deleteLastStr(javaStrBody, javaKaigyo +  javaIndent + ", ") 
+  + ";" + repeatConcatStr(javaKaigyo, 2) + javaStrFoot + "}"
 
   return javaStr;
 }
