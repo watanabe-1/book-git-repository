@@ -20,7 +20,8 @@ public class AppConfig implements WebMvcConfigurer {
         new ReloadableResourceBundleMessageSource();
     // ValidationMessage.propertiesを使用
     messageSource.setBasenames("classpath:config/properties/i18n/ValidationMessages",
-        "classpath:config/properties/i18n/log-messages");
+        "classpath:config/properties/i18n/LogMessages",
+        "classpath:config/properties/i18n/SpringSecurityMessages");
     // メッセージプロパティの文字コードを指定
     messageSource.setDefaultEncoding("UTF-8");
     return messageSource;
