@@ -25,6 +25,15 @@
     </listener>
 	-->
 
+	<!-- セッション管理 -->
+	<session-config>
+		<!-- <session-timeout>要素に適切なタイムアウト値(分単位)を指定する。
+			タイムアウト値を指定しない場合は、サーブレットコンテナが用意しているデフォルト値が適用される。
+			また、0以下の値を指定するとサーブレットコンテナのセッションタイム機能が無効化される。 -->
+		<session-timeout>168</session-timeout>
+	</session-config>
+
+
 	<!-- エンコーディングフィルタ  -->
 	<filter>
 		<filter-name>characterEncodingFilter</filter-name>
