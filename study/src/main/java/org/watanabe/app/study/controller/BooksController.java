@@ -59,7 +59,7 @@ public class BooksController {
    * ファイルダウンロード Helper
    */
   @Autowired
-  DownloadHelper downloadHelper;
+  private DownloadHelper downloadHelper;
 
   /**
    * 家計簿登録画面

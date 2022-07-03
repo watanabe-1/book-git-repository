@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 import org.watanabe.app.study.service.CodelkupService;
 
 /**
- * コードのHelperクラスを作成
+ * コードのUtilクラスを作成
  */
 @Component
 public class CodeUtil {
