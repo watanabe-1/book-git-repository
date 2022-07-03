@@ -123,7 +123,7 @@ function showCalendarProcess(date, targetId, targetBooksID) {
   //StudyUtil.appendOrReplaceChild
   appendOrReplaceChild(targetBooksElement, booksList, 'table');
   //テーブルの内容を並び替えできるようにイベントを追加
-  addEventListenerBySortTable(booksList.id);
+  addEventListenerOfSortTable(booksList.id);
   //クリックイベントの追加
   const tabCalendarTableBody = document
     .getElementById('tabCalendar')

@@ -8,7 +8,7 @@
  * @param {String} targetId 対象テーブルID
  * @param {String} column_no_prev 前回クリックされた列番号
  */
-function addEventListenerBySortTable(targetId) {
+function addEventListenerOfSortTable(targetId) {
   const ASC = 'bi-caret-up-fill';
   const DESC = 'bi-caret-down-fill';
   const NUMBER_SORT = 0;
