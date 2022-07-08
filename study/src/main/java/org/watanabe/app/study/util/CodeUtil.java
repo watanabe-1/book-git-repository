@@ -32,7 +32,7 @@ public class CodeUtil {
    * @param code コード
    * @return ショート
    */
-  public static String getCodeShort(String listName, String code) {
+  public static String getShort(String listName, String code) {
     return codelkupService.findOne(listName, code).getShortValue();
   }
 }

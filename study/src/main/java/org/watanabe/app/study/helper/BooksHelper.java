@@ -214,7 +214,7 @@ public class BooksHelper {
    * @return 家計簿画面の初期表示のタブ
    */
   public String getDefaltTab() {
-    return CodeUtil.getCodeShort(BooksTab.DEFALT_TAB.getListName(), BooksTab.DEFALT_TAB.getCode());
+    return CodeUtil.getShort(BooksTab.DEFALT_TAB.getListName(), BooksTab.DEFALT_TAB.getCode());
   }
 
   /**
