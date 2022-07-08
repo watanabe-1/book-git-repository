@@ -1,8 +1,8 @@
 package org.watanabe.app.study.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,30 +43,16 @@ public class CategoryService {
   }
 
   public CategoryList findAlljoinImage() {
-    // カテゴリー情報の取得
-    List<Category> catList = categoryMapper.findAllJoinImage();
     CategoryList catDatalist = new CategoryList();
-    List<CategoryForm> catFormList = new ArrayList<CategoryForm>();
 
-    // エンティティを画面データに詰め替える
-    for (Category cat : catList) {
+    // カテゴリー情報を取得しformに変換しセット
+    catDatalist.setCatDataList(categoryMapper.findAllJoinImage().stream().map(cat -> {
       CategoryForm data = new CategoryForm();
-      data.setCatCode(cat.getCatCode());
-      data.setCatName(cat.getCatName());
-      data.setNote(cat.getNote());
-      data.setImgId(cat.getImgId());
-      data.setImgType(cat.getImgType());
-      data.setCatType(cat.getCatType());
-      data.setActive(cat.getActive());
-      data.setInsUser(cat.getInsUser());
-      data.setInsDate(cat.getInsDate());
-      data.setUpdUser(cat.getUpdUser());
-      data.setUpdDate(cat.getUpdDate());
-      data.setCatIcon(cat.getCatIcon());
-      data.setImgIds(cat.getImgIds());
-      catFormList.add(data);
-    }
-    catDatalist.setCatDataList(catFormList);
+      // 同名のフィールドにセット 引数1から2へ
+      BeanUtils.copyProperties(cat, data);
+      return data;
+    }).toList());
+
     return catDatalist;
   }
 

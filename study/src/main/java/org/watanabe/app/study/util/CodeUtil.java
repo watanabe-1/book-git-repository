@@ -11,14 +11,14 @@ import org.watanabe.app.study.service.CodelkupService;
 public class CodeUtil {
 
   /**
-   * カテゴリー情報 Service
+   * コード情報 Service
    */
   private static CodelkupService codelkupService;
 
   /**
-   * カテゴリー情報 Serviceのセッター
+   * コード情報 Serviceのセッター
    * 
-   * @param codelkupService カテゴリー情報 Service
+   * @param codelkupService コード情報 Service
    */
   @Autowired
   public void setCodelkupService(CodelkupService codelkupService) {
