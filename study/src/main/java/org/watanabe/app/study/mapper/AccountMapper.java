@@ -58,7 +58,7 @@ public interface AccountMapper {
    * @param userId USER_ID(ユーザーID)
    * @return update行数
    */
-  int updateOne(Account acc, @Param("userIdWhere") String userId);
+  int updateOne(@Param("acc") Account acc, @Param("userIdWhere") String userId);
 
   /**
    * 全行delete
@@ -76,4 +76,3 @@ public interface AccountMapper {
   int deleteOne(@Param("userId") String userId);
 
 }
-

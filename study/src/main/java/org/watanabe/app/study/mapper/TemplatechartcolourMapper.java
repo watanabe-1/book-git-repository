@@ -59,7 +59,7 @@ public interface TemplatechartcolourMapper {
    * @param templateId TEMPLATE_ID(色の組み合わせID)
    * @return update行数
    */
-  int updateOne(Templatechartcolour tem, @Param("templateIdWhere") String templateId);
+  int updateOne(@Param("tem") Templatechartcolour tem, @Param("templateIdWhere") String templateId);
 
   /**
    * 全行delete

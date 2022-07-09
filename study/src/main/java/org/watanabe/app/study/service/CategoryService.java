@@ -1,6 +1,5 @@
 package org.watanabe.app.study.service;
 
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,38 +9,106 @@ import org.watanabe.app.study.dto.CategoryList;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.mapper.CategoryMapper;
-import org.watanabe.app.study.util.StudyUtil;
 
+/**
+ * CATEGORY:カテゴリー(カテゴリー定義テーブル)のserviceクラス
+ */
 @Service
 public class CategoryService {
 
   @Autowired
   private CategoryMapper categoryMapper;
 
+  /**
+   * 全検索
+   * 
+   * @return 検索結果(複数行)
+   */
   public List<Category> findAll() {
     return categoryMapper.findAll();
   }
 
+  /**
+   * 1行検索(引数にプライマルキーを指定)
+   * 
+   * @param catCode CAT_CODE(カテゴリーコード)
+   * @return 検索結果(1行)
+   */
   public Category findOne(String catCode) {
     return categoryMapper.findOne(catCode);
   }
 
+  /**
+   * 複数行insert
+   * 
+   * @param catList entity(Category)のList
+   * @return insert行数
+   */
   @Transactional
-  public void save(CategoryForm catForm) {
-    // insert処理実行
-    categoryMapper.save(setCategory(catForm));
+  public int saveBulk(List<Category> catList) {
+    return categoryMapper.saveBulk(catList);
   }
 
+  /**
+   * 1行insert
+   * 
+   * @param cat entity(Category)
+   * @return insert行数
+   */
   @Transactional
-  public void update(CategoryForm catForm) {
-    categoryMapper.update(setCategory(catForm));
+  public int saveOne(Category cat) {
+    return categoryMapper.saveOne(cat);
   }
 
+  /**
+   * 全行update
+   * 
+   * @param cat entity(Category)
+   * @return update行数
+   */
   @Transactional
-  public void delete(CategoryForm catForm) {
-    categoryMapper.delete(setCategory(catForm));
+  public int updateAll(Category cat) {
+    return categoryMapper.updateAll(cat);
   }
 
+  /**
+   * 1行update プライマルキーをWhere句に指定 プライマルキー：String catCode
+   * 
+   * @param cat entity(Category)
+   * @param catCode CAT_CODE(カテゴリーコード)
+   * @return update行数
+   */
+  @Transactional
+  public int updateOne(Category cat, String catCode) {
+    return categoryMapper.updateOne(cat, catCode);
+  }
+
+  /**
+   * 全行delete
+   * 
+   * @return delete行数
+   */
+  @Transactional
+  public int deleteAll() {
+    return categoryMapper.deleteAll();
+  }
+
+  /**
+   * 1行delete(引数にプライマルキーを指定)
+   * 
+   * @param catCode CAT_CODE(カテゴリーコード)
+   * @return delete行数
+   */
+  @Transactional
+  public int deleteOne(String catCode) {
+    return categoryMapper.deleteOne(catCode);
+  }
+
+  /**
+   * 全検索(画像テーブルと結合)
+   * 
+   * @return 検索結果(複数行)
+   */
   public CategoryList findAlljoinImage() {
     CategoryList catDatalist = new CategoryList();
 
@@ -54,39 +121,5 @@ public class CategoryService {
     }).toList());
 
     return catDatalist;
-  }
-
-  private Category setCategory(CategoryForm catForm) {
-    Category cat = new Category();
-
-    // 現在日時取得
-    Date now = StudyUtil.getNowDate();
-
-    // ログインユーザー取得
-    String user = StudyUtil.getLoginUser();
-
-    // 画面入力情報を取得
-    cat.setCatCode(catForm.getCatCode());
-    cat.setCatName(catForm.getCatName());
-    cat.setNote(catForm.getNote());
-    if (catForm.getImgId() == null) {
-      cat.setImgId(catForm.getImgIds().getImgId());
-    } else {
-      cat.setImgId(catForm.getImgId());
-    }
-    cat.setImgType(catForm.getImgType());
-    cat.setCatType(catForm.getCatType());
-    cat.setActive(catForm.getActive());
-    if (catForm.getInsUser() == null) {
-      cat.setInsUser(user);
-      cat.setInsDate(now);
-    } else {
-      cat.setInsUser(catForm.getInsUser());
-      cat.setInsDate(catForm.getInsDate());
-    }
-    cat.setUpdUser(user);
-    cat.setUpdDate(now);
-
-    return cat;
   }
 }

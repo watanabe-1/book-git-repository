@@ -62,7 +62,7 @@ public interface BooksMapper {
    * @param userId USER_ID(ユーザーID)
    * @return update行数
    */
-  int updateOne(Books boo, @Param("booksIdWhere") String booksId,
+  int updateOne(@Param("boo") Books boo, @Param("booksIdWhere") String booksId,
       @Param("userIdWhere") String userId);
 
   /**
@@ -80,7 +80,6 @@ public interface BooksMapper {
    * @return delete行数
    */
   int deleteOne(@Param("booksId") String booksId, @Param("userId") String userId);
-
 
   /**
    * 家計簿日付、家計簿種類を指定してdelete(引数にプライマルキーを指定)

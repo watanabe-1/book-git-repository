@@ -20,10 +20,10 @@
       values (#{listName}, #{description}, #{editable}, #{insDate}, #{insUser}, #{updDate}, #{updUser})
   </insert>
   <update id="updateAll">
-    update CODELIST set LIST_NAME = #{listName}, DESCRIPTION = #{description}, EDITABLE = #{editable}, INS_DATE = #{insDate}, INS_USER = #{insUser}, UPD_DATE = #{updDate}, UPD_USER = #{updUser}
+    update CODELIST set LIST_NAME = #{listName}, DESCRIPTION = #{description}, EDITABLE = #{editable}, UPD_DATE = #{updDate}, UPD_USER = #{updUser}
   </update>
   <update id="updateOne">
-    update CODELIST set LIST_NAME = #{listName}, DESCRIPTION = #{description}, EDITABLE = #{editable}, INS_DATE = #{insDate}, INS_USER = #{insUser}, UPD_DATE = #{updDate}, UPD_USER = #{updUser}
+    update CODELIST set LIST_NAME = #{cod.listName}, DESCRIPTION = #{cod.description}, EDITABLE = #{cod.editable}, UPD_DATE = #{cod.updDate}, UPD_USER = #{cod.updUser}
       where LIST_NAME = #{listNameWhere}
   </update>
   <delete id="deleteAll">

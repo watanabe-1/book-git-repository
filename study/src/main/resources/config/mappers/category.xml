@@ -1,32 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.watanabe.app.study.mapper.CategoryMapper">
-	<select id="findAll"
-		resultType="org.watanabe.app.study.entity.Category">
-		select CAT_CODE, CAT_NAME, CAT_TYPE, NOTE, IMG_TYPE, IMG_ID, ACTIVE,
-		INS_DATE, INS_USER, UPD_DATE, UPD_USER from CATEGORY
+	<select id="findAll" resultType="org.watanabe.app.study.entity.Category">
+    select SERIAL_KEY, CAT_CODE, CAT_NAME, CAT_TYPE, NOTE, IMG_TYPE, IMG_ID, ACTIVE, INS_DATE, INS_USER, UPD_DATE, UPD_USER from CATEGORY
+      order by CAT_CODE
 	</select>
-	<select id="findOne"
-		resultType="org.watanabe.app.study.entity.Category">
-		select CAT_CODE, CAT_NAME, CAT_TYPE, NOTE, IMG_TYPE, IMG_ID, ACTIVE,
-		INS_DATE, INS_USER, UPD_DATE, UPD_USER from CATEGORY where CAT_CODE =
-		#{catCode}
+	<select id="findOne" resultType="org.watanabe.app.study.entity.Category">
+    select SERIAL_KEY, CAT_CODE, CAT_NAME, CAT_TYPE, NOTE, IMG_TYPE, IMG_ID, ACTIVE, INS_DATE, INS_USER, UPD_DATE, UPD_USER from CATEGORY
+      where CAT_CODE = #{catCode}
 	</select>
-	<insert id="save">
-		insert into CATEGORY (CAT_CODE, CAT_NAME, CAT_TYPE, NOTE, IMG_TYPE, IMG_ID,
-		ACTIVE, INS_DATE, INS_USER, UPD_DATE, UPD_USER)
-		values (#{catCode}, #{catName}, #{catType}, #{note}, #{imgType}, #{imgId},
-		#{active}, #{insDate}, #{insUser}, #{updDate}, #{updUser})
+	<insert id="saveBulk" parameterType="java.util.List">
+    insert into CATEGORY (CAT_CODE, CAT_NAME, CAT_TYPE, NOTE, IMG_TYPE, IMG_ID, ACTIVE, INS_DATE, INS_USER, UPD_DATE, UPD_USER) values
+		<foreach collection="catList" item="cat" separator=",">
+      (#{cat.catCode}, #{cat.catName}, #{cat.catType}, #{cat.note}, #{cat.imgType}, #{cat.imgId}, #{cat.active}, #{cat.insDate}, #{cat.insUser}, #{cat.updDate}, #{cat.updUser})
+		</foreach>
 	</insert>
-	<update id="update">
-		update CATEGORY set CAT_CODE = #{catCode}, CAT_NAME = #{catName}, CAT_TYPE =
-		#{catType}, NOTE = #{note}, IMG_TYPE = #{imgType}, IMG_ID = #{imgId},
-		ACTIVE = #{active}, INS_DATE = #{insDate}, INS_USER = #{insUser},
-		UPD_DATE = #{updDate}, UPD_USER = #{updUser} where CAT_CODE =
-		#{catCode}
+	<insert id="saveOne">
+    insert into CATEGORY (CAT_CODE, CAT_NAME, CAT_TYPE, NOTE, IMG_TYPE, IMG_ID, ACTIVE, INS_DATE, INS_USER, UPD_DATE, UPD_USER)
+      values (#{catCode}, #{catName}, #{catType}, #{note}, #{imgType}, #{imgId}, #{active}, #{insDate}, #{insUser}, #{updDate}, #{updUser})
+	</insert>
+	<update id="updateAll">
+    update CATEGORY set CAT_CODE = #{catCode}, CAT_NAME = #{catName}, CAT_TYPE = #{catType}, NOTE = #{note}, IMG_TYPE = #{imgType}, IMG_ID = #{imgId}, ACTIVE = #{active}, UPD_DATE = #{updDate}, UPD_USER = #{updUser}
 	</update>
-	<delete id="delete">
-		delete from CATEGORY where CAT_CODE = #{catCode}
+	<update id="updateOne">
+    update CATEGORY set CAT_CODE = #{cat.catCode}, CAT_NAME = #{cat.catName}, CAT_TYPE = #{cat.catType}, NOTE = #{cat.note}, IMG_TYPE = #{cat.imgType}, IMG_ID = #{cat.imgId}, ACTIVE = #{cat.active}, UPD_DATE = #{cat.updDate}, UPD_USER = #{cat.updUser}
+      where CAT_CODE = #{catCodeWhere}
+	</update>
+	<delete id="deleteAll">
+    delete from CATEGORY
+	</delete>
+	<delete id="deleteOne">
+    delete from CATEGORY
+      where CAT_CODE = #{catCode}
 	</delete>
 	<select id="findAllJoinImage" resultMap="categoryMap">
 		select
@@ -52,8 +57,7 @@
 	</select>
 
 	<!-- テーブルのSELECT結果をどのようにマッピングするか指定 -->
-	<resultMap id="categoryMap"
-		type="org.watanabe.app.study.entity.Category">
+	<resultMap id="categoryMap" type="org.watanabe.app.study.entity.Category">
 		<id property="catCode" column="CAT_CODE" />
 		<result property="catName" column="CAT_NAME" />
 		<result property="catType" column="CAT_TYPE" />
@@ -67,8 +71,7 @@
 		<association property="imgIds" resultMap="detailResult" />
 	</resultMap>
 
-	<resultMap id="detailResult"
-		type="org.watanabe.app.study.entity.Image">
+	<resultMap id="detailResult" type="org.watanabe.app.study.entity.Image">
 		<result property="imgId" column="IMG_ID" />
 		<result property="imgPath" column="IMG_PATH" />
 		<result property="imgName" column="IMG_NAME" />

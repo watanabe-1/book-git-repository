@@ -55,9 +55,10 @@ public interface CodelistMapper {
    * 1行update プライマルキーをWhere句に指定 プライマルキー：@Param("listNameWhere")String listName
    * 
    * @param cod entity(Codelist)
+   * @param listName LIST_NAME(リストネーム)
    * @return update行数
    */
-  int updateOne(Codelist cod, @Param("listNameWhere") String listName);
+  int updateOne(@Param("cod") Codelist cod, @Param("listNameWhere") String listName);
 
   /**
    * 全行delete
@@ -75,4 +76,3 @@ public interface CodelistMapper {
   int deleteOne(@Param("listName") String listName);
 
 }
-

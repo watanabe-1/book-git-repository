@@ -291,6 +291,8 @@ function getJavaMapperXml(sheetName) {
   const updateFootStr = javaIndent + "</update>" + javaKaigyo;
   //update カラム
   let updateColAndValueStr = "";
+  //updateAll カラム
+  let updateAllColAndValueStr = "";
   //delete head
   const deleteHeadStr = javaIndent + "<delete id=\"";
   //delete body
@@ -315,7 +317,11 @@ function getJavaMapperXml(sheetName) {
         insertColStr += dbTeigi.colen + ", ";
         insertValueStr += camelCaseColStr + ", ";
         insertBulkValueStr += "#{" + entityItemName + "." + toCamelCase(dbTeigi.colen) + "}, ";
-        updateColAndValueStr += dbTeigi.colen + " = " + camelCaseColStr + ", ";
+        // update文対象カラムのみ
+        if (!isIgnoreColOfUpdate(dbTeigi.colen)) {
+          updateColAndValueStr += dbTeigi.colen + " = #{" + entityItemName + "." + toCamelCase(dbTeigi.colen) + "}, ";
+          updateAllColAndValueStr += dbTeigi.colen + " = " + camelCaseColStr + ", ";
+        }
       }
       //where and orde by
       if (dbTeigi.primary && dbTeigi.primary == yes) {
@@ -331,6 +337,7 @@ function getJavaMapperXml(sheetName) {
   insertValueStr = deleteLastStr(insertValueStr, ", ");
   insertBulkValueStr = deleteLastStr(insertBulkValueStr, ", ");
   updateColAndValueStr = deleteLastStr(updateColAndValueStr, ", ");
+  updateAllColAndValueStr = deleteLastStr(updateAllColAndValueStr, ", ");
   orderbyStr = deleteLastStr(orderbyStr, ", ");
   //最後に付け加えた「AND 」だけを削除
   whereStr = deleteLastStr(whereStr, " AND ");
@@ -353,7 +360,7 @@ function getJavaMapperXml(sheetName) {
   const insertOneStr = insertHeadStr + "saveOne" + insertBodyStr + insertColStr + ")"
     + javaKaigyo + repeatConcatStr(javaIndent, 3) + "values (" + insertValueStr + ")" + javaKaigyo + insertFootStr;
   //updateAll
-  const updateAllStr = updateHeadStr + "updateAll" + updateBodyStr + updateColAndValueStr + javaKaigyo + updateFootStr;
+  const updateAllStr = updateHeadStr + "updateAll" + updateBodyStr + updateAllColAndValueStr + javaKaigyo + updateFootStr;
   //updateOne
   const updateOneStr = updateHeadStr + "updateOne" + updateBodyStr + updateColAndValueStr
     + javaKaigyo + repeatConcatStr(javaIndent, 3) + updateWhereStr + javaKaigyo + updateFootStr;
@@ -490,7 +497,7 @@ function getJavaMapperJava(sheetName) {
     + getJavaDoc("1行update" + javaKaigyo
       + "プライマルキーをWhere句に指定" + javaKaigyo + "プライマルキー：" + updatePrimaryKeyJavaClassVarStr, 1,
       concatMap(entityMap, primaryKeyColMap), "update行数")
-    + javaIndent + "int updateOne(" + entityName + " " + entityItemName + ", " + updatePrimaryKeyJavaClassVarStr + ");"
+    + javaIndent + "int updateOne(@Param(\"" + entityItemName + "\") " + entityName + " " + entityItemName + ", " + updatePrimaryKeyJavaClassVarStr + ");"
     + repeatConcatStr(javaKaigyo, 2)
     //deleteAll
     + getJavaDoc("全行delete", 1, "", "delete行数")
@@ -692,6 +699,15 @@ function getJavaDoc(allNote, indentNm = 0, paramNoteMap = "", returnNote = "") {
   }
   javaDock += indent + javaDcokFoot + javaKaigyo
   return javaDock;
+}
+
+/**
+ * update文の除外対象カラムか判定
+ * @param {string} col 判定対象カラム
+ * @return {boolean} 判定結果
+ */
+function isIgnoreColOfUpdate(col) {
+  return getProperty('java_mapper_xml_update_ignore_col').split(",").map(v => v.toUpperCase()).includes(col.toUpperCase());
 }
 
 /**

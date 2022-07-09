@@ -57,9 +57,11 @@ public interface CodelkupMapper {
    * listName, @Param("codeWhere")String code
    * 
    * @param cod entity(Codelkup)
+   * @param listName LIST_NAME(リストネーム)
+   * @param code CODE(コード)
    * @return update行数
    */
-  int updateOne(Codelkup cod, @Param("listNameWhere") String listName,
+  int updateOne(@Param("cod") Codelkup cod, @Param("listNameWhere") String listName,
       @Param("codeWhere") String code);
 
   /**
@@ -79,4 +81,3 @@ public interface CodelkupMapper {
   int deleteOne(@Param("listName") String listName, @Param("code") String code);
 
 }
-

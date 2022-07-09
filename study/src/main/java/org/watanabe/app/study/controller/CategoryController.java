@@ -1,8 +1,10 @@
 package org.watanabe.app.study.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.io.FilenameUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,7 @@ import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.common.logger.LogIdBasedLogger;
 import org.watanabe.app.study.dto.CategoryList;
+import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.entity.Image;
 import org.watanabe.app.study.enums.flag.ActiveFlag;
 import org.watanabe.app.study.enums.flag.DeleteFlag;
@@ -137,10 +140,23 @@ public class CategoryController {
   public String result(@ModelAttribute CategoryForm form, BindingResult result, Model model
   // , MultipartFile catIcon
   ) {
+    // 現在日時取得
+    Date now = StudyUtil.getNowDate();
+    // ログインユーザー取得
+    String user = StudyUtil.getLoginUser();
+
+    // カテゴリーが登録されていなかったら仮でいったん登録
+    Category cat = new Category();
+    // 同名のフィールドにセット 引数1から2へ
+    BeanUtils.copyProperties(form, cat);
+    cat.setInsUser(user);
+    cat.setInsDate(now);
+    cat.setUpdUser(user);
+    cat.setUpdDate(now);
 
     try {
       // dbのカテゴリーテーブルに登録
-      categoryService.save(form);
+      categoryService.saveOne(cat);
     } catch (DuplicateKeyException dke) {
       result.addError(new FieldError(result.getObjectName(), "catCode", "入力したカテゴリーは既に登録されています。"));
       logger.error("Exception happend!", dke);
@@ -208,7 +224,7 @@ public class CategoryController {
     // 全件数送信されるため、変更してなくても更新される。とりあえず仮で実装
     for (CategoryForm catForm : catListParam.getCatDataList()) {
       if (DeleteFlag.isDelete(catForm.getDeleteFlag())) {
-        categoryService.delete(catForm);
+        categoryService.deleteOne(catForm.getCatCode());
       } else {
         // アップロードしたICON
         MultipartFile catIcon = catForm.getCatIcon();
@@ -227,8 +243,23 @@ public class CategoryController {
           // カテゴリーupdate用にセット
           catForm.setImgId(imgId);
         }
+        // 現在日時取得
+        Date now = StudyUtil.getNowDate();
+        // ログインユーザー取得
+        String user = StudyUtil.getLoginUser();
+        // カテゴリーが登録されていなかったら仮でいったん登録
+        Category cat = new Category();
+        // 同名のフィールドにセット 引数1から2へ
+        BeanUtils.copyProperties(catForm, cat);
+        if (catForm.getImgId() == null) {
+          cat.setImgId(catForm.getImgIds().getImgId());
+        } else {
+          cat.setImgId(catForm.getImgId());
+        }
+        cat.setUpdUser(user);
+        cat.setUpdDate(now);
 
-        categoryService.update(catForm);
+        categoryService.updateOne(cat, catForm.getCatCode());
       }
     }
 

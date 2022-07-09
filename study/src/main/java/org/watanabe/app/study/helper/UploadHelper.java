@@ -3,6 +3,7 @@ package org.watanabe.app.study.helper;
 import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Date;
 import java.util.UUID;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
+import org.watanabe.app.study.entity.Image;
 import org.watanabe.app.study.form.CategoryForm;
-import org.watanabe.app.study.form.ImageForm;
 import org.watanabe.app.study.service.ImageService;
 import org.watanabe.app.study.util.StudyUtil;
 
@@ -105,16 +106,26 @@ public class UploadHelper {
 
     // 仮保存していた画像を本保存
     String newImgFilePath = moveTemporaryFileToImagesFolder(newImgName, imgId, uploadIconDir);
+
+    // 現在日時取得
+    Date now = StudyUtil.getNowDate();
+    // ログインユーザー取得
+    String user = StudyUtil.getLoginUser();
+
     // 画像テーブル登録元情報をセット
-    ImageForm imgForm = new ImageForm();
-    imgForm.setImgId(imgId);
-    imgForm.setImgName(newImgName);
-    imgForm.setImgPath(newImgFilePath);
-    imgForm.setImgType(ingType);
+    Image img = new Image();
+    img.setImgId(imgId);
+    img.setImgName(newImgName);
+    img.setImgPath(newImgFilePath);
+    img.setImgType(ingType);
+    img.setInsUser(user);
+    img.setInsDate(now);
+    img.setUpdUser(user);
+    img.setUpdDate(now);
 
     try {
       // dbのimagesテーブルに登録
-      imageService.save(imgForm);
+      imageService.saveOne(img);
     } catch (DuplicateKeyException dke) {
       // result.addError(new FieldError(result.getObjectName(), "imgId", "採番された画像IDは既に登録されています。"));
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));

@@ -19,7 +19,6 @@ import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.enums.dbcode.BooksTab;
-import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.service.CategoryService;
 import org.watanabe.app.study.util.CodeUtil;
 import org.watanabe.app.study.util.StudyUtil;
@@ -120,18 +119,27 @@ public class BooksHelper {
       }
     }
 
-    // カテゴリーが登録されていなかったら仮でいったん登録
-    CategoryForm catForm = new CategoryForm();
-    String catCode = UUID.randomUUID().toString();
-    catForm.setCatCode(catCode);
-    catForm.setCatName(catName);
-    // 仮で保存し後から変更
-    catForm.setImgId(StudyUtil.getNoImageCode());
-    catForm.setImgType("");
-    catForm.setCatType("");
-    catForm.setActive("1");
+    // 現在日時取得
+    Date now = StudyUtil.getNowDate();
+    // ログインユーザー取得
+    String user = StudyUtil.getLoginUser();
 
-    categoryService.save(catForm);
+    // カテゴリーが登録されていなかったら仮でいったん登録
+    Category cat = new Category();
+    String catCode = UUID.randomUUID().toString();
+    cat.setCatCode(catCode);
+    cat.setCatName(catName);
+    // 仮で保存し後から変更
+    cat.setImgId(StudyUtil.getNoImageCode());
+    cat.setImgType("");
+    cat.setCatType("");
+    cat.setActive("1");
+    cat.setInsUser(user);
+    cat.setInsDate(now);
+    cat.setUpdUser(user);
+    cat.setUpdDate(now);
+
+    categoryService.saveOne(cat);
     catList = categoryService.findAll();
 
     return catCode;
