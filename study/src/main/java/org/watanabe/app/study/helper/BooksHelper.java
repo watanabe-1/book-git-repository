@@ -21,6 +21,7 @@ import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.enums.dbcode.BooksTab;
 import org.watanabe.app.study.service.CategoryService;
 import org.watanabe.app.study.util.CodeUtil;
+import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
 /**
@@ -50,8 +51,6 @@ public class BooksHelper {
    * @return Books セットされたentity
    */
   public List<Books> getBooksByCsv(MultipartFile booksFile, String booksType) {
-    // 現在日時取得
-    Date now = StudyUtil.getNowDate();
     // ログインユーザー取得
     String user = StudyUtil.getLoginUser();
     SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -72,10 +71,8 @@ public class BooksHelper {
         books.setCatCode(getCatCode(StudyUtil.trimDoubleQuot(split[2])));
         books.setBooksMethod(StudyUtil.trimDoubleQuot(split[3]));
         books.setBooksAmmount(Integer.parseInt(StudyUtil.trimDoubleQuot(split[4])));
-        books.setInsUser(user);
-        books.setInsDate(now);
-        books.setUpdUser(user);
-        books.setUpdDate(now);
+        // 共通項目をセット
+        StudyModelUtil.setStudyEntityProperties(books);
         booksList.add(books);
       }
     } catch (ParseException e) {
@@ -118,12 +115,6 @@ public class BooksHelper {
         return cat.getCatCode();
       }
     }
-
-    // 現在日時取得
-    Date now = StudyUtil.getNowDate();
-    // ログインユーザー取得
-    String user = StudyUtil.getLoginUser();
-
     // カテゴリーが登録されていなかったら仮でいったん登録
     Category cat = new Category();
     String catCode = UUID.randomUUID().toString();
@@ -134,10 +125,9 @@ public class BooksHelper {
     cat.setImgType("");
     cat.setCatType("");
     cat.setActive("1");
-    cat.setInsUser(user);
-    cat.setInsDate(now);
-    cat.setUpdUser(user);
-    cat.setUpdDate(now);
+
+    // 共通項目をセット
+    StudyModelUtil.setStudyEntityProperties(cat);
 
     categoryService.saveOne(cat);
     catList = categoryService.findAll();

@@ -8,7 +8,7 @@ import lombok.Data;
  * BOOKS:家計簿(家計簿データ保存テーブル)のentityクラス
  */
 @Data
-public class Books implements Serializable {
+public class Books implements Serializable, Entity {
 
   /**
    * シリアルキー

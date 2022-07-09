@@ -8,7 +8,7 @@ import lombok.Data;
  * IMAGE:画像パス(画像パス保存テーブル)のentityクラス
  */
 @Data
-public class Image implements Serializable {
+public class Image implements Serializable, Entity {
 
   /**
    * シリアルキー

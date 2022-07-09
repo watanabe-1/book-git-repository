@@ -1,7 +1,5 @@
 package org.watanabe.app.study.controller;
 
-import java.util.Date;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,7 +17,7 @@ import org.watanabe.app.study.enums.type.AccountType;
 import org.watanabe.app.study.form.AccountForm;
 import org.watanabe.app.study.service.AccountService;
 import org.watanabe.app.study.service.AppUserDetails;
-import org.watanabe.app.study.util.StudyUtil;
+import org.watanabe.app.study.util.StudyModelUtil;
 
 /**
  * アカウントコントローラ.
@@ -110,19 +108,12 @@ public class AccountController {
       return "redirect:/errors";
     }
 
-    // フォームの値をエンティティにコピー
+    // フォームの値をエンティティにコピーし、共通項目をセット
     Account account = new Account();
-    BeanUtils.copyProperties(form, account);
+    StudyModelUtil.copyAndSetStudyEntityProperties(form, account);
 
     // エンコードしたパスワードをセット
     account.setPassword(passwordEncoder.encode(form.getPassword()));
-
-    // 共通項目をセット
-    Date now = StudyUtil.getNowDate();
-    account.setInsDate(now);
-    account.setInsUser(userDetail.getAccount().getUserId());
-    account.setUpdDate(now);
-    account.setUpdUser(userDetail.getAccount().getUserId());
 
     try {
       // DBへデータを保存

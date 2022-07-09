@@ -9,7 +9,7 @@ import lombok.Data;
  * CATEGORY:カテゴリー(カテゴリー定義テーブル)のentityクラス
  */
 @Data
-public class Category implements Serializable {
+public class Category implements Serializable, Entity {
 
   /**
    * シリアルキー

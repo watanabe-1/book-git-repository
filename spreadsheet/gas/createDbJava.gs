@@ -197,7 +197,7 @@ function getJavaEntity(sheetName) {
 
   //クラス名宣言
   let javaStrBody = getJavaDoc(tbEnName + ":" + tbJaName + "(" + tbNote + ")のentityクラス") + getProperty("java_entity_lombok")
-    + javaKaigyo + "public class " + entityName + " implements Serializable {" + repeatConcatStr(javaKaigyo, 2);
+    + javaKaigyo + "public class " + entityName + " implements Serializable, Entity {" + repeatConcatStr(javaKaigyo, 2);
   //フィールド宣言
   for (var j = 5; j <= lastRow; j++) {
     const dbTeigi = new DbTeigi(values[j - 1]);

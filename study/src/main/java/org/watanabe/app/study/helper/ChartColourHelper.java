@@ -21,6 +21,7 @@ import org.watanabe.app.study.enums.dbcode.ChartColourTab;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.service.TemplatechartcolourService;
 import org.watanabe.app.study.util.CodeUtil;
+import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
 /**
@@ -173,23 +174,16 @@ public class ChartColourHelper {
    * @return Books セットされたentity
    */
   public Templatechartcolour getTemplatechartcolourByForm(TemplatechartcolourForm form) {
-    // 現在日時取得
-    Date now = StudyUtil.getNowDate();
     // ログインユーザー取得
     String user = StudyUtil.getLoginUser();
+
+    // フォームの値をエンティティにコピーし、共通項目をセット
     Templatechartcolour newColorTemp = new Templatechartcolour();
+    StudyModelUtil.copyAndSetStudyEntityProperties(form, newColorTemp);
+
     newColorTemp.setTemplateId(UUID.randomUUID().toString());
-    newColorTemp.setTemplateName(form.getTemplateName());
     newColorTemp.setUserId(user);
     newColorTemp.setActive("0");
-    newColorTemp.setSeedCoeffR(form.getSeedCoeffR());
-    newColorTemp.setSeedCoeffG(form.getSeedCoeffG());
-    newColorTemp.setSeedCoeffB(form.getSeedCoeffB());
-    newColorTemp.setNote(form.getNote());
-    newColorTemp.setInsUser(user);
-    newColorTemp.setInsDate(now);
-    newColorTemp.setUpdUser(user);
-    newColorTemp.setUpdDate(now);
 
     return newColorTemp;
   }

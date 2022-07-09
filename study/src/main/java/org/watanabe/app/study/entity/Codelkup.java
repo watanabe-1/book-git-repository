@@ -8,7 +8,7 @@ import lombok.Data;
  * CODELKUP:コードルックアップ(コード定義テーブル(明細))のentityクラス
  */
 @Data
-public class Codelkup implements Serializable {
+public class Codelkup implements Serializable, Entity {
 
   /**
    * シリアルキー

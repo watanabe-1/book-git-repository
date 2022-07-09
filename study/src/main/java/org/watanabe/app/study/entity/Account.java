@@ -2,14 +2,13 @@ package org.watanabe.app.study.entity;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import lombok.Data;
 
 /**
  * ACCOUNT:アカウント(アカウント情報保持テーブル)のentityクラス
  */
 @Data
-public class Account implements Serializable {
+public class Account implements Serializable, Entity {
 
   /**
    * シリアルキー

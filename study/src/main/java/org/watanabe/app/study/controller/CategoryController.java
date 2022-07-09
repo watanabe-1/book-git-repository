@@ -1,10 +1,8 @@
 package org.watanabe.app.study.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
@@ -31,6 +29,7 @@ import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.helper.UploadHelper;
 import org.watanabe.app.study.service.CategoryService;
 import org.watanabe.app.study.service.ImageService;
+import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -140,19 +139,10 @@ public class CategoryController {
   public String result(@ModelAttribute CategoryForm form, BindingResult result, Model model
   // , MultipartFile catIcon
   ) {
-    // 現在日時取得
-    Date now = StudyUtil.getNowDate();
-    // ログインユーザー取得
-    String user = StudyUtil.getLoginUser();
-
     // カテゴリーが登録されていなかったら仮でいったん登録
     Category cat = new Category();
-    // 同名のフィールドにセット 引数1から2へ
-    BeanUtils.copyProperties(form, cat);
-    cat.setInsUser(user);
-    cat.setInsDate(now);
-    cat.setUpdUser(user);
-    cat.setUpdDate(now);
+    // フォームの値をエンティティにコピーし、共通項目をセット
+    StudyModelUtil.copyAndSetStudyEntityProperties(form, cat);
 
     try {
       // dbのカテゴリーテーブルに登録
@@ -243,21 +233,13 @@ public class CategoryController {
           // カテゴリーupdate用にセット
           catForm.setImgId(imgId);
         }
-        // 現在日時取得
-        Date now = StudyUtil.getNowDate();
-        // ログインユーザー取得
-        String user = StudyUtil.getLoginUser();
+
         // カテゴリーが登録されていなかったら仮でいったん登録
         Category cat = new Category();
-        // 同名のフィールドにセット 引数1から2へ
-        BeanUtils.copyProperties(catForm, cat);
-        if (catForm.getImgId() == null) {
-          cat.setImgId(catForm.getImgIds().getImgId());
-        } else {
-          cat.setImgId(catForm.getImgId());
-        }
-        cat.setUpdUser(user);
-        cat.setUpdDate(now);
+        // フォームの値をエンティティにコピーし、共通項目をセット
+        StudyModelUtil.copyAndSetStudyEntityProperties(catForm, cat);
+        // imgaeIdをセット
+        cat.setImgId(catForm.getImgIds().getImgId());
 
         categoryService.updateOne(cat, catForm.getCatCode());
       }
