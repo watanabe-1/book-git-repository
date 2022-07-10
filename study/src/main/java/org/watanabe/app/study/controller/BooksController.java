@@ -28,6 +28,7 @@ import org.watanabe.app.study.form.BooksForm;
 import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.helper.DownloadHelper;
 import org.watanabe.app.study.service.BooksService;
+import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
@@ -141,7 +142,7 @@ public class BooksController {
     List<Books> booksList = new ArrayList<>();
     String baseFileName = "";
 
-    if (StudyUtil.isNullOrEmpty(form.getBooksYear())) {
+    if (StudyStringUtil.isNullOrEmpty(form.getBooksYear())) {
       booksList = booksService.findByBooksTypeAndUserIdJoinCategory(form.getBooksType(),
           StudyUtil.getLoginUser());
       baseFileName = "ALL";
@@ -202,7 +203,7 @@ public class BooksController {
       // 現在の日付を取得
       date = booksHelper.getStartDateByMonth(StudyUtil.getNowDate());
     }
-    if (StudyUtil.isNullOrEmpty(tab)) {
+    if (StudyStringUtil.isNullOrEmpty(tab)) {
       tab = booksHelper.getDefaltTab();
     }
 

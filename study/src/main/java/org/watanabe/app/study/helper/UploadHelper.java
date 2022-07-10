@@ -16,7 +16,7 @@ import org.watanabe.app.study.entity.Image;
 import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.service.ImageService;
 import org.watanabe.app.study.util.StudyModelUtil;
-import org.watanabe.app.study.util.StudyUtil;
+import org.watanabe.app.study.util.StudyStringUtil;
 
 /**
  * アップロードを行うためのHelperクラスを作成
@@ -99,7 +99,7 @@ public class UploadHelper {
    */
   public void saveImageFile(String uploadDirPath, String baseNameCode, String imgId, String ImgExt,
       String ingType) {
-    String uploadIconDir = StudyUtil.replaceFirstOneLeft(uploadDirPath, "/", "");
+    String uploadIconDir = StudyStringUtil.replaceFirstOneLeft(uploadDirPath, "/", "");
     StringBuffer sb = new StringBuffer();
     String newImgName = sb.append(baseNameCode).append("_").append(uploadIconDir).append("_")
         .append(imgId).append(".").append(ImgExt).toString();
@@ -149,12 +149,12 @@ public class UploadHelper {
     File newFile = null;
     String newFilePath = null;
     // 追加ファイルパスがnullもしくは空文字の場合
-    if (StudyUtil.isNullOrEmpty(addFilePath)) {
+    if (StudyStringUtil.isNullOrEmpty(addFilePath)) {
       newFile = uploadImgDefDir;
       newFilePath = uploadImgDefDirPath;
     } else {
       newFile = new File(uploadImgDefDir, addFilePath);
-      newFilePath = StudyUtil.pathJoin(uploadImgDefDirPath, addFilePath);
+      newFilePath = StudyStringUtil.pathJoin(uploadImgDefDirPath, addFilePath);
     }
 
     File file = new File(uploadTmpDir, uploadTmpFileId);

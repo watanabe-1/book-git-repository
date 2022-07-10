@@ -17,9 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.study.entity.Books;
-import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.enums.dbcode.BooksTab;
-import org.watanabe.app.study.service.CategoryService;
 import org.watanabe.app.study.util.CodeUtil;
 import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyUtil;
@@ -31,16 +29,10 @@ import org.watanabe.app.study.util.StudyUtil;
 public class BooksHelper {
 
   /**
-   * カテゴリー情報 Service
+   * カテゴリーヘルパー
    */
   @Autowired
-  private CategoryService categoryService;
-
-  /**
-   * カテゴリー情報保存用リスト
-   */
-  private List<Category> catList = new ArrayList<Category>();
-
+  private CategoryHelper categoryHelper;
 
   /**
    * アップロードされたファイルデータをもとにentytiにセットし返却
@@ -68,7 +60,7 @@ public class BooksHelper {
         books.setBooksType(booksType);
         books.setBooksDate(sdFormat.parse(StudyUtil.trimDoubleQuot(split[0])));
         books.setBooksPlace(StudyUtil.trimDoubleQuot(split[1]));
-        books.setCatCode(getCatCode(StudyUtil.trimDoubleQuot(split[2])));
+        books.setCatCode(categoryHelper.getCatCode(StudyUtil.trimDoubleQuot(split[2])));
         books.setBooksMethod(StudyUtil.trimDoubleQuot(split[3]));
         books.setBooksAmmount(Integer.parseInt(StudyUtil.trimDoubleQuot(split[4])));
         // 共通項目をセット
@@ -95,44 +87,6 @@ public class BooksHelper {
     multipart.transferTo(convFile);
 
     return convFile;
-  }
-
-  /**
-   * カテゴリーテーブルにカテゴリーネームが登録されているか確認し、カテゴリーコードを取得
-   * 
-   * @param catName カテゴリーネーム
-   * @return String カテゴリコード
-   */
-  public String getCatCode(String catName) {
-    // まだ一回も呼ばれていない場合
-    if (catList.isEmpty()) {
-      catList = categoryService.findAll();
-    }
-
-    // 突きつけ合わせ
-    for (Category cat : catList) {
-      if (catName.equals(cat.getCatName())) {
-        return cat.getCatCode();
-      }
-    }
-    // カテゴリーが登録されていなかったら仮でいったん登録
-    Category cat = new Category();
-    String catCode = UUID.randomUUID().toString();
-    cat.setCatCode(catCode);
-    cat.setCatName(catName);
-    // 仮で保存し後から変更
-    cat.setImgId(StudyUtil.getNoImageCode());
-    cat.setImgType("");
-    cat.setCatType("");
-    cat.setActive("1");
-
-    // 共通項目をセット
-    StudyModelUtil.setStudyEntityProperties(cat);
-
-    categoryService.saveOne(cat);
-    catList = categoryService.findAll();
-
-    return catCode;
   }
 
   /**

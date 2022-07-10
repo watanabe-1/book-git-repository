@@ -9,7 +9,7 @@ import org.watanabe.app.common.validation.UploadFileMaxSize;
 import org.watanabe.app.common.validation.UploadFileMediaType;
 import org.watanabe.app.common.validation.UploadFileNotEmpty;
 import org.watanabe.app.study.entity.Image;
-import org.watanabe.app.study.util.StudyUtil;
+import org.watanabe.app.study.util.StudyStringUtil;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -224,7 +224,7 @@ public class CategoryForm implements Serializable {
    */
   public String getActive() {
     // nullもしくは空文字の場合0を代入
-    if (StudyUtil.isNullOrEmpty(active)) {
+    if (StudyStringUtil.isNullOrEmpty(active)) {
       active = "0";
     }
     return active;

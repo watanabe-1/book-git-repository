@@ -19,6 +19,7 @@ import org.watanabe.app.study.entity.Templatechartcolour;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.helper.ChartColourHelper;
 import org.watanabe.app.study.service.TemplatechartcolourService;
+import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
 /**
@@ -146,7 +147,7 @@ public class ChartColourController {
 
     if (redirectTab != null) {
       tab = redirectTab;
-    } else if (StudyUtil.isNullOrEmpty(tab)) {
+    } else if (StudyStringUtil.isNullOrEmpty(tab)) {
       tab = chartColourHelper.getDefaltTab();
     }
 
