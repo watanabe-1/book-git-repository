@@ -1,6 +1,5 @@
 package org.watanabe.app.rest.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -152,10 +151,9 @@ public class BooksRestController {
   @RequestMapping(value = "/books/rest/chart/byYear/all", method = RequestMethod.POST)
   public BooksChartByMonthData chartByYearAll(@ModelAttribute BooksForm form, ModelAndView model,
       Date date) {
-    // 月を取得するようのファンクション
-    Function<Books, String> getMonth = booksByCat -> {
-      SimpleDateFormat sdfYyyyMm = new SimpleDateFormat("yyyy/MM");
-      return sdfYyyyMm.format(booksByCat.getBooksDate());
+    // 年/月を取得するようのファンクション
+    Function<Books, String> getYearMonth = booksByCat -> {
+      return StudyDateUtil.getYearMonth(booksByCat.getBooksDate());
     };
     // カテゴリーネームを取得するようのファンクション
     Function<Books, String> getCatName = booksByCat -> {
@@ -201,7 +199,8 @@ public class BooksRestController {
       List<Long> data = new ArrayList<>();
       Map<String, Long> booksByMethodAndMonthMap = booksByMethodMap.get(keyByMethod).stream()
           // 集約
-          .collect(Collectors.groupingBy(getMonth, Collectors.summingLong(Books::getBooksAmmount)))
+          .collect(
+              Collectors.groupingBy(getYearMonth, Collectors.summingLong(Books::getBooksAmmount)))
           // 集約された結果が詰まったマップをソート
           .entrySet().stream().sorted(Map.Entry.<String, Long>comparingByKey())
           // 順番が保証されるLinkedHashMapに詰める
@@ -245,7 +244,8 @@ public class BooksRestController {
       Map<String, Long> booksByCategoryAndMonthMap = booksByCategoryMap.get(keyByCategoryAndMonth)
           .stream()
           // 集約
-          .collect(Collectors.groupingBy(getMonth, Collectors.summingLong(Books::getBooksAmmount)))
+          .collect(
+              Collectors.groupingBy(getYearMonth, Collectors.summingLong(Books::getBooksAmmount)))
           // 集約された結果が詰まったマップをソート
           .entrySet().stream().sorted(Map.Entry.<String, Long>comparingByKey())
           // 順番が保証されるLinkedHashMapに詰める
@@ -270,7 +270,8 @@ public class BooksRestController {
     // 総支出
     Map<String, Long> _booksByMonthSumAmountDataByExpenses = booksByExpenses.stream()
         // 集約
-        .collect(Collectors.groupingBy(getMonth, Collectors.summingLong(Books::getBooksAmmount)))
+        .collect(
+            Collectors.groupingBy(getYearMonth, Collectors.summingLong(Books::getBooksAmmount)))
         // 集約された結果が詰まったマップをソート
         .entrySet().stream().sorted(Map.Entry.<String, Long>comparingByKey())
         // 順番が保証されるLinkedHashMapに詰める
@@ -292,7 +293,8 @@ public class BooksRestController {
     // 総収入
     Map<String, Long> booksByMonthSumAmountDataByIncome = booksByIncome.stream()
         // 集約
-        .collect(Collectors.groupingBy(getMonth, Collectors.summingLong(Books::getBooksAmmount)))
+        .collect(
+            Collectors.groupingBy(getYearMonth, Collectors.summingLong(Books::getBooksAmmount)))
         // 集約された結果が詰まったマップをソート
         .entrySet().stream().sorted(Map.Entry.<String, Long>comparingByKey())
         // 順番が保証されるLinkedHashMapに詰める

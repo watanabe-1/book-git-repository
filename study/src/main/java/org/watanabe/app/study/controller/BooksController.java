@@ -2,8 +2,6 @@ package org.watanabe.app.study.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -148,24 +146,16 @@ public class BooksController {
           StudyUtil.getLoginUser());
       baseFileName = "ALL";
     } else {
-      SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy");
-      Date date = new Date();
-
-      try {
-        date = sdFormat.parse(form.getBooksYear());
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
-
+      Date date = StudyDateUtil.strToDate(form.getBooksYear(), StudyDateUtil.FMT_YEAR);
       booksList = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(date,
           StudyDateUtil.getEndDateByYear(date), form.getBooksType(), StudyUtil.getLoginUser());
       baseFileName = form.getBooksYear();
     }
 
-    SimpleDateFormat booksDateFormat = new SimpleDateFormat("yyyy/MM/dd");
     List<BooksColumn> columnList = booksList.stream()
-        .map(e -> new BooksColumn(booksDateFormat.format(e.getBooksDate()), e.getBooksPlace(),
-            e.getCatCodes().getCatName(), e.getBooksMethod(), String.valueOf(e.getBooksAmmount())))
+        .map(e -> new BooksColumn(StudyDateUtil.getYearMonthDay(e.getBooksDate()),
+            e.getBooksPlace(), e.getCatCodes().getCatName(), e.getBooksMethod(),
+            String.valueOf(e.getBooksAmmount())))
         .collect(Collectors.toList());
 
     CsvMapper mapper = new CsvMapper();

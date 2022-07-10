@@ -1,7 +1,5 @@
 package org.watanabe.app.study.helper;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -12,8 +10,6 @@ import java.util.Random;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.common.logger.LogIdBasedLogger;
 import org.watanabe.app.study.entity.Templatechartcolour;
 import org.watanabe.app.study.enums.dbcode.ChartColourNum;
@@ -197,23 +193,18 @@ public class ChartColourHelper {
    */
   public Map<String, Long> setEntityMapByYear(Map<String, Long> map, Date minMonth) {
     Map<String, Long> newMap = new LinkedHashMap<>();
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM");
     Date newDate = new Date();
-    String cureentMonth = dateFormat.format(minMonth);
+    String cureentMonth = StudyDateUtil.getYearMonth(minMonth);
 
     for (int i = 0; i <= 12; i++) {
       Long value = map.get(cureentMonth);
       if (value == null) {
         value = (long) 0;
       }
-      newMap.put(cureentMonth, value);
 
-      try {
-        newDate = dateFormat.parse(cureentMonth);
-      } catch (ParseException e) {
-        throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
-      }
-      cureentMonth = dateFormat.format(StudyDateUtil.getNextMonth(newDate));
+      newMap.put(cureentMonth, value);
+      newDate = StudyDateUtil.strToDate(cureentMonth, StudyDateUtil.FMT_YEAR_MONTH_SLASH);
+      cureentMonth = StudyDateUtil.getYearMonth(StudyDateUtil.getNextMonth(newDate));
     }
 
     return newMap;

@@ -3,8 +3,6 @@ package org.watanabe.app.study.helper;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +14,7 @@ import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.enums.dbcode.BooksTab;
 import org.watanabe.app.study.util.StudyCodeUtil;
+import org.watanabe.app.study.util.StudyDateUtil;
 import org.watanabe.app.study.util.StudyFileUtil;
 import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
@@ -44,7 +43,6 @@ public class BooksHelper {
   public List<Books> getBooksByCsv(MultipartFile booksFile, String booksType) {
     // ログインユーザー取得
     String user = StudyUtil.getLoginUser();
-    SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd");
     List<Books> booksList = new ArrayList<Books>();
     String charset = StudyFileUtil.detectFileEncoding(booksFile);
 
@@ -57,7 +55,8 @@ public class BooksHelper {
         books.setBooksId(UUID.randomUUID().toString());
         books.setUserId(user);
         books.setBooksType(booksType);
-        books.setBooksDate(sdFormat.parse(StudyStringUtil.trimDoubleQuot(split[0])));
+        books.setBooksDate(StudyDateUtil.strToDate(StudyStringUtil.trimDoubleQuot(split[0]),
+            StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH));
         books.setBooksPlace(StudyStringUtil.trimDoubleQuot(split[1]));
         books.setCatCode(categoryHelper.getCatCode(StudyStringUtil.trimDoubleQuot(split[2])));
         books.setBooksMethod(StudyStringUtil.trimDoubleQuot(split[3]));
@@ -66,8 +65,6 @@ public class BooksHelper {
         StudyModelUtil.setStudyEntityProperties(books);
         booksList.add(books);
       }
-    } catch (ParseException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1002", "日付(収入日、購入日)"));
     } catch (IOException e) {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
     }

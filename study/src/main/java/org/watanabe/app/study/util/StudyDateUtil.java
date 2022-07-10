@@ -2,6 +2,8 @@ package org.watanabe.app.study.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,6 +26,41 @@ public class StudyDateUtil {
    * 終了日
    */
   public static final String END = "end";
+
+  /**
+   * 日付けフォーマット 年
+   */
+  public static final String FMT_YEAR = "yyyy";
+
+  /**
+   * 日付けフォーマット 月
+   */
+  public static final String FMT_MONTH = "MM";
+
+  /**
+   * 日付けフォーマット 日
+   */
+  public static final String FMT_DAY = "dd";
+
+  /**
+   * 日付けフォーマット 時間
+   */
+  public static final String FMT_HOUR = "hh";
+
+  /**
+   * 日付けフォーマット 分
+   */
+  public static final String FMT_MINUTE = "mm";
+
+  /**
+   * 日付けフォーマット 年/月
+   */
+  public static final String FMT_YEAR_MONTH_SLASH = "yyyy/MM";
+
+  /**
+   * 日付けフォーマット 年/月/日
+   */
+  public static final String FMT_YEAR_MONTH_DAY_SLASH = "yyyy/MM/dd";
 
   /**
    * 日付けに対して計算を行う
@@ -127,34 +164,33 @@ public class StudyDateUtil {
     int field = 0;
 
     if (Objects.equals(Calendar.YEAR, dateType)) {
-      fm = "yyyy";
+      fm = FMT_YEAR;
       field = Calendar.MONTH;
     } else if (Objects.equals(Calendar.MONTH, dateType)) {
-      fm = "MM";
+      fm = FMT_MONTH;
       field = Calendar.DATE;
     } else if (Objects.equals(Calendar.DATE, dateType)) {
-      fm = "dd";
+      fm = FMT_DAY;
       field = Calendar.HOUR;
     } else if (Objects.equals(Calendar.HOUR, dateType)) {
-      fm = "hh";
+      fm = FMT_HOUR;
       field = Calendar.MINUTE;
     } else if (Objects.equals(Calendar.MINUTE, dateType)) {
-      fm = "mm";
+      fm = FMT_MINUTE;
       field = Calendar.SECOND;
     } else {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
     }
 
-    SimpleDateFormat sdfMm = new SimpleDateFormat(fm);
     Date currentDate = date;
-    String fmDate = sdfMm.format(date);
+    String fmDate = dateToStr(date, fm);
     String currentFmDate = fmDate;
     int cnt = 0;
 
     // 無限ループ防止のため1000周以下の条件を追加
     while (cnt < 1000) {
       currentDate = calculateDate(date, field, amount);
-      currentFmDate = sdfMm.format(currentDate);
+      currentFmDate = dateToStr(currentDate, fm);
       if (fmDate.equals(currentFmDate)) {
         date = currentDate;
       } else {
@@ -175,15 +211,100 @@ public class StudyDateUtil {
    */
   public static List<String> getbetweenYears(Date min, Date max) {
     List<String> result = new ArrayList<>();
-    SimpleDateFormat getYearFormat = new SimpleDateFormat("yyyy");
     Date currentDate = min;
 
     while (currentDate.compareTo(max) < 0) {
-      result.add(getYearFormat.format(currentDate));
+      result.add(getYearOfStr(currentDate));
       currentDate = calculateDate(currentDate, Calendar.YEAR, 1);
     }
 
     return result;
+  }
+
+  /**
+   * 引数から年のみ抜き出し返却
+   * 
+   * @param date 取得対象
+   * @return 年 数値
+   */
+  public static int getYearOfInt(Date date) {
+    return dateToLocalDate(date).getYear();
+  }
+
+  /**
+   * 引数から年のみ抜き出し返却
+   * 
+   * @param date 取得対象
+   * @return 年 文字列
+   */
+  public static String getYearOfStr(Date date) {
+    return String.valueOf(getYearOfInt(date));
+  }
+
+  /**
+   * 引数から年/月のみ抜き出し返却
+   * 
+   * @param date 取得対象
+   * @return 年/月 文字列
+   */
+  public static String getYearMonth(Date date) {
+    return dateToStr(date, StudyDateUtil.FMT_YEAR_MONTH_SLASH);
+  }
+
+  /**
+   * 引数から年/月/日のみ抜き出し返却
+   * 
+   * @param date 取得対象
+   * @return 年/月/日 文字列
+   */
+  public static String getYearMonthDay(Date date) {
+    return dateToStr(date, StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH);
+  }
+
+  /**
+   * DateからLocalDateに変換
+   * 
+   * @param date 変換対象
+   * @return LocalDate
+   */
+  public static LocalDate dateToLocalDate(Date date) {
+    ZoneId timeZone = ZoneId.systemDefault();
+
+    return date.toInstant().atZone(timeZone).toLocalDate();
+  }
+
+  /**
+   * StringからDateに変換
+   * 
+   * @param str 変換対象
+   * @param fmtPattern 変換パターン
+   * @return Date
+   */
+  public static Date strToDate(String str, String fmtPattern) {
+    SimpleDateFormat sdFormat = new SimpleDateFormat(fmtPattern);
+    Date date = new Date();
+
+    try {
+      date = sdFormat.parse(str);
+    } catch (ParseException e) {
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1002",
+          new StringBuffer().append(str).append(":").append(fmtPattern).toString()));
+    }
+
+    return date;
+  }
+
+  /**
+   * DateからStringに変換
+   * 
+   * @param date 変換対象
+   * @param fmtPattern 変換パターン
+   * @return Date
+   */
+  public static String dateToStr(Date date, String fmtPattern) {
+    SimpleDateFormat sdfYyyyMm = new SimpleDateFormat(fmtPattern);
+
+    return sdfYyyyMm.format(date);
   }
 
   /**
@@ -194,17 +315,11 @@ public class StudyDateUtil {
    * @return Date 変換語の日付
    */
   public static Date replaceDay(Date date, String newDay) {
-    SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/");
-    SimpleDateFormat sdNewFormat = new SimpleDateFormat("yyyy/MM/dd");
     Date newdate = new Date();
     StringBuffer sb = new StringBuffer();
 
-    sb.append(sdFormat.format(date)).append(newDay);
-    try {
-      newdate = sdNewFormat.parse(sb.toString());
-    } catch (ParseException e) {
-      e.printStackTrace();
-    }
+    sb.append(getYearMonth(date)).append(newDay);
+    newdate = strToDate(sb.toString(), FMT_YEAR_MONTH_DAY_SLASH);
 
     return newdate;
   }

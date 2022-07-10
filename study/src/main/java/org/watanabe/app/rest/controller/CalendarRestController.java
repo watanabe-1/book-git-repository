@@ -3,8 +3,6 @@ package org.watanabe.app.rest.controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,7 +19,6 @@ import org.watanabe.app.rest.form.Syukujitsu;
 import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.enums.type.BooksType;
 import org.watanabe.app.study.form.BooksForm;
-import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.service.BooksService;
 import org.watanabe.app.study.util.StudyDateUtil;
 import org.watanabe.app.study.util.StudyFileUtil;
@@ -42,12 +39,6 @@ public class CalendarRestController {
   private BooksService booksService;
 
   /**
-   * 家計簿 Helper
-   */
-  @Autowired
-  private BooksHelper booksHelper;
-
-  /**
    * 祝日一覧の取得
    * 
    * @param form 送信されたデータ
@@ -62,7 +53,6 @@ public class CalendarRestController {
     ClassPathResource syukujitsuFile = new ClassPathResource("csv/syukujitsu.csv");
     // 文字コードの判定
     String charset = StudyFileUtil.detectFileEncoding(syukujitsuFile);
-    SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd");
     List<Syukujitsu> syukujitsuList = new ArrayList<Syukujitsu>();
     int cnt = 0;
 
@@ -73,7 +63,8 @@ public class CalendarRestController {
         // ヘッダーはとばす
         if (0 < cnt) {
           final String[] split = line.split(",");
-          Date syukujitsuDate = sdFormat.parse(StudyStringUtil.trimDoubleQuot(split[0]));
+          Date syukujitsuDate = StudyDateUtil.strToDate(StudyStringUtil.trimDoubleQuot(split[0]),
+              StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH);
           // 対象範囲の日付けだけ設定
           if (StudyDateUtil.getStartDateByMonth(syukujitsuDate)
               .compareTo(StudyDateUtil.getStartDateByMonth(date)) == 0) {
@@ -85,8 +76,6 @@ public class CalendarRestController {
         }
         cnt++;
       }
-    } catch (ParseException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1002", "日付(祝日)"));
     } catch (IOException e) {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
     }
