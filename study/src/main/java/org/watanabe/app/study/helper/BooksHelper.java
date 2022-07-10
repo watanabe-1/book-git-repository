@@ -1,7 +1,6 @@
 package org.watanabe.app.study.helper;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
@@ -16,7 +15,8 @@ import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.enums.dbcode.BooksTab;
-import org.watanabe.app.study.util.CodeUtil;
+import org.watanabe.app.study.util.StudyCodeUtil;
+import org.watanabe.app.study.util.StudyFileUtil;
 import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
@@ -46,7 +46,7 @@ public class BooksHelper {
     String user = StudyUtil.getLoginUser();
     SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd");
     List<Books> booksList = new ArrayList<Books>();
-    String charset = StudyUtil.detectFileEncoding(booksFile);
+    String charset = StudyFileUtil.detectFileEncoding(booksFile);
 
     try (BufferedReader br =
         new BufferedReader(new InputStreamReader(booksFile.getInputStream(), charset))) {
@@ -76,25 +76,12 @@ public class BooksHelper {
   }
 
   /**
-   * MultipartFileからfileに変換
-   * 
-   * @param multipart MultipartFile
-   * @return convFile file
-   */
-  public File multipartToFile(MultipartFile multipart) throws IllegalStateException, IOException {
-    File convFile = new File(multipart.getOriginalFilename());
-    multipart.transferTo(convFile);
-
-    return convFile;
-  }
-
-  /**
    * 家計簿画面の初期表示のタブを取得
    * 
    * @return 家計簿画面の初期表示のタブ
    */
   public String getDefaltTab() {
-    return CodeUtil.getShort(BooksTab.DEFALT_TAB.getListName(), BooksTab.DEFALT_TAB.getCode());
+    return StudyCodeUtil.getShort(BooksTab.DEFALT_TAB.getListName(), BooksTab.DEFALT_TAB.getCode());
   }
 
 }

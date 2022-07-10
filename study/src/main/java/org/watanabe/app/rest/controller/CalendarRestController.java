@@ -24,6 +24,7 @@ import org.watanabe.app.study.form.BooksForm;
 import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.service.BooksService;
 import org.watanabe.app.study.util.StudyDateUtil;
+import org.watanabe.app.study.util.StudyFileUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
@@ -60,7 +61,7 @@ public class CalendarRestController {
     // 祝日定義ファイルの取得
     ClassPathResource syukujitsuFile = new ClassPathResource("csv/syukujitsu.csv");
     // 文字コードの判定
-    String charset = StudyUtil.detectFileEncoding(syukujitsuFile);
+    String charset = StudyFileUtil.detectFileEncoding(syukujitsuFile);
     SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd");
     List<Syukujitsu> syukujitsuList = new ArrayList<Syukujitsu>();
     int cnt = 0;

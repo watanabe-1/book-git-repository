@@ -20,7 +20,7 @@ import org.watanabe.app.study.enums.dbcode.ChartColourNum;
 import org.watanabe.app.study.enums.dbcode.ChartColourTab;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.service.TemplatechartcolourService;
-import org.watanabe.app.study.util.CodeUtil;
+import org.watanabe.app.study.util.StudyCodeUtil;
 import org.watanabe.app.study.util.StudyDateUtil;
 import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyUtil;
@@ -225,7 +225,7 @@ public class ChartColourHelper {
    * @return 図に表紙する色確認用データの個数
    */
   public int getDefaltDataCnt() {
-    return Integer.parseInt(CodeUtil.getShort(ChartColourNum.DEFALT_DATA_CNT.getListName(),
+    return Integer.parseInt(StudyCodeUtil.getShort(ChartColourNum.DEFALT_DATA_CNT.getListName(),
         ChartColourNum.DEFALT_DATA_CNT.getCode()));
   }
 
@@ -235,7 +235,7 @@ public class ChartColourHelper {
    * @return 図に表紙する色確認用データの最大数
    */
   public int getMaxDataCnt() {
-    return Integer.parseInt(CodeUtil.getShort(ChartColourNum.MAX_DATA_CNT.getListName(),
+    return Integer.parseInt(StudyCodeUtil.getShort(ChartColourNum.MAX_DATA_CNT.getListName(),
         ChartColourNum.MAX_DATA_CNT.getCode()));
   }
 
@@ -245,7 +245,7 @@ public class ChartColourHelper {
    * @return 家計簿画面の初期表示のタブ
    */
   public String getDefaltTab() {
-    return CodeUtil.getShort(ChartColourTab.DEFALT_TAB.getListName(),
+    return StudyCodeUtil.getShort(ChartColourTab.DEFALT_TAB.getListName(),
         ChartColourTab.DEFALT_TAB.getCode());
   }
 
@@ -255,7 +255,7 @@ public class ChartColourHelper {
    * @return 家計簿画面の更新後のタブ
    */
   public String getResultTab() {
-    return CodeUtil.getShort(ChartColourTab.RESULT_TAB.getListName(),
+    return StudyCodeUtil.getShort(ChartColourTab.RESULT_TAB.getListName(),
         ChartColourTab.RESULT_TAB.getCode());
   }
 

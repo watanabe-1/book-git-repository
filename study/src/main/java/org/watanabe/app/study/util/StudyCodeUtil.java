@@ -8,7 +8,7 @@ import org.watanabe.app.study.service.CodelkupService;
  * コードのUtilクラスを作成
  */
 @Component
-public class CodeUtil {
+public class StudyCodeUtil {
 
   /**
    * コード情報 Service
@@ -22,7 +22,7 @@ public class CodeUtil {
    */
   @Autowired
   public void setCodelkupService(CodelkupService codelkupService) {
-    CodeUtil.codelkupService = codelkupService;
+    StudyCodeUtil.codelkupService = codelkupService;
   }
 
   /**

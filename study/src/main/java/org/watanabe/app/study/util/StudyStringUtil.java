@@ -1,5 +1,6 @@
 package org.watanabe.app.study.util;
 
+import java.util.Map;
 import java.util.Objects;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
@@ -100,5 +101,28 @@ public class StudyStringUtil {
     return str.charAt(0) == c && str.charAt(str.length() - 1) == c
         ? str.substring(1, str.length() - 1)
         : str;
+  }
+
+  /**
+   * urlにセットするパラムを作成
+   * 
+   * @param param keyにパラム名、itemにvalue
+   * @return String urlにセットするパラム
+   */
+  public static String createUrlParam(Map<String, String> param) {
+    int index = 0;
+    StringBuffer sb = new StringBuffer();
+  
+    for (String key : param.keySet()) {
+      if (index == 0) {
+        sb.append("?");
+      } else {
+        sb.append("&");
+      }
+      sb.append(key).append("=").append(param.get(key));
+      index++;
+    }
+  
+    return sb.toString();
   }
 }

@@ -19,6 +19,7 @@ public class StudyDateUtil {
    * 開始日
    */
   public static final String START = "start";
+
   /**
    * 終了日
    */
