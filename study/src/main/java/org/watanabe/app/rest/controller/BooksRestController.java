@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +19,7 @@ import org.watanabe.app.study.controller.TopController;
 import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.enums.type.BooksType;
 import org.watanabe.app.study.form.BooksForm;
+import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.helper.ChartColourHelper;
 import org.watanabe.app.study.service.BooksService;
 import org.watanabe.app.study.util.StudyDateUtil;
@@ -48,6 +47,12 @@ public class BooksRestController {
   private ChartColourHelper chartColourHelper;
 
   /**
+   * 家計簿 Helper
+   */
+  @Autowired
+  private BooksHelper booksHelper;
+
+  /**
    * 家計簿一覧画面内の1月ごとのカテゴリーごとの図用
    * 
    * @param form 送信されたデータ
@@ -58,11 +63,6 @@ public class BooksRestController {
   @RequestMapping(value = "/books/rest/chart/byMonth/category", method = RequestMethod.POST)
   public BooksChartByMonthData chartByMonthCategory(@ModelAttribute BooksForm form,
       ModelAndView model, Date date) {
-    // カテゴリーネームを取得するようのファンクション
-    Function<Books, String> getCatName = booksByCat -> {
-      return booksByCat.getCatCodes().getCatName();
-    };
-
     // 対象を取得
     List<Books> books = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
         StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date),
@@ -70,14 +70,7 @@ public class BooksRestController {
 
     // カテゴリーごとに集約し金額の合計を求め、金額が大きい順に並び替え、
     // 順番が保証されるLinkedHashMapに詰める
-    Map<String, Long> booksByCatMap = books.stream()
-        // 集約
-        .collect(Collectors.groupingBy(getCatName, Collectors.summingLong(Books::getBooksAmmount)))
-        // 集約された結果が詰まったマップをソート
-        .entrySet().stream().sorted(Map.Entry.<String, Long>comparingByValue().reversed())
-        // 順番が保証されるLinkedHashMapに詰める
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
-            LinkedHashMap::new));
+    Map<String, Long> booksByCatMap = booksHelper.groupByCatNameAndSortByReversedToLong(books);
 
     BooksChartByMonthDatasets bddd = new BooksChartByMonthDatasets();
     bddd.setBackgroundColor(
@@ -113,15 +106,8 @@ public class BooksRestController {
         BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
     // 支払い方法ごとに集約し金額の合計を求め、金額が大きい順に並び替え、
     // 順番が保証されるLinkedHashMapに詰める
-    Map<String, Long> booksByMethodMap = books.stream()
-        // 集約
-        .collect(Collectors.groupingBy(Books::getBooksMethod,
-            Collectors.summingLong(Books::getBooksAmmount)))
-        // 集約された結果が詰まったマップをソート
-        .entrySet().stream().sorted(Map.Entry.<String, Long>comparingByKey().reversed())
-        // 順番が保証されるLinkedHashMapに詰める
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
-            LinkedHashMap::new));
+    Map<String, Long> booksByMethodMap =
+        booksHelper.groupByBooksMethodAndSortByReversedToLong(books);
 
     BooksChartByMonthDatasets bddd = new BooksChartByMonthDatasets();
     bddd.setBackgroundColor(
@@ -151,15 +137,6 @@ public class BooksRestController {
   @RequestMapping(value = "/books/rest/chart/byYear/all", method = RequestMethod.POST)
   public BooksChartByMonthData chartByYearAll(@ModelAttribute BooksForm form, ModelAndView model,
       Date date) {
-    // 年/月を取得するようのファンクション
-    Function<Books, String> getYearMonth = booksByCat -> {
-      return StudyDateUtil.getYearMonth(booksByCat.getBooksDate());
-    };
-    // カテゴリーネームを取得するようのファンクション
-    Function<Books, String> getCatName = booksByCat -> {
-      return booksByCat.getCatCodes().getCatName();
-    };
-
     final String RGB_WHITE = "rgba(255,255,255,1)";
     final String BAR = "bar";
     final String LINE = "line";
@@ -176,36 +153,25 @@ public class BooksRestController {
     List<BooksChartByMonthDatasets> dataSets = new ArrayList<>();
 
     // bar
-    // 方法ごとに集約し金額の合計を求め、金額が大きい順に並び替え、
+    // 方法ごとに集約
+    // ソートしているが意味はない
     // 順番が保証されるLinkedHashMapに詰める
-    Map<String, List<Books>> booksByMethodMap = booksByExpenses.stream()
-        // 集約
-        .collect(Collectors.groupingBy(Books::getBooksMethod))
-        // 集約された結果が詰まったマップをソート
-        .entrySet().stream().sorted(Map.Entry.<String, List<Books>>comparingByKey())
-        // 順番が保証されるLinkedHashMapに詰める
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
-            LinkedHashMap::new));
+    Map<String, List<Books>> booksByMethodMap =
+        booksHelper.groupByBooksMethodAndSortToList(booksByExpenses);
 
     List<String> backgroundColorsByBar =
         chartColourHelper.getActiveRgbaList(booksByMethodMap.keySet().size(), (float) 0.5);
     List<String> borderColorsByBar =
         chartColourHelper.getActiveRgbaList(booksByMethodMap.keySet().size(), (float) 1);
 
-    // 方法ごとに集約したのちにさらに月ごとに集約
+    // 方法ごとに集約したのちにさらに月ごとに集約し、月順に並び替え
     int indexByMethod = 0;
     // indexを使用したいためforeachではなくfor文を使用
     for (String keyByMethod : booksByMethodMap.keySet()) {
       List<Long> data = new ArrayList<>();
-      Map<String, Long> booksByMethodAndMonthMap = booksByMethodMap.get(keyByMethod).stream()
-          // 集約
-          .collect(
-              Collectors.groupingBy(getYearMonth, Collectors.summingLong(Books::getBooksAmmount)))
-          // 集約された結果が詰まったマップをソート
-          .entrySet().stream().sorted(Map.Entry.<String, Long>comparingByKey())
-          // 順番が保証されるLinkedHashMapに詰める
-          .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
-              LinkedHashMap::new));
+      Map<String, Long> booksByMethodAndMonthMap =
+          booksHelper.groupByBooksDateAndSortToLong(booksByMethodMap.get(keyByMethod));
+
       booksByMethodAndMonthMap = chartColourHelper.setEntityMapByYear(booksByMethodAndMonthMap,
           StudyDateUtil.getOneYearAgoMonth(date));
       booksByMethodAndMonthMap.forEach((keyByMonth, valueBymethod) -> {
@@ -223,14 +189,8 @@ public class BooksRestController {
 
     // line
     // カテゴリー
-    Map<String, List<Books>> booksByCategoryMap = booksByExpenses.stream()
-        // 集約
-        .collect(Collectors.groupingBy(getCatName))
-        // 集約された結果が詰まったマップをソート
-        .entrySet().stream().sorted(Map.Entry.<String, List<Books>>comparingByKey())
-        // 順番が保証されるLinkedHashMapに詰める
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
-            LinkedHashMap::new));
+    Map<String, List<Books>> booksByCategoryMap =
+        booksHelper.groupByCatNameAndSortToList(booksByExpenses);
 
     // 総支出、総収入、貯金額分も使用のため+3
     List<String> borderColorsByLine =
@@ -241,16 +201,9 @@ public class BooksRestController {
     // indexを使用したいためforeachではなくfor文を使用
     for (String keyByCategoryAndMonth : booksByCategoryMap.keySet()) {
       List<Long> data = new ArrayList<>();
-      Map<String, Long> booksByCategoryAndMonthMap = booksByCategoryMap.get(keyByCategoryAndMonth)
-          .stream()
-          // 集約
-          .collect(
-              Collectors.groupingBy(getYearMonth, Collectors.summingLong(Books::getBooksAmmount)))
-          // 集約された結果が詰まったマップをソート
-          .entrySet().stream().sorted(Map.Entry.<String, Long>comparingByKey())
-          // 順番が保証されるLinkedHashMapに詰める
-          .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
-              LinkedHashMap::new));
+      Map<String, Long> booksByCategoryAndMonthMap =
+          booksHelper.groupByBooksDateAndSortToLong(booksByCategoryMap.get(keyByCategoryAndMonth));
+
       booksByCategoryAndMonthMap = chartColourHelper.setEntityMapByYear(booksByCategoryAndMonthMap,
           StudyDateUtil.getOneYearAgoMonth(date));
       booksByCategoryAndMonthMap.forEach((keyByMonth, valueBymethod) -> {
@@ -268,15 +221,9 @@ public class BooksRestController {
     }
 
     // 総支出
-    Map<String, Long> _booksByMonthSumAmountDataByExpenses = booksByExpenses.stream()
-        // 集約
-        .collect(
-            Collectors.groupingBy(getYearMonth, Collectors.summingLong(Books::getBooksAmmount)))
-        // 集約された結果が詰まったマップをソート
-        .entrySet().stream().sorted(Map.Entry.<String, Long>comparingByKey())
-        // 順番が保証されるLinkedHashMapに詰める
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
-            LinkedHashMap::new));
+    Map<String, Long> _booksByMonthSumAmountDataByExpenses =
+        booksHelper.groupByBooksDateAndSortToLong(booksByExpenses);
+
     Map<String, Long> booksByMonthSumAmountDataByExpenses = chartColourHelper.setEntityMapByYear(
         _booksByMonthSumAmountDataByExpenses, StudyDateUtil.getOneYearAgoMonth(date));
     BooksChartByMonthDatasets bdddByMonthSumAmountByExpenses = new BooksChartByMonthDatasets();
@@ -291,15 +238,9 @@ public class BooksRestController {
     dataSets.add(booksByMethodMap.keySet().size(), bdddByMonthSumAmountByExpenses);
 
     // 総収入
-    Map<String, Long> booksByMonthSumAmountDataByIncome = booksByIncome.stream()
-        // 集約
-        .collect(
-            Collectors.groupingBy(getYearMonth, Collectors.summingLong(Books::getBooksAmmount)))
-        // 集約された結果が詰まったマップをソート
-        .entrySet().stream().sorted(Map.Entry.<String, Long>comparingByKey())
-        // 順番が保証されるLinkedHashMapに詰める
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
-            LinkedHashMap::new));
+    Map<String, Long> booksByMonthSumAmountDataByIncome =
+        booksHelper.groupByBooksDateAndSortToLong(booksByIncome);
+
     booksByMonthSumAmountDataByIncome = chartColourHelper.setEntityMapByYear(
         booksByMonthSumAmountDataByIncome, StudyDateUtil.getOneYearAgoMonth(date));
     BooksChartByMonthDatasets bdddByMonthSumAmountByIncome = new BooksChartByMonthDatasets();
