@@ -13,7 +13,6 @@ import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.enums.flag.DeleteFlag;
 import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.service.CategoryService;
-import org.watanabe.app.study.service.ImageService;
 import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
@@ -30,12 +29,6 @@ public class CategoryHelper {
    */
   @Autowired
   private CategoryService categoryService;
-
-  /**
-   * 画像情報 Service
-   */
-  @Autowired
-  private ImageService imageService;
 
   /**
    * ファイル保存用 Helper

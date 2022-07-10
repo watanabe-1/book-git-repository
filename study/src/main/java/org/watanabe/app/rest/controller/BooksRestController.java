@@ -22,9 +22,9 @@ import org.watanabe.app.study.controller.TopController;
 import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.enums.type.BooksType;
 import org.watanabe.app.study.form.BooksForm;
-import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.helper.ChartColourHelper;
 import org.watanabe.app.study.service.BooksService;
+import org.watanabe.app.study.util.StudyDateUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
 /**
@@ -41,12 +41,6 @@ public class BooksRestController {
    */
   @Autowired
   private BooksService booksService;
-
-  /**
-   * 家計簿 Helper
-   */
-  @Autowired
-  private BooksHelper booksHelper;
 
   /**
    * 図の色 Helper
@@ -72,7 +66,7 @@ public class BooksRestController {
 
     // 対象を取得
     List<Books> books = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getStartDateByMonth(date), booksHelper.getEndDateByMonth(date),
+        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date),
         BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
 
     // カテゴリーごとに集約し金額の合計を求め、金額が大きい順に並び替え、
@@ -116,7 +110,7 @@ public class BooksRestController {
       ModelAndView model, Date date) {
     // 対象を取得
     List<Books> books = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getStartDateByMonth(date), booksHelper.getEndDateByMonth(date),
+        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date),
         BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
     // 支払い方法ごとに集約し金額の合計を求め、金額が大きい順に並び替え、
     // 順番が保証されるLinkedHashMapに詰める
@@ -174,11 +168,11 @@ public class BooksRestController {
 
     // 支出を取得
     List<Books> booksByExpenses = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getOneYearAgoMonth(date), booksHelper.getEndDateByMonth(date),
+        StudyDateUtil.getOneYearAgoMonth(date), StudyDateUtil.getEndDateByMonth(date),
         BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
     // 収入を取得
     List<Books> booksByIncome = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getOneYearAgoMonth(date), booksHelper.getEndDateByMonth(date),
+        StudyDateUtil.getOneYearAgoMonth(date), StudyDateUtil.getEndDateByMonth(date),
         BooksType.INCOME.getCode(), StudyUtil.getLoginUser());
 
     List<BooksChartByMonthDatasets> dataSets = new ArrayList<>();
@@ -214,7 +208,7 @@ public class BooksRestController {
           .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
               LinkedHashMap::new));
       booksByMethodAndMonthMap = chartColourHelper.setEntityMapByYear(booksByMethodAndMonthMap,
-          booksHelper.getOneYearAgoMonth(date));
+          StudyDateUtil.getOneYearAgoMonth(date));
       booksByMethodAndMonthMap.forEach((keyByMonth, valueBymethod) -> {
         data.add(valueBymethod);
       });
@@ -258,7 +252,7 @@ public class BooksRestController {
           .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
               LinkedHashMap::new));
       booksByCategoryAndMonthMap = chartColourHelper.setEntityMapByYear(booksByCategoryAndMonthMap,
-          booksHelper.getOneYearAgoMonth(date));
+          StudyDateUtil.getOneYearAgoMonth(date));
       booksByCategoryAndMonthMap.forEach((keyByMonth, valueBymethod) -> {
         data.add(valueBymethod);
       });
@@ -283,7 +277,7 @@ public class BooksRestController {
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
             LinkedHashMap::new));
     Map<String, Long> booksByMonthSumAmountDataByExpenses = chartColourHelper.setEntityMapByYear(
-        _booksByMonthSumAmountDataByExpenses, booksHelper.getOneYearAgoMonth(date));
+        _booksByMonthSumAmountDataByExpenses, StudyDateUtil.getOneYearAgoMonth(date));
     BooksChartByMonthDatasets bdddByMonthSumAmountByExpenses = new BooksChartByMonthDatasets();
     bdddByMonthSumAmountByExpenses.setLabel("総支出");
     bdddByMonthSumAmountByExpenses.setType(LINE);
@@ -305,7 +299,7 @@ public class BooksRestController {
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
             LinkedHashMap::new));
     booksByMonthSumAmountDataByIncome = chartColourHelper.setEntityMapByYear(
-        booksByMonthSumAmountDataByIncome, booksHelper.getOneYearAgoMonth(date));
+        booksByMonthSumAmountDataByIncome, StudyDateUtil.getOneYearAgoMonth(date));
     BooksChartByMonthDatasets bdddByMonthSumAmountByIncome = new BooksChartByMonthDatasets();
     bdddByMonthSumAmountByIncome.setLabel("総収入");
     bdddByMonthSumAmountByIncome.setType(LINE);

@@ -21,6 +21,7 @@ import org.watanabe.app.study.enums.dbcode.ChartColourTab;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.service.TemplatechartcolourService;
 import org.watanabe.app.study.util.CodeUtil;
+import org.watanabe.app.study.util.StudyDateUtil;
 import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
@@ -212,7 +213,7 @@ public class ChartColourHelper {
       } catch (ParseException e) {
         throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
       }
-      cureentMonth = dateFormat.format(BooksHelper.getNextMonth(newDate));
+      cureentMonth = dateFormat.format(StudyDateUtil.getNextMonth(newDate));
     }
 
     return newMap;

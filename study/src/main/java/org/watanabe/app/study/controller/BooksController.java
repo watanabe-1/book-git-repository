@@ -28,6 +28,7 @@ import org.watanabe.app.study.form.BooksForm;
 import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.helper.DownloadHelper;
 import org.watanabe.app.study.service.BooksService;
+import org.watanabe.app.study.util.StudyDateUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -119,7 +120,7 @@ public class BooksController {
 
     List<Books> booksList = booksService.findByUserId(StudyUtil.getLoginUser());
 
-    model.addObject("booksYears", booksHelper.getbetweenYears(
+    model.addObject("booksYears", StudyDateUtil.getbetweenYears(
         booksList.stream().min(Comparator.comparing(Books::getBooksDate)).get().getBooksDate(),
         booksList.stream().max(Comparator.comparing(Books::getBooksDate)).get().getBooksDate()));
     model.addObject("booksTypes", BooksType.values());
@@ -157,7 +158,7 @@ public class BooksController {
       }
 
       booksList = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(date,
-          booksHelper.getEndDateByYear(date), form.getBooksType(), StudyUtil.getLoginUser());
+          StudyDateUtil.getEndDateByYear(date), form.getBooksType(), StudyUtil.getLoginUser());
       baseFileName = form.getBooksYear();
     }
 
@@ -201,19 +202,19 @@ public class BooksController {
     // 日付がパラメーターで指定されていないとき
     if (date == null) {
       // 現在の日付を取得
-      date = booksHelper.getStartDateByMonth(StudyUtil.getNowDate());
+      date = StudyDateUtil.getStartDateByMonth(StudyUtil.getNowDate());
     }
     if (StudyStringUtil.isNullOrEmpty(tab)) {
       tab = booksHelper.getDefaltTab();
     }
 
     List<Books> booksByExpenses = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getStartDateByMonth(date), booksHelper.getEndDateByMonth(date),
+        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date),
         BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
     int sumAmountByExpenses =
         booksByExpenses.stream().mapToInt(book -> book.getBooksAmmount()).sum();
     List<Books> booksByIncome = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getStartDateByMonth(date), booksHelper.getEndDateByMonth(date),
+        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date),
         BooksType.INCOME.getCode(), StudyUtil.getLoginUser());
     int sumAmountByIncome = booksByIncome.stream().mapToInt(book -> book.getBooksAmmount()).sum();
     model.addObject("bookslistByExpenses", booksByExpenses);
@@ -222,8 +223,8 @@ public class BooksController {
     model.addObject("sumAmountByIncome", sumAmountByIncome);
     model.addObject("differenceSumAmount", sumAmountByIncome - sumAmountByExpenses);
     model.addObject("date", date);
-    model.addObject("nextDate", BooksHelper.getNextMonth(date));
-    model.addObject("backDate", BooksHelper.getBackMonth(date));
+    model.addObject("nextDate", StudyDateUtil.getNextMonth(date));
+    model.addObject("backDate", StudyDateUtil.getBackMonth(date));
     model.addObject("tab", tab);
     model.addObject(tab, "active");
 

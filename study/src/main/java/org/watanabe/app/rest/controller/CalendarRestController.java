@@ -23,6 +23,8 @@ import org.watanabe.app.study.enums.type.BooksType;
 import org.watanabe.app.study.form.BooksForm;
 import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.service.BooksService;
+import org.watanabe.app.study.util.StudyDateUtil;
+import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
 /**
@@ -70,13 +72,13 @@ public class CalendarRestController {
         // ヘッダーはとばす
         if (0 < cnt) {
           final String[] split = line.split(",");
-          Date syukujitsuDate = sdFormat.parse(StudyUtil.trimDoubleQuot(split[0]));
+          Date syukujitsuDate = sdFormat.parse(StudyStringUtil.trimDoubleQuot(split[0]));
           // 対象範囲の日付けだけ設定
-          if (booksHelper.getStartDateByMonth(syukujitsuDate)
-              .compareTo(booksHelper.getStartDateByMonth(date)) == 0) {
+          if (StudyDateUtil.getStartDateByMonth(syukujitsuDate)
+              .compareTo(StudyDateUtil.getStartDateByMonth(date)) == 0) {
             Syukujitsu syukujitsu = new Syukujitsu();
             syukujitsu.setDate(syukujitsuDate);
-            syukujitsu.setName(StudyUtil.trimDoubleQuot(split[1]));
+            syukujitsu.setName(StudyStringUtil.trimDoubleQuot(split[1]));
             syukujitsuList.add(syukujitsu);
           }
         }
@@ -103,7 +105,7 @@ public class CalendarRestController {
   public List<Books> calendarByDay(@ModelAttribute BooksForm form, ModelAndView model, Date date) {
     // 対象を取得
     List<Books> books = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        booksHelper.getStartDateByMonth(date), booksHelper.getEndDateByMonth(date),
+        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date),
         BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
 
     return books;

@@ -87,4 +87,18 @@ public class StudyStringUtil {
     return json;
 
   }
+
+  /**
+   * 文字列前後のダブルクォーテーションを削除するFunction
+   * 
+   * @param str 文字列
+   * @return 前後のダブルクォーテーションを削除した文字列
+   */
+  public static String trimDoubleQuot(String str) {
+    char c = '"';
+  
+    return str.charAt(0) == c && str.charAt(str.length() - 1) == c
+        ? str.substring(1, str.length() - 1)
+        : str;
+  }
 }

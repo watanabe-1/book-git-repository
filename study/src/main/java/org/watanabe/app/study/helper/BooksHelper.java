@@ -7,8 +7,6 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +18,7 @@ import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.enums.dbcode.BooksTab;
 import org.watanabe.app.study.util.CodeUtil;
 import org.watanabe.app.study.util.StudyModelUtil;
+import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
 /**
@@ -58,11 +57,11 @@ public class BooksHelper {
         books.setBooksId(UUID.randomUUID().toString());
         books.setUserId(user);
         books.setBooksType(booksType);
-        books.setBooksDate(sdFormat.parse(StudyUtil.trimDoubleQuot(split[0])));
-        books.setBooksPlace(StudyUtil.trimDoubleQuot(split[1]));
-        books.setCatCode(categoryHelper.getCatCode(StudyUtil.trimDoubleQuot(split[2])));
-        books.setBooksMethod(StudyUtil.trimDoubleQuot(split[3]));
-        books.setBooksAmmount(Integer.parseInt(StudyUtil.trimDoubleQuot(split[4])));
+        books.setBooksDate(sdFormat.parse(StudyStringUtil.trimDoubleQuot(split[0])));
+        books.setBooksPlace(StudyStringUtil.trimDoubleQuot(split[1]));
+        books.setCatCode(categoryHelper.getCatCode(StudyStringUtil.trimDoubleQuot(split[2])));
+        books.setBooksMethod(StudyStringUtil.trimDoubleQuot(split[3]));
+        books.setBooksAmmount(Integer.parseInt(StudyStringUtil.trimDoubleQuot(split[4])));
         // 共通項目をセット
         StudyModelUtil.setStudyEntityProperties(books);
         booksList.add(books);
@@ -90,103 +89,12 @@ public class BooksHelper {
   }
 
   /**
-   * その月の最初の日に変換して返却
-   * 
-   * @param date 変更したい日付
-   * @return Date 変換語の日付
-   */
-  public Date getStartDateByMonth(Date date) {
-    return StudyUtil.getEdgeDate(date, StudyUtil.START, Calendar.MONTH);
-  }
-
-  /**
-   * その月の最後の日に変換して返却
-   * 
-   * @param date 変更したい日付
-   * @return Date 変換語の日付
-   */
-  public Date getEndDateByMonth(Date date) {
-    return StudyUtil.getEdgeDate(date, StudyUtil.END, Calendar.MONTH);
-  }
-
-  /**
-   * その年の最初の日に変換して返却
-   * 
-   * @param date 変更したい日付
-   * @return Date 変換語の日付
-   */
-  public Date getStartDateByYear(Date date) {
-    return getStartDateByMonth(StudyUtil.getEdgeDate(date, StudyUtil.START, Calendar.YEAR));
-  }
-
-  /**
-   * その年の最後の日に変換して返却
-   * 
-   * @param date 変更したい日付
-   * @return Date 変換語の日付
-   */
-  public Date getEndDateByYear(Date date) {
-    return getEndDateByMonth(StudyUtil.getEdgeDate(date, StudyUtil.END, Calendar.YEAR));
-  }
-
-  /**
-   * 1年前の月の最初の日を取得
-   * 
-   * @param date 変更したい日付
-   * @return Date 変換語の日付
-   */
-  public Date getOneYearAgoMonth(Date date) {
-    Date startMonth = StudyUtil.calculateDate(date, Calendar.MONTH, -12);
-    return StudyUtil.getEdgeDate(startMonth, StudyUtil.START, Calendar.MONTH);
-  }
-
-  /**
-   * 1月加算してから返却
-   * 
-   * @param date 加算したい日付
-   * @return Date 変換語の日付
-   */
-  public static Date getNextMonth(Date date) {
-    return StudyUtil.calculateDate(date, Calendar.MONTH, 1);
-  }
-
-  /**
-   * 1月減算してしてから返却
-   * 
-   * @param date 減算したい日付
-   * @return Date 変換語の日付
-   */
-  public static Date getBackMonth(Date date) {
-    return StudyUtil.calculateDate(date, Calendar.MONTH, -1);
-  }
-
-  /**
    * 家計簿画面の初期表示のタブを取得
    * 
    * @return 家計簿画面の初期表示のタブ
    */
   public String getDefaltTab() {
     return CodeUtil.getShort(BooksTab.DEFALT_TAB.getListName(), BooksTab.DEFALT_TAB.getCode());
-  }
-
-  /**
-   * 指定した日付けの最小値と最大値の間の年のリストを取得
-   * 
-   * @param min 最小日付
-   * @param max 最大日付
-   * @return 年のリスト
-   */
-  public List<String> getbetweenYears(Date min, Date max) {
-    List<String> result = new ArrayList<>();
-    SimpleDateFormat getYearFormat = new SimpleDateFormat("yyyy");
-    Date currentDate = min;
-
-    while (currentDate.compareTo(max) < 0) {
-      result.add(getYearFormat.format(currentDate));
-      currentDate = StudyUtil.calculateDate(currentDate, Calendar.YEAR, 1);
-    }
-
-    return result;
   }
 
 }
