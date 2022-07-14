@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.watanabe.app.common.logger.LogIdBasedLogger;
-import org.watanabe.app.rest.form.BooksChartByMonthData;
-import org.watanabe.app.rest.form.BooksChartByMonthDatasets;
+import org.watanabe.app.study.column.BooksChartData;
+import org.watanabe.app.study.column.BooksChartDatasets;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.helper.ChartColourHelper;
 
@@ -42,20 +42,20 @@ public class ChartColourRestController {
    * @return json(カテゴリーごとの家計簿情報)
    */
   @RequestMapping(value = "/chartColour/rest/chart", method = RequestMethod.POST)
-  public BooksChartByMonthData chartColourByActive(
+  public BooksChartData chartColourByActive(
       @ModelAttribute @Validated TemplatechartcolourForm form, BindingResult result,
       ModelAndView model, Integer qty) {
     qty = chartColourHelper.getQty(qty);
 
-    BooksChartByMonthDatasets bddd = new BooksChartByMonthDatasets();
+    BooksChartDatasets bddd = new BooksChartDatasets();
     bddd.setBackgroundColor(chartColourHelper.getActiveRgbaList(qty, (float) 0.5));
     bddd.setBorderColor(chartColourHelper.getActiveRgbaList(qty, (float) 1));
     bddd.setData(chartColourHelper.getDummyChartData(qty));
 
-    List<BooksChartByMonthDatasets> dataSets = new ArrayList<>();
+    List<BooksChartDatasets> dataSets = new ArrayList<>();
     dataSets.add(bddd);
 
-    BooksChartByMonthData bdd = new BooksChartByMonthData();
+    BooksChartData bdd = new BooksChartData();
     bdd.setLabels(chartColourHelper.getDummyChartDataLable(qty));
     bdd.setDatasets(dataSets);
 
@@ -71,21 +71,21 @@ public class ChartColourRestController {
    * @return json(カテゴリーごとの家計簿情報)
    */
   @RequestMapping(value = "/chartColour/rest/confirm", method = RequestMethod.POST)
-  public BooksChartByMonthData chartColourBySeed(
+  public BooksChartData chartColourBySeed(
       @ModelAttribute @Validated TemplatechartcolourForm form, ModelAndView model, Integer qty) {
     qty = chartColourHelper.getQty(qty);
 
-    BooksChartByMonthDatasets bddd = new BooksChartByMonthDatasets();
+    BooksChartDatasets bddd = new BooksChartDatasets();
     bddd.setBackgroundColor(chartColourHelper.getRgbaList(qty, (float) 0.5, form.getSeedCoeffR(),
         form.getSeedCoeffG(), form.getSeedCoeffB()));
     bddd.setBorderColor(chartColourHelper.getRgbaList(qty, (float) 1, form.getSeedCoeffR(),
         form.getSeedCoeffG(), form.getSeedCoeffB()));
     bddd.setData(chartColourHelper.getDummyChartData(qty));
 
-    List<BooksChartByMonthDatasets> dataSets = new ArrayList<>();
+    List<BooksChartDatasets> dataSets = new ArrayList<>();
     dataSets.add(bddd);
 
-    BooksChartByMonthData bdd = new BooksChartByMonthData();
+    BooksChartData bdd = new BooksChartData();
     bdd.setLabels(chartColourHelper.getDummyChartDataLable(qty));
     bdd.setDatasets(dataSets);
 

@@ -1,4 +1,4 @@
-package org.watanabe.app.rest.form;
+package org.watanabe.app.study.column;
 
 import java.util.Date;
 import lombok.Data;

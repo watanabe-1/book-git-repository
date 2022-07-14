@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
-import org.watanabe.app.rest.form.Syukujitsu;
+import org.watanabe.app.study.column.Syukujitsu;
 import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.enums.type.BooksType;
 import org.watanabe.app.study.form.BooksForm;

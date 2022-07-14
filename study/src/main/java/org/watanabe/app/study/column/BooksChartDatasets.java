@@ -1,14 +1,14 @@
-package org.watanabe.app.rest.form;
+package org.watanabe.app.study.column;
 
 import java.io.Serializable;
 import java.util.List;
 import lombok.Data;
 
 /**
- * BOOKS:家計簿(家計簿データのドーナツ型チャート-データセット)のjsonクラス
+ * BOOKS:家計簿(家計簿データのチャート-データセット)用クラス
  */
 @Data
-public class BooksChartByMonthDatasets implements Serializable {
+public class BooksChartDatasets implements Serializable {
 
   /**
    * ラベル
