@@ -164,6 +164,64 @@ public class BooksHelper {
    * @return カテゴリーごとの図用データ
    */
   public BooksChartData getChartDatatByYearAll(Date date) {
+    BooksChartData bdd = new BooksChartData();
+    setChartDataByYear(bdd, date);
+
+    return bdd;
+  }
+
+  /**
+   * 1月ごとの家計簿支出データを取得
+   * 
+   * @param date 基準日付
+   * @return 家計簿支出データ
+   */
+  public List<Books> findExpensesByMonth(Date date) {
+    return booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
+        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date),
+        BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
+  }
+
+  /**
+   * 1月ごとの家計簿データを取得
+   * 
+   * @param date 基準日付
+   * @param booksType 家計簿の種類
+   * @return 家計簿データ
+   */
+  public List<Books> findByYearAndType(Date date, String booksType) {
+    return booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
+        StudyDateUtil.getOneYearAgoMonth(date), StudyDateUtil.getEndDateByMonth(date), booksType,
+        StudyUtil.getLoginUser());
+  }
+
+  /**
+   * 1月ごとのデータをセットする
+   * 
+   * @param bdd セット対象
+   * @param booksMap セット元データ
+   */
+  public void setChartDataByMonth(BooksChartData bdd, Map<String, Long> booksMap) {
+    BooksChartDatasets bddd = new BooksChartDatasets();
+    bddd.setBackgroundColor(
+        chartColourHelper.getActiveRgbaList(booksMap.keySet().size(), (float) 0.5));
+    bddd.setBorderColor(chartColourHelper.getActiveRgbaList(booksMap.keySet().size(), (float) 1));
+    bddd.setData(new ArrayList<Long>(booksMap.values()));
+
+    List<BooksChartDatasets> dataSets = new ArrayList<>();
+    dataSets.add(bddd);
+
+    bdd.setLabels(new ArrayList<String>(booksMap.keySet()));
+    bdd.setDatasets(dataSets);
+  }
+
+  /**
+   * 年月ごとのデータをセットする
+   * 
+   * @param bdd セット対象
+   * @param booksMap セット元データ
+   */
+  public void setChartDataByYear(BooksChartData bdd, Date date) {
     final String RGB_WHITE = "rgba(255,255,255,1)";
     final String BAR = "bar";
     final String LINE = "line";
@@ -256,57 +314,10 @@ public class BooksHelper {
     setChartDatasetsByYear(dataSets, barSize, differenceBooksByMonthSumAmountData, date,
         LABEL_SAVE_AMOUNT, LINE, RGB_WHITE, borderColorsByLine.get(indexByLine++), false);
 
-    BooksChartData bdd = new BooksChartData();
+    // セット
     bdd.setDatasets(dataSets);
     bdd.setLabels(new ArrayList<String>(chartColourHelper
         .setEntityMapByYear(new HashMap<>(), StudyDateUtil.getOneYearAgoMonth(date)).keySet()));
-
-    return bdd;
-  }
-
-  /**
-   * 1月ごとの家計簿支出データを取得
-   * 
-   * @param date 基準日付
-   * @return 家計簿支出データ
-   */
-  public List<Books> findExpensesByMonth(Date date) {
-    return booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date),
-        BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
-  }
-
-  /**
-   * 1月ごとの家計簿データを取得
-   * 
-   * @param date 基準日付
-   * @param booksType 家計簿の種類
-   * @return 家計簿データ
-   */
-  public List<Books> findByYearAndType(Date date, String booksType) {
-    return booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        StudyDateUtil.getOneYearAgoMonth(date), StudyDateUtil.getEndDateByMonth(date), booksType,
-        StudyUtil.getLoginUser());
-  }
-
-  /**
-   * 1月ごとのデータをセットする
-   * 
-   * @param bdd セット対象
-   * @param booksMap セット元データ
-   */
-  public void setChartDataByMonth(BooksChartData bdd, Map<String, Long> booksMap) {
-    BooksChartDatasets bddd = new BooksChartDatasets();
-    bddd.setBackgroundColor(
-        chartColourHelper.getActiveRgbaList(booksMap.keySet().size(), (float) 0.5));
-    bddd.setBorderColor(chartColourHelper.getActiveRgbaList(booksMap.keySet().size(), (float) 1));
-    bddd.setData(new ArrayList<Long>(booksMap.values()));
-
-    List<BooksChartDatasets> dataSets = new ArrayList<>();
-    dataSets.add(bddd);
-
-    bdd.setLabels(new ArrayList<String>(booksMap.keySet()));
-    bdd.setDatasets(dataSets);
   }
 
   /**
