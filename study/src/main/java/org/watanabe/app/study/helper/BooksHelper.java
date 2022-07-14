@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -166,6 +167,9 @@ public class BooksHelper {
     final String RGB_WHITE = "rgba(255,255,255,1)";
     final String BAR = "bar";
     final String LINE = "line";
+    final String LABEL_MAX_EXPENSES = "総支出";
+    final String LABEL_MAX_INCOME = "総収入";
+    final String LABEL_SAVE_AMOUNT = "貯金額";
 
     // 支出を取得
     List<Books> booksByExpenses = findByYearAndType(date, BooksType.EXPENSES.getCode());
@@ -180,101 +184,61 @@ public class BooksHelper {
     // ソートしているが意味はない
     // 順番が保証されるLinkedHashMapに詰める
     Map<String, List<Books>> booksByMethodMap = groupByBooksMethodAndSortToList(booksByExpenses);
+    int barSize = booksByMethodMap.keySet().size();
 
-    List<String> backgroundColorsByBar =
-        chartColourHelper.getActiveRgbaList(booksByMethodMap.keySet().size(), (float) 0.5);
-    List<String> borderColorsByBar =
-        chartColourHelper.getActiveRgbaList(booksByMethodMap.keySet().size(), (float) 1);
+    List<String> backgroundColorsByBar = chartColourHelper.getActiveRgbaList(barSize, (float) 0.5);
+    List<String> borderColorsByBar = chartColourHelper.getActiveRgbaList(barSize, (float) 1);
 
     // 方法ごとに集約したのちにさらに月ごとに集約し、月順に並び替え
     int indexByMethod = 0;
     // indexを使用したいためforeachではなくfor文を使用
     for (String keyByMethod : booksByMethodMap.keySet()) {
-      List<Long> data = new ArrayList<>();
       Map<String, Long> booksByMethodAndMonthMap =
           groupByBooksDateAndSortToLong(booksByMethodMap.get(keyByMethod));
 
-      booksByMethodAndMonthMap = chartColourHelper.setEntityMapByYear(booksByMethodAndMonthMap,
-          StudyDateUtil.getOneYearAgoMonth(date));
-      booksByMethodAndMonthMap.forEach((keyByMonth, valueBymethod) -> {
-        data.add(valueBymethod);
-      });
-      BooksChartDatasets bddd = new BooksChartDatasets();
-      bddd.setLabel(keyByMethod);
-      bddd.setType(BAR);
-      bddd.setBackgroundColor(Arrays.asList(backgroundColorsByBar.get(indexByMethod)));
-      bddd.setBorderColor(Arrays.asList(borderColorsByBar.get(indexByMethod)));
-      bddd.setData(data);
-      dataSets.add(bddd);
+      setChartDatasetsByYear(dataSets, dataSets.size(), booksByMethodAndMonthMap, date, keyByMethod,
+          BAR, backgroundColorsByBar.get(indexByMethod), borderColorsByBar.get(indexByMethod),
+          false);
+
       indexByMethod++;
     }
 
     // line
     // カテゴリー
     Map<String, List<Books>> booksByCategoryMap = groupByCatNameAndSortToList(booksByExpenses);
+    int lineSize = booksByCategoryMap.keySet().size() + 3;
 
     // 総支出、総収入、貯金額分も使用のため+3
-    List<String> borderColorsByLine =
-        chartColourHelper.getActiveRgbaList(booksByCategoryMap.keySet().size() + 3, (float) 1);
+    List<String> borderColorsByLine = chartColourHelper.getActiveRgbaList(lineSize, (float) 1);
 
     // 方法ごとに集約したのちにさらに月ごとに集約
     int indexByLine = 0;
     // indexを使用したいためforeachではなくfor文を使用
     for (String keyByCategoryAndMonth : booksByCategoryMap.keySet()) {
-      List<Long> data = new ArrayList<>();
       Map<String, Long> booksByCategoryAndMonthMap =
           groupByBooksDateAndSortToLong(booksByCategoryMap.get(keyByCategoryAndMonth));
 
-      booksByCategoryAndMonthMap = chartColourHelper.setEntityMapByYear(booksByCategoryAndMonthMap,
-          StudyDateUtil.getOneYearAgoMonth(date));
-      booksByCategoryAndMonthMap.forEach((keyByMonth, valueBymethod) -> {
-        data.add(valueBymethod);
-      });
-      BooksChartDatasets bddd = new BooksChartDatasets();
-      bddd.setLabel(keyByCategoryAndMonth);
-      bddd.setType(LINE);
-      bddd.setBackgroundColor(Arrays.asList(RGB_WHITE));
-      bddd.setBorderColor(Arrays.asList(borderColorsByLine.get(indexByLine)));
-      bddd.setData(data);
-      bddd.setHidden(true);
-      dataSets.add(bddd);
+      setChartDatasetsByYear(dataSets, dataSets.size(), booksByCategoryAndMonthMap, date,
+          keyByCategoryAndMonth, LINE, RGB_WHITE, borderColorsByLine.get(indexByLine), true);
+
       indexByLine++;
     }
 
     // 総支出
-    Map<String, Long> _booksByMonthSumAmountDataByExpenses =
+    Map<String, Long> booksByMonthSumAmountDataByExpenses =
         groupByBooksDateAndSortToLong(booksByExpenses);
 
-    Map<String, Long> booksByMonthSumAmountDataByExpenses = chartColourHelper.setEntityMapByYear(
-        _booksByMonthSumAmountDataByExpenses, StudyDateUtil.getOneYearAgoMonth(date));
-    BooksChartDatasets bdddByMonthSumAmountByExpenses = new BooksChartDatasets();
-    bdddByMonthSumAmountByExpenses.setLabel("総支出");
-    bdddByMonthSumAmountByExpenses.setType(LINE);
-    bdddByMonthSumAmountByExpenses.setBackgroundColor(Arrays.asList(RGB_WHITE));
-    bdddByMonthSumAmountByExpenses
-        .setBorderColor(Arrays.asList(borderColorsByLine.get(indexByLine++)));
-    bdddByMonthSumAmountByExpenses
-        .setData(new ArrayList<Long>(booksByMonthSumAmountDataByExpenses.values()));
     // lineの先頭に追加
-    dataSets.add(booksByMethodMap.keySet().size(), bdddByMonthSumAmountByExpenses);
+    setChartDatasetsByYear(dataSets, barSize, booksByMonthSumAmountDataByExpenses, date,
+        LABEL_MAX_EXPENSES, LINE, RGB_WHITE, borderColorsByLine.get(indexByLine++), false);
 
     // 総収入
     Map<String, Long> booksByMonthSumAmountDataByIncome =
         groupByBooksDateAndSortToLong(booksByIncome);
 
-    booksByMonthSumAmountDataByIncome = chartColourHelper.setEntityMapByYear(
-        booksByMonthSumAmountDataByIncome, StudyDateUtil.getOneYearAgoMonth(date));
-    BooksChartDatasets bdddByMonthSumAmountByIncome = new BooksChartDatasets();
-    bdddByMonthSumAmountByIncome.setLabel("総収入");
-    bdddByMonthSumAmountByIncome.setType(LINE);
-    bdddByMonthSumAmountByIncome.setBackgroundColor(Arrays.asList(RGB_WHITE));
-    bdddByMonthSumAmountByIncome
-        .setBorderColor(Arrays.asList(borderColorsByLine.get(indexByLine++)));
-    bdddByMonthSumAmountByIncome
-        .setData(new ArrayList<Long>(booksByMonthSumAmountDataByIncome.values()));
-    bdddByMonthSumAmountByIncome.setHidden(true);
     // lineの先頭に追加
-    dataSets.add(booksByMethodMap.keySet().size(), bdddByMonthSumAmountByIncome);
+    setChartDatasetsByYear(dataSets, barSize, booksByMonthSumAmountDataByIncome, date,
+        LABEL_MAX_INCOME, LINE, RGB_WHITE, borderColorsByLine.get(indexByLine++), true);
 
     // 貯金額
     Map<String, Long> differenceBooksByMonthSumAmountData = new LinkedHashMap<>();
@@ -287,21 +251,15 @@ public class BooksHelper {
         differenceBooksByMonthSumAmountData.put(k, valueByIncome);
       }
     });
-    BooksChartDatasets differenceBdddByMonthSumAmount = new BooksChartDatasets();
-    differenceBdddByMonthSumAmount.setLabel("貯金額");
-    differenceBdddByMonthSumAmount.setType(LINE);
-    differenceBdddByMonthSumAmount.setBackgroundColor(Arrays.asList(RGB_WHITE));
-    differenceBdddByMonthSumAmount
-        .setBorderColor(Arrays.asList(borderColorsByLine.get(indexByLine)));
-    differenceBdddByMonthSumAmount
-        .setData(new ArrayList<Long>(differenceBooksByMonthSumAmountData.values()));
-    differenceBdddByMonthSumAmount.setHidden(false);
-    // lineの先頭
-    dataSets.add(booksByMethodMap.keySet().size(), differenceBdddByMonthSumAmount);
+
+    // lineの先頭に追加
+    setChartDatasetsByYear(dataSets, barSize, differenceBooksByMonthSumAmountData, date,
+        LABEL_SAVE_AMOUNT, LINE, RGB_WHITE, borderColorsByLine.get(indexByLine++), false);
 
     BooksChartData bdd = new BooksChartData();
     bdd.setDatasets(dataSets);
-    bdd.setLabels(new ArrayList<String>(booksByMonthSumAmountDataByExpenses.keySet()));
+    bdd.setLabels(new ArrayList<String>(chartColourHelper
+        .setEntityMapByYear(new HashMap<>(), StudyDateUtil.getOneYearAgoMonth(date)).keySet()));
 
     return bdd;
   }
@@ -355,20 +313,24 @@ public class BooksHelper {
    * 年ごとのデータセットをセットする
    * 
    * @param dataSets セット対象
+   * @param dataSetsIndex 追加場所
+   * @param booksMapByYear 年ごとのデータ
    * @param date 基準日付
    * @param label ラベル
    * @param type タイプ
    * @param backgroundColor バックグラウンドカラー
    * @param borderColor ボーダーカラー
+   * @param isHidden 初期表示をhiddenにするか
    * 
    */
-  public void setChartDatasetsByYear(List<BooksChartDatasets> dataSets, Date date, String label,
-      String type, String backgroundColor, String borderColor, Map<String, Long> booksMap) {
+  public void setChartDatasetsByYear(List<BooksChartDatasets> dataSets, int dataSetsIndex,
+      Map<String, Long> booksMapByYear, Date date, String label, String type,
+      String backgroundColor, String borderColor, boolean isHidden) {
     List<Long> data = new ArrayList<>();
-    booksMap =
-        chartColourHelper.setEntityMapByYear(booksMap, StudyDateUtil.getOneYearAgoMonth(date));
-    booksMap.forEach((keyByMonth, valueBymethod) -> {
-      data.add(valueBymethod);
+    booksMapByYear = chartColourHelper.setEntityMapByYear(booksMapByYear,
+        StudyDateUtil.getOneYearAgoMonth(date));
+    booksMapByYear.forEach((keyByMonth, value) -> {
+      data.add(value);
     });
 
     BooksChartDatasets bddd = new BooksChartDatasets();
@@ -377,7 +339,8 @@ public class BooksHelper {
     bddd.setBackgroundColor(Arrays.asList(backgroundColor));
     bddd.setBorderColor(Arrays.asList(borderColor));
     bddd.setData(data);
-    dataSets.add(bddd);
+    bddd.setHidden(isHidden);
+    dataSets.add(dataSetsIndex, bddd);
   }
 
   /**
