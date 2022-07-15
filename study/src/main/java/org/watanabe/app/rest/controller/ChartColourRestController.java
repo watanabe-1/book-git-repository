@@ -42,10 +42,9 @@ public class ChartColourRestController {
    * @return json(カテゴリーごとの家計簿情報)
    */
   @RequestMapping(value = "/chartColour/rest/chart", method = RequestMethod.POST)
-  public BooksChartData chartColourByActive(
-      @ModelAttribute @Validated TemplatechartcolourForm form, BindingResult result,
-      ModelAndView model, Integer qty) {
-    qty = chartColourHelper.getQty(qty);
+  public BooksChartData chartColourByActive(@ModelAttribute @Validated TemplatechartcolourForm form,
+      BindingResult result, ModelAndView model) {
+    Integer qty = chartColourHelper.getQty(form.getQty());
 
     BooksChartDatasets bddd = new BooksChartDatasets();
     bddd.setBackgroundColor(chartColourHelper.getActiveRgbaList(qty, (float) 0.5));
@@ -71,9 +70,9 @@ public class ChartColourRestController {
    * @return json(カテゴリーごとの家計簿情報)
    */
   @RequestMapping(value = "/chartColour/rest/confirm", method = RequestMethod.POST)
-  public BooksChartData chartColourBySeed(
-      @ModelAttribute @Validated TemplatechartcolourForm form, ModelAndView model, Integer qty) {
-    qty = chartColourHelper.getQty(qty);
+  public BooksChartData chartColourBySeed(@ModelAttribute @Validated TemplatechartcolourForm form,
+      ModelAndView model) {
+    Integer qty = chartColourHelper.getQty(form.getQty());
 
     BooksChartDatasets bddd = new BooksChartDatasets();
     bddd.setBackgroundColor(chartColourHelper.getRgbaList(qty, (float) 0.5, form.getSeedCoeffR(),

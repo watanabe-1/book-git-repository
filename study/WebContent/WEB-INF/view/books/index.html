@@ -35,18 +35,18 @@
 		<div class="row">
 			<div class="col-6">
 				<a class="btn btn-link"
-					th:href="@{/books/list(date = ${#dates.format(backDate, 'yyyy/MM/dd')}, tab = ${tab})}"
+					th:href="@{/books/index(date = ${#dates.format(backDate, 'yyyy/MM/dd')}, tab = ${tab})}"
 					id="datepicker-right">
 					<span data-feather="user-plus">前月</span>
 				</a>
 				<span th:text="${#dates.year(date) + '年' + #dates.month(date) + '月'}" id="selectDate"></span>
 				<a class="btn btn-link"
-					th:href="@{/books/list(date = ${#dates.format(nextDate, 'yyyy/MM/dd')}, tab = ${tab})}"
+					th:href="@{/books/index(date = ${#dates.format(nextDate, 'yyyy/MM/dd')}, tab = ${tab})}"
 					id="datepicker-left">
 					<span data-feather="user-plus">次月</span>
 				</a>
 				<input type="text" name="datepicker" id="js-datepicker" placeholder="日付を選択してください" readonly="readonly">
-				<a hidden th:href="@{/books/list}" id="datepicker"></a>
+				<a hidden th:href="@{/books/index}" id="datepicker"></a>
 			</div>
 			<div class="col-2">
 				<span data-feather="user-plus">総支出：[[${sumAmountByExpenses}]]</span>

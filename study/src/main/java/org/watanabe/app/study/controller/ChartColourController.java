@@ -140,8 +140,9 @@ public class ChartColourController {
 
   @RequestMapping(value = "/chartColour/index", method = RequestMethod.GET)
   public ModelAndView index(@ModelAttribute TemplatechartcolourForm form, ModelAndView model,
-      String tab, @ModelAttribute("model") ModelMap modelMap) {
+      @ModelAttribute("model") ModelMap modelMap) {
     model.setViewName("chartColour/index");
+    String tab = form.getTab();
     // リダイレクトで呼ばれたときのパラメータ-
     String redirectTab = (String) modelMap.get("tab");
 

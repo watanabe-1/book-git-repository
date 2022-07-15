@@ -96,4 +96,13 @@ public class BooksForm implements Serializable {
    */
   private String booksYear;
 
+  /**
+   * 画面：日付け
+   */
+  private Date date;
+
+  /**
+   * 画面：タブ
+   */
+  private String tab;
 }

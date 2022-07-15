@@ -130,8 +130,8 @@ public class BooksHelper {
   public BooksChartData getChartDataByMonthCategory(Date date) {
     // カテゴリーごとに集約し金額の合計を求め、金額が大きい順に並び替え、
     // 順番が保証されるLinkedHashMapに詰める
-    Map<String, Long> booksByCatMap =
-        groupByCatNameAndSortByReversedToLong(findExpensesByMonth(date));
+    Map<String, Long> booksByCatMap = groupByCatNameAndSortByReversedToLong(
+        findByMonthAndType(date, BooksType.EXPENSES.getCode()));
 
     BooksChartData bdd = new BooksChartData();
     setChartDataByMonth(bdd, booksByCatMap);
@@ -148,8 +148,8 @@ public class BooksHelper {
   public BooksChartData getChartDataByMonthMethod(Date date) {
     // 支払い方法ごとに集約し金額の合計を求め、金額が大きい順に並び替え、
     // 順番が保証されるLinkedHashMapに詰める
-    Map<String, Long> booksByMethodMap =
-        groupByBooksMethodAndSortByReversedToLong(findExpensesByMonth(date));
+    Map<String, Long> booksByMethodMap = groupByBooksMethodAndSortByReversedToLong(
+        findByMonthAndType(date, BooksType.EXPENSES.getCode()));
 
     BooksChartData bdd = new BooksChartData();
     setChartDataByMonth(bdd, booksByMethodMap);
@@ -171,19 +171,20 @@ public class BooksHelper {
   }
 
   /**
-   * 1月ごとの家計簿支出データを取得
+   * 1月ごとの家計簿データを取得
    * 
    * @param date 基準日付
-   * @return 家計簿支出データ
+   * @param booksType 家計簿の種類
+   * @return 家計簿データ
    */
-  public List<Books> findExpensesByMonth(Date date) {
+  public List<Books> findByMonthAndType(Date date, String booksType) {
     return booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date),
-        BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
+        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date), booksType,
+        StudyUtil.getLoginUser());
   }
 
   /**
-   * 1月ごとの家計簿データを取得
+   * 年ごとの家計簿データを取得
    * 
    * @param date 基準日付
    * @param booksType 家計簿の種類

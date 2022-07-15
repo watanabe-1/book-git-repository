@@ -19,11 +19,10 @@ import org.watanabe.app.study.column.Syukujitsu;
 import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.enums.type.BooksType;
 import org.watanabe.app.study.form.BooksForm;
-import org.watanabe.app.study.service.BooksService;
+import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.util.StudyDateUtil;
 import org.watanabe.app.study.util.StudyFileUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
-import org.watanabe.app.study.util.StudyUtil;
 
 /**
  * カレンダー表示で使用するajax応答クラス
@@ -33,10 +32,10 @@ import org.watanabe.app.study.util.StudyUtil;
 public class CalendarRestController {
 
   /**
-   * 家計簿 Service
+   * 家計簿 Helper
    */
   @Autowired
-  private BooksService booksService;
+  private BooksHelper booksHelper;
 
   /**
    * 祝日一覧の取得
@@ -93,11 +92,6 @@ public class CalendarRestController {
    */
   @RequestMapping(value = "/books/rest/calendar/AmountByDay", method = RequestMethod.POST)
   public List<Books> calendarByDay(@ModelAttribute BooksForm form, ModelAndView model, Date date) {
-    // 対象を取得
-    List<Books> books = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date),
-        BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
-
-    return books;
+    return booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode());
   }
 }

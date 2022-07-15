@@ -84,6 +84,16 @@ public class TemplatechartcolourForm implements Serializable {
   private String updUser;
 
   /**
+   * 画面：タブ
+   */
+  private String tab;
+
+  /**
+   * 画面：個数
+   */
+  private Integer qty;
+
+  /**
    * シード値算出に使用する係数(R)を設定します.
    * 
    * @param seedCoeffR シード値算出に使用する係数(R)

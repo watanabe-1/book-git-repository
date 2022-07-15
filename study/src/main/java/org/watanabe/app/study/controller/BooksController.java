@@ -184,28 +184,19 @@ public class BooksController {
    * @param date 日付け
    * @return 画面表示用モデル
    */
-  @RequestMapping(value = "/books/list", method = RequestMethod.GET)
-  public ModelAndView list(@ModelAttribute BooksForm form, ModelAndView model, Date date,
-      String tab) {
-    model.setViewName("books/list");
+  @RequestMapping(value = "/books/index", method = RequestMethod.GET)
+  public ModelAndView list(@ModelAttribute BooksForm form, ModelAndView model) {
+    model.setViewName("books/index");
+    Date date = form.getDate() == null ? StudyDateUtil.getStartDateByMonth(StudyUtil.getNowDate())
+        : form.getDate();
+    String tab =
+        StudyStringUtil.isNullOrEmpty(form.getTab()) ? booksHelper.getDefaltTab() : form.getTab();
 
-    // 日付がパラメーターで指定されていないとき
-    if (date == null) {
-      // 現在の日付を取得
-      date = StudyDateUtil.getStartDateByMonth(StudyUtil.getNowDate());
-    }
-    if (StudyStringUtil.isNullOrEmpty(tab)) {
-      tab = booksHelper.getDefaltTab();
-    }
-
-    List<Books> booksByExpenses = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date),
-        BooksType.EXPENSES.getCode(), StudyUtil.getLoginUser());
+    List<Books> booksByExpenses =
+        booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode());
+    List<Books> booksByIncome = booksHelper.findByMonthAndType(date, BooksType.INCOME.getCode());
     int sumAmountByExpenses =
         booksByExpenses.stream().mapToInt(book -> book.getBooksAmmount()).sum();
-    List<Books> booksByIncome = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date),
-        BooksType.INCOME.getCode(), StudyUtil.getLoginUser());
     int sumAmountByIncome = booksByIncome.stream().mapToInt(book -> book.getBooksAmmount()).sum();
     model.addObject("bookslistByExpenses", booksByExpenses);
     model.addObject("bookslistByIncome", booksByIncome);

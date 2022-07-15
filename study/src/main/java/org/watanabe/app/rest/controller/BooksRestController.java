@@ -1,6 +1,5 @@
 package org.watanabe.app.rest.controller;
 
-import java.util.Date;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,9 +36,8 @@ public class BooksRestController {
    * @return json(カテゴリーごとの家計簿情報)
    */
   @RequestMapping(value = "/books/rest/chart/byMonth/category", method = RequestMethod.POST)
-  public BooksChartData chartByMonthCategory(@ModelAttribute BooksForm form, ModelAndView model,
-      Date date) {
-    return booksHelper.getChartDataByMonthCategory(date);
+  public BooksChartData chartByMonthCategory(@ModelAttribute BooksForm form, ModelAndView model) {
+    return booksHelper.getChartDataByMonthCategory(form.getDate());
   }
 
   /**
@@ -51,9 +49,8 @@ public class BooksRestController {
    * @return json(支払いごとの家計簿情報)
    */
   @RequestMapping(value = "/books/rest/chart/byMonth/method", method = RequestMethod.POST)
-  public BooksChartData chartByMonthMethod(@ModelAttribute BooksForm form, ModelAndView model,
-      Date date) {
-    return booksHelper.getChartDataByMonthMethod(date);
+  public BooksChartData chartByMonthMethod(@ModelAttribute BooksForm form, ModelAndView model) {
+    return booksHelper.getChartDataByMonthMethod(form.getDate());
   }
 
   /**
@@ -65,9 +62,8 @@ public class BooksRestController {
    * @return json(カテゴリーごとの家計簿情報)
    */
   @RequestMapping(value = "/books/rest/chart/byYear/all", method = RequestMethod.POST)
-  public BooksChartData chartByYearAll(@ModelAttribute BooksForm form, ModelAndView model,
-      Date date) {
-    return booksHelper.getChartDatatByYearAll(date);
+  public BooksChartData chartByYearAll(@ModelAttribute BooksForm form, ModelAndView model) {
+    return booksHelper.getChartDatatByYearAll(form.getDate());
   }
 
 
