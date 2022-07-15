@@ -71,8 +71,7 @@ public class StudyDateUtil {
    * @return String 変換語の日付
    */
   public static Date calculateDate(Date date, int field, int amount) {
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(date);
+    Calendar cal = dateToCalendar(date);
     // 計算
     cal.add(field, amount);
 
@@ -155,51 +154,33 @@ public class StudyDateUtil {
    * 
    * @param date 変更したい日付
    * @param type "start" or "end"
-   * @param field 計算したい日付の種類(年、月、日、時間、分) Calendar.YEARなどを利用して指定
+   * @param dateType 計算したい日付の種類(年、月、日、時間、分) Calendar.YEARなどを利用して指定
    * @return Date 変換語の日付
    */
   public static Date getEdgeDate(Date date, String type, int dateType) {
-    int amount = START.equals(type) ? -1 : 1;
-    String fm = "";
+    Calendar cal = dateToCalendar(date);
     int field = 0;
 
     if (Objects.equals(Calendar.YEAR, dateType)) {
-      fm = FMT_YEAR;
       field = Calendar.MONTH;
     } else if (Objects.equals(Calendar.MONTH, dateType)) {
-      fm = FMT_MONTH;
       field = Calendar.DATE;
     } else if (Objects.equals(Calendar.DATE, dateType)) {
-      fm = FMT_DAY;
       field = Calendar.HOUR;
     } else if (Objects.equals(Calendar.HOUR, dateType)) {
-      fm = FMT_HOUR;
       field = Calendar.MINUTE;
     } else if (Objects.equals(Calendar.MINUTE, dateType)) {
-      fm = FMT_MINUTE;
       field = Calendar.SECOND;
     } else {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
     }
 
-    Date currentDate = date;
-    String fmDate = dateToStr(date, fm);
-    String currentFmDate = fmDate;
-    int cnt = 0;
+    // 初もしくは末の値を取得
+    int value = START.equals(type) ? cal.getActualMinimum(field) : cal.getActualMaximum(field);
+    // 取得した値をセット
+    cal.set(field, value);
 
-    // 無限ループ防止のため1000周以下の条件を追加
-    while (cnt < 1000) {
-      currentDate = calculateDate(date, field, amount);
-      currentFmDate = dateToStr(currentDate, fm);
-      if (fmDate.equals(currentFmDate)) {
-        date = currentDate;
-      } else {
-        break;
-      }
-      cnt++;
-    }
-
-    return date;
+    return cal.getTime();
   }
 
   /**
@@ -271,6 +252,19 @@ public class StudyDateUtil {
     ZoneId timeZone = ZoneId.systemDefault();
 
     return date.toInstant().atZone(timeZone).toLocalDate();
+  }
+
+  /**
+   * DateからCalendarに変換
+   * 
+   * @param date 変換対象
+   * @return Calendar
+   */
+  public static Calendar dateToCalendar(Date date) {
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(date);
+
+    return cal;
   }
 
   /**
