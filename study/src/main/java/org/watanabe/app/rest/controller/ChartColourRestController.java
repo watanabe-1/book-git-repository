@@ -1,7 +1,5 @@
 package org.watanabe.app.rest.controller;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.watanabe.app.common.logger.LogIdBasedLogger;
 import org.watanabe.app.study.column.BooksChartData;
-import org.watanabe.app.study.column.BooksChartDatasets;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.helper.ChartColourHelper;
 
@@ -44,21 +41,7 @@ public class ChartColourRestController {
   @RequestMapping(value = "/chartColour/rest/chart", method = RequestMethod.POST)
   public BooksChartData chartColourByActive(@ModelAttribute @Validated TemplatechartcolourForm form,
       BindingResult result, ModelAndView model) {
-    Integer qty = chartColourHelper.getQty(form.getQty());
-
-    BooksChartDatasets bddd = new BooksChartDatasets();
-    bddd.setBackgroundColor(chartColourHelper.getActiveRgbaList(qty, (float) 0.5));
-    bddd.setBorderColor(chartColourHelper.getActiveRgbaList(qty, (float) 1));
-    bddd.setData(chartColourHelper.getDummyChartData(qty));
-
-    List<BooksChartDatasets> dataSets = new ArrayList<>();
-    dataSets.add(bddd);
-
-    BooksChartData bdd = new BooksChartData();
-    bdd.setLabels(chartColourHelper.getDummyChartDataLable(qty));
-    bdd.setDatasets(dataSets);
-
-    return bdd;
+    return chartColourHelper.getActiveChartData(chartColourHelper.getQty(form.getQty()));
   }
 
   /**
@@ -72,23 +55,8 @@ public class ChartColourRestController {
   @RequestMapping(value = "/chartColour/rest/confirm", method = RequestMethod.POST)
   public BooksChartData chartColourBySeed(@ModelAttribute @Validated TemplatechartcolourForm form,
       ModelAndView model) {
-    Integer qty = chartColourHelper.getQty(form.getQty());
-
-    BooksChartDatasets bddd = new BooksChartDatasets();
-    bddd.setBackgroundColor(chartColourHelper.getRgbaList(qty, (float) 0.5, form.getSeedCoeffR(),
-        form.getSeedCoeffG(), form.getSeedCoeffB()));
-    bddd.setBorderColor(chartColourHelper.getRgbaList(qty, (float) 1, form.getSeedCoeffR(),
-        form.getSeedCoeffG(), form.getSeedCoeffB()));
-    bddd.setData(chartColourHelper.getDummyChartData(qty));
-
-    List<BooksChartDatasets> dataSets = new ArrayList<>();
-    dataSets.add(bddd);
-
-    BooksChartData bdd = new BooksChartData();
-    bdd.setLabels(chartColourHelper.getDummyChartDataLable(qty));
-    bdd.setDatasets(dataSets);
-
-    return bdd;
+    return chartColourHelper.getChartDataByCoeff(chartColourHelper.getQty(form.getQty()),
+        form.getSeedCoeffR(), form.getSeedCoeffG(), form.getSeedCoeffB());
   }
 
 }

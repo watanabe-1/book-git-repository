@@ -158,7 +158,6 @@ public class StudyDateUtil {
    * @return Date 変換語の日付
    */
   public static Date getEdgeDate(Date date, String type, int dateType) {
-    Calendar cal = dateToCalendar(date);
     int field = 0;
 
     if (Objects.equals(Calendar.YEAR, dateType)) {
@@ -175,8 +174,10 @@ public class StudyDateUtil {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
     }
 
+    Calendar cal = dateToCalendar(date);
     // 初もしくは末の値を取得
-    int value = START.equals(type) ? cal.getActualMinimum(field) : cal.getActualMaximum(field);
+    int value =
+        Objects.equals(START, type) ? cal.getActualMinimum(field) : cal.getActualMaximum(field);
     // 取得した値をセット
     cal.set(field, value);
 

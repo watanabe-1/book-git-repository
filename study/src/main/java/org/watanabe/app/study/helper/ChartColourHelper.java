@@ -11,6 +11,8 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.watanabe.app.common.logger.LogIdBasedLogger;
+import org.watanabe.app.study.column.BooksChartData;
+import org.watanabe.app.study.column.BooksChartDatasets;
 import org.watanabe.app.study.entity.Templatechartcolour;
 import org.watanabe.app.study.enums.dbcode.ChartColourNum;
 import org.watanabe.app.study.enums.dbcode.ChartColourTab;
@@ -45,6 +47,64 @@ public class ChartColourHelper {
    * ダミーデータラベル作成用基準値
    */
   private static final String STANDARD_DATA_LABEL = "項目";
+
+  /**
+   * 図用データをシード値指定で取得
+   * 
+   * @param qty 個数
+   * @param coeffR シード値作成のための係数R
+   * @param coeffG シード値作成のための係数G
+   * @param coeffB シード値作成のための係数B
+   * @return カテゴリーごとの図用データ
+   */
+  public BooksChartData getChartDataByCoeff(Integer qty, int coeffR, int coeffG, int coeffB) {
+    BooksChartData bdd = new BooksChartData();
+    setDummyChartDatat(bdd, qty, getRgbaList(qty, (float) 0.5, coeffR, coeffG, coeffB),
+        getRgbaList(qty, (float) 1, coeffR, coeffG, coeffB));
+
+    return bdd;
+  }
+
+  /**
+   * アクティブな図用データ取得
+   * 
+   * @param qty 個数
+   * @return カテゴリーごとの図用データ
+   */
+  public BooksChartData getActiveChartData(Integer qty) {
+    BooksChartData bdd = new BooksChartData();
+    setDummyChartDatat(bdd, qty, getActiveRgbaList(qty, (float) 0.5),
+        getActiveRgbaList(qty, (float) 1));
+
+    return bdd;
+  }
+
+  /**
+   * ダミー図用データをセット
+   * 
+   * @param bdd セット対象
+   * @param qty 個数
+   * @param coeffR シード値作成のための係数R
+   * @param coeffG シード値作成のための係数G
+   * @param coeffB シード値作成のための係数B
+   * @return カテゴリーごとの図用データ
+   */
+  public void setDummyChartDatat(BooksChartData bdd, Integer qty, List<String> backgroundColor,
+      List<String> borderColor) {
+
+    BooksChartDatasets bddd = new BooksChartDatasets();
+    bddd.setBackgroundColor(backgroundColor);
+    bddd.setBorderColor(borderColor);
+    bddd.setData(getDummyChartData(qty));
+
+    List<BooksChartDatasets> dataSets = new ArrayList<>();
+    dataSets.add(bddd);
+
+    bdd.setLabels(getDummyChartDataLable(qty));
+    bdd.setDatasets(dataSets);
+  }
+
+
 
   /**
    * 設定されている色テンプレートを取得
