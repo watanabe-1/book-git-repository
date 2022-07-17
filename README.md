@@ -6,7 +6,7 @@
     - node.jsのnpmコマンドを使用 → [node.js](https://nodejs.org/ja/)
 2. package.jsonをもとに自環境にライブラリーをインストール
     - book-git-repository\npmで`npm install`コマンドを実施
-    - book-git-repository\npm\npm_install.batに上記コマンドを記載
+    - book-git-repository\npm\npm_install.batを実行すると上記コマンドが実行される
 3. インストールしたモジュールから本プロジェクトで使用している下記ファイルのみ、下記パスに移動させる
     - book-git-repository\npm\copy_node_modules.batを実行することで指定のフォルダにファイルの配置が行われる
 
