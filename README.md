@@ -9,6 +9,7 @@
     - book-git-repository\npm\npm_install.batを実行すると上記コマンドが実行される
 3. インストールしたモジュールから本プロジェクトで使用している下記ファイルのみ、下記パスに移動させる
     - book-git-repository\npm\copy_node_modules.batを実行することで指定のフォルダにファイルの配置が行われる
+4. book-git-repository\study\WebContent\images内の画像を好きな画像に変更する
 
 ### bootstrap
 > node_modules\bootstrap\dist\js\bootstrap.min.js  
