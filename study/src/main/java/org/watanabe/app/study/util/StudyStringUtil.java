@@ -46,7 +46,7 @@ public class StudyStringUtil {
    * @param str 置換対象
    * @param target 置換文字列
    * @param addPath 置換語文字列
-   * @return String 結合したパス
+   * @return String 置換結果
    */
   public static String replaceFirstOneLeft(String str, String target, String replaceMent) {
     // 置換対象が文字列の先頭ににあった場合のみ置換、それ以外は置換せずに返却
@@ -59,7 +59,7 @@ public class StudyStringUtil {
    * @param str 置換対象
    * @param target 置換文字列
    * @param addPath 置換語文字列
-   * @return String 結合したパス
+   * @return String 置換結果
    */
   public static String replaceFirstOneRight(String str, String target, String replaceMent) {
     // 置換対象が文字列の最後尾ににあった場合のみ置換、それ以外は置換せずに返却
@@ -97,7 +97,7 @@ public class StudyStringUtil {
    */
   public static String trimDoubleQuot(String str) {
     char c = '"';
-  
+
     return str.charAt(0) == c && str.charAt(str.length() - 1) == c
         ? str.substring(1, str.length() - 1)
         : str;
@@ -112,7 +112,7 @@ public class StudyStringUtil {
   public static String createUrlParam(Map<String, String> param) {
     int index = 0;
     StringBuffer sb = new StringBuffer();
-  
+
     for (String key : param.keySet()) {
       if (index == 0) {
         sb.append("?");
@@ -122,7 +122,7 @@ public class StudyStringUtil {
       sb.append(key).append("=").append(param.get(key));
       index++;
     }
-  
+
     return sb.toString();
   }
 }

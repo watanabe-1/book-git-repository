@@ -45,4 +45,5 @@ public class AppConfig implements WebMvcConfigurer {
     // これを許可することによって静的コンテンツ(cssやjsなど)へのアクセスを許可
     configurer.enable();
   }
+
 }

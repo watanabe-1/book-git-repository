@@ -146,6 +146,7 @@ public class StudyDateUtil {
    */
   public static Date getOneYearAgoMonth(Date date) {
     Date startMonth = calculateDate(date, Calendar.MONTH, -12);
+
     return getEdgeDate(startMonth, START, Calendar.MONTH);
   }
 
