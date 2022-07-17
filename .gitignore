@@ -65,7 +65,14 @@ hs_err_pid*
 # .gradle
 # !gradle-wrapper.jar
 
-
+# npm
+/npm/node_modules/
+# /npm/js/
+# /npm/css/
+/npm/log/
+/npm/package-lock.json
+/study/WebContent/js/npm
+/study/WebContent/css/npm
 
 
 

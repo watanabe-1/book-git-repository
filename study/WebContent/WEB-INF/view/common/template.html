@@ -14,10 +14,10 @@
   <meta name="_csrf_parameterName" th:content="${_csrf.parameterName}" />
   <title th:replace="${title}"></title>
   <!-- 全画面共通のcssを定義 -->
-  <link th:href="@{/css/bootstrap/bootstrap.css}" rel="stylesheet">
-  <link th:href="@{/css/bootstrap/bootstrap-icons.css}" rel="stylesheet">
-  <link th:href="@{/css/flatpickr/flatpickr.min.css}" rel="stylesheet">
-  <link th:href="@{/css/flatpickr/plugins/monthSelect/style.css}" rel="stylesheet">
+  <link th:href="@{/css/npm/bootstrap/bootstrap.css}" rel="stylesheet">
+  <link th:href="@{/css/npm/bootstrap/bootstrap-icons.css}" rel="stylesheet">
+  <link th:href="@{/css/npm/flatpickr/flatpickr.min.css}" rel="stylesheet">
+  <link th:href="@{/css/npm/flatpickr/plugins/monthSelect/style.css}" rel="stylesheet">
   <!-- 各画面専用のcssを定義 -->
   <th:block th:if="${#!strings.isEmpty(links)}" th:replace="${links}"></th:block>
   <!--共通サイドバーcssの読み込み -->
@@ -42,12 +42,12 @@
   </div>
 
   <!-- 全画面共通のjavascriptを定義 -->
-  <script th:src="@{/js/popper.js/dist/umd/popper.min.js}"></script>
-  <script th:src="@{/js/bootstrap/bootstrap.min.js}"></script>
-  <script th:src="@{/js/flatpickr/dist/flatpickr.min.js}"></script>
-  <script th:src="@{/js/flatpickr/dist/plugins/monthSelect/index.js}"></script>
-  <script th:src="@{/js/flatpickr/dist/l10n/ja.js}"></script>
-  <script th:src="@{/js/chart.js/dist/chart.js}"></script>
+  <script th:src="@{/js/npm/popper.js/popper.min.js}"></script>
+  <script th:src="@{/js/npm/bootstrap/bootstrap.min.js}"></script>
+  <script th:src="@{/js/npm/flatpickr/flatpickr.min.js}"></script>
+  <script th:src="@{/js/npm/flatpickr/plugins/monthSelect/index.js}"></script>
+  <script th:src="@{/js/npm/flatpickr/l10n/ja.js}"></script>
+  <script th:src="@{/js/npm/chart.js/chart.min.js}"></script>
   <script th:src="@{/js/study/util/studyUtil.js}"></script>
   <script th:src="@{/js/study/chart/studyChart.js}"></script>
   <script th:src="@{/js/study/calendar/studyCalendar.js}"></script>
