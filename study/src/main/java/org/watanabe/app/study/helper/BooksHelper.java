@@ -23,6 +23,7 @@ import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.study.column.BooksChartData;
 import org.watanabe.app.study.column.BooksChartDatasets;
+import org.watanabe.app.study.column.BooksColumn;
 import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.enums.dbcode.BooksTab;
 import org.watanabe.app.study.enums.type.BooksType;
@@ -184,16 +185,35 @@ public class BooksHelper {
   }
 
   /**
-   * 年ごとの家計簿データを取得
+   * 基準日から1年前までの家計簿データを取得
    * 
    * @param date 基準日付
    * @param booksType 家計簿の種類
    * @return 家計簿データ
    */
-  public List<Books> findByYearAndType(Date date, String booksType) {
+  public List<Books> findOneYearAgoByDateAndType(Date date, String booksType) {
     return booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
         StudyDateUtil.getOneYearAgoMonth(date), StudyDateUtil.getEndDateByMonth(date), booksType,
         StudyUtil.getLoginUser());
+  }
+
+  /**
+   * 基準年の家計簿データを取得<br>
+   * 基準年がnullの場合は全年度のデータ取得
+   * 
+   * @param date 基準日付
+   * @param booksType 家計簿の種類
+   * @return 家計簿データ
+   */
+  public List<Books> finByYearAndType(String dateStr, String booksType) {
+    if (StudyStringUtil.isNullOrEmpty(dateStr)) {
+      return booksService.findByBooksTypeAndUserIdJoinCategory(booksType, StudyUtil.getLoginUser());
+    } else {
+      Date date = StudyDateUtil.strToDate(dateStr, StudyDateUtil.FMT_YEAR);
+
+      return booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(date,
+          StudyDateUtil.getEndDateByYear(date), booksType, StudyUtil.getLoginUser());
+    }
   }
 
   /**
@@ -231,9 +251,9 @@ public class BooksHelper {
     final String LABEL_SAVE_AMOUNT = "貯金額";
 
     // 支出を取得
-    List<Books> booksByExpenses = findByYearAndType(date, BooksType.EXPENSES.getCode());
+    List<Books> booksByExpenses = findOneYearAgoByDateAndType(date, BooksType.EXPENSES.getCode());
     // 収入を取得
-    List<Books> booksByIncome = findByYearAndType(date, BooksType.INCOME.getCode());;
+    List<Books> booksByIncome = findOneYearAgoByDateAndType(date, BooksType.INCOME.getCode());;
 
     // セット対象
     List<BooksChartDatasets> dataSets = new ArrayList<>();
@@ -451,6 +471,20 @@ public class BooksHelper {
         // 順番が保証されるLinkedHashMapに詰める
         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1,
             LinkedHashMap::new));
+  }
+
+  /**
+   * booksリストをBooksColumnリストに変換
+   * 
+   * @param target 対象 List<Books>
+   * @return List<BooksColumn>
+   */
+  public List<BooksColumn> listBooksToListBooksColumn(List<Books> target) {
+    return target.stream()
+        .map(e -> new BooksColumn(StudyDateUtil.getYearMonthDay(e.getBooksDate()),
+            e.getBooksPlace(), e.getCatCodes().getCatName(), e.getBooksMethod(),
+            String.valueOf(e.getBooksAmmount())))
+        .collect(Collectors.toList());
   }
 
 }

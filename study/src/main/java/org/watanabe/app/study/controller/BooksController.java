@@ -1,10 +1,8 @@
 package org.watanabe.app.study.controller;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -19,7 +17,6 @@ import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.enums.type.BooksType;
 import org.watanabe.app.study.form.BooksForm;
 import org.watanabe.app.study.helper.BooksHelper;
-import org.watanabe.app.study.helper.DownloadHelper;
 import org.watanabe.app.study.service.BooksService;
 import org.watanabe.app.study.util.StudyDateUtil;
 import org.watanabe.app.study.util.StudyFileUtil;
@@ -46,12 +43,6 @@ public class BooksController {
    */
   @Autowired
   private BooksHelper booksHelper;
-
-  /**
-   * ファイルダウンロード Helper
-   */
-  @Autowired
-  private DownloadHelper downloadHelper;
 
   /**
    * 家計簿登録画面
@@ -123,38 +114,25 @@ public class BooksController {
    * 
    * @param form 送信されたデータ
    * @param model モデル
-   * @return beenView名
+   * @return beenView名(viewパッケージ配下に定義)
    */
   @RequestMapping(value = "/books/download", method = RequestMethod.POST)
-  public String download(@ModelAttribute BooksForm form, ModelAndView model) {
-    List<Books> booksList = new ArrayList<>();
-    String baseFileNameType = "";
+  public ModelAndView download(@ModelAttribute BooksForm form, ModelAndView model) {
+    model.setViewName("downloadCsvView");
 
-    if (StudyStringUtil.isNullOrEmpty(form.getBooksYear())) {
-      booksList = booksService.findByBooksTypeAndUserIdJoinCategory(form.getBooksType(),
-          StudyUtil.getLoginUser());
-      baseFileNameType = "ALL";
-    } else {
-      Date date = StudyDateUtil.strToDate(form.getBooksYear(), StudyDateUtil.FMT_YEAR);
-      booksList = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(date,
-          StudyDateUtil.getEndDateByYear(date), form.getBooksType(), StudyUtil.getLoginUser());
-      baseFileNameType = form.getBooksYear();
-    }
-
-    List<BooksColumn> columnList = booksList.stream()
-        .map(e -> new BooksColumn(StudyDateUtil.getYearMonthDay(e.getBooksDate()),
-            e.getBooksPlace(), e.getCatCodes().getCatName(), e.getBooksMethod(),
-            String.valueOf(e.getBooksAmmount())))
-        .collect(Collectors.toList());
+    String fileNameType =
+        StudyStringUtil.isNullOrEmpty(form.getBooksYear()) ? "ALL" : form.getBooksYear();
+    List<BooksColumn> columnList = booksHelper.listBooksToListBooksColumn(
+        booksHelper.finByYearAndType(form.getBooksYear(), form.getBooksType()));
 
     StringBuffer sb = new StringBuffer();
     sb.append("家計簿_").append(BooksType.codeOf(form.getBooksType()).getName()).append("_")
-        .append(baseFileNameType).append(".csv");
+        .append(fileNameType).append(".csv");
 
     model.addObject(StudyFileUtil.MODEL_KEY_FILE_NAME, sb.toString());
     model.addObject(StudyFileUtil.MODEL_KEY_FILE_DATA, columnList);
 
-    return "downloadCsvView";
+    return model;
   }
 
   /**
