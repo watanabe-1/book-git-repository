@@ -29,7 +29,8 @@ public class DownloadCsvView extends AbstractDownloadTextFileView { // (2)
   @Override
   protected byte[] getFileData(ModelMap model) {
     return StudyStringUtil
-        .objectToCsvStr(model.getAttribute(StudyFileUtil.MODEL_KEY_FILE_DATA), true)
+        .objectToCsvStr(model.getAttribute(StudyFileUtil.MODEL_KEY_FILE_DATA),
+            (Class<?>) model.getAttribute(StudyFileUtil.MODEL_KEY_FILE_DATA_CLASS), true)
         .getBytes(StandardCharsets.UTF_8);
   }
 }

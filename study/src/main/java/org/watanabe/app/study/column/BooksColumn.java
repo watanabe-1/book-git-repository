@@ -1,6 +1,9 @@
 package org.watanabe.app.study.column;
 
 import java.io.Serializable;
+import java.util.Date;
+import org.watanabe.app.study.util.StudyDateUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
@@ -20,7 +23,8 @@ public class BooksColumn implements Serializable {
    * 日付(収入日、購入日)
    */
   @JsonProperty("日付(収入日、購入日)")
-  private String booksDate;
+  @JsonFormat(pattern = StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH)
+  private Date booksDate;
 
   /**
    * 場所(収入元、購入先)
@@ -44,6 +48,6 @@ public class BooksColumn implements Serializable {
    * 金額
    */
   @JsonProperty("金額")
-  private String booksAmmount;
+  private Integer booksAmmount;
 
 }

@@ -1,9 +1,5 @@
 package org.watanabe.app.rest.controller;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,16 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
-import org.watanabe.app.study.column.Syukujitsu;
+import org.watanabe.app.study.column.SyukujitsuColumn;
 import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.enums.type.BooksType;
 import org.watanabe.app.study.form.BooksForm;
 import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.util.StudyDateUtil;
 import org.watanabe.app.study.util.StudyFileUtil;
-import org.watanabe.app.study.util.StudyStringUtil;
 
 /**
  * カレンダー表示で使用するajax応答クラス
@@ -46,40 +39,15 @@ public class CalendarRestController {
    * @return json(祝日一覧情報)
    */
   @RequestMapping(value = "/books/rest/calendar/syukujitsu", method = RequestMethod.POST)
-  public List<Syukujitsu> calendarBySyukujitsu(@ModelAttribute BooksForm form, ModelAndView model,
+  public List<SyukujitsuColumn> calendarBySyukujitsu(@ModelAttribute BooksForm form, ModelAndView model,
       Date date) {
     // 祝日定義ファイルの取得
     ClassPathResource syukujitsuFile = new ClassPathResource("csv/syukujitsu.csv");
-    // 文字コードの判定
-    String charset = StudyFileUtil.detectFileEncoding(syukujitsuFile);
-    List<Syukujitsu> syukujitsuList = new ArrayList<Syukujitsu>();
-    int cnt = 0;
+    List<SyukujitsuColumn> syukujitsuList =
+        StudyFileUtil.csvFileToList(syukujitsuFile, SyukujitsuColumn.class, true);
 
-    try (BufferedReader br =
-        new BufferedReader(new InputStreamReader(syukujitsuFile.getInputStream(), charset))) {
-      String line = null;
-      while ((line = br.readLine()) != null) {
-        // ヘッダーはとばす
-        if (0 < cnt) {
-          final String[] split = line.split(",");
-          Date syukujitsuDate = StudyDateUtil.strToDate(StudyStringUtil.trimDoubleQuot(split[0]),
-              StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH);
-          // 対象範囲の日付けだけ設定
-          if (StudyDateUtil.getStartDateByMonth(syukujitsuDate)
-              .compareTo(StudyDateUtil.getStartDateByMonth(date)) == 0) {
-            Syukujitsu syukujitsu = new Syukujitsu();
-            syukujitsu.setDate(syukujitsuDate);
-            syukujitsu.setName(StudyStringUtil.trimDoubleQuot(split[1]));
-            syukujitsuList.add(syukujitsu);
-          }
-        }
-        cnt++;
-      }
-    } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
-    }
-
-    return syukujitsuList;
+    return syukujitsuList.stream().filter(col -> StudyDateUtil.getStartDateByMonth(col.getDate())
+        .compareTo(StudyDateUtil.getStartDateByMonth(date)) == 0).toList();
   }
 
   /**

@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.Objects;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
-import org.watanabe.app.study.column.BooksColumn;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
@@ -15,6 +14,16 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
  * 文字列を扱うutilクラス
  */
 public class StudyStringUtil {
+
+  /**
+   * csvの区切り文字
+   */
+  public static final char SEPARATOR_BY_CSV = ',';
+
+  /**
+   * tsvの区切り文字
+   */
+  public static final char SEPARATOR_BY_TSV = '\t';
 
   /**
    * null、もしくは空文字の判断を行う
@@ -74,6 +83,37 @@ public class StudyStringUtil {
   }
 
   /**
+   * csv形式の一行を分割
+   * 
+   * @param line 分割対象
+   * @return 分割結果
+   */
+  public static String[] splitByCsv(String line) {
+    return split(line, SEPARATOR_BY_CSV);
+  }
+
+  /**
+   * csv形式の一行を分割
+   * 
+   * @param line 分割対象
+   * @return 分割結果
+   */
+  public static String[] splitByTsv(String line) {
+    return split(line, SEPARATOR_BY_TSV);
+  }
+
+  /**
+   * 文字列を区切り文字基準に分割
+   * 
+   * @param line 分割対象
+   * @param sep 区切り文字
+   * @return 分割結果
+   */
+  public static String[] split(String line, char sep) {
+    return line.split(String.valueOf(sep));
+  }
+
+  /**
    * オブジェクトをjsonに変換
    * 
    * @param target 変換対象
@@ -97,28 +137,61 @@ public class StudyStringUtil {
    * オブジェクトをcsvに変換
    * 
    * @param target 変換対象
+   * @param pojoType カラム情報が記載されているクラス
    * @param isHeadder ヘッダーをつけるか
-   * @return String json文字列
+   * @return String csv文字列
    */
-  public static String objectToCsvStr(Object target, boolean isHeadder) {
-    CsvMapper mapper = new CsvMapper();
-    // 文字列にダブルクオートをつける
-    mapper.configure(CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS, true);
-    String csv = null;
+  public static String objectToCsvStr(Object target, Class<?> pojoType, boolean isHeadder) {
+    return objectToStrByCsvMapper(target, pojoType, SEPARATOR_BY_CSV, isHeadder, true);
+  }
 
-    // ヘッダをつける
-    CsvSchema schema = mapper.schemaFor(BooksColumn.class).withHeader();
+  /**
+   * オブジェクトをtsvに変換
+   * 
+   * @param target 変換対象
+   * @param pojoType カラム情報が記載されているクラス
+   * @param isHeadder ヘッダーをつけるか
+   * @return String tsv文字列
+   */
+  public static String objectToTsvStr(Object target, Class<?> pojoType, boolean isHeadder) {
+    return objectToStrByCsvMapper(target, pojoType, SEPARATOR_BY_TSV, isHeadder, false);
+  }
+
+  /**
+   * オブジェクトを文字列に変換
+   * 
+   * @param target 変換対象
+   * @param pojoType カラム情報が記載されているクラス
+   * @param sep 区切り文字
+   * @param isHeadder ヘッダーをつけるか
+   * @param isQuote 文字列にダブルクオートをつけるか
+   * @return String 文字列
+   */
+  public static String objectToStrByCsvMapper(Object target, Class<?> pojoType, char sep,
+      boolean isHeadder, boolean isQuote) {
+    String result = null;
+    CsvMapper mapper = new CsvMapper();
+    CsvSchema schema = mapper.schemaFor(pojoType).withColumnSeparator(sep);
+
+    if (isQuote) {
+      // 文字列にダブルクオートをつける
+      mapper.configure(CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS, true);
+    }
+
+    // ヘッダーをつける
+    if (isHeadder) {
+      schema = schema.withHeader();
+    }
 
     try {
-      csv = isHeadder ? mapper.writer(schema).writeValueAsString(target)
-          : mapper.writer().writeValueAsString(target);
+      result = mapper.writer(schema).writeValueAsString(target);
     } catch (JsonProcessingException e) {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
 
-    return csv;
-
+    return result;
   }
+
 
   /**
    * 文字列前後のダブルクォーテーションを削除するFunction

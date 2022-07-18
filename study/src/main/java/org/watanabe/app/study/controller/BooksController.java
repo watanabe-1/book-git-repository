@@ -131,6 +131,7 @@ public class BooksController {
 
     model.addObject(StudyFileUtil.MODEL_KEY_FILE_NAME, sb.toString());
     model.addObject(StudyFileUtil.MODEL_KEY_FILE_DATA, columnList);
+    model.addObject(StudyFileUtil.MODEL_KEY_FILE_DATA_CLASS, BooksColumn.class);
 
     return model;
   }

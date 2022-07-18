@@ -50,7 +50,6 @@ public abstract class AbstractDownloadTextFileView extends AbstractView {
     } catch (IOException e) {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
-
   }
 
   /**

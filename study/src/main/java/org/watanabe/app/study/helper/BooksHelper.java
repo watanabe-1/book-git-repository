@@ -1,8 +1,5 @@
 package org.watanabe.app.study.helper;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -19,8 +16,6 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.study.column.BooksChartData;
 import org.watanabe.app.study.column.BooksChartDatasets;
 import org.watanabe.app.study.column.BooksColumn;
@@ -94,30 +89,23 @@ public class BooksHelper {
     // ログインユーザー取得
     String user = StudyUtil.getLoginUser();
     List<Books> booksList = new ArrayList<Books>();
-    String charset = StudyFileUtil.detectFileEncoding(booksFile);
 
-    try (BufferedReader br =
-        new BufferedReader(new InputStreamReader(booksFile.getInputStream(), charset))) {
-      String line = null;
-      while ((line = br.readLine()) != null) {
-        final String[] split = line.split(",");
-        Books books = new Books();
-        books.setBooksId(UUID.randomUUID().toString());
-        books.setUserId(user);
-        books.setBooksType(booksType);
-        books.setBooksDate(StudyDateUtil.strToDate(StudyStringUtil.trimDoubleQuot(split[0]),
-            StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH));
-        books.setBooksPlace(StudyStringUtil.trimDoubleQuot(split[1]));
-        books.setCatCode(categoryHelper.getCatCode(StudyStringUtil.trimDoubleQuot(split[2])));
-        books.setBooksMethod(StudyStringUtil.trimDoubleQuot(split[3]));
-        books.setBooksAmmount(Integer.parseInt(StudyStringUtil.trimDoubleQuot(split[4])));
-        // 共通項目をセット
-        StudyModelUtil.setStudyEntityProperties(books);
-        booksList.add(books);
-      }
-    } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
-    }
+    List<BooksColumn> booksColList =
+        StudyFileUtil.csvFileToList(booksFile, BooksColumn.class, false);
+    booksColList.forEach(col -> {
+      Books books = new Books();
+      books.setBooksId(UUID.randomUUID().toString());
+      books.setUserId(user);
+      books.setBooksType(booksType);
+      books.setBooksDate(col.getBooksDate());
+      books.setBooksPlace(col.getBooksPlace());
+      books.setCatCode(categoryHelper.getCatCode(col.getCatName()));
+      books.setBooksMethod(col.getBooksMethod());
+      books.setBooksAmmount(col.getBooksAmmount());
+      // 共通項目をセット
+      StudyModelUtil.setStudyEntityProperties(books);
+      booksList.add(books);
+    });
 
     return booksList;
   }
@@ -480,10 +468,9 @@ public class BooksHelper {
    * @return List<BooksColumn>
    */
   public List<BooksColumn> listBooksToListBooksColumn(List<Books> target) {
-    return target.stream()
-        .map(e -> new BooksColumn(StudyDateUtil.getYearMonthDay(e.getBooksDate()),
-            e.getBooksPlace(), e.getCatCodes().getCatName(), e.getBooksMethod(),
-            String.valueOf(e.getBooksAmmount())))
+    return target
+        .stream().map(e -> new BooksColumn(e.getBooksDate(), e.getBooksPlace(),
+            e.getCatCodes().getCatName(), e.getBooksMethod(), e.getBooksAmmount()))
         .collect(Collectors.toList());
   }
 
