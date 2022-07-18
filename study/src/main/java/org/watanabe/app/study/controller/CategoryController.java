@@ -171,7 +171,7 @@ public class CategoryController {
     // 画面にセット
     addCommonAttribute(model);
     model.addAttribute("catListParam", categoryService.findAlljoinImage());
-    model.addAttribute("imgList", StudyStringUtil.ObjectToJsonStr(imageService.findAll()));
+    model.addAttribute("imgList", StudyStringUtil.objectToJsonStr(imageService.findAll()));
 
     return "category/list";
   }

@@ -1,16 +1,11 @@
 package org.watanabe.app.study.controller;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -27,12 +22,9 @@ import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.helper.DownloadHelper;
 import org.watanabe.app.study.service.BooksService;
 import org.watanabe.app.study.util.StudyDateUtil;
+import org.watanabe.app.study.util.StudyFileUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 /**
  * 家計簿コントローラ.
@@ -131,25 +123,22 @@ public class BooksController {
    * 
    * @param form 送信されたデータ
    * @param model モデル
-   * @return ダウンロードデータ
-   * @throws JsonProcessingException
-   * @throws UnsupportedEncodingException
+   * @return beenView名
    */
   @RequestMapping(value = "/books/download", method = RequestMethod.POST)
-  public ResponseEntity<byte[]> download(@ModelAttribute BooksForm form)
-      throws JsonProcessingException, UnsupportedEncodingException {
+  public String download(@ModelAttribute BooksForm form, ModelAndView model) {
     List<Books> booksList = new ArrayList<>();
-    String baseFileName = "";
+    String baseFileNameType = "";
 
     if (StudyStringUtil.isNullOrEmpty(form.getBooksYear())) {
       booksList = booksService.findByBooksTypeAndUserIdJoinCategory(form.getBooksType(),
           StudyUtil.getLoginUser());
-      baseFileName = "ALL";
+      baseFileNameType = "ALL";
     } else {
       Date date = StudyDateUtil.strToDate(form.getBooksYear(), StudyDateUtil.FMT_YEAR);
       booksList = booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(date,
           StudyDateUtil.getEndDateByYear(date), form.getBooksType(), StudyUtil.getLoginUser());
-      baseFileName = form.getBooksYear();
+      baseFileNameType = form.getBooksYear();
     }
 
     List<BooksColumn> columnList = booksList.stream()
@@ -158,22 +147,14 @@ public class BooksController {
             String.valueOf(e.getBooksAmmount())))
         .collect(Collectors.toList());
 
-    CsvMapper mapper = new CsvMapper();
-    // 文字列にダブルクオートをつける
-    mapper.configure(CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS, true);
-    // ヘッダをつける
-    CsvSchema schema = mapper.schemaFor(BooksColumn.class).withHeader();
-
     StringBuffer sb = new StringBuffer();
     sb.append("家計簿_").append(BooksType.codeOf(form.getBooksType()).getName()).append("_")
-        .append(baseFileName).append(".csv");
+        .append(baseFileNameType).append(".csv");
 
-    HttpHeaders headers = new HttpHeaders();
-    downloadHelper.addContentDisposition(headers, sb.toString());
+    model.addObject(StudyFileUtil.MODEL_KEY_FILE_NAME, sb.toString());
+    model.addObject(StudyFileUtil.MODEL_KEY_FILE_DATA, columnList);
 
-    return new ResponseEntity<>(
-        mapper.writer(schema).writeValueAsString(columnList).getBytes(StandardCharsets.UTF_8),
-        headers, HttpStatus.OK);
+    return "downloadCsvView";
   }
 
   /**

@@ -4,8 +4,12 @@ import java.util.Map;
 import java.util.Objects;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
+import org.watanabe.app.study.column.BooksColumn;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
 /**
  * 文字列を扱うutilクラス
@@ -75,7 +79,7 @@ public class StudyStringUtil {
    * @param target 変換対象
    * @return String json文字列
    */
-  public static String ObjectToJsonStr(Object target) {
+  public static String objectToJsonStr(Object target) {
     ObjectMapper mapper = new ObjectMapper();
     String json = null;
 
@@ -86,6 +90,33 @@ public class StudyStringUtil {
     }
 
     return json;
+
+  }
+
+  /**
+   * オブジェクトをcsvに変換
+   * 
+   * @param target 変換対象
+   * @param isHeadder ヘッダーをつけるか
+   * @return String json文字列
+   */
+  public static String objectToCsvStr(Object target, boolean isHeadder) {
+    CsvMapper mapper = new CsvMapper();
+    // 文字列にダブルクオートをつける
+    mapper.configure(CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS, true);
+    String csv = null;
+
+    // ヘッダをつける
+    CsvSchema schema = mapper.schemaFor(BooksColumn.class).withHeader();
+
+    try {
+      csv = isHeadder ? mapper.writer(schema).writeValueAsString(target)
+          : mapper.writer().writeValueAsString(target);
+    } catch (JsonProcessingException e) {
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+    }
+
+    return csv;
 
   }
 

@@ -16,6 +16,16 @@ import org.terasoluna.gfw.common.message.ResultMessages;
 public class StudyFileUtil {
 
   /**
+   * モデルのキー：ファイルネーム
+   */
+  public static final String MODEL_KEY_FILE_NAME = "fileNmme";
+
+  /**
+   * モデルのキー：ファイルデータ
+   */
+  public static final String MODEL_KEY_FILE_DATA = "fileData";
+
+  /**
    * ファイルの文字コードを判定
    * 
    * @param file アップロードされたMultipartFilefileデータ
