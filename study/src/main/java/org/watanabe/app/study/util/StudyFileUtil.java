@@ -96,8 +96,8 @@ public class StudyFileUtil {
       schema = schema.withHeader();
     }
 
-    try (BufferedReader br =
-        new BufferedReader(new InputStreamReader(inSoursc.getInputStream(), charsetName))) {
+    try (InputStream in = inSoursc.getInputStream();
+        BufferedReader br = new BufferedReader(new InputStreamReader(in, charsetName))) {
       MappingIterator<T> objectMappingIterator =
           mapper.readerFor(pojoType).with(schema).readValues(br);
 
