@@ -9,6 +9,8 @@ import org.watanabe.app.study.entity.Entity;
  */
 public class StudyModelUtil {
 
+  public static final String MODEL_KEY_MODELMAP_NAME = "modelMap";
+
   /**
    * 引数1から引数2に同名のフィールドがあった場合、そのフィールドに同じ値をセット またstudyで固定使用しているカラムの値をセットする
    * 
@@ -39,4 +41,5 @@ public class StudyModelUtil {
     target.setUpdUser(user);
     target.setUpdDate(now);
   }
+
 }

@@ -1,5 +1,6 @@
 package org.watanabe.app.study.column;
 
+import java.io.Serializable;
 import java.util.Date;
 import org.watanabe.app.study.util.StudyDateUtil;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -12,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @JsonPropertyOrder({"date", "name"})
-public class SyukujitsuColumn {
+public class SyukujitsuColumn implements Serializable {
 
   /**
    * 祝日

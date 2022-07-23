@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.watanabe.app.study.column.BooksChartDatasets;
 import org.watanabe.app.study.entity.Templatechartcolour;
 import org.watanabe.app.study.enums.dbcode.ChartColourNum;
 import org.watanabe.app.study.enums.dbcode.ChartColourTab;
+import org.watanabe.app.study.enums.flag.ActiveFlag;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.service.TemplatechartcolourService;
 import org.watanabe.app.study.util.StudyCodeUtil;
@@ -43,6 +45,29 @@ public class ChartColourHelper {
    * ダミーデータラベル作成用基準値
    */
   private static final String STANDARD_DATA_LABEL = "項目";
+
+  /**
+   * 設定されている色テンプレートを変更
+   * 
+   * @param templateId テンプレートid
+   * @param templateName テンプレート名
+   */
+  public void changeActive(String templateId, String templateName) {
+    String user = StudyUtil.getLoginUser();
+    Date date = StudyUtil.getNowDate();
+
+    // ユーザーごとに作成し設定しているテンプレートを取得
+    Templatechartcolour activeTempColour = getActiveChartColorTemp();
+    // デフォルトのテンプレートを設定していなかった場合
+    if (!activeTempColour.getUserId().equals(StudyUtil.getCommonUser())) {
+      // 現在設定しているテンプレートを設定していない状態に変更
+      TemplatechartcolourService.updateActiveAndNameById(ActiveFlag.NON_ACTIVE.getValue(),
+          activeTempColour.getTemplateName(), date, user, activeTempColour.getTemplateId());
+    }
+    // 画面で選択したテンプレートを設定
+    TemplatechartcolourService.updateActiveAndNameById(ActiveFlag.ACTIVE.getValue(), templateName,
+        date, user, templateId);
+  }
 
   /**
    * 図用データをシード値指定で取得
@@ -109,14 +134,52 @@ public class ChartColourHelper {
    */
   public Templatechartcolour getActiveChartColorTemp() {
     // ユーザーごとに作成し設定しているテンプレートを取得
-    List<Templatechartcolour> activeTempColour =
-        TemplatechartcolourService.findByUserIdAndActive(StudyUtil.getLoginUser(), "1");
+    List<Templatechartcolour> activeTempColour = TemplatechartcolourService
+        .findByUserIdAndActive(StudyUtil.getLoginUser(), ActiveFlag.ACTIVE.getValue());
 
     // デフォルト以外のテンプレートを設定していなかったらデフォルトを設定してることになる
     return activeTempColour.isEmpty()
         // デフォルトのテンプレートを設定しているテンプレートとしてセット
-        ? TemplatechartcolourService.findByUserIdAndActive(StudyUtil.getCommonUser(), "1").get(0)
+        ? getActiveCommonCharttColorTemp()
         : activeTempColour.get(0);
+  }
+
+  /**
+   * 共通色テンプレートを取得
+   * 
+   * @return Templatechartcolour 共通色テンプレート
+   */
+  public Templatechartcolour getActiveCommonCharttColorTemp() {
+    return TemplatechartcolourService
+        .findByUserIdAndActive(StudyUtil.getCommonUser(), ActiveFlag.ACTIVE.getValue()).get(0);
+  }
+
+  /**
+   * ログインユーザーが作成したテンプレート一覧(共通ユーザー分も含む)
+   * 
+   * @param activeColour 現在設定している色テンプレート
+   * @return ログインユーザーが作成したテンプレート一覧
+   */
+  public List<Templatechartcolour> getLoginUsersAllTempColours(Templatechartcolour activeColour) {
+    String commonUserId = StudyUtil.getCommonUser();
+    // ログインユーザーが作成したテンプレートを取得
+    List<Templatechartcolour> allTempColours =
+        TemplatechartcolourService.findByUserId(StudyUtil.getLoginUser());
+
+    // 現在設定しているテンプレートが共通かどうか
+    if (Objects.equals(activeColour.getUserId(), commonUserId)) {
+      // 共通のテンプレートを一覧の最初に追加
+      allTempColours.add(0, activeColour);
+    } else {
+      // 現在設定しているテンプレートが共通でない場合は、共通のテンプレートを取得
+      // 取得後にノンアクティブに変更(一覧の中にアクティブなテンプレートは現在設定しているものだけにしたいため)
+      Templatechartcolour commonColour = TemplatechartcolourService
+          .findByUserIdAndActive(commonUserId, ActiveFlag.ACTIVE.getValue()).get(0);
+      commonColour.setActive(ActiveFlag.NON_ACTIVE.getValue());
+      allTempColours.add(0, commonColour);
+    }
+
+    return allTempColours;
   }
 
   /**
@@ -236,7 +299,7 @@ public class ChartColourHelper {
 
     newColorTemp.setTemplateId(UUID.randomUUID().toString());
     newColorTemp.setUserId(user);
-    newColorTemp.setActive("0");
+    newColorTemp.setActive(ActiveFlag.NON_ACTIVE.getValue());
 
     return newColorTemp;
   }

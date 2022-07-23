@@ -1,6 +1,5 @@
 package org.watanabe.app.study.controller;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -12,8 +11,6 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -115,14 +112,15 @@ public class AjaxController {
   @RequestMapping(value = "/books/calendar/syukujitsu", method = RequestMethod.POST)
   @ResponseBody
   public List<SyukujitsuColumn> calendarBySyukujitsu(@ModelAttribute BooksForm form,
-      ModelAndView model, Date date) {
+      ModelAndView model) {
     // 祝日定義ファイルの取得
     ClassPathResource syukujitsuFile = new ClassPathResource("csv/syukujitsu.csv");
     List<SyukujitsuColumn> syukujitsuList =
         StudyFileUtil.csvFileToList(syukujitsuFile, SyukujitsuColumn.class, true);
 
-    return syukujitsuList.stream().filter(col -> Objects
-        .equals(StudyDateUtil.getYearMonth(col.getDate()), StudyDateUtil.getYearMonth(date)))
+    return syukujitsuList.stream()
+        .filter(col -> Objects.equals(StudyDateUtil.getYearMonth(col.getDate()),
+            StudyDateUtil.getYearMonth(form.getDate())))
         .toList();
   }
 
@@ -136,8 +134,8 @@ public class AjaxController {
    */
   @RequestMapping(value = "/books/calendar/AmountByDay", method = RequestMethod.POST)
   @ResponseBody
-  public List<Books> calendarByDay(@ModelAttribute BooksForm form, ModelAndView model, Date date) {
-    return booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode());
+  public List<Books> calendarByDay(@ModelAttribute BooksForm form, ModelAndView model) {
+    return booksHelper.findByMonthAndType(form.getDate(), BooksType.EXPENSES.getCode());
   }
 
   /**
@@ -264,14 +262,14 @@ public class AjaxController {
    * @param errorResults セット対象
    */
   private void addErrResult(BindException e, Locale locale, ErrorResults errorResults) {
-    for (FieldError fieldError : e.getBindingResult().getFieldErrors()) {
+    e.getBindingResult().getFieldErrors().forEach(fieldError -> {
       errorResults.add(fieldError.getCode(), messageSource.getMessage(fieldError, locale),
           fieldError.getField());
-    }
-    for (ObjectError objectError : e.getBindingResult().getGlobalErrors()) {
+    });
+    e.getBindingResult().getGlobalErrors().forEach(objectError -> {
       errorResults.add(objectError.getCode(), messageSource.getMessage(objectError, locale),
           objectError.getObjectName());
-    }
+    });
   }
 
 }

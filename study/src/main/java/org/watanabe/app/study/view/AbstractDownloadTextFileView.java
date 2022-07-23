@@ -22,6 +22,9 @@ import org.watanabe.app.study.helper.DownloadHelper;
 public abstract class AbstractDownloadTextFileView extends AbstractView {
 
 
+  /**
+   * ModelAndView クラス取得用キー
+   */
   protected static final String MODE_KEY_MODEL_AND_VIEW = "modelAndView";
 
   /**

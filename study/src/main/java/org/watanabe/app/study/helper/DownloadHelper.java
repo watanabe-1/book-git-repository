@@ -41,7 +41,7 @@ public class DownloadHelper {
   /**
    * 日本語対応フォーマットでファイル名を指定
    * 
-   * @param headers ヘッダー
+   * @param response レスポンス
    * @param fileName ファイル名
    */
   public void addContentDisposition(HttpServletResponse response, String fileName)

@@ -1,9 +1,6 @@
 package org.watanabe.app.study.controller;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -18,6 +15,7 @@ import org.watanabe.app.study.entity.Templatechartcolour;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.helper.ChartColourHelper;
 import org.watanabe.app.study.service.TemplatechartcolourService;
+import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
@@ -55,43 +53,43 @@ public class ChartColourController {
     Templatechartcolour newColorTemp = chartColourHelper.getTemplatechartcolourByForm(form);
     // 保存
     TemplatechartcolourService.saveOne(newColorTemp);
-    model.addObject("inputResultMessage", "保存が完了しました!");
 
     // redirect時に値を渡すための処理
-    Map<String, String> map = new HashMap<>();
-    map.put("inputResultMessage", "保存が完了しました!");
     ModelMap modelMap = new ModelMap();
-    modelMap.addAttribute("map", map);
+    modelMap.addAttribute("inputResultMessage", "保存が完了しました!");
     modelMap.addAttribute("tab", chartColourHelper.getResultTab());
-    redirectAttributes.addFlashAttribute("model", modelMap);
+    redirectAttributes.addFlashAttribute(StudyModelUtil.MODEL_KEY_MODELMAP_NAME, modelMap);
 
     return "redirect:/chartColour/index";
-    // return index(form, model, chartColourHelper.getResultTab());
   }
 
+  /**
+   * 削除
+   * 
+   * @param form 送信されたデータ
+   * @param result エラーチェック結果
+   * @param model モデル
+   * @param redirectAttributes リダイレクト先に引き継ぐパラメータ
+   * @return リダイレクト先
+   */
   @RequestMapping(value = "/chartColour/delete", method = RequestMethod.POST)
   public String delete(@ModelAttribute @Validated TemplatechartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
-    // 共通ユーザーの取得
-    String commonuser = StudyUtil.getCommonUser();
     // redirect時に値を渡すための処理
-    Map<String, String> map = new HashMap<>();
+    ModelMap modelMap = new ModelMap();
 
-    if (commonuser.equals(form.getUserId())) {
-      map.put("inputResultMessage", "デフォルトのテンプレートは削除できません!");
+    if (StudyUtil.getCommonUser().equals(form.getUserId())) {
+      modelMap.addAttribute("inputResultMessage", "デフォルトのテンプレートは削除できません!");
     } else {
       // 削除
       TemplatechartcolourService.deleteOne(form.getTemplateId());
-      map.put("inputResultMessage", "削除が完了しました!");
+      modelMap.addAttribute("inputResultMessage", "削除が完了しました!");
     }
 
-    ModelMap modelMap = new ModelMap();
-    modelMap.addAttribute("map", map);
     modelMap.addAttribute("tab", chartColourHelper.getResultTab());
-    redirectAttributes.addFlashAttribute("model", modelMap);
+    redirectAttributes.addFlashAttribute(StudyModelUtil.MODEL_KEY_MODELMAP_NAME, modelMap);
 
     return "redirect:/chartColour/index";
-    // return index(form, model, chartColourHelper.getResultTab());
   }
 
   /**
@@ -106,38 +104,31 @@ public class ChartColourController {
   @RequestMapping(value = "/chartColour/changeActive", method = RequestMethod.POST)
   public String changeActive(@ModelAttribute @Validated TemplatechartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
-    String user = StudyUtil.getLoginUser();
-    Date date = StudyUtil.getNowDate();
-
-    // ユーザーごとに作成し設定しているテンプレートを取得
-    Templatechartcolour activeTempColour = chartColourHelper.getActiveChartColorTemp();
-
-    // デフォルトのテンプレートを設定していなかった場合
-    if (!activeTempColour.getUserId().equals(StudyUtil.getCommonUser())) {
-      // 現在設定しているテンプレートを設定していない状態に変更
-      TemplatechartcolourService.updateActiveAndNameById("0", activeTempColour.getTemplateName(),
-          date, user, activeTempColour.getTemplateId());
-    }
-    // 画面で選択したテンプレートを設定
-    TemplatechartcolourService.updateActiveAndNameById("1", form.getTemplateName(), date, user,
-        form.getTemplateId());
+    // 設定されている色テンプレートを変更
+    chartColourHelper.changeActive(form.getTemplateId(), form.getTemplateName());
 
     // redirect時に値を渡すための処理
-    Map<String, String> map = new HashMap<>();
-    map.put("chartColourResultMessage", "保存が完了しました!");
     ModelMap modelMap = new ModelMap();
-    modelMap.addAttribute("map", map);
+    modelMap.addAttribute("chartColourResultMessage", "保存が完了しました!");
     modelMap.addAttribute("tab", chartColourHelper.getDefaltTab());
-    redirectAttributes.addFlashAttribute("model", modelMap);
+    redirectAttributes.addFlashAttribute(StudyModelUtil.MODEL_KEY_MODELMAP_NAME, modelMap);
 
     return "redirect:/chartColour/index";
-    // return index(form, model, chartColourHelper.getDefaltTab());
   }
 
+  /**
+   * 初期画面
+   * 
+   * @param form 送信されたデータ
+   * @param model モデル
+   * @param modelMap リダイレクト時の元画面セットパラメータ
+   * @return 画面表示情報
+   */
   @RequestMapping(value = "/chartColour/index", method = RequestMethod.GET)
   public ModelAndView index(@ModelAttribute TemplatechartcolourForm form, ModelAndView model,
-      @ModelAttribute("model") ModelMap modelMap) {
+      @ModelAttribute(StudyModelUtil.MODEL_KEY_MODELMAP_NAME) ModelMap modelMap) {
     model.setViewName("chartColour/index");
+
     String tab = form.getTab();
     // リダイレクトで呼ばれたときのパラメータ-
     String redirectTab = (String) modelMap.get("tab");
@@ -148,51 +139,20 @@ public class ChartColourController {
       tab = chartColourHelper.getDefaltTab();
     }
 
-    // ユーザーごとに作成し設定しているテンプレートを取得
-    List<Templatechartcolour> activeTempColour =
-        TemplatechartcolourService.findByUserIdAndActive(StudyUtil.getLoginUser(), "1");
-    // デフォルトユーザーのテンプレートを取得
+    // ユーザーごとに設定しているテンプレートを取得
+    Templatechartcolour activeColour = chartColourHelper.getActiveChartColorTemp();
+    // ログインユーザーが作成したテンプレート(共通ユーザー分も含む)を取得
     List<Templatechartcolour> allTempColours =
-        TemplatechartcolourService.findByUserIdAndActive(StudyUtil.getCommonUser(), "1");
-    // デフォルト以外のテンプレートを設定していなかったらデフォルトを設定してることになる
-    // そこで
-    if (activeTempColour.isEmpty()) {
-      // デフォルトのテンプレートを設定しているテンプレートとしてセット
-      activeTempColour = allTempColours;
-    } else {
-      // デフォルトのテンプレートをアクティブではない値に変更(表示用)
-      Templatechartcolour newActiveTemp = allTempColours.get(0);
-      newActiveTemp.setActive("0");
-      allTempColours.set(0, newActiveTemp);
-    }
-    // ユーザーごとに作成したテンプレートを取得しデフォルトのテンプレートのリストと結合
-    allTempColours.addAll(TemplatechartcolourService.findByUserId(StudyUtil.getLoginUser()));
+        chartColourHelper.getLoginUsersAllTempColours(activeColour);
 
-    model.addObject("activeColour", activeTempColour.get(0));
+    model.addObject("activeColour", activeColour);
     model.addObject("tempColourList", allTempColours);
     model.addObject("randomColourList", chartColourHelper.getRandomColourSeedCoef(4));
     model.addObject("tab", tab);
     model.addObject(tab, "active");
-    // リダイレクトされたとき
-    model = setModelMap(model, modelMap);
 
-    return model;
-  }
-
-  /**
-   * リダイレクトで渡されたModelMap modelMapの中身を取得しmodelにセット
-   * 
-   * @param model セット先
-   * @param modelMap セット対象
-   */
-  @SuppressWarnings("unchecked")
-  private ModelAndView setModelMap(ModelAndView model, ModelMap modelMap) {
-    Map<String, String> map = (Map<String, String>) modelMap.get("map");
-    if (map != null) {
-      map.forEach((k, v) -> {
-        model.addObject(k, v);
-      });
-    }
+    // リダイレクトされたとき、リダイレクトもとでセットしたパラメータをセット(keyが同じ場合は上書きする)
+    model.addAllObjects(modelMap);
 
     return model;
   }

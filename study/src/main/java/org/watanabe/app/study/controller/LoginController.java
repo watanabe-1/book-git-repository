@@ -12,9 +12,16 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class LoginController {
 
+  /**
+   * ログイン
+   * 
+   * @param model モデル
+   * @return 画面表示用モデル
+   */
   @RequestMapping(value = "/login", method = RequestMethod.GET)
   public ModelAndView login(ModelAndView model) {
     model.setViewName("login");
+
     return model;
   }
 }

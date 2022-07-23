@@ -26,9 +26,15 @@ import org.watanabe.app.study.util.StudyModelUtil;
 @Controller
 public class AccountController {
 
+  /**
+   * アカウントサービス
+   */
   @Autowired
   private AccountService accountService;
 
+  /**
+   * パスワードエンコーダー
+   */
   @Autowired
   private BCryptPasswordEncoder passwordEncoder;
 
