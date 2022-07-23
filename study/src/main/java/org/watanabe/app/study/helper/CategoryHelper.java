@@ -7,7 +7,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.watanabe.app.common.logger.LogIdBasedLogger;
 import org.watanabe.app.study.dto.CategoryList;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.enums.flag.DeleteFlag;
@@ -21,8 +20,6 @@ import org.watanabe.app.study.util.StudyUtil;
  */
 @Component
 public class CategoryHelper {
-
-  private static final LogIdBasedLogger logger = LogIdBasedLogger.getLogger(CategoryHelper.class);
 
   /**
    * カテゴリー情報 Service

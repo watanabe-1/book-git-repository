@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.watanabe.app.common.logger.LogIdBasedLogger;
 import org.watanabe.app.study.entity.Templatechartcolour;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.helper.ChartColourHelper;
@@ -28,9 +27,6 @@ import org.watanabe.app.study.util.StudyUtil;
  */
 @Controller
 public class ChartColourController {
-
-  private static final LogIdBasedLogger logger =
-      LogIdBasedLogger.getLogger(ChartColourController.class);
 
   /**
    * チャート色テンプレート Service

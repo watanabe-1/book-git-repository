@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 import org.terasoluna.gfw.common.exception.BusinessException;
-import org.watanabe.app.common.logger.LogIdBasedLogger;
 import org.watanabe.app.study.column.BooksChartData;
 import org.watanabe.app.study.column.ErrorResults;
 import org.watanabe.app.study.column.SyukujitsuColumn;
@@ -44,9 +43,6 @@ import org.watanabe.app.study.util.StudyFileUtil;
 @Controller
 @RequestMapping(value = "/ajax")
 public class AjaxController {
-
-  private static final LogIdBasedLogger logger =
-      LogIdBasedLogger.getLogger(AjaxController.class);
 
   /**
    * メッセージソース

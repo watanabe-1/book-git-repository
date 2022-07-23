@@ -10,7 +10,6 @@ import java.util.Random;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.watanabe.app.common.logger.LogIdBasedLogger;
 import org.watanabe.app.study.column.BooksChartData;
 import org.watanabe.app.study.column.BooksChartDatasets;
 import org.watanabe.app.study.entity.Templatechartcolour;
@@ -28,9 +27,6 @@ import org.watanabe.app.study.util.StudyUtil;
  */
 @Component
 public class ChartColourHelper {
-
-  private static final LogIdBasedLogger logger =
-      LogIdBasedLogger.getLogger(ChartColourHelper.class);
 
   /**
    * チャート色テンプレート Service

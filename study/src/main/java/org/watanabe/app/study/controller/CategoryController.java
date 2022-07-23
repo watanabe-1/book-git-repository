@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
-import org.watanabe.app.common.logger.LogIdBasedLogger;
 import org.watanabe.app.study.dto.CategoryList;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.entity.Image;
@@ -29,15 +28,15 @@ import org.watanabe.app.study.service.ImageService;
 import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
+import lombok.extern.slf4j.XSlf4j;
 
 /**
  * カテゴリーコントローラー
  * 
  */
 @Controller
+@XSlf4j
 public class CategoryController {
-
-  private static final LogIdBasedLogger logger = LogIdBasedLogger.getLogger(TopController.class);
 
   /**
    * カテゴリー情報 Service
@@ -145,7 +144,7 @@ public class CategoryController {
       categoryService.saveOne(cat);
     } catch (DuplicateKeyException dke) {
       result.addError(new FieldError(result.getObjectName(), "catCode", "入力したカテゴリーは既に登録されています。"));
-      logger.error("Exception happend!", dke);
+      log.error("Exception happend!", dke);
       return input(form, model);
     }
 
