@@ -34,10 +34,6 @@ public class XLogger {
     logger = LoggerFactory.getLogger(clazz);
   }
 
-  public static XLogger getLogger(Class<?> clazz) {
-    return new XLogger(clazz);
-  }
-
   public boolean isDebugEnabled() {
     return logger.isDebugEnabled();
   }
