@@ -11,7 +11,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 /**
  * slf4jが用意している拡張方法<br/>
  * lombockの@XSlf4j を使用するために作成<br/>
- * メッセージをプロパティファイル参照にする
+ * メッセージをプロパティファイル参照にする拡張クラス
  *
  */
 public class XLogger {

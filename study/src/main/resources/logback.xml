@@ -21,9 +21,9 @@
 	<appender name="APPLICATION_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<!-- (3) -->
 		<!-- ${<変数名>:-<デフォルト値>} という形式で、変数が定義されていなかった場合のデフォルト値を指定できる。 -->
-		<file>${app.log.dir:-/logs}/projectName-application.log</file>		<!-- (4) -->
+		<file>${app.log.dir:-/logs}/study-books-application.log</file>		<!-- (4) -->
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${app.log.dir:-/logs}${app.log.bk:-/bk}/projectName-application-%d{yyyyMMddHH}.log</fileNamePattern>			<!-- (5)　HHまでしていしているため1時間ごとにファイルが切り替わる -->
+			<fileNamePattern>${app.log.dir:-/logs}${app.log.bk:-/bk}/study-books-application-%d{yyyyMMddHH}.log</fileNamePattern>			<!-- (5)　HHまでしていしているため1時間ごとにファイルが切り替わる -->
 			<!-- <maxHistory>25</maxHistory>			(6) 今は削除されないように25にしておく -->
 		</rollingPolicy>
 		<encoder>
@@ -36,9 +36,9 @@
 
 	<appender name="MONITORING_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<!-- (8) -->
-		<file>${app.log.dir:-/logs}/projectName-monitoring.log</file>
+		<file>${app.log.dir:-/logs}/study-books-monitoring.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${app.log.dir:-/logs}${app.log.bk:-/bk}/projectName-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
+			<fileNamePattern>${app.log.dir:-/logs}${app.log.bk:-/bk}/study-books-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
 			<!-- <maxHistory>7</maxHistory> -->
 		</rollingPolicy>
 		<encoder>
