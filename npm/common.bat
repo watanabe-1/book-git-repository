@@ -33,7 +33,5 @@ REM 現在時刻の文字列を取得
 set date2=%date:~0,4%%date:~5,2%%date:~8,2%
 set time2=%time: =0%
 set time2=%time2:~0,2%%time:~3,2%%time:~6,2%
-REM 出力するテキスト名を定義(ERR_日付時刻.txt)
-set textName=copy_node_modules_%date2%%time2%.log
 
 rem pause
