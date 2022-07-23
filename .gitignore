@@ -15,6 +15,10 @@ database.properties
 .project
 .classpath
 .settings
+.metadata
+
+# vscode
+.vscode
 
 # Idea
 .idea
@@ -76,6 +80,3 @@ hs_err_pid*
 
 # image
 # /study/WebContent/images/icon/
-
-
-/.metadata/
