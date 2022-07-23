@@ -122,13 +122,12 @@ function getBaseUrl() {
 }
 
 /**
- * urlの初期部分を取得
+ * urlのコンテキストパスを取得
  *
- * @return urlの初期部分
+ * @return urlのコンテキストパス
  */
-function getFirstUrl() {
-  const href = document.getElementById('firstLink').getAttribute('href');
-  return href.slice(0, href.length - 1);
+function getContextPath() {
+  return document.querySelector('meta[name="contextPath"]').content;
 }
 
 /**
@@ -432,7 +431,7 @@ function getStudyDate() {
  * @param {String} delim 区切り文字
  * @return yyyyMMdd形式に変換された日付け
  */
-function formatDateBtYyyyMmDd(date, delim = null) {
+function formatDateBtYyyyMmDd(date, delim = '/') {
   //日付け型ではなかったら
   if (typeof date != 'Date') {
     date = new Date(date);

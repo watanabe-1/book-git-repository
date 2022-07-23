@@ -169,8 +169,8 @@
 		//画面描画用imageタグの作成
 		const imgElement = document.createElement('img');
 		imgElement.src =
-			//studyUtilのgetFirstUrl()
-			getFirstUrl() +
+			//studyUtilのgetContextPath()
+			getContextPath() +
 			imgJson.imgPath +
 			'/' +
 			imgJson.imgName; // 画像パス
@@ -265,8 +265,8 @@
 		//行内に表示している画像の変更
 		const imgElement = tds[tds.length - 1].querySelector('img');
 		imgElement.src =
-			//studyUtilのgetFirstUrl()
-			getFirstUrl() +
+			//studyUtilのgetContextPath()
+			getContextPath() +
 			imgList[imgNum].imgPath +
 			'/' +
 			imgList[imgNum].imgName; // 画像パス

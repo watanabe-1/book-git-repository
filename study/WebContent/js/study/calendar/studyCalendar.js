@@ -333,8 +333,8 @@ function createBooksListByCalendarProcess(booksList) {
         );
         const imgElement = document.createElement('img');
         imgElement.src =
-          //studyUtilのgetFirstUrl()
-          getFirstUrl() +
+          //studyUtilのgetContextPath()
+          getContextPath() +
           booksList[i].catCodes.imgIds.imgPath +
           '/' +
           booksList[i].catCodes.imgIds.imgName; // 画像パス
