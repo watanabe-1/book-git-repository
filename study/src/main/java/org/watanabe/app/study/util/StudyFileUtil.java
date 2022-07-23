@@ -87,7 +87,6 @@ public class StudyFileUtil {
 
     // ダブルクオートあり
     if (isQuote) {
-      // 文字列にダブルクオートをつける
       mapper.configure(CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS, true);
     }
 

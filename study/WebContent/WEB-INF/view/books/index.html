@@ -131,7 +131,7 @@
 					<div class="col-12">
 						<canvas id="barAndLineByYear"></canvas>
 					</div>
-					<a hiidden id="restBarAndLineByYear" th:href="@{/books/rest/chart/byYear/all}"></a>
+					<a hiidden id="restBarAndLineByYear" th:href="@{/ajax/books/chart/byYear/all}"></a>
 				</div>
 				<div class="row border-bottom my-2"></div>
 				<div class="row">
@@ -145,7 +145,7 @@
 					<div class="col-6">
 						<canvas id="barCategory"></canvas>
 					</div>
-					<a hiidden id="restCategory" th:href="@{/books/rest/chart/byMonth/category}"></a>
+					<a hiidden id="restCategory" th:href="@{/ajax/books/chart/byMonth/category}"></a>
 				</div>
 				<div class="row border-bottom my-2"></div>
 				<div class="row">
@@ -155,7 +155,7 @@
 					<div class="col-6">
 						<canvas id="barMethod"></canvas>
 					</div>
-					<a hiidden id="restMethod" th:href="@{/books/rest/chart/byMonth/method}"></a>
+					<a hiidden id="restMethod" th:href="@{/ajax/books/chart/byMonth/method}"></a>
 				</div>
 			</div>
 		</div>
@@ -183,8 +183,8 @@
 						<div id="booksListbytabCalendar"></div>
 					</div>
 				</div>
-				<a hiidden id="syukujitsuList" th:href="@{/books/rest/calendar/syukujitsu}"></a>
-				<a hiidden id="AmountByDayList" th:href="@{/books/rest/calendar/AmountByDay}"></a>
+				<a hiidden id="syukujitsuList" th:href="@{/ajax/books/calendar/syukujitsu}"></a>
+				<a hiidden id="AmountByDayList" th:href="@{/ajax/books/calendar/AmountByDay}"></a>
 			</div>
 		</div>
 	</div>

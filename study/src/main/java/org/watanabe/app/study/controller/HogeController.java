@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.terasoluna.gfw.common.exception.BusinessException;
+import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.study.form.HogeForm;
 
 @Controller
@@ -51,7 +53,7 @@ public class HogeController {
 
     // エラー画面遷移確認用
     if (Objects.equals(name, ISJAERR) || Objects.equals(name.toUpperCase(), ISEAERR)) {
-      throw new Error("エラーです");
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", "エラーです"));
     }
 
     return model;

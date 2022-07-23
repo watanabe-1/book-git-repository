@@ -63,6 +63,11 @@ public class StudyDateUtil {
   public static final String FMT_YEAR_MONTH_DAY_SLASH = "yyyy/MM/dd";
 
   /**
+   * タイムゾーン 世界標準時
+   */
+  public static final String TIMEZONE_UTC = "UTC";
+
+  /**
    * タイムゾーン 東京
    */
   public static final String TIMEZONE_ASIA_TOKYO = "Asia/Tokyo";

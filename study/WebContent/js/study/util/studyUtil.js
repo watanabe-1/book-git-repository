@@ -263,6 +263,8 @@ function ajax(
           resolve(JSON.parse(httpRequest.responseText));
         } else {
           // statusが200以外の場合はリクエストが適切でなかったとしてサーバーから帰ってきたエラー情報を取得し返却
+          console.log(httpRequest.responseText);
+          console.log(JSON.parse(httpRequest.responseText));
           reject(getErrMsg(JSON.parse(httpRequest.responseText)));
         }
       }

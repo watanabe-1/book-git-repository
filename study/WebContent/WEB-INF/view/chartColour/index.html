@@ -74,7 +74,7 @@
 					<div class="col-6">
 						<canvas id="barActiveTemp"></canvas>
 					</div>
-					<a hiidden id="restActiveTemp" th:href="@{/chartColour/rest/chart}"></a>
+					<a hiidden id="restActiveTemp" th:href="@{/ajax/chartColour/chart}"></a>
 				</div>
 			</div>
 		</div>
@@ -142,7 +142,7 @@
 										<canvas id="barConfirmTempList"></canvas>
 									</div>
 								</div>
-								<a hiidden id="restConfirmTempList" th:href="@{/chartColour/rest/confirm}"></a>
+								<a hiidden id="restConfirmTempList" th:href="@{/ajax/chartColour/confirm}"></a>
 							</div>
 							<div class="row border-bottom my-2"></div>
 						</div>
@@ -238,7 +238,7 @@
 							<canvas th:id="${'barRandom' + stat.index}"></canvas>
 						</div>
 					</div>
-					<a hiidden th:id="${'restRandom' + stat.index}" th:href="@{/chartColour/rest/confirm}"></a>
+					<a hiidden th:id="${'restRandom' + stat.index}" th:href="@{/ajax/chartColour/confirm}"></a>
 					<div class="row border-bottom my-2"></div>
 				</div>
 			</div>
@@ -321,7 +321,7 @@
 										<canvas id="barConfirmTemp"></canvas>
 									</div>
 								</div>
-								<a hiidden id="restConfirmTemp" th:href="@{/chartColour/rest/confirm}"></a>
+								<a hiidden id="restConfirmTemp" th:href="@{/ajax/chartColour/confirm}"></a>
 							</div>
 							<div class="row border-bottom my-2"></div>
 						</div>

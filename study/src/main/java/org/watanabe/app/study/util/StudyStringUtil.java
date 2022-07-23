@@ -93,7 +93,7 @@ public class StudyStringUtil {
   }
 
   /**
-   * csv形式の一行を分割
+   * tsv形式の一行を分割
    * 
    * @param line 分割対象
    * @return 分割結果
