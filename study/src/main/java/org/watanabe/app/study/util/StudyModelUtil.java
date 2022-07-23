@@ -9,7 +9,25 @@ import org.watanabe.app.study.entity.Entity;
  */
 public class StudyModelUtil {
 
+  /**
+   * モデルのキー：モデルマップ名
+   */
   public static final String MODEL_KEY_MODELMAP_NAME = "modelMap";
+
+  /**
+   * モデルのキー：ファイルネーム
+   */
+  public static final String MODEL_KEY_FILE_NAME = "fileNmme";
+
+  /**
+   * モデルのキー：ファイルデータ
+   */
+  public static final String MODEL_KEY_FILE_DATA = "fileData";
+
+  /**
+   * モデルのキー：ファイルデータ
+   */
+  public static final String MODEL_KEY_FILE_DATA_CLASS = "fileDataClass";
 
   /**
    * 引数1から引数2に同名のフィールドがあった場合、そのフィールドに同じ値をセット またstudyで固定使用しているカラムの値をセットする
@@ -41,5 +59,4 @@ public class StudyModelUtil {
     target.setUpdUser(user);
     target.setUpdDate(now);
   }
-
 }

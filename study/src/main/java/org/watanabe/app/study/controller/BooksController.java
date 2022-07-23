@@ -18,7 +18,7 @@ import org.watanabe.app.study.form.BooksForm;
 import org.watanabe.app.study.helper.BooksHelper;
 import org.watanabe.app.study.service.BooksService;
 import org.watanabe.app.study.util.StudyDateUtil;
-import org.watanabe.app.study.util.StudyFileUtil;
+import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
@@ -126,9 +126,9 @@ public class BooksController {
     sb.append("家計簿_").append(BooksType.codeOf(form.getBooksType()).getName()).append("_")
         .append(fileNameType).append(".csv");
 
-    model.addObject(StudyFileUtil.MODEL_KEY_FILE_NAME, sb.toString());
-    model.addObject(StudyFileUtil.MODEL_KEY_FILE_DATA, columnList);
-    model.addObject(StudyFileUtil.MODEL_KEY_FILE_DATA_CLASS, BooksColumn.class);
+    model.addObject(StudyModelUtil.MODEL_KEY_FILE_NAME, sb.toString());
+    model.addObject(StudyModelUtil.MODEL_KEY_FILE_DATA, columnList);
+    model.addObject(StudyModelUtil.MODEL_KEY_FILE_DATA_CLASS, BooksColumn.class);
 
     return model;
   }

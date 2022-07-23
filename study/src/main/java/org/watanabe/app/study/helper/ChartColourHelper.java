@@ -172,7 +172,7 @@ public class ChartColourHelper {
       allTempColours.add(0, activeColour);
     } else {
       // 現在設定しているテンプレートが共通でない場合は、共通のテンプレートを取得
-      // 取得後にノンアクティブに変更(一覧の中にアクティブなテンプレートは現在設定しているものだけにしたいため)
+      // 取得後にノンアクティブに変更(一覧の中のアクティブなテンプレートは現在設定しているものだけにしたいため)
       Templatechartcolour commonColour = TemplatechartcolourService
           .findByUserIdAndActive(commonUserId, ActiveFlag.ACTIVE.getValue()).get(0);
       commonColour.setActive(ActiveFlag.NON_ACTIVE.getValue());

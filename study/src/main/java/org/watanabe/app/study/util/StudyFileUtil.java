@@ -24,21 +24,6 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 public class StudyFileUtil {
 
   /**
-   * モデルのキー：ファイルネーム
-   */
-  public static final String MODEL_KEY_FILE_NAME = "fileNmme";
-
-  /**
-   * モデルのキー：ファイルデータ
-   */
-  public static final String MODEL_KEY_FILE_DATA = "fileData";
-
-  /**
-   * モデルのキー：ファイルデータ
-   */
-  public static final String MODEL_KEY_FILE_DATA_CLASS = "fileDataClass";
-
-  /**
    * csvファイルを読み込む
    * 
    * @param inSoursc InputStreamSource
