@@ -48,7 +48,6 @@
 	<!-- Beanクラスが格納されるパッケージのルートを宣言 -->
 	<context:component-scan base-package="org.watanabe.app.common" />
 	<context:component-scan base-package="org.watanabe.app.study" />
-	<context:component-scan base-package="org.watanabe.app.rest" />
 	<!-- DB設定(環境依存の外部化) -->
 	<context:property-placeholder location="classpath:config/properties/database.properties" order="1" ignore-unresolvable="true" />
 	<!-- DB設定以外のプロパティファイルの読み込み(環境依存の外部化) -->

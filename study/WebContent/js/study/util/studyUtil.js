@@ -263,9 +263,28 @@ function ajax(
           resolve(JSON.parse(httpRequest.responseText));
         } else {
           // statusが200以外の場合はリクエストが適切でなかったとしてサーバーから帰ってきたエラー情報を取得し返却
+          let messages = '';
           console.log(httpRequest.responseText);
-          console.log(JSON.parse(httpRequest.responseText));
-          reject(getErrMsg(JSON.parse(httpRequest.responseText)));
+          if (400 <= httpRequest.status && httpRequest.status <= 499) {
+            // return 結果が json形式か判定
+            const contentType = httpRequest.getResponseHeader('Content-Type');
+            if (contentType != null && contentType.indexOf('json') != -1) {
+              const json = JSON.parse(httpRequest.responseText);
+              console.log(json);
+              console.log(json.errorResults);
+              json.errorResults.forEach((errorResult) => {
+                console.log(errorResult);
+                messages += '<div>' + errorResult.message + '</div>';
+              });
+            } else {
+              messages = '<div>' + httpRequest.statusText + '</div>';
+            }
+          } else {
+            messages = '<div>' + 'System error occurred.' + '</div>';
+          }
+          //console.log(httpRequest.responseText);
+          //console.log(JSON.parse(httpRequest.responseText));
+          reject(messages);
         }
       }
     };
@@ -358,27 +377,6 @@ function getCsrfTokenHeader() {
  */
 function getCsrfTokenParmName() {
   return document.querySelector('meta[name="_csrf_parameterName"]').content;
-}
-
-/**
- * サーバーから帰ってきたエラーから画面に表示するようのメッセージの加工して返却
- *
- * @param {JSON} errJson -サーバーから帰ってきたエラー
- * @return エラーメッセージ
- */
-function getErrMsg(errJson) {
-  //console.log(errJson);
-  let errMassage = '';
-  if (errJson.details) {
-    errMassage = errJson.details
-      .map(function (err) {
-        return err.target + ': [' + err.code + ']' + err.message;
-      })
-      .join('\n');
-  } else {
-    errMassage = '[' + errJson.code + ']' + errJson.message;
-  }
-  return errMassage;
 }
 
 /**
