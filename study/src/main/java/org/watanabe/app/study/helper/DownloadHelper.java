@@ -23,6 +23,9 @@ public class DownloadHelper {
   private static final String CONTENT_DISPOSITION_FORMAT =
       "attachment; filename=\"%s\"; filename*=UTF-8''%s";
 
+  /**
+   * テキスト形式
+   */
   private static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain";
 
   /**

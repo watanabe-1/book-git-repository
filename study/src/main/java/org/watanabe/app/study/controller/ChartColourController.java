@@ -147,7 +147,8 @@ public class ChartColourController {
 
     model.addObject("activeColour", activeColour);
     model.addObject("tempColourList", allTempColours);
-    model.addObject("randomColourList", chartColourHelper.getRandomColourSeedCoef(4));
+    model.addObject("randomColourList",
+        chartColourHelper.getRandomColourSeedCoef(chartColourHelper.getRandomCnt()));
     model.addObject("tab", tab);
     model.addObject(tab, "active");
 

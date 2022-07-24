@@ -15,6 +15,7 @@ import org.watanabe.app.study.column.BooksChartData;
 import org.watanabe.app.study.column.BooksChartDatasets;
 import org.watanabe.app.study.entity.Templatechartcolour;
 import org.watanabe.app.study.enums.dbcode.ChartColourNum;
+import org.watanabe.app.study.enums.dbcode.ChartColourRandomNum;
 import org.watanabe.app.study.enums.dbcode.ChartColourTab;
 import org.watanabe.app.study.enums.flag.ActiveFlag;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
@@ -51,22 +52,26 @@ public class ChartColourHelper {
    * 
    * @param templateId テンプレートid
    * @param templateName テンプレート名
+   * @return 更新数
    */
-  public void changeActive(String templateId, String templateName) {
+  public int changeActive(String templateId, String templateName) {
     String user = StudyUtil.getLoginUser();
     Date date = StudyUtil.getNowDate();
+    int cnt = 0;
 
     // ユーザーごとに作成し設定しているテンプレートを取得
     Templatechartcolour activeTempColour = getActiveChartColorTemp();
     // デフォルトのテンプレートを設定していなかった場合
     if (!activeTempColour.getUserId().equals(StudyUtil.getCommonUser())) {
       // 現在設定しているテンプレートを設定していない状態に変更
-      TemplatechartcolourService.updateActiveAndNameById(ActiveFlag.NON_ACTIVE.getValue(),
+      cnt += TemplatechartcolourService.updateActiveAndNameById(ActiveFlag.NON_ACTIVE.getValue(),
           activeTempColour.getTemplateName(), date, user, activeTempColour.getTemplateId());
     }
     // 画面で選択したテンプレートを設定
-    TemplatechartcolourService.updateActiveAndNameById(ActiveFlag.ACTIVE.getValue(), templateName,
-        date, user, templateId);
+    cnt += TemplatechartcolourService.updateActiveAndNameById(ActiveFlag.ACTIVE.getValue(),
+        templateName, date, user, templateId);
+
+    return cnt;
   }
 
   /**
@@ -367,6 +372,17 @@ public class ChartColourHelper {
   public String getResultTab() {
     return StudyCodeUtil.getShort(ChartColourTab.RESULT_TAB.getListName(),
         ChartColourTab.RESULT_TAB.getCode());
+  }
+
+  /**
+   * 家計簿画面のランダムタブ表示数を取得
+   * 
+   * @return ランダムタブ表示数を取得
+   */
+  public int getRandomCnt() {
+    return Integer
+        .parseInt(StudyCodeUtil.getShort(ChartColourRandomNum.RANDOM_DATA_CNT.getListName(),
+            ChartColourRandomNum.RANDOM_DATA_CNT.getCode()));
   }
 
   /**

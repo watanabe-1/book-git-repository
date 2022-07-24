@@ -5,14 +5,13 @@ import lombok.Getter;
 import lombok.NonNull;
 
 /**
- * chart_colour_tab:図の色確認画面タブのenumクラス
+ * chart_colour_random_num:図の色確認画面ランダム表示数のenumクラス
  */
 @AllArgsConstructor
 @Getter
-public enum ChartColourTab implements DbCode {
+public enum ChartColourRandomNum implements DbCode {
 
-  DEFALT_TAB("chart_colour_tab", "defalt_tab", "初期表示")
-  , RESULT_TAB("chart_colour_tab", "result_tab", "保存後表示");
+  RANDOM_DATA_CNT("chart_colour_random_num", "random_data_cnt", "表示数");
 
   /**
    * リストネーム
@@ -34,8 +33,8 @@ public enum ChartColourTab implements DbCode {
    * @param listName テーブルや定数として指定しているlistName
    * @return listNameに一致するEnumクラス
    */
-  public static ChartColourTab listNameOf(@NonNull String listName) {
-    return DbCode.listNameOf(ChartColourTab.class, listName);
+  public static ChartColourRandomNum listNameOf(@NonNull String listName) {
+    return DbCode.listNameOf(ChartColourRandomNum.class, listName);
   }
 
   /**
@@ -43,8 +42,8 @@ public enum ChartColourTab implements DbCode {
    * @param code テーブルや定数として指定しているcode
    * @return codeに一致するEnumクラス
    */
-  public static ChartColourTab codeOf(@NonNull String code) {
-    return DbCode.codeOf(ChartColourTab.class, code);
+  public static ChartColourRandomNum codeOf(@NonNull String code) {
+    return DbCode.codeOf(ChartColourRandomNum.class, code);
   }
 
   /**
@@ -52,7 +51,7 @@ public enum ChartColourTab implements DbCode {
    * @param description テーブルや定数として指定しているdescription
    * @return descriptionに一致するEnumクラス
    */
-  public static ChartColourTab descriptionOf(@NonNull String description) {
-    return DbCode.descriptionOf(ChartColourTab.class, description);
+  public static ChartColourRandomNum descriptionOf(@NonNull String description) {
+    return DbCode.descriptionOf(ChartColourRandomNum.class, description);
   }
 }
