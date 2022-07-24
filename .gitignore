@@ -16,6 +16,7 @@ database.properties
 .classpath
 .settings
 .metadata
+eclipse-formatter.xml
 
 # vscode
 .vscode
