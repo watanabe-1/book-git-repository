@@ -1,62 +1,78 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-  th:fragment="layout (title,body,scripts,links)">
-<!-- th:replaceを使用して、 <head>用のフラグメントを読込み -->
-<!-- 引数は下記のように指定 -->
-<!--<head th:replace="common/head :: head_fragment(title = 'study top', scripts = ~{common/header}, links = ~{common/header})">-->
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  th:fragment="layout (title,body,scripts,links)"
+>
+  <!-- th:replaceを使用して、 <head>用のフラグメントを読込み -->
+  <!-- 引数は下記のように指定 -->
+  <!--<head th:replace="common/head :: head_fragment(title = 'study top', scripts = ~{common/header}, links = ~{common/header})">-->
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- コンテキストパス -->
-  <meta name="contextPath" th:content="${#httpServletRequest.getContextPath()}" />
-  <!-- CSRF対策用トークン AJAXで使用-->
-  <meta name="_csrf" th:content="${_csrf.token}" />
-  <meta name="_csrf_header" th:content="${_csrf.headerName}" />
-  <meta name="_csrf_parameterName" th:content="${_csrf.parameterName}" />
-  <title th:replace="${title}"></title>
-  <!-- 全画面共通のcssを定義 -->
-  <link th:href="@{/css/npm/bootstrap/bootstrap.css}" rel="stylesheet">
-  <link th:href="@{/css/npm/bootstrap/bootstrap-icons.css}" rel="stylesheet">
-  <link th:href="@{/css/npm/flatpickr/flatpickr.min.css}" rel="stylesheet">
-  <link th:href="@{/css/npm/flatpickr/plugins/monthSelect/style.css}" rel="stylesheet">
-  <!-- 各画面専用のcssを定義 -->
-  <th:block th:if="${#!strings.isEmpty(links)}" th:replace="${links}"></th:block>
-  <!--共通サイドバーcssの読み込み -->
-  <style th:replace="common/sidebar :: sidebar_css_fragment"></style>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- コンテキストパス -->
+    <meta
+      name="contextPath"
+      th:content="${#httpServletRequest.getContextPath()}"
+    />
+    <!-- CSRF対策用トークン AJAXで使用-->
+    <meta name="_csrf" th:content="${_csrf.token}" />
+    <meta name="_csrf_header" th:content="${_csrf.headerName}" />
+    <meta name="_csrf_parameterName" th:content="${_csrf.parameterName}" />
+    <title th:replace="${title}"></title>
+    <!-- 全画面共通のcssを定義 -->
+    <link th:href="@{/css/npm/bootstrap/bootstrap.css}" rel="stylesheet" />
+    <link
+      th:href="@{/css/npm/bootstrap/bootstrap-icons.css}"
+      rel="stylesheet"
+    />
+    <link th:href="@{/css/npm/flatpickr/flatpickr.min.css}" rel="stylesheet" />
+    <link
+      th:href="@{/css/npm/flatpickr/plugins/monthSelect/style.css}"
+      rel="stylesheet"
+    />
+    <!-- 各画面専用のcssを定義 -->
+    <th:block
+      th:if="${#!strings.isEmpty(links)}"
+      th:replace="${links}"
+    ></th:block>
+    <!--共通サイドバーcssの読み込み -->
+    <style th:replace="common/sidebar :: sidebar_css_fragment"></style>
+  </head>
 
-<body>
-  <!--共通ヘッダーの読み込み -->
-  <div th:replace="common/header :: header_fragment"></div>
-  <div class="container-fluid">
-    <div class="row">
-      <!--共通サイドバーの読み込み -->
-      <div th:replace="common/sidebar :: sidebar_fragment"></div>
-      <!--bodyの読み込み -->
-      <main class="my-container col-md-9 col-lg-10 px-md-4">
-        <div id="body" th:replace="${body}"></div>
-      </main>
+  <body>
+    <!--共通ヘッダーの読み込み -->
+    <div th:replace="common/header :: header_fragment"></div>
+    <div class="container-fluid">
+      <div class="row">
+        <!--共通サイドバーの読み込み -->
+        <div th:replace="common/sidebar :: sidebar_fragment"></div>
+        <!--bodyの読み込み -->
+        <main class="my-container col-md-9 col-lg-10 px-md-4">
+          <div id="body" th:replace="${body}"></div>
+        </main>
+      </div>
     </div>
-  </div>
 
-  <!-- 全画面共通のjavascriptを定義 -->
-  <script th:src="@{/js/npm/popper.js/popper.min.js}"></script>
-  <script th:src="@{/js/npm/bootstrap/bootstrap.min.js}"></script>
-  <script th:src="@{/js/npm/flatpickr/flatpickr.min.js}"></script>
-  <script th:src="@{/js/npm/flatpickr/plugins/monthSelect/index.js}"></script>
-  <script th:src="@{/js/npm/flatpickr/l10n/ja.js}"></script>
-  <script th:src="@{/js/npm/chart.js/chart.min.js}"></script>
-  <script th:src="@{/js/study/util/studyUtil.js}"></script>
-  <script th:src="@{/js/study/chart/studyChart.js}"></script>
-  <script th:src="@{/js/study/calendar/studyCalendar.js}"></script>
-  <script th:src="@{/js/study/list/studyListUtil.js}"></script>
+    <!-- 全画面共通のjavascriptを定義 -->
+    <script th:src="@{/js/npm/popper.js/popper.min.js}"></script>
+    <script th:src="@{/js/npm/bootstrap/bootstrap.min.js}"></script>
+    <script th:src="@{/js/npm/flatpickr/flatpickr.min.js}"></script>
+    <script th:src="@{/js/npm/flatpickr/plugins/monthSelect/index.js}"></script>
+    <script th:src="@{/js/npm/flatpickr/l10n/ja.js}"></script>
+    <script th:src="@{/js/npm/chart.js/chart.min.js}"></script>
+    <script th:src="@{/js/study/util/studyUtil.js}"></script>
+    <script th:src="@{/js/study/chart/studyChart.js}"></script>
+    <script th:src="@{/js/study/calendar/studyCalendar.js}"></script>
+    <script th:src="@{/js/study/list/studyListUtil.js}"></script>
 
-  <!-- 各画面専用のjavascriptを定義 -->
-  <th:block th:if="${#!strings.isEmpty(scripts)}" th:replace="${scripts}"></th:block>
-  <!--共通サイドバーjsの読み込み -->
-  <script th:replace="common/sidebar :: sidebar_js_fragment"></script>
-
-</body>
-
+    <!-- 各画面専用のjavascriptを定義 -->
+    <th:block
+      th:if="${#!strings.isEmpty(scripts)}"
+      th:replace="${scripts}"
+    ></th:block>
+    <!--共通サイドバーjsの読み込み -->
+    <script th:replace="common/sidebar :: sidebar_js_fragment"></script>
+  </body>
 </html>

@@ -6,18 +6,21 @@
 そのため、 画面レイアウトを合成するなかで使用されるのはパラメータとして渡したtitle タグ、body タグの内容
 場合に応じてscriptタグ、cssが記載されたhtmlのフラグメント指定文(もしくは~{::body/content()} などでタグ内のコンテンツなどを指定)のみである。
 ここでは、単独でHTMLとして表示できるようにbodyタグ以上のタグも記述し仮のタイトルを記述している。*/-->
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
-  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}"
+>
+  <head>
+    <title>study top</title>
+  </head>
 
-<head>
-  <title>study top</title>
-</head>
-
-<body>
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h3">ダッシュボード</h1>
-    <div class="btn-group ml-auto"></div>
-  </div>
-</body>
-
+  <body>
+    <div
+      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+    >
+      <h1 class="h3">ダッシュボード</h1>
+      <div class="btn-group ml-auto"></div>
+    </div>
+  </body>
 </html>

@@ -1,237 +1,333 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ja">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  lang="ja"
+>
+  <head>
+    <style th:fragment="sidebar_css_fragment">
+      .side-navbar {
+        margin-left: -260px;
+        transition: 0.5s;
+      }
 
+      .my-container {
+        transition: 0.5s;
+      }
 
-<head>
-  <style th:fragment="sidebar_css_fragment">
-    .side-navbar {
-      margin-left: -260px;
-      transition: 0.5s;
-    }
+      /* for sidebar section */
+      .active-nav {
+        margin-left: 0;
+      }
 
-    .my-container {
-      transition: 0.5s;
-    }
+      /* for main section */
+      .active-cont {
+        width: 100%;
+        margin-left: 0;
+      }
 
-    /* for sidebar section */
-    .active-nav {
-      margin-left: 0;
-    }
+      /* 折り畳み可能リストのサイドバー用 */
+      .btn-toggle {
+        padding: 0.25rem 0.5rem;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 0.65);
+        background-color: transparent;
+      }
 
-    /* for main section */
-    .active-cont {
-      width: 100%;
-      margin-left: 0;
-    }
+      .btn-toggle:hover,
+      .btn-toggle:focus {
+        color: rgba(0, 0, 0, 0.85);
+        background-color: #d2f4ea;
+      }
 
-    /* 折り畳み可能リストのサイドバー用 */
-    .btn-toggle {
-      padding: .25rem .5rem;
-      font-weight: 600;
-      color: rgba(0, 0, 0, .65);
-      background-color: transparent;
-    }
+      .btn-toggle::before {
+        width: 1.25em;
+        line-height: 0;
+        content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
+        transition: transform 0.35s ease;
+        transform-origin: 0.5em 50%;
+      }
 
-    .btn-toggle:hover,
-    .btn-toggle:focus {
-      color: rgba(0, 0, 0, .85);
-      background-color: #d2f4ea;
-    }
+      .btn-toggle[aria-expanded='true'] {
+        color: rgba(0, 0, 0, 0.85);
+      }
 
-    .btn-toggle::before {
-      width: 1.25em;
-      line-height: 0;
-      content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
-      transition: transform .35s ease;
-      transform-origin: .5em 50%;
-    }
+      .btn-toggle[aria-expanded='true']::before {
+        transform: rotate(90deg);
+      }
 
-    .btn-toggle[aria-expanded="true"] {
-      color: rgba(0, 0, 0, .85);
-    }
+      .btn-toggle-nav a {
+        padding: 0.1875rem 0.5rem;
+        margin-top: 0.125rem;
+        margin-left: 1.25rem;
+      }
 
-    .btn-toggle[aria-expanded="true"]::before {
-      transform: rotate(90deg);
-    }
+      .btn-toggle-nav a:hover,
+      .btn-toggle-nav a:focus {
+        background-color: #d2f4ea;
+      }
+    </style>
+  </head>
 
-    .btn-toggle-nav a {
-      padding: .1875rem .5rem;
-      margin-top: .125rem;
-      margin-left: 1.25rem;
-    }
-
-    .btn-toggle-nav a:hover,
-    .btn-toggle-nav a:focus {
-      background-color: #d2f4ea;
-    }
-
-  </style>
-
-</head>
-
-<body>
-  <div>
-    <a th:fragment="sidebar_btn_fragment" class="btn" id="menu-btn">
-      <i class="bi bi-text-left" style="font-size: 20px; color:white;"></i>
-    </a>
-  </div>
-  <nav th:fragment="sidebar_fragment" id="sidebarMenu"
-    class="active-nav col-md-3 col-lg-2 d-block bg-light side-navbar collapse">
-    <div class="position-sticky pt-3">
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" type="button"
-            data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            ダッシュボード
-          </button>
-          <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-            <div>
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li class="nav-item">
-                  <a class="link-dark d-inline-flex text-decoration-none rounded" aria-current="page" th:href="@{/}">
-                    <span data-feather="home"></span>
-                    ダッシュボード
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </li>
-        <li class="nav-item">
-          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" type="button"
-            data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-            課題
-          </button>
-          <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-            <div>
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li class="nav-item">
-                  <a class="link-dark d-inline-flex text-decoration-none rounded" th:href="@{/hoge/input}">
-                    <span data-feather="package"></span>
-                    課題1(hoge)
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </li>
-        <li class="nav-item">
-          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" type="button"
-            data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false"
-            aria-controls="collapseThree">
-            カテゴリー
-          </button>
-          <div id="collapseThree" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-            <div>
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li class="nav-item">
-                  <a class="link-dark d-inline-flex text-decoration-none rounded" th:href="@{/category/input}">
-                    <span data-feather="package"></span>
-                    カテゴリー_登録
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="link-dark d-inline-flex text-decoration-none rounded" th:href="@{/category/list}">
-                    <span data-feather="package"></span>
-                    カテゴリー_確認
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </li>
-        <li class="nav-item">
-          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" type="button"
-            data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-            家計簿
-          </button>
-          <div id="collapseFour" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-            <div>
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li class="nav-item">
-                  <a class="link-dark d-inline-flex text-decoration-none rounded" th:href="@{/books/input}">
-                    <span data-feather="package"></span>
-                    家計簿_登録
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="link-dark d-inline-flex text-decoration-none rounded" th:href="@{/books/export}">
-                    <span data-feather="package"></span>
-                    家計簿_出力
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="link-dark d-inline-flex text-decoration-none rounded" th:href="@{/books/index}">
-                    <span data-feather="package"></span>
-                    家計簿_一覧
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </li>
-        <li class="nav-item">
-          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" type="button"
-            data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-            図色
-          </button>
-          <div id="collapseFive" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-            <div>
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li class="nav-item">
-                  <a class="link-dark d-inline-flex text-decoration-none rounded" th:href="@{/chartColour/index}">
-                    <span data-feather="package"></span>
-                    図の色確認
-                  </a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </li>
-        <li class="nav-item">
-          <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0" type="button"
-            data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-            アカウント
-          </button>
-          <div id="collapseSix" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-            <div>
-              <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                <li class="nav-item" sec:authorize="hasRole('ROLE_SYSTEM')">
-                  <a class="link-dark d-inline-flex text-decoration-none rounded" th:href="@{/system/account/}">
-                    <span data-feather="users"></span>
-                    アカウント
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <form th:action="@{/logout}" name="logout" method="post">
-                    <a class="link-dark d-inline-flex text-decoration-none rounded" href="javascript:logout.submit()">
-                      <span data-feather="log-out"></span>
-                      ログアウト
-                    </a>
-                  </form>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </li>
-      </ul>
+  <body>
+    <div>
+      <a th:fragment="sidebar_btn_fragment" class="btn" id="menu-btn">
+        <i class="bi bi-text-left" style="font-size: 20px; color: white"></i>
+      </a>
     </div>
-  </nav>
-  <!-- CSS script ボタンクリック時にクラスがなかったら付与あったら削除することで、出し入れを行う-->
-  <script th:fragment='sidebar_js_fragment'>
-    const menu_btn = document.querySelector('#menu-btn');
-    const menu_btn_i = menu_btn.querySelector('i')
-    const sidebar = document.querySelector('#sidebarMenu');
-    const container = document.querySelector('.my-container');
-    menu_btn.addEventListener('click', () => {
-      sidebar.classList.toggle('active-nav');
-      container.classList.toggle('active-cont');
-      //StudyUtil
-      swichClass(menu_btn_i, 'bi-text-left', 'bi-text-right')
-    });
-  </script>
-
-</body>
-
-
+    <nav
+      th:fragment="sidebar_fragment"
+      id="sidebarMenu"
+      class="active-nav col-md-3 col-lg-2 d-block bg-light side-navbar collapse"
+    >
+      <div class="position-sticky pt-3">
+        <ul class="nav flex-column">
+          <li class="nav-item">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseOne"
+              aria-expanded="true"
+              aria-controls="collapseOne"
+            >
+              ダッシュボード
+            </button>
+            <div
+              id="collapseOne"
+              class="collapse show"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div>
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li class="nav-item">
+                    <a
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                      aria-current="page"
+                      th:href="@{/}"
+                    >
+                      <span data-feather="home"></span>
+                      ダッシュボード
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseTwo"
+              aria-expanded="false"
+              aria-controls="collapseTwo"
+            >
+              課題
+            </button>
+            <div
+              id="collapseTwo"
+              class="collapse"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div>
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li class="nav-item">
+                    <a
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                      th:href="@{/hoge/input}"
+                    >
+                      <span data-feather="package"></span>
+                      課題1(hoge)
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseThree"
+              aria-expanded="false"
+              aria-controls="collapseThree"
+            >
+              カテゴリー
+            </button>
+            <div
+              id="collapseThree"
+              class="collapse"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div>
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li class="nav-item">
+                    <a
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                      th:href="@{/category/input}"
+                    >
+                      <span data-feather="package"></span>
+                      カテゴリー_登録
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                      th:href="@{/category/list}"
+                    >
+                      <span data-feather="package"></span>
+                      カテゴリー_確認
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseFour"
+              aria-expanded="false"
+              aria-controls="collapseFour"
+            >
+              家計簿
+            </button>
+            <div
+              id="collapseFour"
+              class="collapse"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div>
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li class="nav-item">
+                    <a
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                      th:href="@{/books/input}"
+                    >
+                      <span data-feather="package"></span>
+                      家計簿_登録
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                      th:href="@{/books/export}"
+                    >
+                      <span data-feather="package"></span>
+                      家計簿_出力
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                      th:href="@{/books/index}"
+                    >
+                      <span data-feather="package"></span>
+                      家計簿_一覧
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseFive"
+              aria-expanded="false"
+              aria-controls="collapseFive"
+            >
+              図色
+            </button>
+            <div
+              id="collapseFive"
+              class="collapse"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div>
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li class="nav-item">
+                    <a
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                      th:href="@{/chartColour/index}"
+                    >
+                      <span data-feather="package"></span>
+                      図の色確認
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseSix"
+              aria-expanded="false"
+              aria-controls="collapseSix"
+            >
+              アカウント
+            </button>
+            <div
+              id="collapseSix"
+              class="collapse"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div>
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li class="nav-item" sec:authorize="hasRole('ROLE_SYSTEM')">
+                    <a
+                      class="link-dark d-inline-flex text-decoration-none rounded"
+                      th:href="@{/system/account/}"
+                    >
+                      <span data-feather="users"></span>
+                      アカウント
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <form th:action="@{/logout}" name="logout" method="post">
+                      <a
+                        class="link-dark d-inline-flex text-decoration-none rounded"
+                        href="javascript:logout.submit()"
+                      >
+                        <span data-feather="log-out"></span>
+                        ログアウト
+                      </a>
+                    </form>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <!-- CSS script ボタンクリック時にクラスがなかったら付与あったら削除することで、出し入れを行う-->
+    <script th:fragment="sidebar_js_fragment">
+      const menu_btn = document.querySelector('#menu-btn');
+      const menu_btn_i = menu_btn.querySelector('i');
+      const sidebar = document.querySelector('#sidebarMenu');
+      const container = document.querySelector('.my-container');
+      menu_btn.addEventListener('click', () => {
+        sidebar.classList.toggle('active-nav');
+        container.classList.toggle('active-cont');
+        //StudyUtil
+        swichClass(menu_btn_i, 'bi-text-left', 'bi-text-right');
+      });
+    </script>
+  </body>
 </html>

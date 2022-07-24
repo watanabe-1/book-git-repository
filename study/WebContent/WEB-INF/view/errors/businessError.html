@@ -9,8 +9,10 @@
     <h1>エラー</h1>
     <h3>予期せぬビジネスエラーが発生しました。</h3>
     <!--<span th:text="${'エラーコード[' + exceptionCode + ']'}"></span>-->
-    <span th:each="message : ${resultMessages}"
-           th:text="${message.code} != null ? ${'[' + message.code + ']' + #messages.msgWithParams(message.code, message.args)} : ${message.text}"></span>
+    <span
+      th:each="message : ${resultMessages}"
+      th:text="${message.code} != null ? ${'[' + message.code + ']' + #messages.msgWithParams(message.code, message.args)} : ${message.text}"
+    ></span>
     <p>
       しばらく経ってから再度アクセスしてください。<br />
       問題が解消しない場合は、管理者までご連絡ください。

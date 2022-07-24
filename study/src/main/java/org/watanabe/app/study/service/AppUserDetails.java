@@ -11,8 +11,14 @@ import lombok.Getter;
  */
 public class AppUserDetails extends User {
 
+  /**
+   * シリアルバージョンUID
+   */
   private static final long serialVersionUID = 1L;
 
+  /**
+   * アカウント
+   */
   @Getter
   private final Account account;
 

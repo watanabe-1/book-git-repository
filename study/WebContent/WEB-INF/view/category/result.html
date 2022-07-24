@@ -1,23 +1,26 @@
-<html xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}"
+>
+  <head>
+    <title>カテゴリー登録結果</title>
+  </head>
 
-<head>
-  <title>カテゴリー登録結果</title>
-</head>
-
-<body>
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h3">カテゴリー情報登録完了</h1>
-    <div class="btn-group ml-auto">
+  <body>
+    <div
+      class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
+    >
+      <h1 class="h3">カテゴリー情報登録完了</h1>
+      <div class="btn-group ml-auto"></div>
     </div>
-  </div>
-  <div class="card mt-5">
-    <div class="card-body">
-      <h5 class="card-title">登録完了</h5>
-      <p class="card-text">カテゴリー情報の登録が完了しました。</p>
-      <a th:href="@{/category/list}" class="btn btn-primary">カテゴリー一覧へ戻る</a>
+    <div class="card mt-5">
+      <div class="card-body">
+        <h5 class="card-title">登録完了</h5>
+        <p class="card-text">カテゴリー情報の登録が完了しました。</p>
+        <a th:href="@{/category/list}" class="btn btn-primary"
+          >カテゴリー一覧へ戻る</a
+        >
+      </div>
     </div>
-  </div>
-</body>
-
+  </body>
 </html>

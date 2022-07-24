@@ -1,24 +1,35 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" lang="ja">
-<header th:fragment="header_fragment" class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-  <div class="float-start">
-    <ul class="list-group list-group-horizontal">
-      <li class="list-group-item-dark.active">
-        <!--共通サイドバーボタンの読み込み -->
-        <div th:replace="common/sidebar :: sidebar_btn_fragment"></div>
-      </li>
-      <li class="list-group-item-dark.active">
-        <a class="navbar-brand" th:href="@{/}" style="font-size:1.5rem;">study top</a>
-      </li>
-    </ul>
-  </div>
-  <div class="float-end">
-    <ul class="list-group list-group-horizontal">
-      <li class="list-group-item-dark.active">
-        <span class="navbar-text px-3"><span sec:authentication="principal.account.userName"></span>さん</span>
-      </li>
-    </ul>
-  </div>
-</header>
-
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  lang="ja"
+>
+  <header
+    th:fragment="header_fragment"
+    class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow"
+  >
+    <div class="float-start">
+      <ul class="list-group list-group-horizontal">
+        <li class="list-group-item-dark.active">
+          <!--共通サイドバーボタンの読み込み -->
+          <div th:replace="common/sidebar :: sidebar_btn_fragment"></div>
+        </li>
+        <li class="list-group-item-dark.active">
+          <a class="navbar-brand" th:href="@{/}" style="font-size: 1.5rem"
+            >study top</a
+          >
+        </li>
+      </ul>
+    </div>
+    <div class="float-end">
+      <ul class="list-group list-group-horizontal">
+        <li class="list-group-item-dark.active">
+          <span class="navbar-text px-3"
+            ><span sec:authentication="principal.account.userName"></span
+            >さん</span
+          >
+        </li>
+      </ul>
+    </div>
+  </header>
 </html>
