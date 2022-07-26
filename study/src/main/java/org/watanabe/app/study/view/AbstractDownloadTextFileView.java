@@ -15,17 +15,12 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.study.helper.DownloadHelper;
+import org.watanabe.app.study.util.StudyModelUtil;
 
 /**
  * テキストファイルダウンロード用抽象クラス
  */
 public abstract class AbstractDownloadTextFileView extends AbstractView {
-
-
-  /**
-   * ModelAndView クラス取得用キー
-   */
-  protected static final String MODE_KEY_MODEL_AND_VIEW = "modelAndView";
 
   /**
    * ファイルダウンロード Helper
@@ -62,7 +57,7 @@ public abstract class AbstractDownloadTextFileView extends AbstractView {
    * @return モデルマップ
    */
   protected ModelMap getModelMap(Map<String, Object> model) {
-    return ((ModelAndView) model.get(MODE_KEY_MODEL_AND_VIEW)).getModelMap();
+    return ((ModelAndView) model.get(StudyModelUtil.MODEL_KEY_MODEL_AND_VIEW)).getModelMap();
   }
 
   /**

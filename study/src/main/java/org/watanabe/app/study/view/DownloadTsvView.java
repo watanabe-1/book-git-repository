@@ -7,7 +7,7 @@ import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 
 @Component
-public class DownloadCsvView extends AbstractDownloadTextFileView {
+public class DownloadTsvView extends AbstractDownloadTextFileView {
 
   /**
    * ファイルネームを取得する
@@ -29,8 +29,9 @@ public class DownloadCsvView extends AbstractDownloadTextFileView {
   @Override
   protected byte[] getFileData(ModelMap model) {
     return StudyStringUtil
-        .objectToCsvStr(model.getAttribute(StudyModelUtil.MODEL_KEY_FILE_DATA),
-            (Class<?>) model.getAttribute(StudyModelUtil.MODEL_KEY_FILE_DATA_CLASS), true)
+        .objectToTsvStr(model.getAttribute(StudyModelUtil.MODEL_KEY_FILE_DATA),
+            (Class<?>) model.getAttribute(StudyModelUtil.MODEL_KEY_FILE_DATA_CLASS),
+            true)
         .getBytes(StandardCharsets.UTF_8);
   }
 }

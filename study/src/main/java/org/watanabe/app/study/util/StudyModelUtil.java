@@ -10,9 +10,14 @@ import org.watanabe.app.study.entity.Entity;
 public class StudyModelUtil {
 
   /**
-   * モデルのキー：モデルマップ名
+   * モデルのキー：modelMap クラス
    */
-  public static final String MODEL_KEY_MODELMAP_NAME = "modelMap";
+  public static final String MODEL_KEY_MODEL_MAP = "modelMap";
+
+  /**
+   * モデルのキー：ModelAndView クラス
+   */
+  public static final String MODEL_KEY_MODEL_AND_VIEW = "modelAndView";
 
   /**
    * モデルのキー：ファイルネーム
@@ -25,7 +30,7 @@ public class StudyModelUtil {
   public static final String MODEL_KEY_FILE_DATA = "fileData";
 
   /**
-   * モデルのキー：ファイルデータ
+   * モデルのキー：ファイルデータクラス
    */
   public static final String MODEL_KEY_FILE_DATA_CLASS = "fileDataClass";
 

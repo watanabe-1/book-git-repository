@@ -58,7 +58,7 @@ public class ChartColourController {
     ModelMap modelMap = new ModelMap();
     modelMap.addAttribute("inputResultMessage", "保存が完了しました!");
     modelMap.addAttribute("tab", chartColourHelper.getResultTab());
-    redirectAttributes.addFlashAttribute(StudyModelUtil.MODEL_KEY_MODELMAP_NAME, modelMap);
+    redirectAttributes.addFlashAttribute(StudyModelUtil.MODEL_KEY_MODEL_MAP, modelMap);
 
     return "redirect:/chartColour/index";
   }
@@ -87,7 +87,7 @@ public class ChartColourController {
     }
 
     modelMap.addAttribute("tab", chartColourHelper.getResultTab());
-    redirectAttributes.addFlashAttribute(StudyModelUtil.MODEL_KEY_MODELMAP_NAME, modelMap);
+    redirectAttributes.addFlashAttribute(StudyModelUtil.MODEL_KEY_MODEL_MAP, modelMap);
 
     return "redirect:/chartColour/index";
   }
@@ -111,7 +111,7 @@ public class ChartColourController {
     ModelMap modelMap = new ModelMap();
     modelMap.addAttribute("chartColourResultMessage", "保存が完了しました!");
     modelMap.addAttribute("tab", chartColourHelper.getDefaltTab());
-    redirectAttributes.addFlashAttribute(StudyModelUtil.MODEL_KEY_MODELMAP_NAME, modelMap);
+    redirectAttributes.addFlashAttribute(StudyModelUtil.MODEL_KEY_MODEL_MAP, modelMap);
 
     return "redirect:/chartColour/index";
   }
@@ -126,7 +126,7 @@ public class ChartColourController {
    */
   @RequestMapping(value = "/chartColour/index", method = RequestMethod.GET)
   public ModelAndView index(@ModelAttribute TemplatechartcolourForm form, ModelAndView model,
-      @ModelAttribute(StudyModelUtil.MODEL_KEY_MODELMAP_NAME) ModelMap modelMap) {
+      @ModelAttribute(StudyModelUtil.MODEL_KEY_MODEL_MAP) ModelMap modelMap) {
     model.setViewName("chartColour/index");
 
     String tab = form.getTab();
