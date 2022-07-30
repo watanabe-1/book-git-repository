@@ -75,7 +75,7 @@ public class BooksController {
     }
 
     model.setViewName("/books/result");
-    List<Books> booksList = booksHelper.getBooksByCsv(form.getBooksFile(), form.getBooksType());
+    List<Books> booksList = booksHelper.csvToBooksList(form.getBooksFile(), form.getBooksType());
     // 取得したファイル内の日付の最小値、最大値、帳票タイプ(支出)に合わせて今登録済みの内容を削除
     booksService.deleteByBooksDateAndBooksTypeAndUserId(
         booksList.stream().min(Comparator.comparing(Books::getBooksDate)).get().getBooksDate(),

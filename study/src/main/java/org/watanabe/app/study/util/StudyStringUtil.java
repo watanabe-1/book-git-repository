@@ -227,6 +227,17 @@ public class StudyStringUtil {
   }
 
   /**
+   * 文字列の最初の文字が引数2と同じか判定
+   * 
+   * @param target 判定対象
+   * @param first 判定文字
+   * @return 判定結果
+   */
+  public static boolean isFirstChar(String target, char first) {
+    return Objects.equals(target.toCharArray()[0], first);
+  }
+
+  /**
    * 文字列前後のダブルクォーテーションを削除するFunction
    * 
    * @param str 文字列

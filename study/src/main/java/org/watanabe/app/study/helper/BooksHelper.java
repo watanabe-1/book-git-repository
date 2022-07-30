@@ -85,7 +85,7 @@ public class BooksHelper {
    * @param charset 文字コード
    * @return Books セットされたentity
    */
-  public List<Books> getBooksByCsv(MultipartFile booksFile, String booksType) {
+  public List<Books> csvToBooksList(MultipartFile booksFile, String booksType) {
     // ログインユーザー取得
     String user = StudyUtil.getLoginUser();
     List<Books> booksList = new ArrayList<Books>();
