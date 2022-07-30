@@ -12,7 +12,7 @@ import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.enums.flag.DeleteFlag;
 import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.service.CategoryService;
-import org.watanabe.app.study.util.StudyModelUtil;
+import org.watanabe.app.study.util.StudyBeanUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
 /**
@@ -72,7 +72,7 @@ public class CategoryHelper {
         // カテゴリーが登録されていなかったら仮でいったん登録
         Category cat = new Category();
         // フォームの値をエンティティにコピーし、共通項目をセット
-        StudyModelUtil.copyAndSetStudyEntityProperties(catForm, cat);
+        StudyBeanUtil.copyAndSetStudyEntityProperties(catForm, cat);
         // imgaeIdをセット
         cat.setImgId(catForm.getImgIds().getImgId());
 
@@ -113,7 +113,7 @@ public class CategoryHelper {
     cat.setActive("1");
 
     // 共通項目をセット
-    StudyModelUtil.setStudyEntityProperties(cat);
+    StudyBeanUtil.setStudyEntityProperties(cat);
 
     categoryService.saveOne(cat);
     catList = categoryService.findAll();

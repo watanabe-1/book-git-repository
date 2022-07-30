@@ -10,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.AbstractView;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
@@ -34,41 +33,20 @@ public abstract class AbstractDownloadTextFileView extends AbstractView {
    * @param model Model object
    * @param request current HTTP request
    * @param response current HTTP response
-   * @throws IOException Input/output exception
    */
   @Override
   protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
-      HttpServletResponse response) throws IOException {
+      HttpServletResponse response) {
     try (OutputStream outputStream = new BufferedOutputStream(response.getOutputStream())) {
-      downloadHelper.addContentDisposition(response, getFileName(getModelMap(model)));
-      downloadHelper.setFileData(outputStream, getFileData(getModelMap(model)));
+      downloadHelper.addContentDisposition(response,
+          getFileName(StudyModelUtil.getModelMap(model)));
+      downloadHelper.setFileData(outputStream, getFileData(StudyModelUtil.getModelMap(model)));
 
       // ファイルに書き込む
       outputStream.flush();
     } catch (IOException e) {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
-  }
-
-  /**
-   * モデルマップを取得
-   * 
-   * @param model Model object
-   * @return モデルマップ
-   */
-  protected ModelMap getModelMap(Map<String, Object> model) {
-    return ((ModelAndView) model.get(StudyModelUtil.MODEL_KEY_MODEL_AND_VIEW)).getModelMap();
-  }
-
-  /**
-   * コントローラークラスでセットしたアトリビュートを取得
-   * 
-   * @param model Model object
-   * @param attributeName アトリビュート名
-   * @return アトリビュート
-   */
-  protected Object getAttribute(Map<String, Object> model, String attributeName) {
-    return getModelMap(model).getAttribute(attributeName);
   }
 
   /**

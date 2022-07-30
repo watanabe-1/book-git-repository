@@ -25,7 +25,7 @@ import org.watanabe.app.study.helper.CategoryHelper;
 import org.watanabe.app.study.helper.UploadHelper;
 import org.watanabe.app.study.service.CategoryService;
 import org.watanabe.app.study.service.ImageService;
-import org.watanabe.app.study.util.StudyModelUtil;
+import org.watanabe.app.study.util.StudyBeanUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
 import lombok.extern.slf4j.XSlf4j;
@@ -137,7 +137,7 @@ public class CategoryController {
     // カテゴリーが登録されていなかったら仮でいったん登録
     Category cat = new Category();
     // フォームの値をエンティティにコピーし、共通項目をセット
-    StudyModelUtil.copyAndSetStudyEntityProperties(form, cat);
+    StudyBeanUtil.copyAndSetStudyEntityProperties(form, cat);
 
     try {
       // dbのカテゴリーテーブルに登録

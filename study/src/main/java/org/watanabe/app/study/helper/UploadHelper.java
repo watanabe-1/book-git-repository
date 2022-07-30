@@ -2,6 +2,7 @@ package org.watanabe.app.study.helper;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.UUID;
 import org.apache.commons.io.FileUtils;
@@ -15,7 +16,7 @@ import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.study.entity.Image;
 import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.service.ImageService;
-import org.watanabe.app.study.util.StudyModelUtil;
+import org.watanabe.app.study.util.StudyBeanUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 
 /**
@@ -69,7 +70,7 @@ public class UploadHelper {
     try {
       FileUtils.copyInputStreamToFile(multipartFile.getInputStream(), uploadTemporaryFile);
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
 
     return uploadTmpFileId;
@@ -115,14 +116,14 @@ public class UploadHelper {
     img.setImgType(ingType);
 
     // 共通項目をセット
-    StudyModelUtil.setStudyEntityProperties(img);
+    StudyBeanUtil.setStudyEntityProperties(img);
 
     try {
       // dbのimagesテーブルに登録
       imageService.saveOne(img);
-    } catch (DuplicateKeyException dke) {
+    } catch (DuplicateKeyException e) {
       // result.addError(new FieldError(result.getObjectName(), "imgId", "採番された画像IDは既に登録されています。"));
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
   }
 
@@ -163,7 +164,7 @@ public class UploadHelper {
     try {
       FileUtils.moveFile(file, fileToMove);
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
 
     // 抽象パスを返却
@@ -171,7 +172,8 @@ public class UploadHelper {
   }
 
   /**
-   * アップロードされた画像データを取得し、base64でエンコードする エンコードしたものを文字列に変更(同時に拡張子を指定)
+   * アップロードされた画像データを取得し、base64でエンコードする<br/>
+   * エンコードしたものを文字列に変更(同時に拡張子を指定)
    * 
    * @param imageForm アップロードされたデータ
    * @param String アップロードされたファイルの拡張子
@@ -181,9 +183,10 @@ public class UploadHelper {
     StringBuffer data = new StringBuffer();
     String base64 = null;
     try {
-      base64 = new String(Base64.getEncoder().encode(multipartFile.getBytes()), "ASCII");
+      base64 = new String(Base64.getEncoder().encode(multipartFile.getBytes()),
+          StandardCharsets.UTF_8.name());
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
     data.append("data:image/").append(expand).append(";base64,").append(base64);
 

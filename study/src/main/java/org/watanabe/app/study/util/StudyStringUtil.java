@@ -192,6 +192,39 @@ public class StudyStringUtil {
     return result;
   }
 
+  /**
+   * 文字列の最初の文字を大文字にする
+   * 
+   * @param val 変換対象
+   * @return 変換後文字列
+   */
+  public static String upperCaseFirst(String val) {
+    char[] arr = val.toCharArray();
+    arr[0] = Character.toUpperCase(arr[0]);
+    return new String(arr);
+  }
+
+  /**
+   * 文字列の最初の文字を小文字にする
+   * 
+   * @param val 変換対象
+   * @return 変換後文字列
+   */
+  public static String lowerCaseFirst(String val) {
+    char[] arr = val.toCharArray();
+    arr[0] = Character.toLowerCase(arr[0]);
+    return new String(arr);
+  }
+
+  /**
+   * 最初の文字を小文字にしたクラス名を取得する
+   * 
+   * @param Clazz クラス名取得対象クラス
+   * @return 最初の文字が小文字のクラス名
+   */
+  public static String getlowerCaseFirstClassName(Class<?> Clazz) {
+    return lowerCaseFirst(Clazz.getSimpleName());
+  }
 
   /**
    * 文字列前後のダブルクォーテーションを削除するFunction

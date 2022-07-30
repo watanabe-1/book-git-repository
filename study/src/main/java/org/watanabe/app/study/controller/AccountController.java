@@ -17,7 +17,7 @@ import org.watanabe.app.study.enums.type.AccountType;
 import org.watanabe.app.study.form.AccountForm;
 import org.watanabe.app.study.service.AccountService;
 import org.watanabe.app.study.service.AppUserDetails;
-import org.watanabe.app.study.util.StudyModelUtil;
+import org.watanabe.app.study.util.StudyBeanUtil;
 
 /**
  * アカウントコントローラ.
@@ -116,7 +116,7 @@ public class AccountController {
 
     // フォームの値をエンティティにコピーし、共通項目をセット
     Account account = new Account();
-    StudyModelUtil.copyAndSetStudyEntityProperties(form, account);
+    StudyBeanUtil.copyAndSetStudyEntityProperties(form, account);
 
     // エンコードしたパスワードをセット
     account.setPassword(passwordEncoder.encode(form.getPassword()));

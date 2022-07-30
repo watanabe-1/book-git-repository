@@ -1,8 +1,8 @@
 package org.watanabe.app.study.util;
 
-import java.util.Date;
-import org.springframework.beans.BeanUtils;
-import org.watanabe.app.study.entity.Entity;
+import java.util.Map;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * モデルのUtilクラスを作成
@@ -35,33 +35,27 @@ public class StudyModelUtil {
   public static final String MODEL_KEY_FILE_DATA_CLASS = "fileDataClass";
 
   /**
-   * 引数1から引数2に同名のフィールドがあった場合、そのフィールドに同じ値をセット またstudyで固定使用しているカラムの値をセットする
+   * コントローラークラスでセットしたモデルマップを取得<br/>
+   * 主にviewクラスでの使用を想定
    * 
-   * @param source コピー元
-   * @param target コピー＆セット先
+   * @param model Model object
+   * @return モデルマップ
    */
-  public static void copyAndSetStudyEntityProperties(Object source, Entity target) {
-    // 同名のフィールドにセット 引数1から2へ
-    BeanUtils.copyProperties(source, target);
-    setStudyEntityProperties(target);
+  public static ModelMap getModelMap(Map<String, Object> model) {
+    return model.containsKey(MODEL_KEY_MODEL_AND_VIEW)
+        ? ((ModelAndView) model.get(MODEL_KEY_MODEL_AND_VIEW)).getModelMap()
+        : (ModelMap) model.get(MODEL_KEY_MODEL_MAP);
   }
 
   /**
-   * studyで固定使用しているカラムの値をセットする
+   * コントローラークラスでセットしたアトリビュートを取得
    * 
-   * @param target セット対象
+   * @param model Model object
+   * @param attributeName アトリビュート名
+   * @return アトリビュート
    */
-  public static void setStudyEntityProperties(Entity target) {
-    // 現在日時取得
-    Date now = StudyUtil.getNowDate();
-    // ログインユーザー取得
-    String user = StudyUtil.getLoginUser();
-
-    if (target.getInsUser() == null) {
-      target.setInsUser(user);
-      target.setInsDate(now);
-    }
-    target.setUpdUser(user);
-    target.setUpdDate(now);
+  public static Object getAttribute(Map<String, Object> model, String attributeName) {
+    return getModelMap(model).getAttribute(attributeName);
   }
+
 }

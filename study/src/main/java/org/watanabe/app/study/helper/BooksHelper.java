@@ -23,10 +23,10 @@ import org.watanabe.app.study.entity.Books;
 import org.watanabe.app.study.enums.dbcode.BooksTab;
 import org.watanabe.app.study.enums.type.BooksType;
 import org.watanabe.app.study.service.BooksService;
+import org.watanabe.app.study.util.StudyBeanUtil;
 import org.watanabe.app.study.util.StudyCodeUtil;
 import org.watanabe.app.study.util.StudyDateUtil;
 import org.watanabe.app.study.util.StudyFileUtil;
-import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
@@ -103,7 +103,7 @@ public class BooksHelper {
       books.setBooksMethod(col.getBooksMethod());
       books.setBooksAmmount(col.getBooksAmmount());
       // 共通項目をセット
-      StudyModelUtil.setStudyEntityProperties(books);
+      StudyBeanUtil.setStudyEntityProperties(books);
       booksList.add(books);
     });
 
@@ -361,6 +361,16 @@ public class BooksHelper {
     bddd.setData(data);
     bddd.setHidden(isHidden);
     dataSets.add(dataSetsIndex, bddd);
+  }
+
+  /**
+   * 金額を合計する
+   * 
+   * @param target 対象
+   * @return 金額の合計
+   */
+  public int sumAmount(List<Books> target) {
+    return target.stream().mapToInt(book -> book.getBooksAmmount()).sum();
   }
 
   /**

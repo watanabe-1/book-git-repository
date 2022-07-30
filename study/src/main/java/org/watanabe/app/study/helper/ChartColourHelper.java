@@ -20,9 +20,9 @@ import org.watanabe.app.study.enums.dbcode.ChartColourTab;
 import org.watanabe.app.study.enums.flag.ActiveFlag;
 import org.watanabe.app.study.form.TemplatechartcolourForm;
 import org.watanabe.app.study.service.TemplatechartcolourService;
+import org.watanabe.app.study.util.StudyBeanUtil;
 import org.watanabe.app.study.util.StudyCodeUtil;
 import org.watanabe.app.study.util.StudyDateUtil;
-import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
 /**
@@ -300,7 +300,7 @@ public class ChartColourHelper {
 
     // フォームの値をエンティティにコピーし、共通項目をセット
     Templatechartcolour newColorTemp = new Templatechartcolour();
-    StudyModelUtil.copyAndSetStudyEntityProperties(form, newColorTemp);
+    StudyBeanUtil.copyAndSetStudyEntityProperties(form, newColorTemp);
 
     newColorTemp.setTemplateId(UUID.randomUUID().toString());
     newColorTemp.setUserId(user);

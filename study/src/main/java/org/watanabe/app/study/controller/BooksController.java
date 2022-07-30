@@ -21,6 +21,7 @@ import org.watanabe.app.study.util.StudyDateUtil;
 import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
+import org.watanabe.app.study.view.DownloadCsvView;
 
 /**
  * 家計簿コントローラ.
@@ -115,7 +116,7 @@ public class BooksController {
    */
   @RequestMapping(value = "/books/download", method = RequestMethod.POST)
   public ModelAndView download(@ModelAttribute BooksForm form, ModelAndView model) {
-    model.setViewName("downloadCsvView");
+    model.setViewName(StudyStringUtil.getlowerCaseFirstClassName(DownloadCsvView.class));
 
     String fileNameType =
         StudyStringUtil.isNullOrEmpty(form.getBooksYear()) ? "ALL" : form.getBooksYear();
@@ -152,9 +153,9 @@ public class BooksController {
     List<Books> booksByExpenses =
         booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode());
     List<Books> booksByIncome = booksHelper.findByMonthAndType(date, BooksType.INCOME.getCode());
-    int sumAmountByExpenses =
-        booksByExpenses.stream().mapToInt(book -> book.getBooksAmmount()).sum();
-    int sumAmountByIncome = booksByIncome.stream().mapToInt(book -> book.getBooksAmmount()).sum();
+    int sumAmountByExpenses = booksHelper.sumAmount(booksByExpenses);
+    int sumAmountByIncome = booksHelper.sumAmount(booksByIncome);
+
     model.addObject("bookslistByExpenses", booksByExpenses);
     model.addObject("bookslistByIncome", booksByIncome);
     model.addObject("sumAmountByExpenses", sumAmountByExpenses);
