@@ -4,18 +4,18 @@
   th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}"
 >
   <head>
-    <title>家計簿支出情報一覧</title>
+    <title>家計簿情報一覧</title>
   </head>
 
   <body>
     <div
       class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom"
     >
-      <h1 class="h3">家計簿支出一覧</h1>
+      <h1 class="h3">家計簿一覧</h1>
       <div class="btn-group ml-auto">
         <a class="btn btn-link" th:href="@{/books/input}">
           <span data-feather="user-plus"></span>
-          家計簿支出一括登録
+          家計簿一括登録
         </a>
       </div>
     </div>

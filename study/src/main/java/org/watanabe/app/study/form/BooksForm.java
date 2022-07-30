@@ -8,6 +8,7 @@ import org.watanabe.app.common.validation.UploadFileMaxSize;
 import org.watanabe.app.common.validation.UploadFileMediaType;
 import org.watanabe.app.common.validation.UploadFileNotEmpty;
 import org.watanabe.app.common.validation.UploadFileRequired;
+import org.watanabe.app.study.util.StudyFileUtil;
 import lombok.Data;
 
 /**
@@ -22,7 +23,8 @@ public class BooksForm implements Serializable {
   @UploadFileRequired
   @UploadFileNotEmpty
   @UploadFileMaxSize
-  @UploadFileMediaType(exts = "csv", mediaTypes = "text/csv")
+  @UploadFileMediaType(exts = StudyFileUtil.EXTENSION_BY_CSV,
+      mediaTypes = StudyFileUtil.MEDIATYPE_BY_CSV)
   private MultipartFile booksFile;
 
   /**

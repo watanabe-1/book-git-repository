@@ -14,6 +14,7 @@ import org.springframework.web.servlet.view.AbstractView;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.study.helper.DownloadHelper;
+import org.watanabe.app.study.util.StudyFileUtil;
 import org.watanabe.app.study.util.StudyModelUtil;
 
 /**
@@ -39,7 +40,7 @@ public abstract class AbstractDownloadTextFileView extends AbstractView {
       HttpServletResponse response) {
     try (OutputStream outputStream = new BufferedOutputStream(response.getOutputStream())) {
       downloadHelper.addContentDisposition(response,
-          getFileName(StudyModelUtil.getModelMap(model)));
+          getFileName(StudyModelUtil.getModelMap(model)), StudyFileUtil.MEDIATYPE_BY_TEXT);
       downloadHelper.setFileData(outputStream, getFileData(StudyModelUtil.getModelMap(model)));
 
       // ファイルに書き込む

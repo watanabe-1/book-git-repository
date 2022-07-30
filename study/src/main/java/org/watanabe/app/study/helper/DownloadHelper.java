@@ -24,11 +24,6 @@ public class DownloadHelper {
       "attachment; filename=\"%s\"; filename*=UTF-8''%s";
 
   /**
-   * テキスト形式
-   */
-  private static final String CONTENT_TYPE_TEXT_PLAIN = "text/plain";
-
-  /**
    * 日本語対応フォーマットでファイル名を指定
    * 
    * @param headers ヘッダー
@@ -46,13 +41,15 @@ public class DownloadHelper {
    * 
    * @param response レスポンス
    * @param fileName ファイル名
+   * @param ContentType コンテンツタイプ
    */
-  public void addContentDisposition(HttpServletResponse response, String fileName)
+  public void addContentDisposition(HttpServletResponse response, String fileName,
+      String ContentType)
       throws UnsupportedEncodingException {
     String headerValue = String.format(CONTENT_DISPOSITION_FORMAT, fileName,
         UriUtils.encode(fileName, StandardCharsets.UTF_8.name()));
     response.setHeader(HttpHeaders.CONTENT_DISPOSITION, headerValue);
-    response.setContentType(CONTENT_TYPE_TEXT_PLAIN);
+    response.setContentType(ContentType);
   }
 
   /**

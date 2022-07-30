@@ -3,6 +3,7 @@ package org.watanabe.app.study.view;
 import java.nio.charset.StandardCharsets;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.ModelMap;
+import org.watanabe.app.study.util.StudyFileUtil;
 import org.watanabe.app.study.util.StudyModelUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 
@@ -17,7 +18,9 @@ public class DownloadTsvView extends AbstractDownloadTextFileView {
    */
   @Override
   protected String getFileName(ModelMap model) {
-    return (String) model.getAttribute(StudyModelUtil.MODEL_KEY_FILE_NAME);
+    return StudyFileUtil.addExtension(
+        (String) model.getAttribute(StudyModelUtil.MODEL_KEY_FILE_NAME),
+        StudyFileUtil.EXTENSION_BY_TSV);
   }
 
   /**

@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.io.FilenameUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,45 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
  * ファイルを扱うutilクラス
  */
 public class StudyFileUtil {
+
+  /**
+   * csvの拡張子
+   */
+  public static final String EXTENSION_BY_CSV = "csv";
+
+  /**
+   * tsvの拡張子
+   */
+  public static final String EXTENSION_BY_TSV = "tsv";
+
+  /**
+   * txtのメディアタイプ
+   */
+  public static final String MEDIATYPE_BY_TEXT = "text/plain";
+
+  /**
+   * csvのメディアタイプ
+   */
+  public static final String MEDIATYPE_BY_CSV = "text/csv";
+
+  /**
+   * tsvのメディアタイプ
+   */
+  public static final String MEDIATYPE_BY_TSV = "text/tsv";
+
+
+  /**
+   * 拡張子を追加
+   * 
+   * @param fileName 追加対象
+   * @param extension 追加する拡張子
+   * @return 拡張子を追加したファイル名
+   */
+  public static String addExtension(String fileName, String extension) {
+    return FilenameUtils.isExtension(fileName, extension)
+        ? fileName
+        : new StringBuffer().append(fileName).append(".").append(extension).toString();
+  }
 
   /**
    * csvファイルを読み込む
@@ -168,4 +208,5 @@ public class StudyFileUtil {
 
     return convFile;
   }
+
 }

@@ -123,11 +123,8 @@ public class BooksController {
     List<BooksColumn> columnList = booksHelper.listBooksToListBooksColumn(
         booksHelper.finByYearAndType(form.getBooksYear(), form.getBooksType()));
 
-    StringBuffer sb = new StringBuffer();
-    sb.append("家計簿_").append(BooksType.codeOf(form.getBooksType()).getName()).append("_")
-        .append(fileNameType).append(".csv");
-
-    model.addObject(StudyModelUtil.MODEL_KEY_FILE_NAME, sb.toString());
+    model.addObject(StudyModelUtil.MODEL_KEY_FILE_NAME, String.format("家計簿_%s_%s",
+        BooksType.codeOf(form.getBooksType()).getName(), fileNameType));
     model.addObject(StudyModelUtil.MODEL_KEY_FILE_DATA, columnList);
     model.addObject(StudyModelUtil.MODEL_KEY_FILE_DATA_CLASS, BooksColumn.class);
 
