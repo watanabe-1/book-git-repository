@@ -81,3 +81,8 @@ hs_err_pid*
 
 # image
 # /study/WebContent/images/icon/
+
+# Ignore Gradle project-specific cache directory
+.gradle
+bin/
+build/
