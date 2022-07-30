@@ -1,6 +1,7 @@
 package org.watanabe.app.study.enums.type;
 
 import java.util.Arrays;
+import java.util.Objects;
 import lombok.NonNull;
 
 /**
@@ -31,7 +32,8 @@ interface Type {
    * @return codeに一致するEnumクラス
    */
   public static <E extends Enum<E> & Type> E codeOf(Class<E> enumType, @NonNull String code) {
-    return Arrays.stream(enumType.getEnumConstants()).filter(type -> type.getCode().equals(code))
+    return Arrays.stream(enumType.getEnumConstants())
+        .filter(type -> Objects.equals(type.getCode(), code))
         .findFirst()
         .orElseThrow((() -> new IllegalArgumentException("enum class has not code : " + code)));
   }
@@ -45,7 +47,8 @@ interface Type {
    * @return nameに一致するEnumクラス
    */
   public static <E extends Enum<E> & Type> E nameOf(Class<E> enumType, @NonNull String name) {
-    return Arrays.stream(enumType.getEnumConstants()).filter(type -> type.getName().equals(name))
+    return Arrays.stream(enumType.getEnumConstants())
+        .filter(type -> Objects.equals(type.getName(), name))
         .findFirst()
         .orElseThrow((() -> new IllegalArgumentException("enum class has not name : " + name)));
   }

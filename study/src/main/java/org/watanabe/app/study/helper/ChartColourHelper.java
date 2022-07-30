@@ -62,7 +62,7 @@ public class ChartColourHelper {
     // ユーザーごとに作成し設定しているテンプレートを取得
     Templatechartcolour activeTempColour = getActiveChartColorTemp();
     // デフォルトのテンプレートを設定していなかった場合
-    if (!activeTempColour.getUserId().equals(StudyUtil.getCommonUser())) {
+    if (!Objects.equals(activeTempColour.getUserId(), StudyUtil.getCommonUser())) {
       // 現在設定しているテンプレートを設定していない状態に変更
       cnt += TemplatechartcolourService.updateActiveAndNameById(ActiveFlag.NON_ACTIVE.getValue(),
           activeTempColour.getTemplateName(), date, user, activeTempColour.getTemplateId());

@@ -5,13 +5,13 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import org.watanabe.app.study.entity.Account;
 import org.watanabe.app.study.enums.type.AccountType;
 import org.watanabe.app.study.form.AccountForm;
@@ -46,13 +46,14 @@ public class AccountController {
    * @return 入力画面HTML名
    */
   @RequestMapping(value = "/system/account", method = RequestMethod.GET)
-  public String index(Model model) {
+  public ModelAndView index(ModelAndView model) {
+    model.setViewName("account/index");
 
     // リスト設定
-    model.addAttribute("accountList", accountService.findAll());
-    model.addAttribute("accountTypeList", AccountType.values());
+    model.addObject("accountList", accountService.findAll());
+    model.addObject("accountTypeList", AccountType.values());
 
-    return "account/index";
+    return model;
   }
 
   /**
@@ -63,12 +64,12 @@ public class AccountController {
    * @return 入力画面HTML名
    */
   @RequestMapping(value = "/system/account/input", method = RequestMethod.GET)
-  public String input(@ModelAttribute AccountForm form, Model model) {
-
+  public ModelAndView input(@ModelAttribute AccountForm form, ModelAndView model) {
+    model.setViewName("account/input");
     // リスト設定
-    model.addAttribute("accountTypeList", AccountType.values());
+    model.addObject("accountTypeList", AccountType.values());
 
-    return "account/input";
+    return model;
   }
 
   /**
@@ -80,8 +81,9 @@ public class AccountController {
    * @return 入力確認画面HTML名
    */
   @RequestMapping(value = "/system/account/confirm", method = RequestMethod.POST)
-  public String confirm(@ModelAttribute @Validated AccountForm form, BindingResult result,
-      Model model) {
+  public ModelAndView confirm(@ModelAttribute @Validated AccountForm form, BindingResult result,
+      ModelAndView model) {
+    model.setViewName("account/confirm");
 
     // 入力チェックエラー有無判定
     if (result.hasErrors()) {
@@ -90,9 +92,9 @@ public class AccountController {
     }
 
     // リスト設定
-    model.addAttribute("accountTypeList", AccountType.values());
+    model.addObject("accountTypeList", AccountType.values());
 
-    return "account/confirm";
+    return model;
   }
 
   /**
@@ -105,13 +107,16 @@ public class AccountController {
    * @return 登録完了画面HTML名
    */
   @RequestMapping(value = "/system/account/store", method = RequestMethod.POST)
-  public String store(@AuthenticationPrincipal AppUserDetails userDetail,
-      @ModelAttribute @Validated AccountForm form, BindingResult result, Model model) {
+  public ModelAndView store(@AuthenticationPrincipal AppUserDetails userDetail,
+      @ModelAttribute @Validated AccountForm form, BindingResult result,
+      ModelAndView model) {
+    model.setViewName("account/complete");
 
     // 入力チェックエラー有無判定
     if (result.hasErrors()) {
+      model.setViewName("redirect:/errors");
       // エラーありの場合はシステムエラー（パラメータ改ざん）
-      return "redirect:/errors";
+      return model;
     }
 
     // フォームの値をエンティティにコピーし、共通項目をセット
@@ -129,6 +134,6 @@ public class AccountController {
       return input(form, model);
     }
 
-    return "account/complete";
+    return model;
   }
 }

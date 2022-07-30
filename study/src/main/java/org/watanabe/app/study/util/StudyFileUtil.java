@@ -105,7 +105,7 @@ public class StudyFileUtil {
     try (InputStream fis = file.getInputStream()) {
       result = detectFileEncoding(fis);
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
 
     return result;
@@ -123,7 +123,7 @@ public class StudyFileUtil {
     try (InputStream fis = new FileInputStream(file)) {
       result = detectFileEncoding(fis);
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
 
     return result;
@@ -149,7 +149,7 @@ public class StudyFileUtil {
       result = detector.getDetectedCharset();
       detector.reset();
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
 
     return result;

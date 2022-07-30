@@ -30,8 +30,7 @@ public class DownloadTsvView extends AbstractDownloadTextFileView {
   protected byte[] getFileData(ModelMap model) {
     return StudyStringUtil
         .objectToTsvStr(model.getAttribute(StudyModelUtil.MODEL_KEY_FILE_DATA),
-            (Class<?>) model.getAttribute(StudyModelUtil.MODEL_KEY_FILE_DATA_CLASS),
-            true)
+            (Class<?>) model.getAttribute(StudyModelUtil.MODEL_KEY_FILE_DATA_CLASS), true)
         .getBytes(StandardCharsets.UTF_8);
   }
 }

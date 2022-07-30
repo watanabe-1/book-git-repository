@@ -1,6 +1,7 @@
 package org.watanabe.app.study.controller;
 
 import java.util.List;
+import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -48,8 +49,9 @@ public class ChartColourController {
    * @return リダイレクト先
    */
   @RequestMapping(value = "/chartColour/input", method = RequestMethod.POST)
-  public String result(@ModelAttribute @Validated TemplatechartcolourForm form,
+  public ModelAndView result(@ModelAttribute @Validated TemplatechartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
+    model.setViewName("redirect:/chartColour/index");
     Templatechartcolour newColorTemp = chartColourHelper.getTemplatechartcolourByForm(form);
     // 保存
     TemplatechartcolourService.saveOne(newColorTemp);
@@ -60,7 +62,7 @@ public class ChartColourController {
     modelMap.addAttribute("tab", chartColourHelper.getResultTab());
     redirectAttributes.addFlashAttribute(StudyModelUtil.MODEL_KEY_MODEL_MAP, modelMap);
 
-    return "redirect:/chartColour/index";
+    return model;
   }
 
   /**
@@ -73,12 +75,13 @@ public class ChartColourController {
    * @return リダイレクト先
    */
   @RequestMapping(value = "/chartColour/delete", method = RequestMethod.POST)
-  public String delete(@ModelAttribute @Validated TemplatechartcolourForm form,
+  public ModelAndView delete(@ModelAttribute @Validated TemplatechartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
+    model.setViewName("redirect:/chartColour/index");
     // redirect時に値を渡すための処理
     ModelMap modelMap = new ModelMap();
 
-    if (StudyUtil.getCommonUser().equals(form.getUserId())) {
+    if (Objects.equals(StudyUtil.getCommonUser(), form.getUserId())) {
       modelMap.addAttribute("inputResultMessage", "デフォルトのテンプレートは削除できません!");
     } else {
       // 削除
@@ -89,7 +92,7 @@ public class ChartColourController {
     modelMap.addAttribute("tab", chartColourHelper.getResultTab());
     redirectAttributes.addFlashAttribute(StudyModelUtil.MODEL_KEY_MODEL_MAP, modelMap);
 
-    return "redirect:/chartColour/index";
+    return model;
   }
 
   /**
@@ -102,8 +105,9 @@ public class ChartColourController {
    * @return リダイレクト先
    */
   @RequestMapping(value = "/chartColour/changeActive", method = RequestMethod.POST)
-  public String changeActive(@ModelAttribute @Validated TemplatechartcolourForm form,
+  public ModelAndView changeActive(@ModelAttribute @Validated TemplatechartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
+    model.setViewName("redirect:/chartColour/index");
     // 設定されている色テンプレートを変更
     chartColourHelper.changeActive(form.getTemplateId(), form.getTemplateName());
 
@@ -113,7 +117,7 @@ public class ChartColourController {
     modelMap.addAttribute("tab", chartColourHelper.getDefaltTab());
     redirectAttributes.addFlashAttribute(StudyModelUtil.MODEL_KEY_MODEL_MAP, modelMap);
 
-    return "redirect:/chartColour/index";
+    return model;
   }
 
   /**

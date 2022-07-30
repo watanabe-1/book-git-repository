@@ -1,11 +1,11 @@
 package org.watanabe.app.study.controller;
 
 import java.util.List;
+import java.util.Objects;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import org.watanabe.app.study.dto.list.CategoryFormList;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.entity.Image;
@@ -70,11 +71,12 @@ public class CategoryController {
    * @return 入力画面HTML名
    */
   @RequestMapping(value = "/category/input", method = RequestMethod.GET)
-  public String input(@ModelAttribute CategoryForm form, Model model) {
+  public ModelAndView input(@ModelAttribute CategoryForm form, ModelAndView model) {
+    model.setViewName("category/input");
     // 画面にセット
     addCommonAttribute(model);
 
-    return "category/input";
+    return model;
   }
 
   /**
@@ -86,8 +88,8 @@ public class CategoryController {
    * @return 入力画面HTML名
    */
   @RequestMapping(value = "/category/confirm", method = RequestMethod.POST)
-  public String confirm(@ModelAttribute @Validated CategoryForm form, BindingResult result,
-      Model model) {
+  public ModelAndView confirm(@ModelAttribute @Validated CategoryForm form, BindingResult result,
+      ModelAndView model) {
     // エラーがあったら画面を返す
     if (result.hasErrors()) {
       return input(form, model);
@@ -114,14 +116,14 @@ public class CategoryController {
       form.setImgExt(imgExt);
 
       // アップロードされたファイルをbase64にエンコードした後にstring型に変換し、画面にセット
-      model.addAttribute("uploadIcon", uploadHelper.encodeBase64(catIcon, imgExt));
+      model.addObject("uploadIcon", uploadHelper.encodeBase64(catIcon, imgExt));
     } else {
       String noImgCd = StudyUtil.getNoImageCode();
       Image img = imageService.findOne(noImgCd);
       form.setImgId(noImgCd);
       form.setImgIds(img);
     }
-    return "category/confirm";
+    return model;
   }
 
   /**
@@ -133,7 +135,9 @@ public class CategoryController {
    * @return 入力画面HTML名
    */
   @RequestMapping(value = "/category/result", method = RequestMethod.POST)
-  public String result(@ModelAttribute CategoryForm form, BindingResult result, Model model) {
+  public ModelAndView result(@ModelAttribute CategoryForm form, BindingResult result,
+      ModelAndView model) {
+    model.setViewName("/category/result");
     // カテゴリーが登録されていなかったら仮でいったん登録
     Category cat = new Category();
     // フォームの値をエンティティにコピーし、共通項目をセット
@@ -150,12 +154,12 @@ public class CategoryController {
 
     String imgId = form.getImgId();
     // 画像をアップロードしたとき
-    if (!imgId.equals(StudyUtil.getNoImageCode())) {
+    if (Objects.equals(imgId, StudyUtil.getNoImageCode())) {
       // アイコン画像を本保存
       uploadHelper.saveIconFile(form);
     }
 
-    return "/category/result";
+    return model;
 
   }
 
@@ -166,13 +170,14 @@ public class CategoryController {
    * @return 入力画面HTML名
    */
   @RequestMapping(value = "/category/list", method = RequestMethod.GET)
-  public String displayList(Model model) {
+  public ModelAndView displayList(ModelAndView model) {
+    model.setViewName("category/list");
     // 画面にセット
     addCommonAttribute(model);
-    model.addAttribute("catListParam", categoryService.findAlljoinImage());
-    model.addAttribute("imgList", StudyStringUtil.objectToJsonStr(imageService.findAll()));
+    model.addObject("catListParam", categoryService.findAlljoinImage());
+    model.addObject("imgList", StudyStringUtil.objectToJsonStr(imageService.findAll()));
 
-    return "category/list";
+    return model;
   }
 
 
@@ -183,12 +188,13 @@ public class CategoryController {
    * @return リダイレクト先
    */
   @RequestMapping(value = "/category/listUpdate", method = RequestMethod.POST)
-  public String listUpdate(@Validated @ModelAttribute CategoryFormList catListParam,
-      BindingResult result, Model model) {
+  public ModelAndView listUpdate(@Validated @ModelAttribute CategoryFormList catListParam,
+      BindingResult result, ModelAndView model) {
+    model.setViewName("redirect:/category/list");
     if (result.hasErrors()) {
       List<String> errorList = result.getAllErrors().stream()
           .map(error -> error.getDefaultMessage()).distinct().toList();
-      model.addAttribute("validationError", errorList);
+      model.addObject("validationError", errorList);
 
       return displayList(model);
     }
@@ -196,7 +202,7 @@ public class CategoryController {
     // カテゴリー情報の更新
     categoryHelper.updatCeategorys(catListParam);
 
-    return "redirect:/category/list";
+    return model;
   }
 
   /**
@@ -205,18 +211,18 @@ public class CategoryController {
    * @param model Model
    * @return model
    */
-  private void addCommonAttribute(Model model) {
+  private void addCommonAttribute(ModelAndView model) {
     // select box
-    model.addAttribute("imgTypes", ImageType.values());
+    model.addObject("imgTypes", ImageType.values());
 
     // radio botan
-    model.addAttribute("catTypes", CategoryType.values());
+    model.addObject("catTypes", CategoryType.values());
 
     // check box
-    model.addAttribute("actives", ActiveFlag.ACTIVE);
+    model.addObject("actives", ActiveFlag.ACTIVE);
 
     // 削除確認
-    model.addAttribute("isDeleteList", DeleteFlag.DELETE);
+    model.addObject("isDeleteList", DeleteFlag.DELETE);
   }
 
 }

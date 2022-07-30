@@ -126,7 +126,7 @@ public class StudyStringUtil {
     try {
       json = mapper.writeValueAsString(target);
     } catch (JsonProcessingException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
 
     return json;

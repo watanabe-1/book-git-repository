@@ -20,10 +20,12 @@ import lombok.NoArgsConstructor;
 public class BooksColumn implements Serializable {
 
   /**
-   * 日付(収入日、購入日)
+   * 日付(収入日、購入日)<br/>
+   * タイムゾーンには00時00分として扱いたいため、Asia/Tokyoを指定
    */
   @JsonProperty("日付(収入日、購入日)")
-  @JsonFormat(pattern = StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH)
+  @JsonFormat(pattern = StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH,
+      timezone = StudyDateUtil.TIMEZONE_ASIA_TOKYO)
   private Date booksDate;
 
   /**

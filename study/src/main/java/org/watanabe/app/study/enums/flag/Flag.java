@@ -85,7 +85,8 @@ interface Flag {
    * @return valueに一致するEnumクラス
    */
   public static <E extends Enum<E> & Flag> E valueOf(Class<E> enumType, @NonNull Object value) {
-    return Arrays.stream(enumType.getEnumConstants()).filter(type -> type.getValue().equals(value))
+    return Arrays.stream(enumType.getEnumConstants())
+        .filter(type -> Objects.equals(type.getValue(), value))
         .findFirst()
         .orElseThrow((() -> new IllegalArgumentException("enum class has not value : " + value)));
   }
@@ -99,7 +100,8 @@ interface Flag {
    * @return nameに一致するEnumクラス
    */
   public static <E extends Enum<E> & Flag> E nameOf(Class<E> enumType, @NonNull String name) {
-    return Arrays.stream(enumType.getEnumConstants()).filter(type -> type.getName().equals(name))
+    return Arrays.stream(enumType.getEnumConstants())
+        .filter(type -> Objects.equals(type.getName(), name))
         .findFirst()
         .orElseThrow((() -> new IllegalArgumentException("enum class has not name : " + name)));
   }

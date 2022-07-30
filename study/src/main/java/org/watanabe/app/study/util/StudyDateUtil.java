@@ -182,7 +182,8 @@ public class StudyDateUtil {
     } else if (Objects.equals(Calendar.MINUTE, dateType)) {
       field = Calendar.SECOND;
     } else {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001"));
+      throw new BusinessException(
+          ResultMessages.error().add("1.01.01.1001", "dateTypeにはCalendar.YEARなどを利用して指定ください"));
     }
 
     Calendar cal = dateToCalendar(date);
@@ -308,9 +309,9 @@ public class StudyDateUtil {
    * @return Date
    */
   public static String dateToStr(Date date, String fmtPattern) {
-    SimpleDateFormat sdfYyyyMm = new SimpleDateFormat(fmtPattern);
+    SimpleDateFormat sdFormat = new SimpleDateFormat(fmtPattern);
 
-    return sdfYyyyMm.format(date);
+    return sdFormat.format(date);
   }
 
   /**

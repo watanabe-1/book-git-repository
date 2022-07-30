@@ -66,9 +66,14 @@ public class DownloadHelper {
       try {
         outputStream.write(sbyte[i]);
       } catch (IOException e) {
-        throw new BusinessException(ResultMessages.error().add("1.01.01.1001",
-            "FileDownload Failed with writeResponseStream(). cause message is {}."
-                + e.getMessage()));
+        throw new BusinessException(
+            ResultMessages
+                .error()
+                .add("1.01.01.1001",
+                    new StringBuffer()
+                        .append("FileDownload Failed with writeResponseStream(). cause message is ")
+                        .append(e.getMessage())
+                        .toString()));
       }
     }
   }

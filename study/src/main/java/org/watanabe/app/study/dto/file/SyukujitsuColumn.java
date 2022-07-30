@@ -16,9 +16,11 @@ import lombok.Data;
 public class SyukujitsuColumn implements Serializable {
 
   /**
-   * 祝日
+   * 祝日<br/>
+   * タイムゾーンには00時00分として扱いたいため、Asia/Tokyoを指定
    */
-  @JsonFormat(pattern = StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH)
+  @JsonFormat(pattern = StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH,
+      timezone = StudyDateUtil.TIMEZONE_ASIA_TOKYO)
   @JsonProperty("date")
   private Date date;
 

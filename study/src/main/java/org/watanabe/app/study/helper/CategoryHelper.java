@@ -2,6 +2,7 @@ package org.watanabe.app.study.helper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,7 +98,7 @@ public class CategoryHelper {
 
     // 突きつけ合わせ
     for (Category cat : catList) {
-      if (catName.equals(cat.getCatName())) {
+      if (Objects.equals(catName, cat.getCatName())) {
         return cat.getCatCode();
       }
     }
