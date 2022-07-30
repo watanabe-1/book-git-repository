@@ -44,7 +44,7 @@ public class StudyModelUtil {
   public static ModelMap getModelMap(Map<String, Object> model) {
     return model.containsKey(MODEL_KEY_MODEL_AND_VIEW)
         ? ((ModelAndView) model.get(MODEL_KEY_MODEL_AND_VIEW)).getModelMap()
-        : (ModelMap) model.get(MODEL_KEY_MODEL_MAP);
+        : new ModelMap().addAllAttributes(model);
   }
 
   /**
