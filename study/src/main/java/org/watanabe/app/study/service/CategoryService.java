@@ -5,7 +5,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.watanabe.app.study.dto.CategoryList;
+import org.watanabe.app.study.dto.CategoryFormList;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.mapper.CategoryMapper;
@@ -109,8 +109,8 @@ public class CategoryService {
    * 
    * @return 検索結果(複数行)
    */
-  public CategoryList findAlljoinImage() {
-    CategoryList catDatalist = new CategoryList();
+  public CategoryFormList findAlljoinImage() {
+    CategoryFormList catDatalist = new CategoryFormList();
 
     // カテゴリー情報を取得しformに変換しセット
     catDatalist.setCatDataList(categoryMapper.findAllJoinImage().stream().map(cat -> {

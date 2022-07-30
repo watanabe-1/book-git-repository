@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
-import org.watanabe.app.study.dto.CategoryList;
+import org.watanabe.app.study.dto.CategoryFormList;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.entity.Image;
 import org.watanabe.app.study.enums.flag.ActiveFlag;
@@ -183,7 +183,7 @@ public class CategoryController {
    * @return リダイレクト先
    */
   @RequestMapping(value = "/category/listUpdate", method = RequestMethod.POST)
-  public String listUpdate(@Validated @ModelAttribute CategoryList catListParam,
+  public String listUpdate(@Validated @ModelAttribute CategoryFormList catListParam,
       BindingResult result, Model model) {
     if (result.hasErrors()) {
       List<String> errorList = result.getAllErrors().stream()

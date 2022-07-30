@@ -7,7 +7,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.watanabe.app.study.dto.CategoryList;
+import org.watanabe.app.study.dto.CategoryFormList;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.enums.flag.DeleteFlag;
 import org.watanabe.app.study.form.CategoryForm;
@@ -43,7 +43,7 @@ public class CategoryHelper {
    * 
    * @return 更新件数
    */
-  public int updatCeategorys(CategoryList catListParam) {
+  public int updatCeategorys(CategoryFormList catListParam) {
     // カテゴリー情報の更新
     // 全件数送信されるため、変更してなくても更新される。とりあえず仮で実装
     int updCnt = 0;

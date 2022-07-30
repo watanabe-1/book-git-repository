@@ -10,7 +10,7 @@ import lombok.Data;
  * カテゴリー一覧画面用 データクラス
  */
 @Data
-public class CategoryList implements Serializable {
+public class CategoryFormList implements Serializable {
 
   /**
    * カテゴリーリスト

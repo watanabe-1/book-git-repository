@@ -1,4 +1,4 @@
-package org.watanabe.app.study.column;
+package org.watanabe.app.study.dto;
 
 import java.io.Serializable;
 import java.util.List;

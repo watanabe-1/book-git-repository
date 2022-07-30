@@ -27,12 +27,11 @@ public class StudyFileUtil {
    * csvファイルを読み込む
    * 
    * @param inSoursc InputStreamSource
-   * @param charsetName 文字コード
    * @param pojoType カラム情報が記載されているクラス
    * @param isHeadder ヘッダーをつけるか
    * @return List
    */
-  public static <T> List<T> csvFileToList(InputStreamSource inSoursc, Class<?> pojoType,
+  public static <T> List<T> csvFileToList(InputStreamSource inSoursc, Class<T> pojoType,
       boolean isHeadder) {
     return fileToListByCsvMapper(inSoursc, detectFileEncoding(inSoursc), pojoType,
         StudyStringUtil.SEPARATOR_BY_CSV, isHeadder, true);
@@ -42,12 +41,11 @@ public class StudyFileUtil {
    * tsvファイルを読み込む
    * 
    * @param inSoursc InputStreamSource
-   * @param charsetName 文字コード
    * @param pojoType カラム情報が記載されているクラス
    * @param isHeadder ヘッダーをつけるか
    * @return List
    */
-  public static <T> List<T> tsvFileToList(InputStreamSource inSoursc, Class<?> pojoType,
+  public static <T> List<T> tsvFileToList(InputStreamSource inSoursc, Class<T> pojoType,
       boolean isHeadder) {
     return fileToListByCsvMapper(inSoursc, detectFileEncoding(inSoursc), pojoType,
         StudyStringUtil.SEPARATOR_BY_TSV, isHeadder, false);
@@ -65,7 +63,7 @@ public class StudyFileUtil {
    * @return List
    */
   public static <T> List<T> fileToListByCsvMapper(InputStreamSource inSoursc, String charsetName,
-      Class<?> pojoType, char sep, boolean isHeadder, boolean isQuote) {
+      Class<T> pojoType, char sep, boolean isHeadder, boolean isQuote) {
     CsvMapper mapper = new CsvMapper();
     CsvSchema schema = mapper.schemaFor(pojoType).withColumnSeparator(sep);
     List<T> result = new ArrayList<>();
