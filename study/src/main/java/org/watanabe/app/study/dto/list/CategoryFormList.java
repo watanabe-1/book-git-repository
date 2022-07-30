@@ -1,4 +1,4 @@
-package org.watanabe.app.study.dto;
+package org.watanabe.app.study.dto.list;
 
 import java.io.Serializable;
 import java.util.List;

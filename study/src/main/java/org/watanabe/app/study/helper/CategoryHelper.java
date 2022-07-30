@@ -7,7 +7,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.watanabe.app.study.dto.CategoryFormList;
+import org.watanabe.app.study.dto.list.CategoryFormList;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.enums.flag.DeleteFlag;
 import org.watanabe.app.study.form.CategoryForm;

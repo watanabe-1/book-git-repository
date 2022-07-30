@@ -1,4 +1,4 @@
-package org.watanabe.app.study.dto;
+package org.watanabe.app.study.dto.error;
 
 import java.io.Serializable;
 import lombok.Data;

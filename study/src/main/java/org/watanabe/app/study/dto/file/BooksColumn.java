@@ -1,4 +1,4 @@
-package org.watanabe.app.study.dto;
+package org.watanabe.app.study.dto.file;
 
 import java.io.Serializable;
 import java.util.Date;

@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
-import org.watanabe.app.study.dto.CategoryFormList;
+import org.watanabe.app.study.dto.list.CategoryFormList;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.entity.Image;
 import org.watanabe.app.study.enums.flag.ActiveFlag;

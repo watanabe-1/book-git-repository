@@ -5,7 +5,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.watanabe.app.study.dto.CategoryFormList;
+import org.watanabe.app.study.dto.list.CategoryFormList;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.mapper.CategoryMapper;
