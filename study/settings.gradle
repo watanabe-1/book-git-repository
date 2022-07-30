@@ -3,3 +3,30 @@
  */
 
 rootProject.name = 'study'
+
+/* もしspringを使用しないなら下記の書き方でも定義可能
+dependencyResolutionManagement {
+    versionCatalogs {
+        libs {
+            version('springframework_boot', '2.7.1')
+            version('thymeleaf_extras', '3.0.4.RELEASE')
+            version('terasoluna_gfw', '5.7.0.RELEASE')
+            library('spring-boot-starter-web', 'org.springframework.boot', 'spring-boot-starter-web').versionRef('springframework_boot')
+            library('spring-boot-starter-thymeleaf', 'org.springframework.boot', 'spring-boot-starter-thymeleaf').versionRef('springframework_boot')
+            library('spring-boot-starter-data-jpa', 'org.springframework.boot', 'spring-boot-starter-data-jpa').versionRef('springframework_boot')
+            library('spring-boot-starter-validation', 'org.springframework.boot', 'spring-boot-starter-validation').versionRef('springframework_boot')
+            library('spring-boot-starter-security', 'org.springframework.boot', 'spring-boot-starter-security').versionRef('springframework_boot')
+            library('spring-boot-devtools', 'org.springframework.boot', 'spring-boot-devtools').versionRef('springframework_boot')
+            library('spring-boot-starter-test', 'org.springframework.boot', 'spring-boot-starter-test').versionRef('springframework_boot')
+            library('spring-boot-starter-test', 'org.springframework.boot', 'spring-boot-starter-test').versionRef('springframework_boot')
+         library('spring-boot-starter-test', 'org.springframework.boot', 'spring-boot-starter-test').versionRef('springframework_boot')
+            
+            library('terasoluna-gfw-web', 'org.terasoluna.gfw', 'terasoluna-gfw-web').versionRef('terasoluna_gfw')
+            library('terasoluna-gfw-common', 'org.terasoluna.gfw', 'terasoluna-gfw-common').versionRef('terasoluna_gfw')
+            bundle('spring.boot', ['spring-boot-starter-web', 'spring-boot-starter-thymeleaf', 'spring-boot-starter-data-jpa', 'spring-boot-starter-validation', 'spring-boot-starter-security', 'spring-boot-devtools'])
+            bundle('spring.boot.test', ['spring-boot-starter-test'])
+            bundle('terasoluna', ['terasoluna-gfw-web','terasoluna-gfw-common'])
+        }
+    }
+}
+*/
