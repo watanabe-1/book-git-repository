@@ -66,26 +66,13 @@ bin
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-# Gradle
-# .gradle
-# !gradle-wrapper.jar
-
-# npm
-/npm/node_modules/
-# /npm/js/
-# /npm/css/
-/npm/log/
-
+# Ignore Gradle project-specific cache directory
+.gradle
+!gradle-wrapper.jar
+bin/
+build/
 package-lock.json
 /study/node_modules/
 /study/WebContent/js/
 /study/WebContent/css/
 /study/WebContent/res/
-
-# image
-# /study/WebContent/images/icon/
-
-# Ignore Gradle project-specific cache directory
-.gradle
-bin/
-build/
