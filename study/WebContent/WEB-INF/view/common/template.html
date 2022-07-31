@@ -30,8 +30,6 @@
       th:if="${#!strings.isEmpty(links)}"
       th:replace="${links}"
     ></th:block>
-    <!--共通サイドバーcssの読み込み -->
-    <style th:replace="common/sidebar :: sidebar_css_fragment"></style>
   </head>
 
   <body>
@@ -58,7 +56,5 @@
       th:if="${#!strings.isEmpty(scripts)}"
       th:replace="${scripts}"
     ></th:block>
-    <!--共通サイドバーjsの読み込み -->
-    <script th:replace="common/sidebar :: sidebar_js_fragment"></script>
   </body>
 </html>

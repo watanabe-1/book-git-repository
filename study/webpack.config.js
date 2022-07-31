@@ -11,7 +11,15 @@ module.exports = {
   entry: {
     // 共通系の JavaScript ライブラリーは vendor.bundle.js としてひとつにまとめる
     // .css は bootstrap の .css と合成するため vendor に含めておく
-    vendor: ['vue', 'axios', 'popper.js', 'chart.js', 'flatpickr', 'bootstrap'],
+    vendor: [
+      'vue',
+      'axios',
+      'popper.js',
+      'chart.js',
+      'flatpickr',
+      'bootstrap',
+      './src/main/js/view/common/sidebar.js',
+    ],
     // 画面ごとの .js は分割して出力する（この設定のファイルを起点にバンドル開始）
     booksIndex: './src/main/js/view/books/booksIndex.js',
     chartColourIndex: './src/main/js/view/chartColour/chartColourIndex.js',

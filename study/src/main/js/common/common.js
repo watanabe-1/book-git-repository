@@ -5,6 +5,5 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 // flate pickerのcss
 import 'flatpickr/dist/flatpickr.css';
 import 'flatpickr/dist/plugins/monthSelect/style.css';
-
 // for common css
-//import '../../css/style.css';
+import '../../css/view/common/sidebar.css';
