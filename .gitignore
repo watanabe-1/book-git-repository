@@ -73,6 +73,6 @@ bin/
 build/
 package-lock.json
 /study/node_modules/
-#/study/WebContent/js/
+/study/WebContent/js/
 /study/WebContent/css/
-#/study/WebContent/res/
+/study/WebContent/res/
