@@ -169,9 +169,9 @@ public class CategoryController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/category/list", method = RequestMethod.GET)
+  @RequestMapping(value = "/category/index", method = RequestMethod.GET)
   public ModelAndView displayList(ModelAndView model) {
-    model.setViewName("category/list");
+    model.setViewName("category/index");
     // 画面にセット
     addCommonAttribute(model);
     model.addObject("catListParam", categoryService.findAlljoinImage());
@@ -190,7 +190,7 @@ public class CategoryController {
   @RequestMapping(value = "/category/listUpdate", method = RequestMethod.POST)
   public ModelAndView listUpdate(@Validated @ModelAttribute CategoryFormList catListParam,
       BindingResult result, ModelAndView model) {
-    model.setViewName("redirect:/category/list");
+    model.setViewName("redirect:/category/index");
     if (result.hasErrors()) {
       List<String> errorList = result.getAllErrors().stream()
           .map(error -> error.getDefaultMessage()).distinct().toList();

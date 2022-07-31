@@ -23,6 +23,70 @@ java.sourceCompatibility = JavaVersion.VERSION_17
 java.targetCompatibility = JavaVersion.VERSION_17
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
+/**
+ * for node.js & webpack
+ */
+node {
+    version = '16.14.2'
+    download = true
+}
+
+task webpack(dependsOn: ['npm_run_webpack'])
+task debug(dependsOn: ['npm_run_debug'])
+task watch(dependsOn: ['npm_run_watch'])
+task server(dependsOn: ['npm_run_server'])
+
+compileTestJava {
+    options.compilerArgs = ['-proc:none']
+}
+
+bootJar {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+jar {
+    enabled = false
+}
+
+/**
+ * clean build
+ */
+task cleanGen(type: Delete) {
+    delete fileTree('src/main/resources/static') {
+        include 'css/*.*'
+        include 'res/*.*'
+        include 'js/*.*'
+    }
+}
+
+// build order
+webpack.dependsOn cleanGen
+webpack.mustRunAfter cleanGen
+build.dependsOn webpack
+build.mustRunAfter webpack
+bootRun.dependsOn debug
+bootRun.mustRunAfter webpack
+
+/**
+ * for heroku deploy
+ */
+task stage(dependsOn: ['clean', 'build']) {
+    mustRunAfter 'clean'
+}
+
+/**
+ * for Spring Boot
+ * （ターミナルで）Spring Boot アプリケーション起動すると時用 eclipsでは関係ないかも
+ * ./gradlew bootRun
+ */
+bootRun {
+    // for static resource hot reloading
+    //  https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/html/#running-your-application-reloading-resources
+    sourceResources sourceSets.main
+    // remote debug support @see .vscode/launch.json
+    jvmArgs=["-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=7778"]
+}
+
 repositories {
     mavenCentral()
 }

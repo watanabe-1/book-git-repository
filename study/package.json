@@ -1,0 +1,45 @@
+{
+  "name": "springboot-template-web",
+  "version": "1.0.0",
+  "description": "springboot-template-web",
+  "repository": {},
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@types/jquery": "^3.5.14",
+    "@types/webpack": "^5.28.0",
+    "babel-loader": "^8.2.4",
+    "css-loader": "^6.7.1",
+    "eslint": "^8.13.0",
+    "htmlhint": "^1.1.4",
+    "mini-css-extract-plugin": "^2.6.0",
+    "sass": "^1.50.0",
+    "sass-loader": "^12.6.0",
+    "vue-loader": "^15.9.8",
+    "vue-template-compiler": "^2.6.14",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.8.1",
+    "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.17.9",
+    "axios": "^0.26.1",
+    "open-iconic": "^1.1.1",
+    "vue": "^2.6.14",
+    "@popperjs/core": "^2.11.4",
+    "bootstrap": "^5.1.3",
+    "bootstrap-icons": "^1.8.3",
+    "chart.js": "^3.7.1",
+    "popper.js": "^1.16.1",
+    "flatpickr": "^4.6.11"
+  },
+  "scripts": {
+    "webpack": "webpack",
+    "debug": "webpack --config webpack.dev.js",
+    "watch": "webpack --config webpack.dev.js --watch",
+    "server": "webpack-dev-server --config webpack.dev.js"
+  }
+}

@@ -6,7 +6,7 @@
  * @param {string} param - パラメーター値
  * @return セットしたurl
  */
-function setAtagHrefParm(aTagQualifiedName, paramName, param) {
+export function setAtagHrefParm(aTagQualifiedName, paramName, param) {
   const target = document.querySelector(aTagQualifiedName);
   const href = target.getAttribute('href');
   const baseUrl = getBaseUrl();
@@ -52,7 +52,7 @@ function setAtagHrefParm(aTagQualifiedName, paramName, param) {
  * @param {JSON} params - {パラメータ名: パラメーター値}
  * @return セットしたurl
  */
-function setAtagHrefParms(aTagQualifiedName, params) {
+export function setAtagHrefParms(aTagQualifiedName, params) {
   const target = document.querySelector(aTagQualifiedName);
   const href = target.getAttribute('href');
   const baseUrl = getBaseUrl();
@@ -82,7 +82,7 @@ function setAtagHrefParms(aTagQualifiedName, params) {
  * @param {JSON} params - {パラメータ名: パラメーター値}
  * @return セットしたurl
  */
-function addUrlParms(targetUrl, params) {
+export function addUrlParms(targetUrl, params) {
   const baseUrl = getBaseUrl();
   const url = new URL(targetUrl, baseUrl);
   //const json = JSON.parse(params);
@@ -108,7 +108,7 @@ function addUrlParms(targetUrl, params) {
  * @param {string} string - エスケープ対象
  * @return エスケープ後の文字列
  */
-function escapeRegExp(string) {
+export function escapeRegExp(string) {
   return string.replace(/[.*+?^=!:${}()|[\]\/\\]/g, '\\$&'); // $&はマッチした部分文字列全体を意味します
 }
 
@@ -117,7 +117,7 @@ function escapeRegExp(string) {
  *
  * @return urlのプロトコルからホストまで
  */
-function getBaseUrl() {
+export function getBaseUrl() {
   return location.protocol + '//' + location.host;
 }
 
@@ -126,7 +126,7 @@ function getBaseUrl() {
  *
  * @return urlのコンテキストパス
  */
-function getContextPath() {
+export function getContextPath() {
   return document.querySelector('meta[name="contextPath"]').content;
 }
 
@@ -136,7 +136,7 @@ function getContextPath() {
  * @param {string} paramName - パラメーター名
  * @return urlのパラメータ
  */
-function getLocationHrefParm(paramName) {
+export function getLocationHrefParm(paramName) {
   // URLを取得
   const url = new URL(window.location.href);
   // URLSearchParamsオブジェクトを取得
@@ -201,14 +201,14 @@ function getLocationHrefParm(paramName) {
  *
  *  @type {string}
  */
-const PARALLEL = 'parallel';
+export const PARALLEL = 'parallel';
 
 /**
  * ajax通信時のコールバックファンクション実行方法：直列
  *
  *  @type {string}
  */
-const SERIES = 'series';
+export const SERIES = 'series';
 
 /**
  * ajaxで非同期通信を行う(Promiseでラップした通信結果を返却)
@@ -223,7 +223,7 @@ const SERIES = 'series';
  * @param {any[]} functionArgs -functionsに追加で渡す引数 functionsの配列の添え字に合わせることでfunctionsに渡される 省略可能
  * @return -結果が格納された「Promise」オブジェクト
  */
-function ajax(
+export function ajax(
   method,
   url,
   params = {},
@@ -356,7 +356,7 @@ function ajax(
  *
  * @return CSRF対策用のトークン
  */
-function getCsrfToken() {
+export function getCsrfToken() {
   return document.querySelector('meta[name="_csrf"]').content;
 }
 
@@ -365,7 +365,7 @@ function getCsrfToken() {
  *
  * @return CSRF対策用のトークン送信用ヘッダー名CSRF対策用のトークン
  */
-function getCsrfTokenHeader() {
+export function getCsrfTokenHeader() {
   return document.querySelector('meta[name="_csrf_header"]').content;
 }
 
@@ -374,7 +374,7 @@ function getCsrfTokenHeader() {
  *
  * @return CSRF対策用のトークン送信用ヘッダー名CSRF対策用のトークン
  */
-function getCsrfTokenParmName() {
+export function getCsrfTokenParmName() {
   return document.querySelector('meta[name="_csrf_parameterName"]').content;
 }
 
@@ -385,7 +385,7 @@ function getCsrfTokenParmName() {
  * @param {string} url -送信先url
  * @param {JSON} params -送信時にセットするparam 省略可能
  */
-function submit(method, url, params = '') {
+export function submit(method, url, params = '') {
   const submitMe = document.createElement('form');
   submitMe.action = url; // Remember to change me
   submitMe.method = method;
@@ -415,7 +415,7 @@ function submit(method, url, params = '') {
  *
  * @return パラメータにセットされた日付け。なければ現在時刻。
  */
-function getStudyDate() {
+export function getStudyDate() {
   // urlからパラメーターを取得
   const paaramDate = getLocationHrefParm('date');
   //dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
@@ -431,7 +431,7 @@ function getStudyDate() {
  * @param {String} delim 区切り文字
  * @return yyyyMMdd形式に変換された日付け
  */
-function formatDateBtYyyyMmDd(date, delim = '/') {
+export function formatDateBtYyyyMmDd(date, delim = '/') {
   //日付け型ではなかったら
   if (typeof date != 'Date') {
     date = new Date(date);
@@ -456,7 +456,7 @@ function formatDateBtYyyyMmDd(date, delim = '/') {
  * @param {HTMLElement} child 追加html要素
  * @param {String} childType 追加html要素のタイプ
  */
-function appendOrReplaceChild(target, child, childType) {
+export function appendOrReplaceChild(target, child, childType) {
   if (target.childElementCount > 0) {
     target.replaceChild(child, target.querySelector(childType));
   } else {
@@ -475,7 +475,7 @@ function appendOrReplaceChild(target, child, childType) {
  * @param {String} classOne 切り替えクラス1
  * @param {String} classTwo 切り替えクラス2
  */
-function swichClass(target, classOne, classTwo) {
+export function swichClass(target, classOne, classTwo) {
   if (
     target.classList.contains(classOne) &&
     target.classList.contains(classTwo)

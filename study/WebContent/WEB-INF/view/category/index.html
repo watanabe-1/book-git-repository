@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html
   xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}"
+  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{::script},~{})}"
 >
   <head>
     <title>登録済みカテゴリー情報一覧</title>
+    <script th:src="@{/js/categoryIndex.bundle.js}"></script>
   </head>
 
   <body>
@@ -112,12 +113,7 @@
                   type="hidden"
                   th:field="*{catDataList[__${st.index}__].imgIds.imgId}"
                 />
-                <button
-                  type="button"
-                  class="btn btn-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#listModal"
-                >
+                <button type="button" class="btn btn-primary modalBtn">
                   確認
                 </button>
               </td>
@@ -165,6 +161,7 @@
           </tbody>
         </table>
       </form>
+      <div hidden id="imgListData">[[${imgList}]]</div>
       <!--hidden model -->
       <div class="modal fade" tabindex="-1" id="listModal">
         <div class="modal-dialog modal-dialog-scrollable">
@@ -232,134 +229,3 @@
     </div>
   </body>
 </html>
-<script>
-  //テーブルの内容を並び替えできるようにイベントを追加
-  //カテゴリーリスト
-  addEventListenerOfSortAndFilterTable('categoryListTable', 'AND');
-</script>
-<script type="text/javascript" th:inline="javascript">
-  //tymeleafを使用してjsコードの中身を動的に変更
-  /*<![CDATA[*/
-  let imgList = JSON.parse(/*[[${imgList}]]*/);
-  /*]]>*/
-  let imgNum = 0;
-  //クリックした時のボタン
-  let imgConfirmButton;
-
-  /**
-   * イメージタグの作成
-   *
-   * @param {HTMLElement} imgJson 画像パス
-   */
-  function createImgTag(imgJson) {
-    //画面描画用imageタグの作成
-    const imgElement = document.createElement('img');
-    imgElement.src =
-      //studyUtilのgetContextPath()
-      getContextPath() + imgJson.imgPath + '/' + imgJson.imgName; // 画像パス
-    imgElement.alt = imgJson.imgName; // 代替テキスト
-    imgElement.width = 600; // 横サイズ（px）
-    imgElement.height = 450; // 縦サイズ（px）
-    imgElement.className = 'mh-100 mw-100';
-    //modal内に描画
-    const imgCanvas = document.getElementById('imgCanvas');
-    //StudyUtil.appendOrReplaceChild
-    appendOrReplaceChild(imgCanvas, imgElement, 'img');
-  }
-
-  /**
-   * 画像を前の画像に変更
-   *
-   * @param {String} selectedImgId 設定されている画像Id
-   */
-  function defaultImgtag(selectedImgId) {
-    let num = 0;
-    imgList.forEach((value, index) => {
-      //console.log(selectedImgId);
-      //console.log(value.imgId);
-      if (value.imgId == selectedImgId) {
-        //console.log(num);
-        num = index;
-      }
-    });
-    imgNum = num;
-    createImgTag(imgList[imgNum]);
-  }
-
-  /**
-   * 画像を次の画像に変更
-   *
-   */
-  function nextImgtag() {
-    if (imgNum < imgList.length - 1) {
-      imgNum++;
-    } else {
-      imgNum = 0;
-    }
-    createImgTag(imgList[imgNum]);
-  }
-
-  /**
-   * 画像を前の画像に変更
-   *
-   */
-  function backImgtag() {
-    if (imgNum > 0) {
-      imgNum--;
-    } else {
-      imgNum = imgList.length - 1;
-    }
-    createImgTag(imgList[imgNum]);
-  }
-</script>
-
-<script>
-  //list model
-  const listModalEl = document.getElementById('listModal');
-  //modalが開き始めるとき
-  listModalEl.addEventListener('show.bs.modal', function (event) {
-    //クリックした時のボタン
-    imgConfirmButton = event.relatedTarget;
-    //imgConfirmButtonから同じtdタグ内に存在するラベル、インプットタグを取得
-    const inputElment = imgConfirmButton.parentNode.querySelector('input');
-    //console.log(inputElment);
-    //画面描画用imageタグの作成
-    defaultImgtag(inputElment.value);
-
-    //次へボタン
-    const nextButton = listModalEl.querySelector('#nextImg');
-    nextButton.addEventListener('click', function (event) {
-      nextImgtag();
-    });
-    //前へボタン
-    const backButton = listModalEl.querySelector('#backImg');
-    backButton.addEventListener('click', function (event) {
-      backImgtag();
-    });
-  });
-
-  //model内のボタンにイベントの追加
-  //confirm model-change-button
-  const listModalSaveButton = listModalEl.querySelector('#saveListModal');
-  listModalSaveButton.addEventListener('click', function (event) {
-    const imgId = imgList[imgNum].imgId;
-    //行を指定して取得
-    const tds = imgConfirmButton.parentNode.parentNode.querySelectorAll('td');
-    //行内に表示している画像の変更
-    const imgElement = tds[tds.length - 1].querySelector('img');
-    imgElement.src =
-      //studyUtilのgetContextPath()
-      getContextPath() +
-      imgList[imgNum].imgPath +
-      '/' +
-      imgList[imgNum].imgName; // 画像パス
-    //imgConfirmButtonから同じtdタグ内に存在するラベル、インプットタグを取得
-    const labelElment = imgConfirmButton.parentNode.querySelector('label');
-    const inputElment = imgConfirmButton.parentNode.querySelector('input');
-    labelElment.innerText = imgId;
-    inputElment.value = imgId;
-
-    //modelを閉じる
-    bootstrap.Modal.getInstance(listModalEl).hide();
-  });
-</script>

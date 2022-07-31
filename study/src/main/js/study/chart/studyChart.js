@@ -1,10 +1,14 @@
+import * as studyUtil from './../util/studyUtil';
+import Chart from 'chart.js/auto';
+import { fontString } from 'chart.js/helpers';
+
 /**
  * ドーナツチャート
  *
  * @param {JSON} jsonData chartのdataに使用
  * @param {any} args 表示などに使用
  */
-function doughnutChart(jsonData, args) {
+export function doughnutChart(jsonData, args) {
   const doughnutChart = document.getElementById(args[0]);
   if (jsonData.datasets[0].data.length === 0) {
     //console.log(jsonData.datasets[0].data)
@@ -46,11 +50,7 @@ function doughnutChart(jsonData, args) {
             const fontSize = 16;
             const fontStyle = 'normal';
             const fontFamily = 'Helvetica Neue';
-            ctx.font = Chart.helpers.fontString(
-              fontSize,
-              fontStyle,
-              fontFamily
-            );
+            ctx.font = fontString(fontSize, fontStyle, fontFamily);
 
             const dataString = chart.data.labels[index]; //+ ' : ' + dataset.data[index].toString();
 
@@ -126,7 +126,7 @@ function doughnutChart(jsonData, args) {
             label: function (context) {
               //dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
               //studyUtil.getStudyDate()の呼び出し
-              const date = getStudyDate();
+              const date = studyUtil.getStudyDate();
               return date.getFullYear() + '/' + date.getMonth();
             },
             /*
@@ -181,7 +181,7 @@ function doughnutChart(jsonData, args) {
  * @param {JSON} jsonData chartのdataに使用
  * @param {any} args 表示などに使用
  */
-function barChart(jsonData, args) {
+export function barChart(jsonData, args) {
   const barChart = document.getElementById(args[0]);
   //console.log(jsonData);
   //console.log(jsonData.datasets[0].data);
@@ -206,11 +206,7 @@ function barChart(jsonData, args) {
             const fontSize = 10;
             const fontStyle = 'normal';
             const fontFamily = 'Helvetica Neue';
-            ctx.font = Chart.helpers.fontString(
-              fontSize,
-              fontStyle,
-              fontFamily
-            );
+            ctx.font = fontString(fontSize, fontStyle, fontFamily);
 
             const dataString = ' \xA5' + dataset.data[index].toString();
             //文字列の位置の基準点
@@ -276,7 +272,7 @@ function barChart(jsonData, args) {
               const label = context[0].label;
               //dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
               //studyUtil.getStudyDate()の呼び出し
-              const date = getStudyDate();
+              const date = studyUtil.getStudyDate();
               return (
                 label + '(' + date.getFullYear() + '/' + date.getMonth() + ')'
               );
@@ -317,7 +313,7 @@ function barChart(jsonData, args) {
  * @param {JSON} jsonData chartのdataに使用
  * @param {any} args 表示などに使用
  */
-function barAndLineChart(jsonData, args) {
+export function barAndLineChart(jsonData, args) {
   const barAndLineChart = document.getElementById(args[0]);
   if (jsonData.datasets[0].data.length === 0) {
     //console.log(jsonData.datasets[0].data)
@@ -367,7 +363,7 @@ function barAndLineChart(jsonData, args) {
  * @param {JSON} jsonData 置き換えるデータ
  * @param {Chart} chart 更新対象
  */
-function updateDataDoughnut(jsonData, chart) {
+export function updateDataDoughnut(jsonData, chart) {
   chart.data = jsonData;
   chart.update();
 }
@@ -378,7 +374,7 @@ function updateDataDoughnut(jsonData, chart) {
  * @param {JSON} jsonData 置き換えるデータ
  * @param {Chart} chart 更新対象
  */
-function updateDataBar(jsonData, chart) {
+export function updateDataBar(jsonData, chart) {
   const maxData = Math.max(...jsonData.datasets[0].data);
   chart.options.scales.x.suggestedMax = maxData / 10 + maxData;
   chart.data = jsonData;

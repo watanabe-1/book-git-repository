@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html
   xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}"
+  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{::script},~{})}"
 >
   <head>
     <title>アカウント一覧</title>
+    <script th:src="@{/js/accountIndex.bundle.js}"></script>
   </head>
 
   <body>
@@ -54,8 +55,3 @@
     </div>
   </body>
 </html>
-<script>
-  //テーブルの内容を並び替えできるようにイベントを追加
-  //アカウントリスト
-  addEventListenerOfSortAndFilterTable('accountListTable', 'AND');
-</script>

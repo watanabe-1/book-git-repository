@@ -75,9 +75,12 @@ hs_err_pid*
 # /npm/js/
 # /npm/css/
 /npm/log/
-/npm/package-lock.json
-/study/WebContent/js/npm/
-/study/WebContent/css/npm/
+
+package-lock.json
+/study/node_modules/
+/study/WebContent/js/
+/study/WebContent/css/
+/study/WebContent/res/
 
 # image
 # /study/WebContent/images/icon/

@@ -22,16 +22,9 @@
     <meta name="_csrf_parameterName" th:content="${_csrf.parameterName}" />
     <title th:replace="${title}"></title>
     <!-- 全画面共通のcssを定義 -->
-    <link th:href="@{/css/npm/bootstrap/bootstrap.css}" rel="stylesheet" />
-    <link
-      th:href="@{/css/npm/bootstrap/bootstrap-icons.css}"
-      rel="stylesheet"
-    />
-    <link th:href="@{/css/npm/flatpickr/flatpickr.min.css}" rel="stylesheet" />
-    <link
-      th:href="@{/css/npm/flatpickr/plugins/monthSelect/style.css}"
-      rel="stylesheet"
-    />
+    <!-- 全 .css がバンドルされた vendor.bundle.css を指定 -->
+    <!-- 画像パスなどは webpack（各 publicPath 設定） により自動的に解決されている -->
+    <link th:href="@{/css/depens.bundle.css}" rel="stylesheet" />
     <!-- 各画面専用のcssを定義 -->
     <th:block
       th:if="${#!strings.isEmpty(links)}"
@@ -56,17 +49,10 @@
     </div>
 
     <!-- 全画面共通のjavascriptを定義 -->
-    <script th:src="@{/js/npm/popper.js/popper.min.js}"></script>
-    <script th:src="@{/js/npm/bootstrap/bootstrap.min.js}"></script>
-    <script th:src="@{/js/npm/flatpickr/flatpickr.min.js}"></script>
-    <script th:src="@{/js/npm/flatpickr/plugins/monthSelect/index.js}"></script>
-    <script th:src="@{/js/npm/flatpickr/l10n/ja.js}"></script>
-    <script th:src="@{/js/npm/chart.js/chart.min.js}"></script>
-    <script th:src="@{/js/study/util/studyUtil.js}"></script>
-    <script th:src="@{/js/study/chart/studyChart.js}"></script>
-    <script th:src="@{/js/study/calendar/studyCalendar.js}"></script>
-    <script th:src="@{/js/study/list/studyListUtil.js}"></script>
-
+    <!-- 共通ライブラリーがバンドルされた vendor.bundle.js -->
+    <!-- 各画面で同一ファイルとなるためブラウザーキャッシュが効く -->
+    <script th:src="@{/js/vendor.bundle.js}"></script>
+    <script th:src="@{/js/depens.bundle.js}"></script>
     <!-- 各画面専用のjavascriptを定義 -->
     <th:block
       th:if="${#!strings.isEmpty(scripts)}"

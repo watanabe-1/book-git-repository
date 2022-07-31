@@ -1,6 +1,9 @@
+import * as studyUtil from './../util/studyUtil';
+import * as studyListUtil from './../list/studyListUtil';
+
 // let selectDayByCalendar = new Date();
 //studyUtil.getStudyDate()の呼び出し
-let selectDayByCalendar = getStudyDate();
+let selectDayByCalendar = studyUtil.getStudyDate();
 // 祝日一覧 初期化時に設定
 let syukujitsuList;
 // 日にちごとのお金のリスト
@@ -14,7 +17,7 @@ let AmountByDayList;
  * @param {string} syukujitsuUrl 祝日取得用url
  * @param {string} AmountByDayListUrl 日にちごとのお金取得用url
  */
-function initStudyCalendar(
+export function initStudyCalendar(
   date,
   targetId,
   targetBooksID,
@@ -27,7 +30,8 @@ function initStudyCalendar(
   if (syukujitsuList) {
     showCalendarProcess(date, targetId, targetBooksID);
   } else {
-    ajax('POST', syukujitsuUrl)
+    studyUtil
+      .ajax('POST', syukujitsuUrl)
       .then(
         //前の処理が成功した時
         function (response) {
@@ -46,7 +50,7 @@ function initStudyCalendar(
           // 日にちごとのお金のリスト
           let result;
           if (!AmountByDayList) {
-            result = ajax('POST', AmountByDayListUrl).then(
+            result = studyUtil.ajax('POST', AmountByDayListUrl).then(
               //前の処理が成功した時
               function (response) {
                 AmountByDayList = response;
@@ -121,9 +125,9 @@ function showCalendarProcess(date, targetId, targetBooksID) {
   );
   const targetBooksElement = document.querySelector('#' + targetBooksID);
   //StudyUtil.appendOrReplaceChild
-  appendOrReplaceChild(targetBooksElement, booksList, 'table');
+  studyUtil.appendOrReplaceChild(targetBooksElement, booksList, 'table');
   //テーブルの内容を並び替えできるようにイベントを追加
-  addEventListenerOfSortAndFilterTable(booksList.id, 'AND');
+  studyListUtil.addEventListenerOfSortAndFilterTable(booksList.id, 'AND');
   //クリックイベントの追加
   const tabCalendarTableBody = document
     .getElementById('tabCalendar')
@@ -322,7 +326,7 @@ function createBooksListByCalendarProcess(booksList) {
         bodyCellContent.push(
           document.createTextNode(
             //studyUtilのformatDateBtYyyyMmDd
-            formatDateBtYyyyMmDd(booksList[i].booksDate, '/')
+            studyUtil.formatDateBtYyyyMmDd(booksList[i].booksDate, '/')
           )
         );
       } else if (j == 1) {
@@ -334,7 +338,7 @@ function createBooksListByCalendarProcess(booksList) {
         const imgElement = document.createElement('img');
         imgElement.src =
           //studyUtilのgetContextPath()
-          getContextPath() +
+          studyUtil.getContextPath() +
           booksList[i].catCodes.imgIds.imgPath +
           '/' +
           booksList[i].catCodes.imgIds.imgName; // 画像パス

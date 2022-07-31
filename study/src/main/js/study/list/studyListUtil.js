@@ -5,7 +5,10 @@
  * @param {String} targetId 対象テーブルID
  * @param {String} searchType 検索方法 'AND''OR'のどちらかを指定 デフォルトはand
  */
-function addEventListenerOfSortAndFilterTable(targetId, searchType = 'AND') {
+export function addEventListenerOfSortAndFilterTable(
+  targetId,
+  searchType = 'AND'
+) {
   addEventListenerOfSortTable(targetId);
   addEventListenerOfFilterTable(targetId, searchType);
 }
@@ -101,105 +104,112 @@ function addEventListenerOfFilterTable(targetId, searchType = 'AND') {
   const SEARCH_INPUT_CLASS_NAME = 'light-table-filter';
   const AND = 'AND';
   // inputボックスの追加
-  document.querySelectorAll('#' + targetId + ' th').forEach((elm) => {
-    const csrfOutPut = document.createElement('input');
-    csrfOutPut.className = SEARCH_INPUT_CLASS_NAME + ' form-control';
-    csrfOutPut.type = 'search';
-    csrfOutPut.placeholder = '検索';
-    elm.appendChild(csrfOutPut);
-  });
+  const tableHeads = document.querySelectorAll('#' + targetId + ' th');
+  // ２回実行された場合は追加しない
+  if (
+    tableHeads[0] != null &&
+    tableHeads[0].querySelectorAll('.' + SEARCH_INPUT_CLASS_NAME).length == 0
+  ) {
+    tableHeads.forEach((elm) => {
+      const csrfOutPut = document.createElement('input');
+      csrfOutPut.className = SEARCH_INPUT_CLASS_NAME + ' form-control';
+      csrfOutPut.type = 'search';
+      csrfOutPut.placeholder = '検索';
+      elm.appendChild(csrfOutPut);
+    });
 
-  /**
-   * テーブルにフィルターイベントを追加
-   *
-   * @param {document} document ドキュメント
-   */
-  (function (document) {
-    'use strict';
-    const LightTableFilter = (function (Arr) {
-      //let _input;
-      const table = document.getElementById(targetId);
-      const inputs = table.getElementsByClassName(SEARCH_INPUT_CLASS_NAME);
+    /**
+     * テーブルにフィルターイベントを追加
+     *
+     * @param {document} document ドキュメント
+     */
+    (function (document) {
+      'use strict';
+      const LightTableFilter = (function (Arr) {
+        //let _input;
+        const table = document.getElementById(targetId);
+        const inputs = table.getElementsByClassName(SEARCH_INPUT_CLASS_NAME);
 
-      /**
-       * input入力時のイベント
-       * フィルターの実施
-       *
-       * @param {any} e イベント
-       */
-      function _onInputEvent(e) {
-        //_input = e.target;
-        Arr.forEach.call(table.tBodies, function (tbody) {
-          Arr.forEach.call(tbody.rows, _filter);
-        });
-      }
+        /**
+         * input入力時のイベント
+         * フィルターの実施
+         *
+         * @param {any} e イベント
+         */
+        function _onInputEvent(e) {
+          //_input = e.target;
+          Arr.forEach.call(table.tBodies, function (tbody) {
+            Arr.forEach.call(tbody.rows, _filter);
+          });
+        }
 
-      /**
-       * inputクリック時のイベント
-       * 親要素のイベントを実行しないようにする
-       *
-       * @param {any} e イベント
-       */
-      function _onClickEvent(e) {
-        //親要素のイベントを中止(ソートイベントをinputボックスをクリックしたときに起きなくする)
-        e.stopPropagation();
-      }
+        /**
+         * inputクリック時のイベント
+         * 親要素のイベントを実行しないようにする
+         *
+         * @param {any} e イベント
+         */
+        function _onClickEvent(e) {
+          //親要素のイベントを中止(ソートイベントをinputボックスをクリックしたときに起きなくする)
+          e.stopPropagation();
+        }
 
-      /**
-       * フィルター処理
-       *
-       * @param {Element} row テーブル1行
-       */
-      function _filter(row) {
-        let isNone = false;
-        let isBreak = false;
-        Arr.forEach.call(inputs, function (input) {
-          if (!isBreak) {
-            if (input.value) {
-              const columnNo = input.parentNode.cellIndex;
-              const text = row.cells[columnNo].textContent.toLowerCase();
-              const val = input.value.toLowerCase();
-              if (searchType === AND) {
-                if (text.indexOf(val) === -1) {
-                  isBreak = true;
-                  isNone = true;
+        /**
+         * フィルター処理
+         *
+         * @param {Element} row テーブル1行
+         */
+        function _filter(row) {
+          let isNone = false;
+          let isBreak = false;
+          Arr.forEach.call(inputs, function (input) {
+            if (!isBreak) {
+              if (input.value) {
+                const columnNo = input.parentNode.cellIndex;
+                const text = row.cells[columnNo].textContent.toLowerCase();
+                const val = input.value.toLowerCase();
+                if (searchType === AND) {
+                  if (text.indexOf(val) === -1) {
+                    isBreak = true;
+                    isNone = true;
+                  } else {
+                    isNone = false;
+                  }
                 } else {
-                  isNone = false;
-                }
-              } else {
-                if (text.indexOf(val) > -1) {
-                  isBreak = true;
-                  isNone = false;
-                } else {
-                  isNone = true;
+                  if (text.indexOf(val) > -1) {
+                    isBreak = true;
+                    isNone = false;
+                  } else {
+                    isNone = true;
+                  }
                 }
               }
             }
-          }
-        });
-        // const columnNo = _input.parentNode.cellIndex;
-        // const text = row.cells[columnNo].textContent.toLowerCase();
-        // const val = _input.value.toLowerCase();
-        // row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
-        row.style.display = isNone ? 'none' : 'table-row';
-      }
-
-      return {
-        init: function () {
-          Arr.forEach.call(inputs, function (input) {
-            input.oninput = _onInputEvent;
-            input.onclick = _onClickEvent;
           });
-        },
-      };
-    })(Array.prototype);
+          // const columnNo = _input.parentNode.cellIndex;
+          // const text = row.cells[columnNo].textContent.toLowerCase();
+          // const val = _input.value.toLowerCase();
+          // row.style.display = text.indexOf(val) === -1 ? 'none' : 'table-row';
+          row.style.display = isNone ? 'none' : 'table-row';
+        }
 
-    //document.addEventListener('readystatechange', function () {
-    //if (document.readyState === 'complete') {
-    LightTableFilter.init();
-    //}
-    //});
-  })(document);
+        return {
+          init: function () {
+            Arr.forEach.call(inputs, function (input) {
+              input.oninput = _onInputEvent;
+              input.onclick = _onClickEvent;
+            });
+          },
+        };
+      })(Array.prototype);
+
+      //document.addEventListener('readystatechange', function () {
+      //if (document.readyState === 'complete') {
+      LightTableFilter.init();
+      //}
+      //});
+    })(document);
+  }
 }
 
 /**
