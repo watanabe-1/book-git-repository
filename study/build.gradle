@@ -93,16 +93,20 @@ repositories {
 
 dependencyManagement {
     dependencies {
+        // terasoluna-gfw version
         dependencySet(group: "org.terasoluna.gfw", version: "5.7.0.RELEASE") {
             entry "terasoluna-gfw-web"
             entry "terasoluna-gfw-common"
         }
+        // MyBatis version
         dependencySet(group: "org.mybatis.spring.boot", version: "2.2.2") {
             entry "mybatis-spring-boot-starter"
         }
+        // Apache Commons IO version
         dependencySet(group: "commons-io", version: "2.11.0") {
             entry "commons-io"
         }
+        // juniversalchardet
         dependencySet(group: "com.googlecode.juniversalchardet", version: "1.0.3") {
             entry "juniversalchardet"
         }
@@ -110,24 +114,41 @@ dependencyManagement {
 }
 
 dependencies {
+    // SpringBoot のWebアプリケーション用ライブラリ
+    // SpringBoot のWebAppに関するすべての機能をまとめている
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // SpringBoot のThymeleaf用のライブラリ
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    // Thymeleaf（テンプレートエンジン）ライブラリ
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity5'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-java8time'
+    // SpringBoot でのDB関連一式
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // validation
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    // MyBatis
     implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter'
+    // spring-securit
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.security:spring-security-config'
+    // DB Commons DBCP2 
     implementation 'org.apache.commons:commons-dbcp2'
+    // ホットデプロイの為のツール
     implementation 'org.springframework.boot:spring-boot-devtools'
+    // 文字コード判定用
     implementation 'com.googlecode.juniversalchardet:juniversalchardet'
+    // PostgreSQL
     implementation 'org.postgresql:postgresql'
+    // Apache Commons IO
     implementation 'commons-io:commons-io'
+    // jackson-dataformat-csv
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
+    // ntt terasoluna
     implementation 'org.terasoluna.gfw:terasoluna-gfw-web'
     implementation 'org.terasoluna.gfw:terasoluna-gfw-common'
+    // spring test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    // lombok
     compileOnly 'org.projectlombok:lombok'
 }
