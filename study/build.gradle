@@ -9,8 +9,7 @@ plugins {
 apply plugin: 'java'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.github.node-gradle.node'
-
-
+apply plugin: "eclipse"
 
 group = 'org.watanabe.app'
 version = '0.0.1-SNAPSHOT'
@@ -41,6 +40,7 @@ compileTestJava {
 }
 
 bootJar {
+	mainClass = 'org.watanabe.app'
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
@@ -52,7 +52,7 @@ jar {
  * clean build
  */
 task cleanGen(type: Delete) {
-    delete fileTree('src/main/resources/static') {
+    delete fileTree('WebContent/') {
         include 'css/*.*'
         include 'res/*.*'
         include 'js/*.*'
@@ -151,4 +151,5 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
     // lombok
     compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
 }

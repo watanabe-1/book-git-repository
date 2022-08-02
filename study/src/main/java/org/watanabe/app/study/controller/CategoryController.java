@@ -154,7 +154,7 @@ public class CategoryController {
 
     String imgId = form.getImgId();
     // 画像をアップロードしたとき
-    if (Objects.equals(imgId, StudyUtil.getNoImageCode())) {
+    if (!Objects.equals(imgId, StudyUtil.getNoImageCode())) {
       // アイコン画像を本保存
       uploadHelper.saveIconFile(form);
     }
