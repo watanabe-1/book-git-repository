@@ -52,7 +52,7 @@ jar {
  * clean build
  */
 task cleanGen(type: Delete) {
-    delete fileTree('WebContent/') {
+    delete fileTree('src/main/webapp') {
         include 'css/*.*'
         include 'res/*.*'
         include 'js/*.*'
@@ -66,13 +66,6 @@ build.dependsOn webpack
 build.mustRunAfter webpack
 bootRun.dependsOn debug
 bootRun.mustRunAfter webpack
-
-/**
- * for heroku deploy
- */
-task stage(dependsOn: ['clean', 'build']) {
-    mustRunAfter 'clean'
-}
 
 /**
  * for Spring Boot

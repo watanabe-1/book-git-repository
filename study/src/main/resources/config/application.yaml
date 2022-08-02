@@ -1,0 +1,32 @@
+spring:
+  profiles:
+    active: devel
+  servlet:
+    multipart:
+      resolve-lazily: true
+      max-file-size: 2MB
+      max-request-size: 20MB
+  main:
+    allow-bean-definition-overriding: true
+server:
+  servlet:
+    context-path: /study/
+  error:
+    path: /errors
+  compression:
+    enabled: true
+    mime-types:
+      - text/css
+      - text/html
+      - application/javascript
+      - application/json
+---
+spring:
+  devtools:
+    restart:
+      enabled: true
+  config:
+    activate:
+      on-profile: devel
+server:
+  port: 8080
