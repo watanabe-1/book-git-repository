@@ -13,8 +13,8 @@ import lombok.ToString;
 @ToString(of = "code")
 public enum AccountType implements Type {
 
-  SYSTEM("01", "システム管理者", "ROLE_SYSTEM"), ADMIN("02", "管理者", "ROLE_ADMIN"), USER("03", "一般ユーザ",
-      "ROLE_USER");
+  SYSTEM("01", "システム管理者", "SYSTEM", "ROLE_SYSTEM"), ADMIN("02", "管理者", "ADMIN",
+      "ROLE_ADMIN"), USER("03", "一般ユーザ", "USER", "ROLE_USER");
 
   /**
    * コード
@@ -25,6 +25,11 @@ public enum AccountType implements Type {
    * 名称
    */
   private final String name;
+
+  /**
+   * ロールのベース
+   */
+  private final String baseRole;
 
   /**
    * ロール

@@ -71,9 +71,10 @@ public class WebSecurityConfig {
             .mvcMatchers("/res/*.*").permitAll()
             .mvcMatchers("/images/*.*").permitAll()
             // システム管理者のみ
-            .mvcMatchers("/system/**").hasRole(AccountType.SYSTEM.getRole())
+            .mvcMatchers("/system/**").hasRole(AccountType.SYSTEM.getBaseRole())
             // システム管理者および管理者のみ
-            .mvcMatchers("/admin/**").hasRole(AccountType.ADMIN.getRole())
+            .mvcMatchers("/admin/**")
+            .hasAnyRole(AccountType.SYSTEM.getBaseRole(), AccountType.ADMIN.getBaseRole())
             .anyRequest().authenticated());
     return http.build();
   }
