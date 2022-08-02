@@ -29,8 +29,8 @@ module.exports = {
   output: {
     // JavaScript は js/ 配下に配置
     filename: 'js/[name].bundle.js',
-    // ビルドの出力先を /src/main/webapp にする
-    path: path.join(__dirname, '/src/main/webapp/'), // eslint-disable-line
+    // ビルドの出力先を /src/main/resources/static にする
+    path: path.join(__dirname, '/src/main/resources/static'), // eslint-disable-line
     // Spring Boot のコンテキストパス（/study/）を設定する
     publicPath: '/study/',
     assetModuleFilename: 'res/[name].[hash][ext]',
