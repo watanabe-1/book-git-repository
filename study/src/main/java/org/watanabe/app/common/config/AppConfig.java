@@ -22,7 +22,7 @@ public class AppConfig implements WebMvcConfigurer {
    * @return メッセージソース
    */
   @Bean
-  public MessageSource messageSource() {
+  MessageSource messageSource() {
     ReloadableResourceBundleMessageSource messageSource =
         new ReloadableResourceBundleMessageSource();
     // ValidationMessage.propertiesを使用
@@ -40,7 +40,7 @@ public class AppConfig implements WebMvcConfigurer {
    * @return バリデータ
    */
   @Bean
-  public LocalValidatorFactoryBean validator() {
+  LocalValidatorFactoryBean validator() {
     LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
     localValidatorFactoryBean.setValidationMessageSource(messageSource());
     return localValidatorFactoryBean;

@@ -15,9 +15,9 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 public class ViewConfig {
 
   @Bean
-  public ITemplateResolver templateResolver() {
+  ITemplateResolver templateResolver() {
     SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-    resolver.setPrefix("/WEB-INF/view/");
+    resolver.setPrefix("classpath:view/");
     resolver.setSuffix(".html");
     resolver.setTemplateMode("HTML");
     resolver.setCharacterEncoding("UTF-8");
@@ -25,7 +25,7 @@ public class ViewConfig {
   }
 
   @Bean
-  public SpringTemplateEngine templateEngine() {
+  SpringTemplateEngine templateEngine() {
     SpringTemplateEngine templateEngine = new SpringTemplateEngine();
     templateEngine.setTemplateResolver(templateResolver());
     templateEngine.addDialect(new SpringSecurityDialect());
@@ -35,7 +35,7 @@ public class ViewConfig {
   }
 
   @Bean
-  public ViewResolver thymeleafViewResolver() {
+  ViewResolver thymeleafViewResolver() {
     ThymeleafViewResolver thymeleafViewResolver = new ThymeleafViewResolver();
     thymeleafViewResolver.setTemplateEngine(templateEngine());
     thymeleafViewResolver.setCharacterEncoding("UTF-8");
@@ -44,7 +44,7 @@ public class ViewConfig {
   }
 
   @Bean
-  public BeanNameViewResolver beanNameViewResolver() {
+  BeanNameViewResolver beanNameViewResolver() {
     BeanNameViewResolver beanNameViewResolver = new BeanNameViewResolver();
     beanNameViewResolver.setOrder(0);
     return beanNameViewResolver;

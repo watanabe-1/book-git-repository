@@ -73,7 +73,7 @@ bin/
 build/
 package-lock.json
 /study/node_modules/
-/study/src/main/webapp/js/
-/study/src/main/webapp/css/
-/study/src/main/webapp/res/
-/study/src/main/webapp/temp/
+/study/src/main/resources/static/js/
+/study/src/main/resources/static/css/
+/study/src/main/resources/static/res/
+/study/src/main/resources/static/temp/
