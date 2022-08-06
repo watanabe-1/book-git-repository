@@ -21,8 +21,8 @@ public class FileConfig {
    */
   @Bean
   Dir fileDir() {
-    // 起動時のディレクトリをfileDirのstaticFileDirフィールドに保持しておく
-    File fileDir = new File("src/main/webapp");
+    // 静的ファイル配置用ディレクトリを保持しておく
+    File fileDir = new File("src/main/resources/static");
     fileDir = fileDir.getAbsoluteFile();
 
     Dir dir = new Dir();

@@ -1,5 +1,6 @@
 package org.watanabe.app.common.config;
 
+import java.nio.charset.StandardCharsets;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.MessageSource;
@@ -30,7 +31,7 @@ public class AppConfig implements WebMvcConfigurer {
         "classpath:config/properties/i18n/LogMessages",
         "classpath:config/properties/i18n/SpringSecurityMessages");
     // メッセージプロパティの文字コードを指定
-    messageSource.setDefaultEncoding("UTF-8");
+    messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
     return messageSource;
   }
 

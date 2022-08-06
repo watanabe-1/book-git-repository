@@ -1,5 +1,6 @@
 package org.watanabe.app.common.config;
 
+import java.nio.charset.StandardCharsets;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
@@ -20,7 +21,7 @@ public class ViewConfig {
     resolver.setPrefix("classpath:view/");
     resolver.setSuffix(".html");
     resolver.setTemplateMode("HTML");
-    resolver.setCharacterEncoding("UTF-8");
+    resolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
     return resolver;
   }
 
@@ -38,7 +39,7 @@ public class ViewConfig {
   ViewResolver thymeleafViewResolver() {
     ThymeleafViewResolver thymeleafViewResolver = new ThymeleafViewResolver();
     thymeleafViewResolver.setTemplateEngine(templateEngine());
-    thymeleafViewResolver.setCharacterEncoding("UTF-8");
+    thymeleafViewResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
     thymeleafViewResolver.setOrder(1);
     return thymeleafViewResolver;
   }
