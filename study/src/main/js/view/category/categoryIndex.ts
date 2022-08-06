@@ -89,7 +89,7 @@ function backImgtag(): void {
 const listModalEl: HTMLDivElement = document.getElementById(
   'listModal'
 ) as HTMLDivElement;
-const listModalElObj = new bootstrap.Modal(listModalEl);
+const listModalElObj: bootstrap.Modal = new bootstrap.Modal(listModalEl);
 
 document.querySelectorAll('.modalBtn').forEach((btn, index) => {
   btn.addEventListener('click', (e) => {

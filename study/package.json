@@ -9,6 +9,7 @@
     "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
     "@types/webpack": "^5.28.0",
+    "@types/bootstrap": "^5.2.1",
     "babel-loader": "^8.2.4",
     "css-loader": "^6.7.1",
     "eslint": "^8.13.0",

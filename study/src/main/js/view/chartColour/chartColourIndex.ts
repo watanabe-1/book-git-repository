@@ -212,7 +212,7 @@ const barConfirmTempChart = studyChart.barChart(confirmDefData, [
 const confirmModalEl: HTMLDivElement = document.getElementById(
   'confirmModal'
 ) as HTMLDivElement;
-const confirmModalElObj = new bootstrap.Modal(confirmModalEl);
+const confirmModalElObj: bootstrap.Modal = new bootstrap.Modal(confirmModalEl);
 
 document.querySelectorAll('.confirmModalBtn').forEach((button, index) => {
   button.addEventListener('click', async (e) => {
@@ -319,11 +319,13 @@ const barConfirmTempListChart = studyChart.barChart(confirmDefData, [
 const listModalEl: HTMLDivElement = document.getElementById(
   'listModal'
 ) as HTMLDivElement;
-const listModalElObj = new bootstrap.Modal(listModalEl);
+const listModalElObj: bootstrap.Modal = new bootstrap.Modal(listModalEl);
 const listModalDeleteEl: HTMLDivElement = document.getElementById(
   'listModalDelete'
 ) as HTMLDivElement;
-const listModalDeleteElObj = new bootstrap.Modal(listModalDeleteEl);
+const listModalDeleteElObj: bootstrap.Modal = new bootstrap.Modal(
+  listModalDeleteEl
+);
 
 document.querySelectorAll('.listModalBtn').forEach((button, index) => {
   button.addEventListener('click', async (e) => {
