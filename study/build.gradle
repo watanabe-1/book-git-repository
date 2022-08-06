@@ -52,7 +52,7 @@ jar {
  * clean build
  */
 task cleanGen(type: Delete) {
-    delete fileTree('src/main/webapp') {
+    delete fileTree('src/main/resources/static') {
         include 'css/*.*'
         include 'res/*.*'
         include 'js/*.*'
