@@ -40,7 +40,6 @@ compileTestJava {
 }
 
 bootJar {
-	mainClass = 'org.watanabe.app'
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
