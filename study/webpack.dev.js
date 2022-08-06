@@ -12,7 +12,10 @@ module.exports = merge(common, {
   // 開発用サーバーを 9080 ポートで起動
   devServer: {
     static: {
-      directory: path.join(__dirname, '/src/main/resources/templates'), // eslint-disable-line
+      directory: path.join(
+        __dirname,
+        '/src/main/resources/static/WEB-INF/view'
+      ), // eslint-disable-line
     },
     watchFiles: ['src/main/js/**/*', 'src/main/css/**/*'],
     port: 9080,

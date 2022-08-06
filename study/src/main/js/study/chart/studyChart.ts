@@ -1,74 +1,26 @@
 import * as studyUtil from './../util/studyUtil';
-import Chart from 'chart.js/auto';
+import Chart, {
+  BubbleDataPoint,
+  ChartData,
+  ChartTypeRegistry,
+  ScatterDataPoint,
+} from 'chart.js/auto';
 import { fontString } from 'chart.js/helpers';
 
 /**
  * ドーナツチャート
  *
- * @param {JSON} jsonData chartのdataに使用
- * @param {any} args 表示などに使用
+ * @param {ChartData} jsonData chartのdataに使用
+ * @param {string[]} args 表示などに使用
  */
-export function doughnutChart(jsonData, args) {
-  const doughnutChart = document.getElementById(args[0]);
+export function doughnutChart(jsonData: ChartData, args: string[]): Chart {
+  const doughnutChart: HTMLCanvasElement = document.getElementById(
+    args[0]
+  ) as HTMLCanvasElement;
   if (jsonData.datasets[0].data.length === 0) {
     //console.log(jsonData.datasets[0].data)
     args[1] = 'データがありません';
   }
-  //console.log(jsonData);
-  const centerAndEachLabel = {
-    // 真ん中に表示する
-    beforeDraw(chart, argsAny, options) {
-      const {
-        ctx,
-        chartArea: { top, right, bottom, left, width, height },
-      } = chart;
-      ctx.save();
-      ctx.fillStyle = 'black';
-      ctx.fillRect(width / 2, top + height / 2, 0, 0);
-      ctx.font = '16px sans-serif';
-      ctx.textAlign = 'center';
-
-      // 位置調整
-      //console.log("width", width);
-      //console.log("height", height);
-      //console.log("top", top);
-      //console.log("width / 2, top + (height / 2)", width / 2, top + (height / 2));
-
-      //表示する文字
-      ctx.fillText(args[1], width / 2, top + height / 2);
-    },
-    //ラベルをつける
-    afterDatasetsDraw: function (chart, easing) {
-      const ctx = chart.ctx;
-      chart.data.datasets.forEach(function (dataset, i) {
-        const meta = chart.getDatasetMeta(i);
-        if (!meta.hidden) {
-          meta.data.forEach(function (element, index) {
-            //文字の色
-            ctx.fillStyle = 'rgb(255, 255, 255)';
-
-            const fontSize = 16;
-            const fontStyle = 'normal';
-            const fontFamily = 'Helvetica Neue';
-            ctx.font = fontString(fontSize, fontStyle, fontFamily);
-
-            const dataString = chart.data.labels[index]; //+ ' : ' + dataset.data[index].toString();
-
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-
-            const padding = 5;
-            const position = element.tooltipPosition();
-            ctx.fillText(
-              dataString,
-              position.x,
-              position.y - fontSize / 2 - padding
-            );
-          });
-        }
-      });
-    },
-  };
   //描画
   return new Chart(doughnutChart, {
     type: 'doughnut',
@@ -123,10 +75,10 @@ export function doughnutChart(jsonData, args) {
         tooltip: {
           usePointStyle: true,
           callbacks: {
-            label: function (context) {
+            label: function (context): string {
               //dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
               //studyUtil.getStudyDate()の呼び出し
-              const date = studyUtil.getStudyDate();
+              const date: Date = studyUtil.getStudyDate();
               return date.getFullYear() + '/' + date.getMonth();
             },
             /*
@@ -150,79 +102,107 @@ export function doughnutChart(jsonData, args) {
             },
             */
             //bodyの方が見栄えが良さそうなのでafterLabelから変更
-            afterBody: function (context) {
-              const data = context[0].dataset.data;
-              const index = context[0].dataIndex;
-              const label = context[0].label;
+            afterBody: function (context): string[] {
+              const data: number[] = context[0].dataset.data as number[];
+              const index: number = context[0].dataIndex;
+              const label: string = context[0].label;
               //金額(dataに定義した)の合計
-              let dataSum = 0;
+              let dataSum: number = 0;
               data.forEach(function (element) {
                 dataSum += element;
               });
               //割合(小数点なし)*1/1の値を両方10倍すると小数点の桁数が一つ増える
-              const ratio =
+              const ratio: string =
                 (Math.round((data[index] / dataSum) * 100 * 1) / 1).toString() +
                 '%';
               //\xA5は円マークのこと
-              const text = label + ':' + ratio + '  \xA5' + data[index];
+              const text: string = label + ':' + ratio + '  \xA5' + data[index];
               return [text];
             },
           },
         },
       },
     },
-    plugins: [centerAndEachLabel],
+    plugins: [
+      {
+        id: 'doughnutChart',
+        // 真ん中に表示する
+        beforeDraw(chart, argsAny, options) {
+          const {
+            ctx,
+            chartArea: { top, right, bottom, left, width, height },
+          } = chart;
+          ctx.save();
+          ctx.fillStyle = 'black';
+          ctx.fillRect(width / 2, top + height / 2, 0, 0);
+          ctx.font = '16px sans-serif';
+          ctx.textAlign = 'center';
+
+          // 位置調整
+          //console.log("width", width);
+          //console.log("height", height);
+          //console.log("top", top);
+          //console.log("width / 2, top + (height / 2)", width / 2, top + (height / 2));
+
+          //表示する文字
+          ctx.fillText(args[1], width / 2, top + height / 2);
+        },
+        //ラベルをつける
+        afterDatasetsDraw: function (chart, easing) {
+          const ctx: CanvasRenderingContext2D = chart.ctx;
+          chart.data.datasets.forEach(function (dataset, i) {
+            const meta = chart.getDatasetMeta(i);
+            if (!meta.hidden) {
+              meta.data.forEach(function (element, index) {
+                //文字の色
+                ctx.fillStyle = 'rgb(255, 255, 255)';
+
+                const fontSize: number = 16;
+                const fontStyle: string = 'normal';
+                const fontFamily: string = 'Helvetica Neue';
+                ctx.font = fontString(fontSize, fontStyle, fontFamily);
+
+                const dataString: string = chart.data.labels[index] as string; //+ ' : ' + dataset.data[index].toString();
+
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+
+                const padding: number = 5;
+                const position = element.tooltipPosition();
+                ctx.fillText(
+                  dataString,
+                  position.x,
+                  position.y - fontSize / 2 - padding
+                );
+              });
+            }
+          });
+        },
+      },
+    ],
   });
 }
 
 /**
  * ホライゾンバーチャート
  *
- * @param {JSON} jsonData chartのdataに使用
- * @param {any} args 表示などに使用
+ * @param {ChartData} jsonData chartのdataに使用
+ * @param {string[]} args 表示などに使用
  */
-export function barChart(jsonData, args) {
-  const barChart = document.getElementById(args[0]);
+export function barChart(jsonData: ChartData, args: string[]): Chart {
+  const barChart: HTMLCanvasElement = document.getElementById(
+    args[0]
+  ) as HTMLCanvasElement;
   //console.log(jsonData);
   //console.log(jsonData.datasets[0].data);
-  const maxData = Math.max(...jsonData.datasets[0].data);
+  const maxData: number = Math.max(...(jsonData.datasets[0].data as number[]));
   //console.log(maxData);
   if (jsonData.datasets[0].data.length === 0) {
     //console.log(jsonData.datasets[0].data)
     args[1] = 'データがありません';
   }
-  const headLabel = {
-    //棒の頭にラベルをつける
-    afterDatasetsDraw: function (chart, easing) {
-      const ctx = chart.ctx;
-      //console.log(ctx);
-      chart.data.datasets.forEach(function (dataset, i) {
-        const meta = chart.getDatasetMeta(i);
-        if (!meta.hidden) {
-          meta.data.forEach(function (element, index) {
-            //文字の色
-            ctx.fillStyle = 'rgb(0, 0, 0)';
-
-            const fontSize = 10;
-            const fontStyle = 'normal';
-            const fontFamily = 'Helvetica Neue';
-            ctx.font = fontString(fontSize, fontStyle, fontFamily);
-
-            const dataString = ' \xA5' + dataset.data[index].toString();
-            //文字列の位置の基準点
-            //start, end, left, right, center
-            ctx.textAlign = 'start';
-            //middle, top, bottom
-            ctx.textBaseline = 'middle';
-
-            const position = element.tooltipPosition();
-            ctx.fillText(dataString, position.x, position.y);
-          });
-        }
-      });
-    },
-  };
-  const config = {
+  //描画
+  return new Chart(barChart, {
     type: 'bar',
     data: jsonData,
     options: {
@@ -267,30 +247,30 @@ export function barChart(jsonData, args) {
         tooltip: {
           usePointStyle: true,
           callbacks: {
-            title: function (context) {
+            title: function (context): string {
               //console.log(context);
-              const label = context[0].label;
+              const label: string = context[0].label;
               //dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
               //studyUtil.getStudyDate()の呼び出し
-              const date = studyUtil.getStudyDate();
+              const date: Date = studyUtil.getStudyDate();
               return (
                 label + '(' + date.getFullYear() + '/' + date.getMonth() + ')'
               );
             },
-            label: function (context) {
-              const data = context.dataset.data;
-              const index = context.dataIndex;
+            label: function (context): string[] {
+              const data: number[] = context.dataset.data as number[];
+              const index: number = context.dataIndex;
               //金額(dataに定義した)の合計
-              let dataSum = 0;
+              let dataSum: number = 0;
               data.forEach(function (element) {
                 dataSum += element;
               });
               //割合(小数点なし)*1/1の値を両方10倍すると小数点の桁数が一つ増える
-              const ratio =
+              const ratio: string =
                 (Math.round((data[index] / dataSum) * 100 * 1) / 1).toString() +
                 '%';
               //\xA5は円マークのこと
-              const text = ratio + '  \xA5' + data[index];
+              const text: string = ratio + '  \xA5' + data[index];
               return [text];
             },
           },
@@ -301,25 +281,61 @@ export function barChart(jsonData, args) {
         },
       },
     },
-    plugins: [headLabel],
-  };
-  //描画
-  return new Chart(barChart, config);
+    plugins: [
+      {
+        id: 'studyBarChart',
+        //棒の頭にラベルをつける
+        afterDatasetsDraw: function (chart, easing) {
+          const ctx: CanvasRenderingContext2D = chart.ctx;
+          //console.log(ctx);
+          chart.data.datasets.forEach(function (dataset, i) {
+            const meta = chart.getDatasetMeta(i);
+            if (!meta.hidden) {
+              meta.data.forEach(function (element, index) {
+                //文字の色
+                ctx.fillStyle = 'rgb(0, 0, 0)';
+
+                const fontSize: number = 10;
+                const fontStyle: string = 'normal';
+                const fontFamily: string = 'Helvetica Neue';
+                ctx.font = fontString(fontSize, fontStyle, fontFamily);
+
+                const dataString: string =
+                  ' \xA5' + dataset.data[index].toString();
+                //文字列の位置の基準点
+                //start, end, left, right, center
+                ctx.textAlign = 'start';
+                //middle, top, bottom
+                ctx.textBaseline = 'middle';
+
+                const position = element.tooltipPosition();
+                ctx.fillText(dataString, position.x, position.y);
+              });
+            }
+          });
+        },
+      },
+    ],
+  });
 }
 
 /**
  * ホライゾンバーチャート
  *
- * @param {JSON} jsonData chartのdataに使用
- * @param {any} args 表示などに使用
+ * @param {ChartData} jsonData chartのdataに使用
+ * @param {string[]} args 表示などに使用
  */
-export function barAndLineChart(jsonData, args) {
-  const barAndLineChart = document.getElementById(args[0]);
+export function barAndLineChart(jsonData: ChartData, args: string[]) {
+  const barAndLineChart: HTMLCanvasElement = document.getElementById(
+    args[0]
+  ) as HTMLCanvasElement;
   if (jsonData.datasets[0].data.length === 0) {
     //console.log(jsonData.datasets[0].data)
     args[1] = 'データがありません';
   }
-  const config = {
+  //console.log(config);
+  //描画
+  return new Chart(barAndLineChart, {
     type: 'bar',
     data: jsonData,
     options: {
@@ -341,29 +357,27 @@ export function barAndLineChart(jsonData, args) {
               return context[0].label;
             },
             label: function (context) {
-              const data = context.dataset.data;
-              const index = context.dataIndex;
+              const data: number[] = context.dataset.data as number[];
+              const index: number = context.dataIndex;
               //\xA5は円マークのこと
-              const text = context.dataset.label + '：\xA5' + data[index];
+              const text: string =
+                context.dataset.label + '：\xA5' + data[index];
               return [text];
             },
           },
         },
       },
     },
-  };
-  //console.log(config);
-  //描画
-  return new Chart(barAndLineChart, config);
+  });
 }
 
 /**
  * ドーナツチャートの表示データを更新
  *
- * @param {JSON} jsonData 置き換えるデータ
+ * @param {ChartData} jsonData 置き換えるデータ
  * @param {Chart} chart 更新対象
  */
-export function updateDataDoughnut(jsonData, chart) {
+export function updateDataDoughnut(jsonData: ChartData, chart: Chart) {
   chart.data = jsonData;
   chart.update();
 }
@@ -371,11 +385,22 @@ export function updateDataDoughnut(jsonData, chart) {
 /**
  * ホライゾンバーチャートの表示データを更新
  *
- * @param {JSON} jsonData 置き換えるデータ
+ * @param {ChartData} jsonData 置き換えるデータ
  * @param {Chart} chart 更新対象
  */
-export function updateDataBar(jsonData, chart) {
-  const maxData = Math.max(...jsonData.datasets[0].data);
+export function updateDataBar(
+  jsonData: ChartData,
+  chart: {
+    options: { scales: { x: { suggestedMax: number } } };
+    data: ChartData<
+      keyof ChartTypeRegistry,
+      (number | ScatterDataPoint | BubbleDataPoint)[],
+      unknown
+    >;
+    update: () => void;
+  }
+) {
+  const maxData: number = Math.max(...(jsonData.datasets[0].data as number[]));
   chart.options.scales.x.suggestedMax = maxData / 10 + maxData;
   chart.data = jsonData;
   chart.update();
@@ -384,11 +409,15 @@ export function updateDataBar(jsonData, chart) {
 /**
  * 図の表示データを追加 kari
  *
- * @param {string} chart 更新対象
+ * @param {Chart} chart 更新対象
  * @param {string} label 追加するラベル
- * @param {JSON} data 追加するデータ
+ * @param {number | ScatterDataPoint | BubbleDataPoint} data 追加するデータ
  */
-function addData(chart, label, data) {
+function addData(
+  chart: Chart,
+  label: string,
+  data: number | ScatterDataPoint | BubbleDataPoint
+) {
   chart.data.labels.push(label);
   chart.data.datasets.forEach((dataset) => {
     dataset.data.push(data);
@@ -399,9 +428,9 @@ function addData(chart, label, data) {
 /**
  * 図のデータを削除する kari
  *
- * @param {*} chart 更新対象
+ * @param {Chart} chart 更新対象
  */
-function removeData(chart) {
+function removeData(chart: Chart) {
   chart.data.labels.pop();
   chart.data.datasets.forEach((dataset) => {
     dataset.data.pop();

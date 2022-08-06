@@ -40,7 +40,7 @@ build
 bin
 
 # Other
-/study/WebContent/temp/
+#/study/WebContent/temp/
 *.log
 *.swp
 *.bak
@@ -73,6 +73,8 @@ bin/
 build/
 package-lock.json
 /study/node_modules/
-/study/WebContent/js/
-/study/WebContent/css/
-/study/WebContent/res/
+/study/src/main/resources/static/js/
+/study/src/main/resources/static/css/
+/study/src/main/resources/static/res/
+/study/src/main/resources/static/temp/
+/study/src/main/resources/static/images/

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
+import org.watanabe.app.study.dto.dir.Dir;
 import org.watanabe.app.study.entity.Image;
 import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.service.ImageService;
@@ -56,6 +57,12 @@ public class UploadHelper {
   private ImageService imageService;
 
   /**
+   * 起動ディレクトリ情報
+   */
+  @Autowired
+  private Dir fileDir;
+
+  /**
    * ファイルを一時ファイルとして保存
    * 
    * @param MultipartFile アップロードされたデータ
@@ -64,7 +71,7 @@ public class UploadHelper {
   public String saveTemporaryFile(MultipartFile multipartFile) {
     // 画像IDの発番
     String uploadTmpFileId = UUID.randomUUID().toString();
-    File uploadTemporaryFile = new File(uploadTmpDir, uploadTmpFileId);
+    File uploadTemporaryFile = getFileDir(uploadTmpDir, uploadTmpFileId);
 
     // アップロードしたファイルを一時ファイルとして保存
     try {
@@ -158,8 +165,8 @@ public class UploadHelper {
       newFilePath = StudyStringUtil.pathJoin(uploadImgDefDirPath, addFilePath);
     }
 
-    File file = new File(uploadTmpDir, uploadTmpFileId);
-    File fileToMove = new File(newFile, newFileName);
+    File file = getFileDir(uploadTmpDir, uploadTmpFileId);
+    File fileToMove = getFileDir(newFile, newFileName);
 
     try {
       FileUtils.moveFile(file, fileToMove);
@@ -191,6 +198,17 @@ public class UploadHelper {
     data.append("data:image/").append(expand).append(";base64,").append(base64);
 
     return data.toString();
+  }
+
+  /**
+   * ベースと合成して返却
+   * 
+   * @param base 元となるディレクトリ
+   * @param name ファイル名
+   * @return ファイル
+   */
+  public File getFileDir(File base, String name) {
+    return new File(new File(fileDir.getStaticFileDir(), base.getPath()), name);
   }
 
 }

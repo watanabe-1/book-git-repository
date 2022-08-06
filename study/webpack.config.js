@@ -10,7 +10,6 @@ module.exports = {
   mode: 'production',
   entry: {
     // 共通系の JavaScript ライブラリーは vendor.bundle.js としてひとつにまとめる
-    // .css は bootstrap の .css と合成するため vendor に含めておく
     vendor: [
       'vue',
       'axios',
@@ -18,19 +17,19 @@ module.exports = {
       'chart.js',
       'flatpickr',
       'bootstrap',
-      './src/main/js/view/common/sidebar.js',
+      './src/main/js/view/common/sidebar',
     ],
     // 画面ごとの .js は分割して出力する（この設定のファイルを起点にバンドル開始）
-    booksIndex: './src/main/js/view/books/booksIndex.js',
-    chartColourIndex: './src/main/js/view/chartColour/chartColourIndex.js',
-    accountIndex: './src/main/js/view/account/accountIndex.js',
-    categoryIndex: './src/main/js/view/category/categoryIndex.js',
+    booksIndex: './src/main/js/view/books/booksIndex',
+    chartColourIndex: './src/main/js/view/chartColour/chartColourIndex',
+    accountIndex: './src/main/js/view/account/accountIndex',
+    categoryIndex: './src/main/js/view/category/categoryIndex',
   },
   output: {
     // JavaScript は js/ 配下に配置
     filename: 'js/[name].bundle.js',
-    // ビルドの出力先を /study/WebContent にする
-    path: path.join(__dirname, '/WebContent'), // eslint-disable-line
+    // ビルドの出力先を /src/main/resources/static にする
+    path: path.join(__dirname, '/src/main/resources/static'), // eslint-disable-line
     // Spring Boot のコンテキストパス（/study/）を設定する
     publicPath: '/study/',
     assetModuleFilename: 'res/[name].[hash][ext]',
@@ -70,6 +69,11 @@ module.exports = {
             },
           },
         ],
+      },
+      {
+        // 拡張子が.tsで終わるファイルに対して、TypeScriptコンパイラを適用する
+        test: /\.ts$/,
+        loader: 'ts-loader',
       },
       {
         // .vue の Vue.js コンポーネントをビルドしてバンドル
@@ -119,7 +123,7 @@ module.exports = {
   },
   resolve: {
     // .js と .vue 拡張子は import で付いてなくても解決
-    extensions: ['.js', '.vue'],
+    extensions: ['.js', '.ts', '.vue'],
     // import するモジュールでパス付きでないものは npm の node_modules に入ってる
     modules: ['node_modules'],
     alias: {

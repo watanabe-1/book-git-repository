@@ -1,5 +1,6 @@
 package org.watanabe.app.common.config;
 
+import java.nio.charset.StandardCharsets;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
@@ -15,17 +16,17 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 public class ViewConfig {
 
   @Bean
-  public ITemplateResolver templateResolver() {
+  ITemplateResolver templateResolver() {
     SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
-    resolver.setPrefix("/WEB-INF/view/");
+    resolver.setPrefix("classpath:view/");
     resolver.setSuffix(".html");
     resolver.setTemplateMode("HTML");
-    resolver.setCharacterEncoding("UTF-8");
+    resolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
     return resolver;
   }
 
   @Bean
-  public SpringTemplateEngine templateEngine() {
+  SpringTemplateEngine templateEngine() {
     SpringTemplateEngine templateEngine = new SpringTemplateEngine();
     templateEngine.setTemplateResolver(templateResolver());
     templateEngine.addDialect(new SpringSecurityDialect());
@@ -35,16 +36,16 @@ public class ViewConfig {
   }
 
   @Bean
-  public ViewResolver thymeleafViewResolver() {
+  ViewResolver thymeleafViewResolver() {
     ThymeleafViewResolver thymeleafViewResolver = new ThymeleafViewResolver();
     thymeleafViewResolver.setTemplateEngine(templateEngine());
-    thymeleafViewResolver.setCharacterEncoding("UTF-8");
+    thymeleafViewResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
     thymeleafViewResolver.setOrder(1);
     return thymeleafViewResolver;
   }
 
   @Bean
-  public BeanNameViewResolver beanNameViewResolver() {
+  BeanNameViewResolver beanNameViewResolver() {
     BeanNameViewResolver beanNameViewResolver = new BeanNameViewResolver();
     beanNameViewResolver.setOrder(0);
     return beanNameViewResolver;

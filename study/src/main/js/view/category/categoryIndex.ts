@@ -1,4 +1,5 @@
 import './../../common/common';
+import { Image } from './../../@types/studyUtilType';
 import * as studyListUtil from './../../study/list/studyListUtil';
 import * as studyUtil from './../../study/util/studyUtil';
 
@@ -8,20 +9,22 @@ import * as bootstrap from 'bootstrap';
 //カテゴリーリスト
 studyListUtil.addEventListenerOfSortAndFilterTable('categoryListTable', 'AND');
 
-const imgList = JSON.parse(document.getElementById('imgListData').innerHTML);
+const imgList: Image[] = JSON.parse(
+  document.getElementById('imgListData').innerHTML
+) as Image[];
 
-let imgNum = 0;
+let imgNum: number = 0;
 //クリックした時のボタン
-let imgConfirmButton;
+let imgConfirmButton: Element;
 
 /**
  * イメージタグの作成
  *
- * @param {HTMLElement} imgJson 画像パス
+ * @param {Image} imgJson 画像パス
  */
-function createImgTag(imgJson) {
+function createImgTag(imgJson: Image): void {
   //画面描画用imageタグの作成
-  const imgElement = document.createElement('img');
+  const imgElement: HTMLImageElement = document.createElement('img');
   imgElement.src =
     //studyUtilのgetContextPath()
     studyUtil.getContextPath() + imgJson.imgPath + '/' + imgJson.imgName; // 画像パス
@@ -30,7 +33,9 @@ function createImgTag(imgJson) {
   imgElement.height = 450; // 縦サイズ（px）
   imgElement.className = 'mh-100 mw-100';
   //modal内に描画
-  const imgCanvas = document.getElementById('imgCanvas');
+  const imgCanvas: HTMLDivElement = document.getElementById(
+    'imgCanvas'
+  ) as HTMLDivElement;
   //StudyUtil.appendOrReplaceChild
   studyUtil.appendOrReplaceChild(imgCanvas, imgElement, 'img');
 }
@@ -40,8 +45,8 @@ function createImgTag(imgJson) {
  *
  * @param {String} selectedImgId 設定されている画像Id
  */
-function defaultImgtag(selectedImgId) {
-  let num = 0;
+function defaultImgtag(selectedImgId: string): void {
+  let num: number = 0;
   imgList.forEach((value, index) => {
     //console.log(selectedImgId);
     //console.log(value.imgId);
@@ -58,7 +63,7 @@ function defaultImgtag(selectedImgId) {
  * 画像を次の画像に変更
  *
  */
-function nextImgtag() {
+function nextImgtag(): void {
   if (imgNum < imgList.length - 1) {
     imgNum++;
   } else {
@@ -71,7 +76,7 @@ function nextImgtag() {
  * 画像を前の画像に変更
  *
  */
-function backImgtag() {
+function backImgtag(): void {
   if (imgNum > 0) {
     imgNum--;
   } else {
@@ -81,7 +86,9 @@ function backImgtag() {
 }
 
 //list model
-const listModalEl = document.getElementById('listModal');
+const listModalEl: HTMLDivElement = document.getElementById(
+  'listModal'
+) as HTMLDivElement;
 const listModalElObj = new bootstrap.Modal(listModalEl);
 
 document.querySelectorAll('.modalBtn').forEach((btn, index) => {
@@ -89,18 +96,23 @@ document.querySelectorAll('.modalBtn').forEach((btn, index) => {
     //クリックした時のボタン
     imgConfirmButton = btn;
     //imgConfirmButtonから同じtdタグ内に存在するラベル、インプットタグを取得
-    const inputElment = imgConfirmButton.parentNode.querySelector('input');
+    const inputElment: HTMLInputElement =
+      imgConfirmButton.parentNode.querySelector('input');
     //console.log(inputElment);
     //画面描画用imageタグの作成
     defaultImgtag(inputElment.value);
 
     //次へボタン
-    const nextButton = listModalEl.querySelector('#nextImg');
+    const nextButton: HTMLButtonElement = listModalEl.querySelector(
+      '#nextImg'
+    ) as HTMLButtonElement;
     nextButton.addEventListener('click', function (event) {
       nextImgtag();
     });
     //前へボタン
-    const backButton = listModalEl.querySelector('#backImg');
+    const backButton: HTMLButtonElement = listModalEl.querySelector(
+      '#backImg'
+    ) as HTMLButtonElement;
     backButton.addEventListener('click', function (event) {
       backImgtag();
     });
@@ -112,11 +124,12 @@ document.querySelectorAll('.modalBtn').forEach((btn, index) => {
 //confirm model-change-button
 const listModalSaveButton = listModalEl.querySelector('#saveListModal');
 listModalSaveButton.addEventListener('click', function (event) {
-  const imgId = imgList[imgNum].imgId;
+  const imgId: string = imgList[imgNum].imgId;
   //行を指定して取得
-  const tds = imgConfirmButton.parentNode.parentNode.querySelectorAll('td');
+  const tds: NodeListOf<HTMLTableCellElement> =
+    imgConfirmButton.parentNode.parentNode.querySelectorAll('td');
   //行内に表示している画像の変更
-  const imgElement = tds[tds.length - 1].querySelector('img');
+  const imgElement: HTMLImageElement = tds[tds.length - 1].querySelector('img');
   imgElement.src =
     //studyUtilのgetContextPath()
     studyUtil.getContextPath() +
@@ -124,8 +137,10 @@ listModalSaveButton.addEventListener('click', function (event) {
     '/' +
     imgList[imgNum].imgName; // 画像パス
   //imgConfirmButtonから同じtdタグ内に存在するラベル、インプットタグを取得
-  const labelElment = imgConfirmButton.parentNode.querySelector('label');
-  const inputElment = imgConfirmButton.parentNode.querySelector('input');
+  const labelElment: HTMLLabelElement =
+    imgConfirmButton.parentNode.querySelector('label');
+  const inputElment: HTMLInputElement =
+    imgConfirmButton.parentNode.querySelector('input');
   labelElment.innerText = imgId;
   inputElment.value = imgId;
 

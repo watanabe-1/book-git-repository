@@ -6,14 +6,18 @@
  * @param {string} param - パラメーター値
  * @return セットしたurl
  */
-export function setAtagHrefParm(aTagQualifiedName, paramName, param) {
-  const target = document.querySelector(aTagQualifiedName);
-  const href = target.getAttribute('href');
-  const baseUrl = getBaseUrl();
-  const url = new URL(href, baseUrl);
+export function setAtagHrefParm(
+  aTagQualifiedName: string,
+  paramName: string,
+  param: string
+): string {
+  const target: Element = document.querySelector(aTagQualifiedName);
+  const href: string = target.getAttribute('href');
+  const baseUrl: string = getBaseUrl();
+  const url: URL = new URL(href, baseUrl);
   url.searchParams.set(paramName, param);
   //別に置換しなくても絶対urlがaタグにセットされるだけだけど見た目的に一応置換して相対urlに
-  const newHref = url.href.replace(baseUrl, '');
+  const newHref: string = url.href.replace(baseUrl, '');
 
   //console.log(newHref);
   target.setAttribute('href', newHref);
@@ -49,14 +53,17 @@ export function setAtagHrefParm(aTagQualifiedName, paramName, param) {
  * aタグにセットされているhref属性にパラメーターをセットする共通関数
  *
  * @param {string} aTagQualifiedName - aタグ一意に指定できるquerySelectorのelement
- * @param {JSON} params - {パラメータ名: パラメーター値}
+ * @param {Object} params - {パラメータ名: パラメーター値}
  * @return セットしたurl
  */
-export function setAtagHrefParms(aTagQualifiedName, params) {
-  const target = document.querySelector(aTagQualifiedName);
-  const href = target.getAttribute('href');
-  const baseUrl = getBaseUrl();
-  const url = new URL(href, baseUrl);
+export function setAtagHrefParms(
+  aTagQualifiedName: string,
+  params: Object
+): string {
+  const target: Element = document.querySelector(aTagQualifiedName);
+  const href: string = target.getAttribute('href');
+  const baseUrl: string = getBaseUrl();
+  const url: URL = new URL(href, baseUrl);
   //const json = JSON.parse(params);
 
   for (const key in params) {
@@ -69,7 +76,7 @@ export function setAtagHrefParms(aTagQualifiedName, params) {
   // });
 
   //別に置換しなくても絶対urlがaタグにセットされるだけだけど見た目的に一応置換して相対urlに
-  const newHref = url.href.replace(baseUrl, '');
+  const newHref: string = url.href.replace(baseUrl, '');
 
   target.setAttribute('href', newHref);
   return newHref;
@@ -79,12 +86,12 @@ export function setAtagHrefParms(aTagQualifiedName, params) {
  * urlにパラメータを追加
  *
  * @param {string} targetUrl - url
- * @param {JSON} params - {パラメータ名: パラメーター値}
+ * @param {Object} params - {パラメータ名: パラメーター値}
  * @return セットしたurl
  */
-export function addUrlParms(targetUrl, params) {
-  const baseUrl = getBaseUrl();
-  const url = new URL(targetUrl, baseUrl);
+export function addUrlParms(targetUrl: string, params: Object): string {
+  const baseUrl: string = getBaseUrl();
+  const url: URL = new URL(targetUrl, baseUrl);
   //const json = JSON.parse(params);
 
   for (const key in params) {
@@ -97,7 +104,7 @@ export function addUrlParms(targetUrl, params) {
   // });
 
   //別に置換しなくても絶対urlがaタグにセットされるだけだけど見た目的に一応置換して相対urlに
-  const newHref = url.href.replace(baseUrl, '');
+  const newHref: string = url.href.replace(baseUrl, '');
 
   return newHref;
 }
@@ -108,8 +115,8 @@ export function addUrlParms(targetUrl, params) {
  * @param {string} string - エスケープ対象
  * @return エスケープ後の文字列
  */
-export function escapeRegExp(string) {
-  return string.replace(/[.*+?^=!:${}()|[\]\/\\]/g, '\\$&'); // $&はマッチした部分文字列全体を意味します
+export function escapeRegExp(str: string): string {
+  return str.replace(/[.*+?^=!:${}()|[\]\/\\]/g, '\\$&'); // $&はマッチした部分文字列全体を意味します
 }
 
 /**
@@ -117,7 +124,7 @@ export function escapeRegExp(string) {
  *
  * @return urlのプロトコルからホストまで
  */
-export function getBaseUrl() {
+export function getBaseUrl(): string {
   return location.protocol + '//' + location.host;
 }
 
@@ -126,8 +133,9 @@ export function getBaseUrl() {
  *
  * @return urlのコンテキストパス
  */
-export function getContextPath() {
-  return document.querySelector('meta[name="contextPath"]').content;
+export function getContextPath(): string {
+  return document.querySelector<HTMLMetaElement>('meta[name="contextPath"]')
+    .content;
 }
 
 /**
@@ -136,13 +144,13 @@ export function getContextPath() {
  * @param {string} paramName - パラメーター名
  * @return urlのパラメータ
  */
-export function getLocationHrefParm(paramName) {
+export function getLocationHrefParm(paramName: string): string {
   // URLを取得
-  const url = new URL(window.location.href);
+  const url: URL = new URL(window.location.href);
   // URLSearchParamsオブジェクトを取得
-  const params = url.searchParams;
+  const params: URLSearchParams = url.searchParams;
   // getメソッド
-  const param = params.get(paramName);
+  const param: string = params.get(paramName);
   return param;
 }
 
@@ -171,9 +179,9 @@ export function getLocationHrefParm(paramName) {
 //         // statusが200の場合はリクエストが成功
 //         console.log('200');
 //         //console.log(httpRequest.responseText);
-//         //const dataStringify = JSON.stringify(httpRequest.responseText);
-//         //console.log('dataStringify:' + typeof dataStringify);
-//         //const dataJson = JSON.parse(dataStringify);
+//         //const datastringify = JSON.stringify(httpRequest.responseText);
+//         //console.log('datastringify:' + typeof datastringify);
+//         //const dataJson = JSON.parse(datastringify);
 //         //console.log('dataJson:' + typeof dataJson);
 //         //console.log(dataJson);
 //         callBackFunction(
@@ -201,14 +209,14 @@ export function getLocationHrefParm(paramName) {
  *
  *  @type {string}
  */
-export const PARALLEL = 'parallel';
+export const PARALLEL: string = 'parallel';
 
 /**
  * ajax通信時のコールバックファンクション実行方法：直列
  *
  *  @type {string}
  */
-export const SERIES = 'series';
+export const SERIES: string = 'series';
 
 /**
  * ajaxで非同期通信を行う(Promiseでラップした通信結果を返却)
@@ -217,23 +225,23 @@ export const SERIES = 'series';
  *
  * @param {string} method -通信方法('GET' or 'POST')
  * @param {string} url -送信先url
- * @param {string} params -送信時にセットするパラメーター 省略可能
+ * @param {Document | XMLHttpRequestBodyInit} body -送信時にセットするパラメーター 省略可能
  * @param {string} type -実行方法{並列 : 'parallel', 直列 : 'series'} 省略可能
- * @param {function[]} functions -実行したい引数に取得したjsonオブジェクトをとる関数たちを指定  省略可能
- * @param {any[]} functionArgs -functionsに追加で渡す引数 functionsの配列の添え字に合わせることでfunctionsに渡される 省略可能
+ * @param {any} functions -実行したい引数に取得したjsonオブジェクトをとる関数たちを指定  省略可能
+ * @param {Object[]} functionArgs -functionsに追加で渡す引数 functionsの配列の添え字に合わせることでfunctionsに渡される 省略可能
  * @return -結果が格納された「Promise」オブジェクト
  */
 export function ajax(
-  method,
-  url,
-  params = {},
-  type = SERIES,
-  functions = [],
-  functionArgs = []
-) {
+  method: string,
+  url: string,
+  body: Document | XMLHttpRequestBodyInit = '',
+  type: string = SERIES,
+  functions: any = [],
+  functionArgs: Object[] = []
+): Promise<unknown> {
   //ajax送信を行い結果を配列に格納
-  let ajaxPromise = new Promise(function (resolve, reject) {
-    let httpRequest = new XMLHttpRequest(); // XMLHttpRequestのインスタンス作成
+  let ajaxPromise: Promise<unknown> = new Promise(function (resolve, reject) {
+    let httpRequest: XMLHttpRequest = new XMLHttpRequest(); // XMLHttpRequestのインスタンス作成
     //CSRFトークンをセットで送信
     // let csrfToken = {};
     // csrfToken[getCsrfTokenParmName()] = getCsrfToken();
@@ -244,7 +252,7 @@ export function ajax(
       'Content-Type',
       'application/x-www-form-urlencoded'
     ); // リクエストヘッダーを追加(URIエンコードで送信)
-    httpRequest.send(params); // sendメソッドでサーバに送信
+    httpRequest.send(body); // sendメソッドでサーバに送信
     httpRequest.onreadystatechange = function () {
       if (httpRequest.readyState === 4) {
         // readyStateが4になればデータの読込み完了
@@ -253,20 +261,21 @@ export function ajax(
           // statusが200の場合はリクエストが成功
           console.log('200');
           //console.log(httpRequest.responseText);
-          //const dataStringify = JSON.stringify(httpRequest.responseText);
-          //console.log('dataStringify:' + typeof dataStringify);
-          //const dataJson = JSON.parse(dataStringify);
+          //const datastringify = JSON.stringify(httpRequest.responseText);
+          //console.log('datastringify:' + typeof datastringify);
+          //const dataJson = JSON.parse(datastringify);
           //console.log('dataJson:' + typeof dataJson);
           //console.log(dataJson);
           //console.log(JSON.parse(httpRequest.responseText));
           resolve(JSON.parse(httpRequest.responseText));
         } else {
           // statusが200以外の場合はリクエストが適切でなかったとしてサーバーから帰ってきたエラー情報を取得し返却
-          let messages = '';
+          let messages: string = '';
           console.log(httpRequest.responseText);
           if (400 <= httpRequest.status && httpRequest.status <= 499) {
             // return 結果が json形式か判定
-            const contentType = httpRequest.getResponseHeader('Content-Type');
+            const contentType: string =
+              httpRequest.getResponseHeader('Content-Type');
             if (contentType != null && contentType.indexOf('json') != -1) {
               const json = JSON.parse(httpRequest.responseText);
               console.log(json);
@@ -356,8 +365,8 @@ export function ajax(
  *
  * @return CSRF対策用のトークン
  */
-export function getCsrfToken() {
-  return document.querySelector('meta[name="_csrf"]').content;
+export function getCsrfToken(): string {
+  return document.querySelector<HTMLMetaElement>('meta[name="_csrf"]').content;
 }
 
 /**
@@ -365,8 +374,9 @@ export function getCsrfToken() {
  *
  * @return CSRF対策用のトークン送信用ヘッダー名CSRF対策用のトークン
  */
-export function getCsrfTokenHeader() {
-  return document.querySelector('meta[name="_csrf_header"]').content;
+export function getCsrfTokenHeader(): string {
+  return document.querySelector<HTMLMetaElement>('meta[name="_csrf_header"]')
+    .content;
 }
 
 /**
@@ -374,8 +384,10 @@ export function getCsrfTokenHeader() {
  *
  * @return CSRF対策用のトークン送信用ヘッダー名CSRF対策用のトークン
  */
-export function getCsrfTokenParmName() {
-  return document.querySelector('meta[name="_csrf_parameterName"]').content;
+export function getCsrfTokenParmName(): string {
+  return document.querySelector<HTMLMetaElement>(
+    'meta[name="_csrf_parameterName"]'
+  ).content;
 }
 
 /**
@@ -383,23 +395,27 @@ export function getCsrfTokenParmName() {
  *
  * @param {string} method -通信方法('GET' or 'POST')
  * @param {string} url -送信先url
- * @param {JSON} params -送信時にセットするparam 省略可能
+ * @param {Object} params -送信時にセットするparam 省略可能
  */
-export function submit(method, url, params = '') {
-  const submitMe = document.createElement('form');
+export function submit(
+  method: string,
+  url: string,
+  params: Object = null
+): void {
+  const submitMe: HTMLFormElement = document.createElement('form');
   submitMe.action = url; // Remember to change me
   submitMe.method = method;
   submitMe.type = 'hidden';
   submitMe.enctype = 'multipart/form-data';
   for (const key in params) {
-    const output = document.createElement('input');
+    const output: HTMLInputElement = document.createElement('input');
     output.value = params[key];
     output.type = 'hidden';
     output.name = key;
     submitMe.appendChild(output);
   }
   //CSRF対策用トークン
-  const csrfOutPut = document.createElement('input');
+  const csrfOutPut: HTMLInputElement = document.createElement('input');
   csrfOutPut.value = getCsrfToken();
   csrfOutPut.type = 'hidden';
   csrfOutPut.name = getCsrfTokenParmName();
@@ -415,11 +431,11 @@ export function submit(method, url, params = '') {
  *
  * @return パラメータにセットされた日付け。なければ現在時刻。
  */
-export function getStudyDate() {
+export function getStudyDate(): Date {
   // urlからパラメーターを取得
-  const paaramDate = getLocationHrefParm('date');
+  const paaramDate: string = getLocationHrefParm('date');
   //dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
-  const date = paaramDate == null ? new Date() : new Date(paaramDate);
+  const date: Date = paaramDate == null ? new Date() : new Date(paaramDate);
 
   return date;
 }
@@ -428,17 +444,15 @@ export function getStudyDate() {
  * 日付けをyyyyMMdd形式に変換
  *
  * @param {Date} date 対象日付け
- * @param {String} delim 区切り文字
+ * @param {string} delim 区切り文字
  * @return yyyyMMdd形式に変換された日付け
  */
-export function formatDateBtYyyyMmDd(date, delim = '/') {
-  //日付け型ではなかったら
-  if (typeof date != 'Date') {
-    date = new Date(date);
-  }
-  const result =
+export function formatDateBtYyyyMmDd(date: Date, delim: string = '/'): string {
+  const result: string =
     delim == null
-      ? date.getFullYear() + (date.getMonth() + 1) + date.getDate()
+      ? String(date.getFullYear()) +
+        String(date.getMonth() + 1) +
+        String(date.getDate())
       : date.getFullYear() +
         delim +
         (date.getMonth() + 1) +
@@ -454,9 +468,13 @@ export function formatDateBtYyyyMmDd(date, delim = '/') {
  *
  * @param {HTMLElement} target 追加対象html要素
  * @param {HTMLElement} child 追加html要素
- * @param {String} childType 追加html要素のタイプ
+ * @param {string} childType 追加html要素のタイプ
  */
-export function appendOrReplaceChild(target, child, childType) {
+export function appendOrReplaceChild(
+  target: HTMLElement,
+  child: HTMLElement,
+  childType: string
+): void {
   if (target.childElementCount > 0) {
     target.replaceChild(child, target.querySelector(childType));
   } else {
@@ -472,10 +490,14 @@ export function appendOrReplaceChild(target, child, childType) {
  * 両クラスともあった場合は、クラス1を削除
  *
  * @param {HTMLElement} target クラス切り替え対象
- * @param {String} classOne 切り替えクラス1
- * @param {String} classTwo 切り替えクラス2
+ * @param {string} classOne 切り替えクラス1
+ * @param {string} classTwo 切り替えクラス2
  */
-export function swichClass(target, classOne, classTwo) {
+export function swichClass(
+  target: HTMLElement,
+  classOne: string,
+  classTwo: string
+): void {
   if (
     target.classList.contains(classOne) &&
     target.classList.contains(classTwo)

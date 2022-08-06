@@ -13,8 +13,7 @@ import lombok.ToString;
 @ToString(of = "code")
 public enum AccountType implements Type {
 
-  SYSTEM("01", "システム管理者", "ROLE_SYSTEM"), ADMIN("02", "管理者", "ROLE_ADMIN"), USER("03", "一般ユーザ",
-      "ROLE_USER");
+  SYSTEM("01", "システム管理者", "SYSTEM"), ADMIN("02", "管理者", "ADMIN"), USER("03", "一般ユーザ", "USER");
 
   /**
    * コード
@@ -27,9 +26,18 @@ public enum AccountType implements Type {
   private final String name;
 
   /**
-   * ロール
+   * ロールのベース
    */
-  private final String role;
+  private final String baseRole;
+
+  /**
+   * ロールを返却
+   * 
+   * @return
+   */
+  public String getRole() {
+    return new StringBuffer().append("ROLE_").append(this.baseRole).toString();
+  }
 
   /**
    * タイプ用に拡張したEnumのcode値から取得した拡張Enumを生成する

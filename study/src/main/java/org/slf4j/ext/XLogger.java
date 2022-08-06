@@ -1,5 +1,6 @@
 package org.slf4j.ext;
 
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Locale;
@@ -32,7 +33,7 @@ public class XLogger {
   // staticイニシャライザにてMessageSourceを生成する
   static {
     // プロパティファイルをパースする際に使用する文字コードを指定
-    messageSource.setDefaultEncoding("UTF-8");
+    messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
     // i18nに配置したLogMessages.propertiesを読み込む
     messageSource.setBasenames("classpath:config/properties/i18n/LogMessages");
   }
