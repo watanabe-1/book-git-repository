@@ -1,13 +1,27 @@
+import { Books, Syukujits } from './../../@types/studyUtilType';
 import * as studyUtil from './../util/studyUtil';
 import * as studyListUtil from './../list/studyListUtil';
 
+/**
+ * 日付けに対しての判定結果格納定義
+ */
+type CheckedDate = {
+  isSelectdayByCalendar: boolean;
+  isHoliday: boolean;
+  holidayName: string;
+  isAmountDay: boolean;
+  amountList: number[];
+  isSaturday: boolean;
+  isSunday: boolean;
+};
+
 // let selectDayByCalendar = new Date();
 //studyUtil.getStudyDate()の呼び出し
-let selectDayByCalendar = studyUtil.getStudyDate();
+let selectDayByCalendar: Date = studyUtil.getStudyDate();
 // 祝日一覧 初期化時に設定
-let syukujitsuList;
+let syukujitsuList: Syukujits[];
 // 日にちごとのお金のリスト
-let AmountByDayList;
+let amountByDayList: Books[];
 /**
  * 初期化処理
  *
@@ -15,15 +29,15 @@ let AmountByDayList;
  * @param {string} targetId 対象カレンダーID
  * @param {string} targetBooksID 対象家計簿ID
  * @param {string} syukujitsuUrl 祝日取得用url
- * @param {string} AmountByDayListUrl 日にちごとのお金取得用url
+ * @param {string} amountByDayListUrl 日にちごとのお金取得用url
  */
 export function initStudyCalendar(
-  date,
-  targetId,
-  targetBooksID,
-  syukujitsuUrl,
-  AmountByDayListUrl
-) {
+  date: Date,
+  targetId: string,
+  targetBooksID: string,
+  syukujitsuUrl: string,
+  amountByDayListUrl: string
+): void {
   //スタイルタグの追加
   addCalendarStyle();
   //祝日一覧の取得
@@ -35,7 +49,7 @@ export function initStudyCalendar(
       .then(
         //前の処理が成功した時
         function (response) {
-          syukujitsuList = response;
+          syukujitsuList = response as Syukujits[];
           //console.log(response);
           return response;
         },
@@ -48,12 +62,12 @@ export function initStudyCalendar(
         //前の処理が成功した時
         function (response) {
           // 日にちごとのお金のリスト
-          let result;
-          if (!AmountByDayList) {
-            result = studyUtil.ajax('POST', AmountByDayListUrl).then(
+          let result: Promise<Books>;
+          if (!amountByDayList) {
+            result = studyUtil.ajax('POST', amountByDayListUrl).then(
               //前の処理が成功した時
               function (response) {
-                AmountByDayList = response;
+                amountByDayList = response as Books[];
                 //console.log(response);
                 return response;
               },
@@ -61,7 +75,7 @@ export function initStudyCalendar(
               function (error) {
                 throw new Error(error);
               }
-            );
+            ) as Promise<Books>;
           }
           return result;
         },
@@ -111,30 +125,35 @@ export function initStudyCalendar(
  * @param {string} targetBooksID 対象家計簿ID
  *
  */
-function showCalendarProcess(date, targetId, targetBooksID) {
-  const year = date.getFullYear();
-  const month = date.getMonth(); // 0始まり
+function showCalendarProcess(
+  date: Date,
+  targetId: string,
+  targetBooksID: string
+): void {
+  const year: number = date.getFullYear();
+  const month: number = date.getMonth(); // 0始まり
   document.querySelector('#tabCalendarHeader').innerHTML =
     year + '年 ' + (month + 1) + '月';
 
-  const calendar = createCalendarProcess(year, month);
+  const calendar: string = createCalendarProcess(year, month);
   document.querySelector('#' + targetId).innerHTML = calendar;
 
-  const booksList = createBooksListByCalendarProcess(
-    getSelectedAmountByDayList()
+  const booksList: HTMLTableElement = createBooksListByCalendarProcess(
+    getSelectedamountByDayList()
   );
-  const targetBooksElement = document.querySelector('#' + targetBooksID);
+  const targetBooksElement: HTMLDivElement =
+    document.querySelector<HTMLDivElement>('#' + targetBooksID);
   //StudyUtil.appendOrReplaceChild
   studyUtil.appendOrReplaceChild(targetBooksElement, booksList, 'table');
   //テーブルの内容を並び替えできるようにイベントを追加
   studyListUtil.addEventListenerOfSortAndFilterTable(booksList.id, 'AND');
   //クリックイベントの追加
-  const tabCalendarTableBody = document
-    .getElementById('tabCalendar')
+  const tabCalendarTableBody: NodeListOf<HTMLTableSectionElement> = document
+    .getElementById(targetId)
     .querySelectorAll('tbody');
   //console.log(tabCalendarTableBody);
   tabCalendarTableBody.forEach((value, index) => {
-    const hoverTds =
+    const hoverTds: NodeListOf<Element> =
       tabCalendarTableBody[index].querySelectorAll('.cell-hover');
     //console.log(hoverTds);
     //イベントの追加
@@ -142,34 +161,31 @@ function showCalendarProcess(date, targetId, targetBooksID) {
       //ボタンへのイベントの追加
       value.addEventListener('click', function (event) {
         //クリックした時のボタン
-        const target = event.target;
-        let selectId;
+        const target: HTMLElement = event.target as HTMLElement;
         // console.log(target);
         // console.log(target.parentNode);
         //クリックされた位置によって取得方法を変更
-        if (target.parentNode.className.indexOf('cell-hover') == 0) {
+        if (
+          (target.parentNode as HTMLTableCellElement).className.indexOf(
+            'cell-hover'
+          ) == 0
+        ) {
           //cellの中をクリックしたとき
           //   console.log(target.parentNode.firstElementChild.innerHTML);
           selectDayByCalendar.setDate(
-            target.parentNode.firstElementChild.innerHTML
+            Number(target.parentNode.firstElementChild.innerHTML)
           );
-          selectId =
-            target.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute(
-              'id'
-            );
         } else {
           //cellの縁側をクリックしたとき
           //   console.log(target.firstElementChild.innerHTML);
-          selectDayByCalendar.setDate(target.firstElementChild.innerHTML);
-          selectId =
-            target.parentNode.parentNode.parentNode.parentNode.getAttribute(
-              'id'
-            );
+          selectDayByCalendar.setDate(
+            Number(target.firstElementChild.innerHTML)
+          );
         }
         // console.log(target);
         // console.log(selectDayByCalendar);
         // console.log(selectId);
-        showCalendarProcess(selectDayByCalendar, selectId, targetBooksID);
+        showCalendarProcess(selectDayByCalendar, targetId, targetBooksID);
       });
     });
   });
@@ -179,9 +195,9 @@ function showCalendarProcess(date, targetId, targetBooksID) {
  * スタイルタグを追加し、カレンダー内のホバー用cssを定義する
  *
  */
-function addCalendarStyle() {
+function addCalendarStyle(): void {
   // styleタグを作成
-  let styleTag = document.createElement('style');
+  let styleTag: HTMLStyleElement = document.createElement('style');
 
   // styleタグに記載するcssを記入
   styleTag.innerText = `/* カレンダーホバー用 */ .cell-hover:hover { background-color: #bbd1ca; cursor: pointer;}`;
@@ -195,25 +211,28 @@ function addCalendarStyle() {
 /**
  * カレンダー作成
  *
- * @param {string} year 年
- * @param {string} month 月
+ * @param {number} year 年
+ * @param {number} month 月
  * @return {string} 作成したカレンダーのhtml
  */
-function createCalendarProcess(year, month) {
+function createCalendarProcess(year: number, month: number): string {
   //週の定義
-  const weekByCalendar = ['日', '月', '火', '水', '木', '金', '土'];
+  const weekByCalendar: string[] = ['日', '月', '火', '水', '木', '金', '土'];
   // 曜日
-  let calendar = "<table class='table table-bordered'><tr class='dayOfWeek'>";
-  for (let i = 0; i < weekByCalendar.length; i++) {
-    calendar += '<th class = "text-start">' + weekByCalendar[i] + '</th > ';
-  }
+  let calendar: string =
+    "<table class='table table-bordered'><tr class='dayOfWeek'>";
+  weekByCalendar.forEach((dayOfWeek) => {
+    calendar += '<th class = "text-start">' + dayOfWeek + '</th > ';
+  });
   calendar += '</tr>';
 
-  let count = 0;
-  const startDayOfWeek = new Date(year, month, 1).getDay();
-  const endDate = new Date(year, month + 1, 0).getDate();
-  const lastMonthEndDate = new Date(year, month, 0).getDate();
-  const row = Math.ceil((startDayOfWeek + endDate) / weekByCalendar.length);
+  let count: number = 0;
+  const startDayOfWeek: number = new Date(year, month, 1).getDay();
+  const endDate: number = new Date(year, month + 1, 0).getDate();
+  const lastMonthEndDate: number = new Date(year, month, 0).getDate();
+  const row: number = Math.ceil(
+    (startDayOfWeek + endDate) / weekByCalendar.length
+  );
 
   // 1行ずつ設定
   for (let i = 0; i < row; i++) {
@@ -236,7 +255,7 @@ function createCalendarProcess(year, month) {
       } else {
         // 当月の日付を曜日に照らし合わせて設定
         count++;
-        let dateInfo = checkDate(year, month, j, count);
+        let dateInfo: CheckedDate = checkDate(year, month, j, count);
         calendar += '<td class="cell-hover ';
         if (dateInfo.isSelectdayByCalendar) {
           calendar += 'selected bg-danger text-white';
@@ -275,18 +294,20 @@ function createCalendarProcess(year, month) {
 /**
  * カレンダーに対応する家計簿支出リスト作成
  *
- * @param {Object} booksList 選択されたリスト
- * @return {Object} 作成したカレンダーに対応する家計簿支出リスト
+ * @param {Books}booksList 選択されたリスト
+ * @return 作成したカレンダーに対応する家計簿支出リスト
  */
-function createBooksListByCalendarProcess(booksList) {
+function createBooksListByCalendarProcess(
+  booksList: Books[]
+): HTMLTableElement {
   // <table> 要素と <tbody> 要素を作成
-  const tbl = document.createElement('table');
+  const tbl: HTMLTableElement = document.createElement('table');
   tbl.className = 'table table-bordered';
   tbl.id = 'booksListByCalendarTable';
-  const tblhead = document.createElement('thead');
-  const tblBody = document.createElement('tbody');
+  const tblhead: HTMLTableSectionElement = document.createElement('thead');
+  const tblBody: HTMLTableSectionElement = document.createElement('tbody');
   //家計簿の定義
-  const booksListHeadByCalendar = [
+  const booksListHeadByCalendar: string[] = [
     '日付',
     '名称',
     'カテゴリー',
@@ -297,16 +318,15 @@ function createBooksListByCalendarProcess(booksList) {
   //headの作成
   for (let i = 0; i < 1; i++) {
     // 表の行を作成
-    const headRow = document.createElement('tr');
-
-    for (let j = 0; j < booksListHeadByCalendar.length; j++) {
+    const headRow: HTMLTableRowElement = document.createElement('tr');
+    booksListHeadByCalendar.forEach((head) => {
       // <th> 要素とテキストノードを作成し、テキストノードを
       // <th> の内容として、その <th> を表の行の末尾に追加
-      const headCell = document.createElement('th');
-      const headCellText = document.createTextNode(booksListHeadByCalendar[j]);
+      const headCell: HTMLTableCellElement = document.createElement('th');
+      const headCellText: Text = document.createTextNode(head);
       headCell.appendChild(headCellText);
       headRow.appendChild(headCell);
-    }
+    });
 
     // 表のヘッドの末尾に行を追加
     tblhead.appendChild(headRow);
@@ -315,18 +335,21 @@ function createBooksListByCalendarProcess(booksList) {
   // すべてのセルを作成
   for (let i = 0; i < booksList.length; i++) {
     // 表の行を作成
-    let bodyRow = document.createElement('tr');
+    let bodyRow: HTMLTableRowElement = document.createElement('tr');
 
     for (let j = 0; j < booksListHeadByCalendar.length; j++) {
       // <td> 要素とテキストノードを作成し、テキストノードを
       // <td> の内容として、その <td> を表の行の末尾に追加
-      const bodyCell = document.createElement('td');
-      const bodyCellContent = [];
+      const bodyCell: HTMLTableCellElement = document.createElement('td');
+      const bodyCellContent: Node[] = [];
       if (j == 0) {
         bodyCellContent.push(
           document.createTextNode(
             //studyUtilのformatDateBtYyyyMmDd
-            studyUtil.formatDateBtYyyyMmDd(booksList[i].booksDate, '/')
+            studyUtil.formatDateBtYyyyMmDd(
+              new Date(booksList[i].booksDate),
+              '/'
+            )
           )
         );
       } else if (j == 1) {
@@ -335,7 +358,7 @@ function createBooksListByCalendarProcess(booksList) {
         bodyCellContent.push(
           document.createTextNode(booksList[i].catCodes.catName)
         );
-        const imgElement = document.createElement('img');
+        const imgElement: HTMLImageElement = document.createElement('img');
         imgElement.src =
           //studyUtilのgetContextPath()
           studyUtil.getContextPath() +
@@ -351,7 +374,7 @@ function createBooksListByCalendarProcess(booksList) {
         bodyCellContent.push(document.createTextNode(booksList[i].booksMethod));
       } else if (j == 4) {
         bodyCellContent.push(
-          document.createTextNode(booksList[i].booksAmmount)
+          document.createTextNode(String(booksList[i].booksAmmount))
         );
       }
       bodyCellContent.forEach((v) => {
@@ -374,13 +397,18 @@ function createBooksListByCalendarProcess(booksList) {
 /**
  * 日付チェック
  *
- * @param {string} year 年
- * @param {string} month 月
- * @param {int} weekCnt 週(日を0とし、月が1……と続き、土の6で終わる数値)
- * @param {string} day 日
- * @return {Object} 判定結果
+ * @param {number} year 年
+ * @param {number} month 月
+ * @param {number} weekCnt 週(日を0とし、月が1……と続き、土の6で終わる数値)
+ * @param {number} day 日
+ * @return 判定結果
  */
-function checkDate(year, month, weekCnt, day) {
+function checkDate(
+  year: number,
+  month: number,
+  weekCnt: number,
+  day
+): CheckedDate {
   // if (isSelectdayByCalendar(year, month, day)) {
   //   return {
   //     isSelectdayByCalendar: true,
@@ -392,18 +420,18 @@ function checkDate(year, month, weekCnt, day) {
   //     isSunday: false,
   //   };
   // }
-  const checkSelectedday = isSelectdayByCalendar(year, month, day);
-  const checkHoliday = isHoliday(year, month, day);
-  const checkAmountDay = isAmountDay(year, month, day);
+  const checkSelectedday: boolean = isSelectdayByCalendar(year, month, day);
+  const checkHoliday: (string | boolean)[] = isHoliday(year, month, day);
+  const checkAmountDay: (boolean | number[])[] = isAmountDay(year, month, day);
   //const checkHoliday = false;
-  const checkSaturday = isSaturday(weekCnt);
-  const checkSunday = isSunday(weekCnt);
+  const checkSaturday: boolean = isSaturday(weekCnt);
+  const checkSunday: boolean = isSunday(weekCnt);
   return {
     isSelectdayByCalendar: checkSelectedday,
-    isHoliday: checkHoliday[0],
-    holidayName: checkHoliday[1],
-    isAmountDay: checkAmountDay[0],
-    amountList: checkAmountDay[1],
+    isHoliday: checkHoliday[0] as boolean,
+    holidayName: checkHoliday[1] as string,
+    isAmountDay: checkAmountDay[0] as boolean,
+    amountList: checkAmountDay[1] as number[],
     isSaturday: checkSaturday,
     isSunday: checkSunday,
   };
@@ -412,12 +440,16 @@ function checkDate(year, month, weekCnt, day) {
 /**
  * 当日かどうか
  *
- * @param {string} year 年
- * @param {string} month 月
- * @param {string} day 日
+ * @param {number} year 年
+ * @param {number} month 月
+ * @param {number} day 日
  * @return {boolean} 判定結果
  */
-function isSelectdayByCalendar(year, month, day) {
+function isSelectdayByCalendar(
+  year: number,
+  month: number,
+  day: number
+): boolean {
   return (
     year == selectDayByCalendar.getFullYear() &&
     month == selectDayByCalendar.getMonth() &&
@@ -428,34 +460,38 @@ function isSelectdayByCalendar(year, month, day) {
 /**
  * 土曜日かどうか
  *
- * @param {int} weekCnt 週(日を0とし、月が1……と続き、土の6で終わる数値)
+ * @param {number} weekCnt 週(日を0とし、月が1……と続き、土の6で終わる数値)
  * @return {boolean} 判定結果
  */
-function isSaturday(weekCnt) {
+function isSaturday(weekCnt: number): boolean {
   return weekCnt == 6;
 }
 
 /**
  * 日曜日かどうか
  *
- * @param {int} weekCnt 週(日を0とし、月が1……と続き、土の6で終わる数値)
+ * @param {number} weekCnt 週(日を0とし、月が1……と続き、土の6で終わる数値)
  * @return {boolean} 判定結果
  */
-function isSunday(weekCnt) {
+function isSunday(weekCnt): boolean {
   return weekCnt == 0;
 }
 
 /**
  * 祝日かどうか
  *
- * @param {string} year 年
- * @param {string} month 月
- * @param {string} day 日
- * @return {boolean} 判定結果
+ * @param {number} year 年
+ * @param {number} month 月
+ * @param {number} day 日
+ * @return 判定結果
  */
-function isHoliday(year, month, day) {
+function isHoliday(
+  year: number,
+  month: number,
+  day: number
+): (boolean | string)[] {
   for (let i = 0; i < syukujitsuList.length; i++) {
-    const holiday = new Date(syukujitsuList[i].date);
+    const holiday: Date = new Date(syukujitsuList[i].date);
     if (
       year == holiday.getFullYear() &&
       month == holiday.getMonth() &&
@@ -471,42 +507,46 @@ function isHoliday(year, month, day) {
 /**
  * 支払いがあったかどうか
  *
- * @param {string} year 年
- * @param {string} month 月
- * @param {string} day 日
- * @return {boolean} 判定結果
+ * @param {number} year 年
+ * @param {number} month 月
+ * @param {number} day 日
+ * @return { (boolean | number[])[]} 判定結果
  */
-function isAmountDay(year, month, day) {
-  let flag = false;
-  const booksAmmountList = [];
-  for (let i = 0; i < AmountByDayList.length; i++) {
-    const amountday = new Date(AmountByDayList[i].booksDate);
+function isAmountDay(
+  year: number,
+  month: number,
+  day: number
+): (boolean | number[])[] {
+  let flag: boolean = false;
+  const booksAmmountList: number[] = [];
+  amountByDayList.forEach((books) => {
+    const amountday: Date = new Date(books.booksDate);
     if (
       year == amountday.getFullYear() &&
       month == amountday.getMonth() &&
       day == amountday.getDate()
     ) {
       flag = true;
-      booksAmmountList.push(Number(AmountByDayList[i].booksAmmount));
+      booksAmmountList.push(Number(books.booksAmmount));
     }
-  }
+  });
   if (flag) {
     //console.log(booksAmmount);
     return [true, booksAmmountList];
   } else {
-    return [false, ''];
+    return [false, null];
   }
 }
 
 /**
  * 選択されている家計簿リストを取得
  *
- * @return {Object} 選択されている家計簿リストを取得
+ * @return 選択されている家計簿リストを取得
  */
-function getSelectedAmountByDayList() {
-  const selectAmountByDayList = [];
-  for (let i = 0; i < AmountByDayList.length; i++) {
-    const amountday = new Date(AmountByDayList[i].booksDate);
+function getSelectedamountByDayList(): Books[] {
+  const selectamountByDayList: Books[] = [];
+  amountByDayList.forEach((books) => {
+    const amountday = new Date(books.booksDate);
     if (
       isSelectdayByCalendar(
         amountday.getFullYear(),
@@ -514,9 +554,9 @@ function getSelectedAmountByDayList() {
         amountday.getDate()
       )
     ) {
-      selectAmountByDayList.push(AmountByDayList[i]);
+      selectamountByDayList.push(books);
     }
-  }
+  });
 
-  return selectAmountByDayList;
+  return selectamountByDayList;
 }

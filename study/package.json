@@ -8,7 +8,6 @@
     "@babel/core": "^7.17.9",
     "@babel/plugin-transform-runtime": "^7.17.0",
     "@babel/preset-env": "^7.16.11",
-    "@types/jquery": "^3.5.14",
     "@types/webpack": "^5.28.0",
     "babel-loader": "^8.2.4",
     "css-loader": "^6.7.1",
@@ -17,6 +16,8 @@
     "mini-css-extract-plugin": "^2.6.0",
     "sass": "^1.50.0",
     "sass-loader": "^12.6.0",
+    "ts-loader": "^9.3.1",
+    "typescript": "^4.7.4",
     "vue-loader": "^15.9.8",
     "vue-template-compiler": "^2.6.14",
     "webpack": "^5.72.0",
@@ -26,15 +27,15 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.17.9",
-    "axios": "^0.26.1",
-    "open-iconic": "^1.1.1",
-    "vue": "^2.6.14",
     "@popperjs/core": "^2.11.4",
+    "axios": "^0.26.1",
     "bootstrap": "^5.1.3",
     "bootstrap-icons": "^1.8.3",
     "chart.js": "^3.7.1",
+    "flatpickr": "^4.6.11",
+    "open-iconic": "^1.1.1",
     "popper.js": "^1.16.1",
-    "flatpickr": "^4.6.11"
+    "vue": "^2.6.14"
   },
   "scripts": {
     "webpack": "webpack",
