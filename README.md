@@ -9,6 +9,8 @@
 - node.js の npm コマンドを使用 → [node.js](https://nodejs.org/ja/)
   - gradel から利用するため node.js をインストールしていなくても実行可能
 - db は PostgreSQL を使用 → [PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+- 本プロジェクトで扱う家計簿データは楽天家計簿を参考に作成 →[楽天家計簿](https://support.rakuten-card.jp/faq/show/127262?category_id=886&return_path=%2Fcategory%2Fshow%2F886%3Fpage%3D1%26site_domain%3Dguest%26site_domain%3Dguest%26sort%3Dsort_access%26sort_order%3Ddesc&site_domain=guest)
+- 家計簿データの取り込み csv 形式も楽天家計簿で出力される形式に合わせている
 
 ### pull 後の流れ
 
@@ -32,14 +34,14 @@ book-git-repository\study に使用しているライブラリ情報が入って
 
 1. gradle を使用し eclips プロジェクトの作成
    - book-git-repository\study で`gradlew eclips`コマンドを実施
-2. eclips や vs code に gradle プロジェクトとして import
+2. eclips や vs code に gradle プロジェクトとして importp
 
 ### デバッグ(eclips)
 
 1. book-git-repository\study で`gradle bootrun --debug`コマンドを設定
 2. [実行の構成] -> [リモート Java アプリケーション] からポート:7778 にアクセス
-3. 通常のデバッグと同じくブレイクポイントなどが使用可能
-4. js もソースマップが出力されているため、ブラウザなどでデバッグ可能
+   - 通常のデバッグと同じくブレイクポイントなどが使用可能
+   - js もソースマップが出力されているため、ブラウザなどでデバッグ可能
 
 ### js のみビルドしたい場合
 
@@ -47,3 +49,12 @@ book-git-repository\study に使用しているライブラリ情報が入って
    - book-git-repository\study で`gradlew npmInstall`コマンドを実施(初回やライブラリを更新する場合)
 2. webpack を使用し js をビルド
    - book-git-repository\study で`gradlew webpack`コマンドを実施
+
+### その他
+
+- ログは C:\logs\study 配下に出力
+- -DB 定義は book-git-repository\spreadsheet\DB 定義.xlsx
+  - Google スプレッドシートに取り込み、book-git-repository\spreadsheet\gas 配下のマクロファイルを設定すれば create 文生成などのマクロが使用可能
+- 家計簿データの例は book-git-repository\example 配下に
+- java の formatter は google が公開しているものを使用 → [git](https://github.com/google/google-java-format)
+- js(ts、json) の formatter は prettier,eslint を使用
