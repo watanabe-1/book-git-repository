@@ -36,11 +36,12 @@ book-git-repository\study に使用しているライブラリ情報が入って
 
 ### デバッグ(eclips)
 
-1. [実行の構成] -> [Gradle プロジェクト] -> Gradle タスクに`bootrun --debug-jvm`コマンドを設定
-2. 1 を実行
-3. [実行の構成] -> [リモート Java アプリケーション] からポート:7778 にアクセス
+1. book-git-repository\study で`gradle bootrun --debug`コマンドを設定
+2. [実行の構成] -> [リモート Java アプリケーション] からポート:7778 にアクセス
+3. 通常のデバッグと同じくブレイクポイントなどが使用可能
+4. js もソースマップが出力されているため、ブラウザなどでデバッグ可能
 
-### js のみビルドする場合
+### js のみビルドしたい場合
 
 1. ライブラリのインストール(更新)
    - book-git-repository\study で`gradlew npmInstall`コマンドを実施(初回やライブラリを更新する場合)
