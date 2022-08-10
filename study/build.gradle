@@ -85,6 +85,15 @@ repositories {
 
 dependencyManagement {
     dependencies {
+        // org.graalvm.sdk version
+        dependencySet(group: "org.graalvm.sdk", version: "21.1.0") {
+            entry "graal-sdk"
+        }
+        // org.graalvm.js version
+        dependencySet(group: "org.graalvm.js", version: "21.1.0") {
+            entry "js"
+            entry "js-scriptengine"
+        }
         // terasoluna-gfw version
         dependencySet(group: "org.terasoluna.gfw", version: "5.7.0.RELEASE") {
             entry "terasoluna-gfw-web"
@@ -106,6 +115,10 @@ dependencyManagement {
 }
 
 dependencies {
+    // java上でのjs実行
+    implementation "org.graalvm.sdk:graal-sdk"
+    implementation "org.graalvm.js:js"
+    implementation "org.graalvm.js:js-scriptengine"
     // SpringBoot のWebアプリケーション用ライブラリ
     // SpringBoot のWebAppに関するすべての機能をまとめている
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -141,6 +154,8 @@ dependencies {
     // spring test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    // spring dev
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     // lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
