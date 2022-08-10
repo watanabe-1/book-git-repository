@@ -26,7 +26,9 @@ book-git-repository\study に使用しているライブラリ情報が入って
 
 2. ビルドの実施
    - お好みで book-git-repository\study\WebContent\images 内の画像を好きな画像に変更する
-   - book-git-repository\study で`gradle bootrun`コマンドを実施
+   - book-git-repository\bat\bootrunAndDaemonwatch.bat を実行することでサーバの起動と js のファイル監視が可能
+     - もしくは book-git-repository\study で`gradle bootrun`コマンドを実行すると spring boot サーバが立ち上がる
+     - もしくは book-git-repository\study で `gradlew --no-daemon watch`コマンドを実行すると js のファイル監視が可能
    - ブラウザから[localhost:8080/study/](http://localhost:8080/study/)にアクセス
    - admin/admin でシステム管理者としてログイン可能
 
@@ -41,13 +43,14 @@ book-git-repository\study に使用しているライブラリ情報が入って
 1. プロジェクトを選択して[右クリック] -> [プロパティ] -> [Java のビルドパス]
    - [study/main/java]：[bin/main] -> [build/classes/java/main]に変更
    - [src/main/resources]：[bin/main] -> [build/resources/main]に変更
-2. book-git-repository\study で`gradle bootrun`コマンドを設定
+2. book-git-repository\bat\bootrunAndDaemonwatch.bat を実行することでサーバの起動と js のファイル監視が可能
+   - もしくは book-git-repository\study で`gradle bootrun`コマンドを実行すると spring boot サーバが立ち上がる
+   - もしくは book-git-repository\study で `gradlew --no-daemon watch`コマンドを実行すると js のファイル監視が可能
 3. [実行の構成] -> [リモート Java アプリケーション] からポート:7778 にアクセス
    - java ファイル編集、コンパイル後に自動的にサーバーに反映される
    - 通常のデバッグと同じくブレイクポイントなどが使用可能
    - js もソースマップが出力されているため、ブラウザなどでデバッグ可能
-4. js のファイル監視は`gradlew --no-daemon watch`で実行可能
-   - js ファイルの編集後に自動的にトランスパイルされサーバーに反映されるようになる
+   - js ファイルを編集、保存すると自動的にトランスパイルされサーバに配置される
 
 ### js のみビルドしたい場合
 
