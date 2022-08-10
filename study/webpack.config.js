@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const glob = require('glob');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 /**
@@ -8,22 +8,28 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
  */
 module.exports = {
   mode: 'production',
-  entry: {
-    // 共通系の JavaScript ライブラリーは vendor.bundle.js としてひとつにまとめる
-    vendor: [
-      'vue',
+  entry: () => {
+    const entries = {};
+    // 全画面共通
+    entries['vendor'] = [
       'axios',
       'popper.js',
       'chart.js',
       'flatpickr',
       'bootstrap',
       './src/main/js/view/common/sidebar',
-    ],
-    // 画面ごとの .js は分割して出力する（この設定のファイルを起点にバンドル開始）
-    booksIndex: './src/main/js/view/books/booksIndex',
-    chartColourIndex: './src/main/js/view/chartColour/chartColourIndex',
-    accountIndex: './src/main/js/view/account/accountIndex',
-    categoryIndex: './src/main/js/view/category/categoryIndex',
+    ];
+    // 各画面
+    glob.sync('./src/main/js/view/**/*.ts').forEach((file) => {
+      const name = file.replace('./src/main/js/view/', '').replace('.ts', '');
+      entries[name] = path.resolve(file);
+    });
+    // react
+    glob.sync('./src/main/js/client/pages/**/*.tsx').forEach((file) => {
+      const name = file.replace('./src/main/js/client', '').replace('.tsx', '');
+      entries[name] = path.resolve(file);
+    });
+    return entries;
   },
   output: {
     // JavaScript は js/ 配下に配置
@@ -34,20 +40,39 @@ module.exports = {
     publicPath: '/study/',
     assetModuleFilename: 'res/[name].[hash][ext]',
   },
+  // 参照元をすべて一つのファイルにまとめる
   optimization: {
-    // 共通 JavaScript/CSS を vendor という名前で出力する
     splitChunks: {
       cacheGroups: {
+        //  共通で使用するベンダーモジュール(リアクト以外) outputに定義した[name = depens].bundle.jsに出力
         vender: {
+          // test: /[\\/]node_modules[\\/](axios|popper.js|chart.js|flatpickr|bootstrap)[\\/]/,
           name: 'depens',
           chunks: 'initial',
         },
+        // 共通で使用する自作モジュール outputに定義した[name = depens].bundle.jsに出力（venderとマージ）
+        // study: {
+        //   test: /[\\/]src[\\/]main[\\/]js[\\/](study)[\\/]/,
+        //   name: 'depens',
+        //   chunks: 'initial',
+        // },
+        // css: {
+        //   test: /\.(sa|c)ss$/,
+        //   name: 'depens',
+        //   chunks: 'initial',
+        // },
+        // serverで実行するときにエラーになってしまうためリアクト系は共通出力しない
+        // react: {
+        //   test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
+        //   name: 'react',
+        //   chunks: 'initial',
+        // },
       },
     },
   },
   plugins: [
     // .vue をビルド・バンドルするプラグイン
-    new VueLoaderPlugin(),
+    //new VueLoaderPlugin(),
     // .css は JavaScript にバンドルせずにファイル出力するプラグイン
     //  css/ 配下に出力
     new MiniCssExtractPlugin({
@@ -58,13 +83,13 @@ module.exports = {
     rules: [
       {
         // .js は babel を通してブラウザーで動作する JavaScript に変換
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         use: [
           {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env'],
+              presets: ['@babel/preset-env', '@babel/preset-react'],
               plugins: ['@babel/plugin-transform-runtime'],
             },
           },
@@ -72,7 +97,7 @@ module.exports = {
       },
       {
         // 拡張子が.tsで終わるファイルに対して、TypeScriptコンパイラを適用する
-        test: /\.ts$/,
+        test: /\.ts|tsx$/,
         loader: 'ts-loader',
       },
       {
@@ -123,13 +148,13 @@ module.exports = {
   },
   resolve: {
     // .js と .vue 拡張子は import で付いてなくても解決
-    extensions: ['.js', '.ts', '.vue'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
     // import するモジュールでパス付きでないものは npm の node_modules に入ってる
     modules: ['node_modules'],
-    alias: {
-      // import Vue from 'vue'; は Product 用の ES Modules 版を使う
-      vue$: 'vue/dist/vue.esm.js',
-    },
+    // alias: {
+    //   // import Vue from 'vue'; は Product 用の ES Modules 版を使う
+    //   vue$: 'vue/dist/vue.esm.js',
+    // },
   },
   performance: {
     maxAssetSize: 3000000,
