@@ -12,10 +12,7 @@ module.exports = merge(common, {
   // 開発用サーバーを 9080 ポートで起動
   devServer: {
     static: {
-      directory: path.join(
-        __dirname,
-        '/src/main/resources/static/WEB-INF/view'
-      ), // eslint-disable-line
+      directory: path.join(__dirname, '/src/main/resources/view'), // eslint-disable-line
     },
     watchFiles: ['src/main/js/**/*', 'src/main/css/**/*'],
     port: 9080,
@@ -33,11 +30,11 @@ module.exports = merge(common, {
     },
   },
   resolve: {
-    alias: {
-      // webpack.config.js の設定を上書き
-      // import Vue from 'vue'; で開発版を読ませることで Vue のデバッグが可能になる
-      vue$: 'vue/dist/vue.js',
-    },
+    // alias: {
+    //   // webpack.config.js の設定を上書き
+    //   // import Vue from 'vue'; で開発版を読ませることで Vue のデバッグが可能になる
+    //   vue$: 'vue/dist/vue.js',
+    // },
   },
   performance: {
     hints: false,

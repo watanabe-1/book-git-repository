@@ -51,11 +51,27 @@ jar {
  * clean build
  */
 task cleanGen(type: Delete) {
-    delete fileTree('src/main/resources/static') {
-        include 'css/*.*'
-        include 'res/*.*'
-        include 'js/*.*'
+    // delete fileTree('src/main/resources/static') {
+    //     include 'css/**/*.*'
+    //     include 'res/**/*.*'
+    //     include 'js/**/*.*'
+    // }
+    // フォルダも含めて削除
+    def dirbaseName = "src/main/resources/static/" 
+    def dirNames = ["css","res","js"]
+    def gitKeep = ".gitkeep"
+    dirNames.toList().forEach{
+        dirName  -> 
+            def targetDir = dirbaseName + dirName
+            //System.out.println(targetDir);
+            file(targetDir).list().each{
+                f -> 
+                    if(!gitKeep.equals(f)){
+                        delete "${targetDir}/${f}" 
+                    }              
+        }
     }
+
 }
 
 // build order
