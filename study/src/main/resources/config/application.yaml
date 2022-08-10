@@ -1,6 +1,14 @@
 spring:
   profiles:
     active: devel
+  devtools:
+    restart:
+      enabled: true
+      additional-paths:
+        - src/main/java/**
+    livereload:
+      enabled: true
+
   servlet:
     multipart:
       resolve-lazily: true
@@ -9,6 +17,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
 server:
+  port: 8080
   servlet:
     context-path: /study/
   error:
@@ -20,13 +29,3 @@ server:
       - text/html
       - application/javascript
       - application/json
----
-spring:
-  devtools:
-    restart:
-      enabled: true
-  config:
-    activate:
-      on-profile: devel
-server:
-  port: 8080
