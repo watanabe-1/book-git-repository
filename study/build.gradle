@@ -3,7 +3,7 @@
  */
 plugins {
     id 'org.springframework.boot' version '2.7.2'
-    id 'com.github.node-gradle.node' version '3.2.1'
+    id 'com.github.node-gradle.node' version '3.4.0'
 }
 
 apply plugin: 'java'
@@ -102,11 +102,11 @@ repositories {
 dependencyManagement {
     dependencies {
         // org.graalvm.sdk version
-        dependencySet(group: "org.graalvm.sdk", version: "21.1.0") {
+        dependencySet(group: "org.graalvm.sdk", version: "22.2.0") {
             entry "graal-sdk"
         }
         // org.graalvm.js version
-        dependencySet(group: "org.graalvm.js", version: "21.1.0") {
+        dependencySet(group: "org.graalvm.js", version: "22.2.0") {
             entry "js"
             entry "js-scriptengine"
         }
