@@ -82,6 +82,11 @@ module.exports = {
   module: {
     rules: [
       {
+        // 拡張子が.tsで終わるファイルに対して、TypeScriptコンパイラを適用する
+        test: /\.ts|tsx$/,
+        loader: 'ts-loader',
+      },
+      {
         // .js は babel を通してブラウザーで動作する JavaScript に変換
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
@@ -95,16 +100,11 @@ module.exports = {
           },
         ],
       },
-      {
-        // 拡張子が.tsで終わるファイルに対して、TypeScriptコンパイラを適用する
-        test: /\.ts|tsx$/,
-        loader: 'ts-loader',
-      },
-      {
-        // .vue の Vue.js コンポーネントをビルドしてバンドル
-        test: /\.vue$/,
-        loader: 'vue-loader',
-      },
+      // {
+      //   // .vue の Vue.js コンポーネントをビルドしてバンドル
+      //   test: /\.vue$/,
+      //   loader: 'vue-loader',
+      // },
       {
         // .css|.sass ファイルをビルドして css/ ディレクトリに出力
         test: /\.(sa|c)ss$/,
@@ -156,6 +156,7 @@ module.exports = {
     //   vue$: 'vue/dist/vue.esm.js',
     // },
   },
+  // target: ['web', 'es5'],
   performance: {
     maxAssetSize: 3000000,
     maxEntrypointSize: 3000000,

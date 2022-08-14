@@ -3,6 +3,7 @@ package org.watanabe.app.study.util;
 import java.util.Date;
 import org.springframework.beans.BeanUtils;
 import org.watanabe.app.study.entity.Entity;
+import org.watanabe.app.study.form.Form;
 
 /**
  * java beanのUtilクラスを作成
@@ -40,5 +41,13 @@ public class StudyBeanUtil {
     target.setUpdDate(now);
   }
 
+  /**
+   * SSRを行うか判定する
+   * 
+   * @param form フォーム
+   */
+  public static boolean isSSR(Form form) {
+    return StudyStringUtil.isNullOrEmpty(form.getSsr());
+  }
 
 }

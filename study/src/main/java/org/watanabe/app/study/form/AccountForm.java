@@ -2,14 +2,13 @@ package org.watanabe.app.study.form;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import lombok.Data;
 
 /**
  * ACCOUNT:アカウント(アカウント情報保持テーブル)のformクラス
  */
 @Data
-public class AccountForm implements Serializable {
+public class AccountForm implements Serializable, Form {
 
   /**
    * シリアルキー
@@ -56,5 +55,9 @@ public class AccountForm implements Serializable {
    */
   private String updUser;
 
+  /**
+   * ssr判定
+   */
+  private String ssr;
 }
 

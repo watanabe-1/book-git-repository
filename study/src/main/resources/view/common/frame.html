@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}"
+>
+  <head>
+    <title th:text="${jstitle}"></title>
+  </head>
+  <body>
+    <div th:utext="${jsbody}"></div>
+  </body>
+</html>
