@@ -1,5 +1,6 @@
 package org.watanabe.app.study.enums.dbcode;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -9,6 +10,7 @@ import lombok.NonNull;
  */
 @AllArgsConstructor
 @Getter
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ChartColourNum implements DbCode {
 
   DEFALT_DATA_CNT("chart_colour_num", "defalt_data_cnt", "初期数")

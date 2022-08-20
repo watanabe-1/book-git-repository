@@ -1,5 +1,6 @@
 package org.watanabe.app.study.enums.dbcode;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -9,6 +10,7 @@ import lombok.NonNull;
  */
 @AllArgsConstructor
 @Getter
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum BooksTab implements DbCode {
 
   DEFALT_TAB("books_tab", "defalt_tab", "初期表示");

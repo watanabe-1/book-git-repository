@@ -516,3 +516,60 @@ export function swichClass(
     target.classList.toggle(classTwo);
   }
 }
+
+/**
+ * オブジェクトが空か判定する
+ * @param obj
+ * @returns 判定結果
+ */
+function isEmpty(obj: {}) {
+  for (let i in obj) {
+    return false;
+  }
+  return true;
+}
+
+/**
+ * get通信を行う
+ * @param baseurl 通信先
+ * @param params パラメータ
+ * @returns 通信結果
+ */
+export async function fetchGet(baseurl: string, params: {} = {}): Promise<any> {
+  const query = new URLSearchParams(params);
+  const url = isEmpty(params)
+    ? getContextPath() + baseurl
+    : getContextPath() + baseurl + '?' + query;
+  const res: Response = await window.fetch(url);
+  if (!res.ok) {
+    throw new Error(`unexpected status: ${res.status}`);
+  }
+
+  return await res.json();
+}
+
+/**
+ * post通信を行う
+ * @param baseurl 通信先
+ * @param body 送付パラム
+ * @returns 通信結果
+ */
+export async function fetchPost(baseurl: string, body: {} = {}): Promise<any> {
+  const headers = () => {
+    const headers: {} = {};
+    headers['Content-Type'] = 'application/json';
+    headers[getCsrfTokenHeader()] = getCsrfToken();
+    return headers;
+  };
+
+  const res: Response = await window.fetch(getContextPath() + baseurl, {
+    method: 'POST',
+    headers: headers(),
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    throw new Error(`unexpected status: ${res.status}`);
+  }
+
+  return await res.json();
+}

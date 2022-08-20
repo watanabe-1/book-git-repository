@@ -151,6 +151,7 @@ function getCodeEnumJava(listName, description, map) {
   let javaStrHead = "package " + getProperty("java_enum_dbcode_package") + ";" + repeatConcatStr(javaKaigyo, 2);
 
   //固定impot文の挿入
+  importMap.set("JsonFormat", "com.fasterxml.jackson.annotation.JsonFormat");
   importMap.set("AllArgsConstructor", "lombok.AllArgsConstructor");
   importMap.set("Getter", "lombok.Getter");
   importMap.set("NonNull", "lombok.NonNull");
@@ -159,7 +160,7 @@ function getCodeEnumJava(listName, description, map) {
 
   //クラス名宣言
   let javaStrBody = getJavaDoc(listName + ":" + description + "のenumクラス") + "@AllArgsConstructor" + javaKaigyo
-    + "@Getter" + javaKaigyo + "public enum " + className + " implements DbCode {" + repeatConcatStr(javaKaigyo, 2) 
+    + "@Getter" + javaKaigyo + "@JsonFormat(shape = JsonFormat.Shape.OBJECT)" + javaKaigyo + "public enum " + className + " implements DbCode {" + repeatConcatStr(javaKaigyo, 2) 
     + javaIndent;
   
     //javadoc対象に引数(param)がある場合
@@ -171,7 +172,6 @@ function getCodeEnumJava(listName, description, map) {
     }
   }
 
-  //import文の入れ物
   const fieldMap = new Map();
   fieldMap.set("listName", "リストネーム");
   fieldMap.set("code", "コード");

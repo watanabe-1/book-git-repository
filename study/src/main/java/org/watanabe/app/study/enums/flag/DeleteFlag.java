@@ -1,5 +1,6 @@
 package org.watanabe.app.study.enums.flag;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -11,6 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString(of = "value")
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum DeleteFlag implements Flag {
 
   NON_DELETE(NON_SET_UP_FLAG_VALUE, "削除しない"), DELETE(SET_UP_FLAG_VALUE, "削除する");

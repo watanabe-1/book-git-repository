@@ -1,5 +1,6 @@
 package org.watanabe.app.study.enums.type;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -11,6 +12,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @ToString(of = "code")
+@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum AccountType implements Type {
 
   SYSTEM("01", "システム管理者", "SYSTEM"), ADMIN("02", "管理者", "ADMIN"), USER("03", "一般ユーザ", "USER");
