@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.watanabe.app.study.form.Form;
-import org.watanabe.app.study.util.StudyBeanUtil;
 import org.watanabe.app.study.util.StudyJsUtil;
 import lombok.extern.slf4j.XSlf4j;
 
@@ -22,7 +21,6 @@ public class TopController {
   @RequestMapping(value = "/", method = RequestMethod.GET)
   public ModelAndView top(HttpServletRequest request, ModelAndView model,
       @ModelAttribute Form form) {
-    model.setViewName(StudyJsUtil.viewName);
     // model.addObject("message", "Hello World!!");
     // log.debug("debug log");
     log.info("i.ab.cd.1001", "study -- トップです！！！ --");
@@ -30,11 +28,9 @@ public class TopController {
     // log.error("e.ab.cd.3001", "replace_value_3");
     // log.trace("t.ab.cd.4001", "replace_value_4");
     // log.info("i.ab.cd.1002", "replace_value_5");
-    String body =
-        StudyJsUtil.render(request, "/static/js/pages/top.bundle.js", null,
-            StudyBeanUtil.isSSR(form));
-    model.addObject("jstitle", "study top");
-    model.addObject("jsbody", body);
+
+    StudyJsUtil.setJsTemplate(model, "study top", request,
+        "/static/js/pages/top.bundle.js", null, form);
 
     return model;
   }

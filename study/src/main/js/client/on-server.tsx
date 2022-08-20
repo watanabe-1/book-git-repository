@@ -7,7 +7,11 @@ import React from 'react';
  * @param {string} valueIdentifier
  * @returns
  */
-export function onServer(callback, defaultValue, valueIdentifier: string) {
+export function onServer(
+  callback,
+  defaultValue,
+  valueIdentifier: string
+): [any, JSX.Element] {
   const anyWindow: any = window;
   if (anyWindow.isServer) {
     const jsonValue = callback(anyWindow.api);

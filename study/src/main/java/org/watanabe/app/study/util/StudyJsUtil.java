@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.springframework.core.io.ClassPathResource;
-import org.watanabe.app.study.api.ServerApi;
+import org.springframework.web.servlet.ModelAndView;
+import org.watanabe.app.study.api.js.ServerApi;
+import org.watanabe.app.study.form.Form;
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import lombok.extern.slf4j.XSlf4j;
 
@@ -24,7 +26,55 @@ import lombok.extern.slf4j.XSlf4j;
 @XSlf4j
 public abstract class StudyJsUtil {
 
-  public static final String viewName = "common/frame";
+  /**
+   * reactjs用view名
+   */
+  public static final String VIEW_NAME = "common/frame";
+
+  /**
+   * reactjs用view-title
+   */
+  public static final String VIEW_TITLE = "jstitle";
+
+  /**
+   * reactjs用view-body
+   */
+  public static final String VIEW_BODY = "jsbody";
+
+  /**
+   * js実行テンプレートのセット
+   * 
+   * @param model モデル
+   * @param title タイトル
+   * @param request リクエスト
+   * @param scriptPath jsファイルのパス
+   * @param serverApi jsに埋め込むjavaオブジェクト
+   * @param form form
+   */
+  public static void setJsTemplate(ModelAndView model, String title, HttpServletRequest request,
+      String scriptPath, ServerApi serverApi, Form form) {
+    setJsTemplate(model, title, request, scriptPath, serverApi, isSSR(form));
+  }
+
+  /**
+   * js実行テンプレートのセット
+   * 
+   * @param model モデル
+   * @param title タイトル
+   * @param request リクエスト
+   * @param scriptPath jsファイルのパス
+   * @param serverApi jsに埋め込むjavaオブジェクト
+   * @param isSSR jsを実行するか
+   */
+  public static void setJsTemplate(ModelAndView model, String title, HttpServletRequest request,
+      String scriptPath, ServerApi serverApi, boolean isSSR) {
+    model.setViewName(VIEW_NAME);
+
+    String body = render(request, scriptPath, serverApi, isSSR);
+    model.addObject(VIEW_TITLE, title);
+    model.addObject(VIEW_BODY, body);
+
+  }
 
   /**
    * react jsを読み込み実行する<br/>
@@ -35,8 +85,6 @@ public abstract class StudyJsUtil {
    * @param serverApi jsに埋め込むjavaオブジェクト
    * @param isSSR jsを実行するか
    * @return 実行結果
-   * @throws ScriptException
-   * @throws IOException
    */
   public static String render(HttpServletRequest request, String scriptPath, ServerApi serverApi,
       boolean isSSR) {
@@ -237,5 +285,14 @@ public abstract class StudyJsUtil {
     }
 
     return engine;
+  }
+
+  /**
+   * SSRを行うか判定する
+   * 
+   * @param form フォーム
+   */
+  public static boolean isSSR(Form form) {
+    return form != null ? StudyStringUtil.isNullOrEmpty(form.getSsr()) : false;
   }
 }

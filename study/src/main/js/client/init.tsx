@@ -8,7 +8,10 @@ const anyWindow: any = window;
  * 初期化
  * @param Root
  */
-export const initialize = (Root: { (): JSX.Element; (): JSX.Element }) => {
+export const initialize = (Root: {
+  (props: unknown): JSX.Element;
+  (props: unknown): JSX.Element;
+}) => {
   /**
    * サーバーで実行された結果(html)と実行予測結果を比較(domを比較)し差分がなかったら
    * jsのイベントリスナーのみ付与する
