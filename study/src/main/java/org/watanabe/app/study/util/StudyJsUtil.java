@@ -42,6 +42,11 @@ public abstract class StudyJsUtil {
   public static final String VIEW_BODY = "jsbody";
 
   /**
+   * reactjs用view-script
+   */
+  public static final String VIEW_SCRIPT = "jsScript";
+
+  /**
    * js実行テンプレートのセット
    * 
    * @param model モデル
@@ -71,8 +76,24 @@ public abstract class StudyJsUtil {
     model.setViewName(VIEW_NAME);
 
     String body = render(request, scriptPath, serverApi, isSSR);
+    // 最大1000まで
+    int cnt = 0;
+    StringBuffer scripts = new StringBuffer();
+    while (cnt < 1000) {
+      String serverDataScript = readScript(body);
+      if (!StudyStringUtil.isNullOrEmpty(serverDataScript)) {
+        scripts.append(serverDataScript);
+        body = body.replace(serverDataScript, "");
+      } else {
+        break;
+      }
+      cnt++;
+    }
+    log.info("", new StringBuffer().append("置換scriptタグ数:").append(cnt));
+
     model.addObject(VIEW_TITLE, title);
     model.addObject(VIEW_BODY, body);
+    model.addObject(VIEW_SCRIPT, scripts.toString());
 
   }
 
@@ -217,6 +238,21 @@ public abstract class StudyJsUtil {
    */
   private static String readServerDataScript(String outPut) {
     String startStr = "<script class=\"serverData\">";
+    String endStr = "</script>";
+    int startIndex = outPut.indexOf(startStr);
+    int endIndex = outPut.indexOf(endStr, startIndex) + endStr.length();
+
+    return startIndex >= 0 ? outPut.substring(startIndex, endIndex) : "";
+  }
+
+  /**
+   * jsファイル実行出力結果からscriptタグ取得
+   * 
+   * @param outPut jsファイル出力結果
+   * @return サーバーデータ格納scriptタグ
+   */
+  private static String readScript(String outPut) {
+    String startStr = "<script";
     String endStr = "</script>";
     int startIndex = outPut.indexOf(startStr);
     int endIndex = outPut.indexOf(endStr, startIndex) + endStr.length();

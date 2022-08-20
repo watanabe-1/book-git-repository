@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html
   xmlns:th="http://www.thymeleaf.org"
-  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{},~{})}"
+  th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{::#jsScript},~{})}"
 >
   <head>
     <title th:text="${jstitle}"></title>
+    <div id="jsScript" th:remove="tag" th:utext="${jsScript}"></div>
   </head>
   <body>
-    <div th:utext="${jsbody}"></div>
+    <div th:remove="tag" th:utext="${jsbody}"></div>
   </body>
 </html>
