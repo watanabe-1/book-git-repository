@@ -318,6 +318,7 @@ public abstract class StudyJsUtil {
       // TextEncoderがwebapi(ブラウザで用意されているapi)のため別で読み込みしなおす
       // text-encoding-polyfill
       engine.eval(readFile("/static/js/webqpi.bundle.js"));
+      engine.eval("TextEncoder = window.TextEncoder");
       engine.eval(readFile(scriptPath));
     } catch (ScriptException e) {
       log.error("", e.toString());
