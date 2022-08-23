@@ -10,6 +10,8 @@ module.exports = {
   mode: 'production',
   entry: () => {
     const entries = {};
+    //webapiをサーバーで使用する時用
+    entries['webqpi'] = ['./src/main/js/client/webapi'];
     // 全画面共通
     entries['vendor'] = [
       'axios',

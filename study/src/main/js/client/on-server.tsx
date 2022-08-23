@@ -50,8 +50,3 @@ export function isSSR() {
   //console.log(anyWindow.isSSR);
   return anyWindow.isSSR;
 }
-
-const fetch = async (defaultUrl) => {
-  const response = await window.fetch(defaultUrl);
-  return await response.json();
-};

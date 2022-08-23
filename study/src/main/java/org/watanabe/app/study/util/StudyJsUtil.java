@@ -273,7 +273,7 @@ public abstract class StudyJsUtil {
         new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8.name()));
     log.info("", new StringBuffer().append(path).append(" js file loaded."));
 
-    return reader.lines().collect(Collectors.joining());
+    return reader.lines().collect(Collectors.joining(""));
   }
 
   /**
@@ -315,6 +315,9 @@ public abstract class StudyJsUtil {
     // engine.eval("TextEncoder = TextEncoder");
     try {
       engine.eval(readFile("/static/js/depens.bundle.js"));
+      // TextEncoderがwebapi(ブラウザで用意されているapi)のため別で読み込みしなおす
+      // text-encoding-polyfill
+      engine.eval(readFile("/static/js/webqpi.bundle.js"));
       engine.eval(readFile(scriptPath));
     } catch (ScriptException e) {
       log.error("", e.toString());
