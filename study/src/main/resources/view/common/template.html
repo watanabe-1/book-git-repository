@@ -16,7 +16,7 @@
       name="contextPath"
       th:content="${#httpServletRequest.getContextPath()}"
     />
-    <!-- CSRF対策用トークン AJAXで使用-->
+    <!-- CSRF対策用トークン jsで使用-->
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
     <meta name="_csrf_parameterName" th:content="${_csrf.parameterName}" />

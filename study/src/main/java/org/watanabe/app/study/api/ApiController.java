@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,7 +26,20 @@ public class ApiController {
    * メッセージソース
    */
   @Autowired
-  private MessageSource messageSource;
+  protected MessageSource messageSource;
+
+  /**
+   * 連携パラメータにエラーがあった場合BindException
+   * 
+   * @param result バインド結果
+   * @throws BindException
+   */
+  public void throwBindExceptionIfNeeded(BindingResult result) throws BindException {
+    // エラーがあった場合
+    if (result.hasErrors()) {
+      throw new BindException(result);
+    }
+  }
 
   /**
    * BindException エラーハンドリング<br/>
@@ -120,11 +134,11 @@ public class ApiController {
    */
   private void addErrResult(BindException e, Locale locale, ErrorResults errorResults) {
     e.getBindingResult().getFieldErrors().forEach(fieldError -> {
-      errorResults.add(fieldError.getCode(), messageSource.getMessage(fieldError, locale),
+      errorResults.add(true, fieldError.getCode(), messageSource.getMessage(fieldError, locale),
           fieldError.getField());
     });
     e.getBindingResult().getGlobalErrors().forEach(objectError -> {
-      errorResults.add(objectError.getCode(), messageSource.getMessage(objectError, locale),
+      errorResults.add(true, objectError.getCode(), messageSource.getMessage(objectError, locale),
           objectError.getObjectName());
     });
   }

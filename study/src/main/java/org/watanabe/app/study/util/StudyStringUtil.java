@@ -54,6 +54,22 @@ public class StudyStringUtil {
   }
 
   /**
+   * ベースのパスと追加のパス(複数可)を結合し返却する
+   * 
+   * @param basePath ベースとなるパス
+   * @param addPaths 追加したいパス
+   * @return String 結合したパス
+   */
+  public static String pathJoin(String basePath, String... addPaths) {
+    String result = basePath;
+    for (String addaPath : addPaths) {
+      result = pathJoin(result, addaPath);
+    }
+
+    return result;
+  }
+
+  /**
    * 置換対象が文字列の先頭にあった場合のみ置換、それ以外は置換せずに返却
    * 
    * @param str 置換対象

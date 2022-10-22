@@ -2,8 +2,8 @@ package org.watanabe.app.study.controller;
 
 import java.util.List;
 import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.watanabe.app.study.api.js.CategoryApi;
 import org.watanabe.app.study.dto.list.CategoryFormList;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.entity.Image;
@@ -27,8 +28,10 @@ import org.watanabe.app.study.helper.UploadHelper;
 import org.watanabe.app.study.service.CategoryService;
 import org.watanabe.app.study.service.ImageService;
 import org.watanabe.app.study.util.StudyBeanUtil;
+import org.watanabe.app.study.util.StudyJsUtil;
 import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
 
 /**
@@ -37,31 +40,33 @@ import lombok.extern.slf4j.XSlf4j;
  */
 @Controller
 @XSlf4j
+@AllArgsConstructor
 public class CategoryController {
 
   /**
    * カテゴリー情報 Service
    */
-  @Autowired
-  private CategoryService categoryService;
+  private final CategoryService categoryService;
 
   /**
    * 画像情報 Service
    */
-  @Autowired
-  private ImageService imageService;
+  private final ImageService imageService;
 
   /**
    * ファイル保存用 Helper
    */
-  @Autowired
-  private UploadHelper uploadHelper;
+  private final UploadHelper uploadHelper;
 
   /**
    * カテゴリー用 Helper
    */
-  @Autowired
-  private CategoryHelper categoryHelper;
+  private final CategoryHelper categoryHelper;
+
+  /**
+   * カテゴリーjs用api
+   */
+  private final CategoryApi categoryApi;
 
   /**
    * カテゴリー登録画面
@@ -71,8 +76,29 @@ public class CategoryController {
    * @return 入力画面HTML名
    */
   @RequestMapping(value = "/category/input", method = RequestMethod.GET)
-  public ModelAndView input(@ModelAttribute CategoryForm form, ModelAndView model) {
-    model.setViewName("category/input");
+  public ModelAndView input(HttpServletRequest request, @ModelAttribute CategoryForm form,
+      ModelAndView model) {
+    StudyJsUtil.setJsTemplate(model, "カテゴリー情報登録", request,
+        "/static/js/pages/category/input.bundle.js", categoryApi, form);
+
+    // 画面にセット
+    addCommonAttribute(model);
+
+    return model;
+  }
+
+  /**
+   * カテゴリー登録画面
+   * 
+   * @param form 送信されたデータ
+   * @param model モデル
+   * @return 入力画面HTML名
+   */
+  @RequestMapping(value = "/category/inputs", method = RequestMethod.GET)
+  public ModelAndView inputs(HttpServletRequest request, @ModelAttribute CategoryForm form,
+      ModelAndView model) {
+    model.setViewName("/category/input");
+
     // 画面にセット
     addCommonAttribute(model);
 
@@ -87,12 +113,13 @@ public class CategoryController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/category/confirm", method = RequestMethod.POST)
-  public ModelAndView confirm(@ModelAttribute @Validated CategoryForm form, BindingResult result,
+  @RequestMapping(value = "/category/confirm2", method = RequestMethod.POST)
+  public ModelAndView confirm(HttpServletRequest request,
+      @ModelAttribute @Validated CategoryForm form, BindingResult result,
       ModelAndView model) {
     // エラーがあったら画面を返す
     if (result.hasErrors()) {
-      return input(form, model);
+      return input(request, form, model);
     }
 
     // 画面にセット
@@ -134,11 +161,11 @@ public class CategoryController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/category/result", method = RequestMethod.POST)
-  public ModelAndView result(@ModelAttribute CategoryForm form, BindingResult result,
+  @RequestMapping(value = "/category/result2", method = RequestMethod.POST)
+  public ModelAndView result(HttpServletRequest request, @ModelAttribute CategoryForm form,
+      BindingResult result,
       ModelAndView model) {
     model.setViewName("/category/result");
-    // カテゴリーが登録されていなかったら仮でいったん登録
     Category cat = new Category();
     // フォームの値をエンティティにコピーし、共通項目をセット
     StudyBeanUtil.copyAndSetStudyEntityProperties(form, cat);
@@ -147,9 +174,10 @@ public class CategoryController {
       // dbのカテゴリーテーブルに登録
       categoryService.saveOne(cat);
     } catch (DuplicateKeyException dke) {
-      result.addError(new FieldError(result.getObjectName(), "catCode", "入力したカテゴリーは既に登録されています。"));
+      result.addError(
+          new FieldError(result.getObjectName(), "catCode", "入力したカテゴリーは既に登録されています。"));
       log.error("Exception happend!", dke);
-      return input(form, model);
+      return input(request, form, model);
     }
 
     String imgId = form.getImgId();

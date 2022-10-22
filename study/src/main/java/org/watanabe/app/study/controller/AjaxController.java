@@ -137,7 +137,7 @@ public class AjaxController extends ApiController {
       BindingResult result, ModelAndView model) {
     return chartColourHelper.getActiveChartData(chartColourHelper.getQty(form.getQty()));
   }
-
+  
   /**
    * 色見本の登録時の確認用
    * 

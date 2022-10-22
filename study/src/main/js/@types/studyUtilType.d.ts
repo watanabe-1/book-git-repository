@@ -63,3 +63,57 @@ export type Books = {
   updUser: String;
   catCodes: Category;
 };
+
+/**
+ * タイプ
+ */
+export type Type = {
+  code: string;
+  name: string;
+};
+
+/**
+ * フラグ
+ */
+export type Flag = {
+  value: string;
+  name: string;
+};
+
+/**
+ * カテゴリーUI
+ */
+export type CategoryUi = {
+  form: Category;
+  imgTypes: Type[];
+  catTypes: Type[];
+  active: Flag;
+  delete: Flag;
+};
+
+/**
+ * エラー
+ */
+export type ErrorResult = {
+  code: string;
+  message: string;
+  itemPath: string;
+  isError: boolean;
+};
+
+/**
+ * エラー
+ */
+export type ErrorResults = {
+  errorResults: ErrorResult[];
+};
+
+/**
+ * form入力確認画面表示リスト用データ保持
+ */
+export type FormConfirmData = {
+  id: string;
+  name: string;
+  value: string;
+  type: string;
+};

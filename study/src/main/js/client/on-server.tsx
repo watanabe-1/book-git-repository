@@ -50,3 +50,13 @@ export function isSSR() {
   //console.log(anyWindow.isSSR);
   return anyWindow.isSSR;
 }
+
+/**
+ * ssr判定フラグにセット
+ * @param isSSR
+ */
+export function setSSR(isSSR) {
+  const anyWindow: any = window;
+  //console.log(anyWindow.isSSR);
+  anyWindow.isSSR = isSSR;
+}

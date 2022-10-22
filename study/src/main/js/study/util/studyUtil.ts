@@ -1,3 +1,5 @@
+import { ErrorResults } from '../../@types/studyUtilType';
+
 /**
  * aタグにセットされているhref属性にパラメーターをセットする共通関数
  *
@@ -152,6 +154,15 @@ export function getLocationHrefParm(paramName: string): string {
   // getメソッド
   const param: string = params.get(paramName);
   return param;
+}
+
+/**
+ * 画像がない場合の画像パスを取得
+ *
+ * @return urlのコンテキストパス
+ */
+export function getNoImagePath(): string {
+  return getContextPath() + '/images/no_image.png';
 }
 
 // /**
@@ -535,7 +546,7 @@ function isEmpty(obj: {}) {
  * @param params パラメータ
  * @returns 通信結果
  */
-export async function fetchGet(baseurl: string, params: {} = {}): Promise<any> {
+export async function fetchGet(baseurl: string, params: {} = {}) {
   const query = new URLSearchParams(params);
   const url = isEmpty(params)
     ? getContextPath() + baseurl
@@ -545,7 +556,7 @@ export async function fetchGet(baseurl: string, params: {} = {}): Promise<any> {
     throw new Error(`unexpected status: ${res.status}`);
   }
 
-  return await res.json();
+  return res;
 }
 
 /**
@@ -554,22 +565,97 @@ export async function fetchGet(baseurl: string, params: {} = {}): Promise<any> {
  * @param body 送付パラム
  * @returns 通信結果
  */
-export async function fetchPost(baseurl: string, body: {} = {}): Promise<any> {
+export async function fetchPost(
+  baseurl: string,
+  body: {} = {}
+): Promise<Response> {
   const headers = () => {
     const headers: {} = {};
-    headers['Content-Type'] = 'application/json';
+    //headers['Content-Type'] = 'multipart/form-data';
     headers[getCsrfTokenHeader()] = getCsrfToken();
     return headers;
   };
 
+  const data = new FormData();
+  for (const key in body) {
+    console.log(key);
+    console.log(body[key]);
+    if (body[key]) data.append(key, body[key]);
+  }
+
+  console.log(data);
+
   const res: Response = await window.fetch(getContextPath() + baseurl, {
     method: 'POST',
     headers: headers(),
-    body: JSON.stringify(body),
+    body: data,
   });
-  if (!res.ok) {
-    throw new Error(`unexpected status: ${res.status}`);
+  console.log(res);
+  // if (!res.ok) {
+  //   throw new Error(`unexpected status: ${res.status}`);
+  // }
+  // const json = await res.json();
+  // console.log(json);
+  return res;
+}
+
+/**
+ * サーバーでエラーがあった場合のエラーメッセージを取得
+ * @param errData エラー結果格納変数
+ * @param setErrData エラー結果格納変数更新メソッド
+ * @returns エラーメッセージ
+ */
+export function getServerErrMsg(
+  errData: ErrorResults,
+  target: string,
+  setErrData: (value: React.SetStateAction<{}>) => void
+) {
+  console.log('エラーメッセージ');
+  console.log(errData);
+  if (errData) {
+    const errors = errData.errorResults;
+    for (let i = 0; i < errors.length; ++i) {
+      const FieldName = errors[i].itemPath;
+      if (FieldName == target) {
+        const cloneErrData = errData;
+        // エラー配列から対象の初期化
+        cloneErrData.errorResults[i].itemPath = '';
+        setErrData(cloneErrData);
+        return errors[i].message;
+      }
+    }
+  }
+  return 'エラーです';
+}
+
+/**
+ * サーバーでエラーがあったかの判定を行う
+ * @param errData エラー結果格納変数
+ * @returns 判定結果
+ */
+export function isServerErr(errData: ErrorResults, target: string) {
+  console.log(errData);
+  if (errData) {
+    const errors = errData.errorResults;
+    console.log('エラー：' + errors);
+    for (let i = 0; i < errors.length; ++i) {
+      const FieldName = errors[i].itemPath;
+      if (FieldName == target) {
+        return false;
+      }
+    }
   }
 
-  return await res.json();
+  return true;
+}
+
+/**
+ * inputのファイルを取得
+ * @param event inputのチェンジイベント
+ * @returns ファイル
+ */
+export function getInputFile(event: React.ChangeEvent<HTMLInputElement>) {
+  return event.currentTarget.files !== null
+    ? event.currentTarget.files[0]
+    : null;
 }

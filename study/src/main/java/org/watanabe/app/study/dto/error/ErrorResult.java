@@ -26,4 +26,9 @@ public class ErrorResult implements Serializable {
    */
   private String itemPath;
 
+  /**
+   * エラー判定
+   */
+  private boolean isError;
+
 }

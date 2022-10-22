@@ -10,10 +10,16 @@ import org.watanabe.app.common.validation.UploadFileMediaType;
 import org.watanabe.app.common.validation.UploadFileNotEmpty;
 import org.watanabe.app.study.entity.Image;
 import org.watanabe.app.study.util.StudyStringUtil;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-public class CategoryForm implements Serializable {
+/**
+ * カテゴリーフォームクラス
+ *
+ */
+@Data
+public class CategoryForm implements Serializable, Form {
 
   /* シリアルキー. */
   private String serialKey;
@@ -57,6 +63,11 @@ public class CategoryForm implements Serializable {
 
   /* 更新ユーザー. */
   private String updUser;
+
+  /**
+   * ssr判定
+   */
+  private String ssr;
 
   /* ICON. */
   @UploadFileNotEmpty

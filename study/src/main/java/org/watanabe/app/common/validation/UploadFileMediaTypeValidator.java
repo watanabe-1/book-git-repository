@@ -16,7 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public class UploadFileMediaTypeValidator
     implements ConstraintValidator<UploadFileMediaType, MultipartFile> {
-
+ 
   /**
    * 指定する拡張子をカンマ区切りで指定
    */
@@ -36,7 +36,7 @@ public class UploadFileMediaTypeValidator
   @Override
   public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext context) {
     // Emptyなら通す。他のバリデーターで検証する
-    if (multipartFile.isEmpty()) {
+    if (multipartFile == null || multipartFile.isEmpty()) {
       return true;
     }
     // メディアタイプ

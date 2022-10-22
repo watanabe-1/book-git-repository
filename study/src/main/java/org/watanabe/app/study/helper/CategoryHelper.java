@@ -8,12 +8,20 @@ import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import org.watanabe.app.study.dto.data.FormConfirmData;
 import org.watanabe.app.study.dto.list.CategoryFormList;
 import org.watanabe.app.study.entity.Category;
+import org.watanabe.app.study.entity.Image;
 import org.watanabe.app.study.enums.flag.DeleteFlag;
+import org.watanabe.app.study.enums.type.CategoryType;
+import org.watanabe.app.study.enums.type.ColType;
+import org.watanabe.app.study.enums.type.ImageType;
 import org.watanabe.app.study.form.CategoryForm;
 import org.watanabe.app.study.service.CategoryService;
+import org.watanabe.app.study.service.ImageService;
 import org.watanabe.app.study.util.StudyBeanUtil;
+import org.watanabe.app.study.util.StudyMessageUtil;
+import org.watanabe.app.study.util.StudyStringUtil;
 import org.watanabe.app.study.util.StudyUtil;
 
 /**
@@ -33,6 +41,12 @@ public class CategoryHelper {
    */
   @Autowired
   private UploadHelper uploadHelper;
+
+  /**
+   * 画像情報 Service
+   */
+  @Autowired
+  private ImageService imageService;
 
   /**
    * カテゴリー情報保存用リスト
@@ -120,6 +134,63 @@ public class CategoryHelper {
     catList = categoryService.findAll();
 
     return catCode;
+  }
+
+  /**
+   * 確認画面用のデータに加工
+   * 
+   * @param form フォーム入力値
+   * @param contextPath コンテキストパス
+   * @return
+   */
+  public List<FormConfirmData> getConfirmList(CategoryForm form, String contextPath) {
+    List<FormConfirmData> list = new ArrayList<FormConfirmData>();
+    int index = 0;
+
+    list.add(new FormConfirmData(index++, "カテゴリーコード",
+        StudyMessageUtil.getConfirmMessage(form.getCatCode()),
+        ColType.STRING.getCode()));
+    list.add(new FormConfirmData(index++, "カテゴリー名",
+        StudyMessageUtil.getConfirmMessage(form.getCatName()),
+        ColType.STRING.getCode()));
+    list.add(new FormConfirmData(index++, "メモ", StudyMessageUtil.getConfirmMessage(form.getNote()),
+        ColType.STRING.getCode()));
+    list.add(
+        new FormConfirmData(index++, "画像タイプ",
+            StudyMessageUtil.getConfirmMessage(
+                StudyStringUtil.isNullOrEmpty(form.getImgType()) ? null
+                    : ImageType.codeOf(form.getImgType()).getName(),
+                ColType.SELECT),
+            ColType.STRING.getCode()));
+    list.add(new FormConfirmData(index++, "カテゴリータイプ",
+        StudyMessageUtil.getConfirmMessage(
+            StudyStringUtil.isNullOrEmpty(form.getCatType()) ? null
+                : CategoryType.codeOf(form.getCatType()).getName(),
+            ColType.RADIO),
+        ColType.STRING.getCode()));
+    list.add(
+        new FormConfirmData(index++, "アクティブ",
+            StudyMessageUtil.getConfirmMessage(form.getActive(), ColType.CHECK),
+            ColType.STRING.getCode()));
+
+    // アップロードしたICON
+    MultipartFile catIcon = form.getCatIcon();
+    String imgPath = null;
+    // 画像をアップロードしたとき
+    if (!Objects.equals(catIcon, null)) {
+      // アップロードされたICONの拡張子
+      String imgExt = FilenameUtils.getExtension(catIcon.getOriginalFilename());
+      // アップロードされたファイルをbase64にエンコードした後にstring型に変換
+      imgPath = uploadHelper.encodeBase64(catIcon, imgExt);
+    } else {
+      Image img = imageService.findOne(StudyUtil.getNoImageCode());
+      imgPath =
+          StudyStringUtil.pathJoin(contextPath, img.getImgPath(), img.getImgName());
+    }
+
+    list.add(new FormConfirmData(index++, "アイコン", imgPath, ColType.IMAGE.getCode()));
+
+    return list;
   }
 
 }

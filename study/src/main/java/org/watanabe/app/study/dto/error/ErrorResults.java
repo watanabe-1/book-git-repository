@@ -24,8 +24,9 @@ public class ErrorResults implements Serializable {
    * @param code コード
    * @param message メッセージ
    */
-  public ErrorResults add(String code, String message) {
+  public ErrorResults add(boolean isError, String code, String message) {
     ErrorResult errorResult = new ErrorResult();
+    errorResult.setError(isError);
     errorResult.setCode(code);
     errorResult.setMessage(message);
     errorResults.add(errorResult);
@@ -39,8 +40,9 @@ public class ErrorResults implements Serializable {
    * @param message メッセージ
    * @param itemPath パス
    */
-  public ErrorResults add(String code, String message, String itemPath) {
+  public ErrorResults add(boolean isError, String code, String message, String itemPath) {
     ErrorResult errorResult = new ErrorResult();
+    errorResult.setError(isError);
     errorResult.setCode(code);
     errorResult.setMessage(message);
     errorResult.setItemPath(itemPath);
