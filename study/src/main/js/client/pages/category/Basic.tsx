@@ -13,6 +13,12 @@ import { Formik } from 'formik';
 import yup from '../../yup/message/ja';
 import BodysHead from '../../components/BodysHead';
 import BodysLodingSpinner from '../../components/BodysLodingSpinner';
+import TextBoxOnValidate from '../../components/TextBoxOnValidate';
+import TextArea from '../../components/TextArea';
+import SelectBox from '../../components/SelectBox';
+import RadioBtn from '../../components/RadioBtn';
+import CheckBox from '../../components/CheckBox';
+import FileBoxOnValidate from '../../components/FileBoxOnValidate';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -162,109 +168,78 @@ const Basic = (props) => {
               <Col md="7" lg="8">
                 <Row g="3">
                   <Col sm="6">
-                    <Form.Group controlId="catCode">
-                      <Form.Label>カテゴリーコード</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="catCode"
-                        value={values.catCode}
-                        onChange={handleChange}
-                        isValid={touched.catCode && !errors.catCode}
-                        isInvalid={!!errors.catCode}
-                      />
-                      <Form.Control.Feedback>OK!</Form.Control.Feedback>
-                      <Form.Control.Feedback type="invalid">
-                        {(errors as any).catCode}
-                      </Form.Control.Feedback>
-                    </Form.Group>
+                    <TextBoxOnValidate
+                      title="カテゴリーコード"
+                      name="catCode"
+                      value={values.catCode}
+                      touched={touched.catCode}
+                      error={errors.catCode}
+                      onChange={handleChange}
+                    />
                   </Col>
                   <Col sm="6">
-                    <Form.Group controlId="catName">
-                      <Form.Label>カテゴリー名</Form.Label>
-                      <Form.Control
-                        type="text"
-                        name="catName"
-                        value={values.catName}
-                        onChange={handleChange}
-                        isValid={touched.catName && !errors.catName}
-                        isInvalid={!!errors.catName}
-                      />
-                      <Form.Control.Feedback>OK!</Form.Control.Feedback>
-                      <Form.Control.Feedback type="invalid">
-                        {(errors as any).catName}
-                      </Form.Control.Feedback>
-                    </Form.Group>
+                    <TextBoxOnValidate
+                      title="カテゴリー名"
+                      name="catName"
+                      value={values.catName}
+                      touched={touched.catName}
+                      error={errors.catName}
+                      onChange={handleChange}
+                    />
                   </Col>
                   <Col sm="12">
-                    <Form.Group controlId="note">
-                      <Form.Label>メモ</Form.Label>
-                      <Form.Control
-                        as="textarea"
-                        value={values.note}
-                        onChange={handleChange}
-                      />
-                    </Form.Group>
+                    <TextArea
+                      title="メモ"
+                      name="note"
+                      value={values.note}
+                      onChange={handleChange}
+                    />
                   </Col>
                   <Col sm="12">
-                    <Form.Group controlId="imgType">
-                      <Form.Label>画像タイプ</Form.Label>
-                      <Form.Select name="imgType" onChange={handleChange}>
-                        {info.imgTypes.map((i) => (
-                          <option value={i.code}>{i.name}</option>
-                        ))}
-                      </Form.Select>
-                    </Form.Group>
+                    <SelectBox
+                      title="画像タイプ"
+                      name="imgType"
+                      value={values.imgTypes}
+                      typeList={info.imgTypes}
+                      onChange={handleChange}
+                    />
                   </Col>
                 </Row>
                 <hr className="my-4" />
                 <Row g="3">
                   <Col sm="4">
-                    <Form.Group controlId="catType">
-                      <Form.Label>カテゴリータイプ</Form.Label>
-                      <br />
-                      {info.catTypes.map((i) => (
-                        <Form.Check
-                          type="radio"
-                          inline
-                          value={i.code}
-                          label={i.name}
-                          checked={i.code == values.catType}
-                          onChange={handleChange}
-                        />
-                      ))}
-                    </Form.Group>
+                    <RadioBtn
+                      title="カテゴリータイプ"
+                      name="catType"
+                      value={values.catType}
+                      typeList={info.catTypes}
+                      onChange={handleChange}
+                    />
                   </Col>
                   <Col sm="4">
-                    <Form.Group controlId="active">
-                      <Form.Check
-                        type="checkbox"
-                        value={info.active.value}
-                        label={info.active.name}
-                        checked={info.active.value == values.active}
-                        onChange={handleChange}
-                      />
-                    </Form.Group>
+                    <CheckBox
+                      name="active"
+                      value={values.active}
+                      flag={info.active}
+                      onChange={handleChange}
+                    />
                   </Col>
                 </Row>
                 <hr className="my-4" />
                 <Row g="3">
                   <Col sm="12">
-                    <Form.Group controlId="catIcon">
-                      <Form.Label>アイコンのアップロード</Form.Label>
-                      <Form.Control
-                        type="file"
-                        accept="image/*"
-                        onChange={(
-                          event: React.ChangeEvent<HTMLInputElement>
-                        ) => {
-                          setFieldValue('catIcon', getInputFile(event));
-                        }}
-                        isInvalid={!!errors.catIcon}
-                      />
-                      <Form.Control.Feedback type="invalid">
-                        {(errors as any).catIcon}
-                      </Form.Control.Feedback>
-                    </Form.Group>
+                    <FileBoxOnValidate
+                      title="アイコンのアップロード"
+                      name="catIcon"
+                      value={values.catIcon}
+                      error={errors.catIcon}
+                      accept="image/*"
+                      onChange={(
+                        event: React.ChangeEvent<HTMLInputElement>
+                      ) => {
+                        setFieldValue('catIcon', getInputFile(event));
+                      }}
+                    />
                   </Col>
                 </Row>
                 <hr className="my-4" />
