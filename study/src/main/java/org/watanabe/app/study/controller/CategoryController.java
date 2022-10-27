@@ -94,7 +94,7 @@ public class CategoryController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/category/inputs", method = RequestMethod.GET)
+  @RequestMapping(value = "/category/input2", method = RequestMethod.GET)
   public ModelAndView inputs(HttpServletRequest request, @ModelAttribute CategoryForm form,
       ModelAndView model) {
     model.setViewName("/category/input");
