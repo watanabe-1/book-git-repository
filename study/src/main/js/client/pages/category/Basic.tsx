@@ -11,7 +11,6 @@ import {
 import { CategoryUi, ErrorResults } from '../../../@types/studyUtilType';
 import { Formik } from 'formik';
 import yup from '../../yup/message/ja';
-import BodysHead from '../../components/BodysHead';
 import BodysLodingSpinner from '../../components/BodysLodingSpinner';
 import TextBoxOnValidate from '../../components/TextBoxOnValidate';
 import TextArea from '../../components/TextArea';
@@ -133,7 +132,6 @@ const Basic = (props) => {
 
   return (
     <div>
-      <BodysHead title="カテゴリー情報登録フォーム" />
       <Formik
         validationSchema={schema}
         onSubmit={handleSubmit}
@@ -165,103 +163,99 @@ const Basic = (props) => {
           } = props;
           return (
             <Form noValidate onSubmit={handleSubmit}>
-              <Col md="7" lg="8">
-                <Row g="3">
-                  <Col sm="6">
-                    <TextBoxOnValidate
-                      title="カテゴリーコード"
-                      name="catCode"
-                      value={values.catCode}
-                      touched={touched.catCode}
-                      error={errors.catCode}
-                      onChange={handleChange}
-                    />
-                  </Col>
-                  <Col sm="6">
-                    <TextBoxOnValidate
-                      title="カテゴリー名"
-                      name="catName"
-                      value={values.catName}
-                      touched={touched.catName}
-                      error={errors.catName}
-                      onChange={handleChange}
-                    />
-                  </Col>
-                  <Col sm="12">
-                    <TextArea
-                      title="メモ"
-                      name="note"
-                      value={values.note}
-                      onChange={handleChange}
-                    />
-                  </Col>
-                  <Col sm="12">
-                    <SelectBox
-                      title="画像タイプ"
-                      name="imgType"
-                      value={values.imgTypes}
-                      typeList={info.imgTypes}
-                      onChange={handleChange}
-                    />
-                  </Col>
-                </Row>
-                <hr className="my-4" />
-                <Row g="3">
-                  <Col sm="4">
-                    <RadioBtn
-                      title="カテゴリータイプ"
-                      name="catType"
-                      value={values.catType}
-                      typeList={info.catTypes}
-                      onChange={handleChange}
-                    />
-                  </Col>
-                  <Col sm="4">
-                    <CheckBox
-                      name="active"
-                      value={values.active}
-                      flag={info.active}
-                      onChange={handleChange}
-                    />
-                  </Col>
-                </Row>
-                <hr className="my-4" />
-                <Row g="3">
-                  <Col sm="12">
-                    <FileBoxOnValidate
-                      title="アイコンのアップロード"
-                      name="catIcon"
-                      value={values.catIcon}
-                      error={errors.catIcon}
-                      accept="image/*"
-                      onChange={(
-                        event: React.ChangeEvent<HTMLInputElement>
-                      ) => {
-                        setFieldValue('catIcon', getInputFile(event));
-                      }}
-                    />
-                  </Col>
-                </Row>
-                <hr className="my-4" />
-                {isConfirmLoading ? (
-                  <Button variant="outline-primary" disabled>
-                    <BodysLodingSpinner />;
-                  </Button>
-                ) : (
-                  <Button variant="primary" type="submit">
-                    確認
-                  </Button>
-                )}
-                <Button
-                  ref={buttonElement}
-                  onClick={(event) => {
-                    validateForm(values);
-                  }}
-                  hidden
-                >
-                  バリデーション実施
+              <Row g="3">
+                <Col sm="6">
+                  <TextBoxOnValidate
+                    title="カテゴリーコード"
+                    name="catCode"
+                    value={values.catCode}
+                    touched={touched.catCode}
+                    error={errors.catCode}
+                    onChange={handleChange}
+                  />
+                </Col>
+                <Col sm="6">
+                  <TextBoxOnValidate
+                    title="カテゴリー名"
+                    name="catName"
+                    value={values.catName}
+                    touched={touched.catName}
+                    error={errors.catName}
+                    onChange={handleChange}
+                  />
+                </Col>
+                <Col sm="12">
+                  <TextArea
+                    title="メモ"
+                    name="note"
+                    value={values.note}
+                    onChange={handleChange}
+                  />
+                </Col>
+                <Col sm="12">
+                  <SelectBox
+                    title="画像タイプ"
+                    name="imgType"
+                    value={values.imgTypes}
+                    typeList={info.imgTypes}
+                    onChange={handleChange}
+                  />
+                </Col>
+              </Row>
+              <hr className="my-4" />
+              <Row g="3">
+                <Col sm="4">
+                  <RadioBtn
+                    title="カテゴリータイプ"
+                    name="catType"
+                    value={values.catType}
+                    typeList={info.catTypes}
+                    onChange={handleChange}
+                  />
+                </Col>
+                <Col sm="4">
+                  <CheckBox
+                    name="active"
+                    value={values.active}
+                    flag={info.active}
+                    onChange={handleChange}
+                  />
+                </Col>
+              </Row>
+              <hr className="my-4" />
+              <Row g="3">
+                <Col sm="12">
+                  <FileBoxOnValidate
+                    title="アイコンのアップロード"
+                    name="catIcon"
+                    value={values.catIcon}
+                    error={errors.catIcon}
+                    accept="image/*"
+                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                      setFieldValue('catIcon', getInputFile(event));
+                    }}
+                  />
+                </Col>
+              </Row>
+              <hr className="my-4" />
+              {isConfirmLoading ? (
+                <Button variant="outline-primary" disabled>
+                  <BodysLodingSpinner />;
                 </Button>
-              </Col>
+              ) : (
+                <Button variant="primary" type="submit">
+                  確認
+                </Button>
+              )}
+              <Button
+                ref={buttonElement}
+                onClick={(event) => {
+                  validateForm(values);
+                }}
+                hidden
+              >
+                バリデーション実施
+              </Button>
             </Form>
           );
         }}

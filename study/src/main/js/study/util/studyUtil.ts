@@ -131,6 +131,17 @@ export function getBaseUrl(): string {
 }
 
 /**
+ * コンテキストパスを付与
+ *
+ * @return コンテキストパスを結合したパス
+ */
+export function addContextPath(url: string): string {
+  return url.charAt(0) == '/'
+    ? getContextPath() + url
+    : getContextPath() + '/' + url;
+}
+
+/**
  * urlのコンテキストパスを取得
  *
  * @return urlのコンテキストパス

@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import { setSSR } from '../../on-server';
 import { fetchPost } from '../../../study/util/studyUtil';
 import { Context } from './Content';
-import BodysHead from '../../components/BodysHead';
 import ConfirmList from '../../components/ConfirmList';
 import Button from 'react-bootstrap/Button';
 
@@ -24,7 +23,6 @@ const Confirm = (props) => {
 
   return (
     <div>
-      <BodysHead title="カテゴリー情報確認" />
       <ConfirmList listData={currentState.confirm} />
       <Button variant="primary" onClick={props.handleBack}>
         戻る

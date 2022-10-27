@@ -1,8 +1,17 @@
-import React from 'react';
+import React, { useState, createContext } from 'react';
 import Basic from './Basic';
 import Confirm from './Confirm';
 import Result from './Result';
-export const Context = React.createContext(null);
+import Stepper from '../../components/Stepper';
+import BodysHead from '../../components/BodysHead';
+import Col from 'react-bootstrap/Col';
+export const Context = createContext(null);
+
+const steps = [
+  'カテゴリー情報登録フォーム',
+  'カテゴリー情報確認',
+  'カテゴリー情報登録完了',
+];
 
 const getStepContent = (stepIndex, handleNext, handleBack, handleReset) => {
   switch (stepIndex) {
@@ -16,14 +25,15 @@ const getStepContent = (stepIndex, handleNext, handleBack, handleReset) => {
       return 'Unknown stepIndex';
   }
 };
+
 const Content = () => {
-  const [currentState, setCurrentState] = React.useState({});
+  const [currentState, setCurrentState] = useState({});
   const value = {
     currentState,
     setCurrentState,
   };
 
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -36,9 +46,13 @@ const Content = () => {
 
   return (
     <div>
-      <Context.Provider value={value}>
-        {getStepContent(activeStep, handleNext, handleBack, handleReset)}
-      </Context.Provider>
+      <BodysHead title={steps[activeStep]} />
+      <Col md="7" lg="8">
+        <Stepper steps={steps} activeStep={activeStep}></Stepper>
+        <Context.Provider value={value}>
+          {getStepContent(activeStep, handleNext, handleBack, handleReset)}
+        </Context.Provider>
+      </Col>
     </div>
   );
 };
