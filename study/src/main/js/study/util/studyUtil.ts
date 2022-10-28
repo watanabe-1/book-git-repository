@@ -136,9 +136,26 @@ export function getBaseUrl(): string {
  * @return コンテキストパスを結合したパス
  */
 export function addContextPath(url: string): string {
-  return url.charAt(0) == '/'
-    ? getContextPath() + url
-    : getContextPath() + '/' + url;
+  return pathJoin(getContextPath(), url);
+}
+
+/**
+ * パスを結合
+ *
+ * @return コンテキストパスを結合したパス
+ */
+export function pathJoin(base: string, add: string): string {
+  const SLASH = '/';
+  // 先頭
+  const addHead = add.slice(0, 1);
+  // 末尾
+  const baseFoot = base.slice(-1);
+
+  if (baseFoot == SLASH) {
+    return addHead == SLASH ? base.slice(0, -1) + add : base + add;
+  } else {
+    return addHead == SLASH ? base + add : base + SLASH + add;
+  }
 }
 
 /**
@@ -173,7 +190,7 @@ export function getLocationHrefParm(paramName: string): string {
  * @return urlのコンテキストパス
  */
 export function getNoImagePath(): string {
-  return getContextPath() + '/images/no_image.png';
+  return pathJoin(getContextPath(), '/images/no_image.png');
 }
 
 // /**
@@ -559,10 +576,10 @@ function isEmpty(obj: {}) {
  */
 export async function fetchGet(baseurl: string, params: {} = {}) {
   const query = new URLSearchParams(params);
-  const url = isEmpty(params)
-    ? getContextPath() + baseurl
-    : getContextPath() + baseurl + '?' + query;
-  const res: Response = await window.fetch(url);
+  const url = pathJoin(getContextPath(), baseurl);
+  const res: Response = await window.fetch(
+    isEmpty(params) ? url : url + '?' + query
+  );
   if (!res.ok) {
     throw new Error(`unexpected status: ${res.status}`);
   }
@@ -596,11 +613,14 @@ export async function fetchPost(
 
   console.log(data);
 
-  const res: Response = await window.fetch(getContextPath() + baseurl, {
-    method: 'POST',
-    headers: headers(),
-    body: data,
-  });
+  const res: Response = await window.fetch(
+    pathJoin(getContextPath(), baseurl),
+    {
+      method: 'POST',
+      headers: headers(),
+      body: data,
+    }
+  );
   console.log(res);
   // if (!res.ok) {
   //   throw new Error(`unexpected status: ${res.status}`);
