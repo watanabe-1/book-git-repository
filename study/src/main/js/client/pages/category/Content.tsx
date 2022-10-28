@@ -5,6 +5,7 @@ import Result from './Result';
 import Stepper from '../../components/Stepper';
 import BodysHead from '../../components/BodysHead';
 import Col from 'react-bootstrap/Col';
+
 export const Context = createContext(null);
 
 const steps = [

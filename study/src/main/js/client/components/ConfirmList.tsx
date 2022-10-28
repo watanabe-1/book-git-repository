@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 import { FormConfirmData } from '../../@types/studyUtilType';
-
+import { TypeConst } from '../../constant/typeConstant';
 /**
  *
  * @returns form確認画面リスト表示用
@@ -17,14 +17,14 @@ const ConfirmList = (props: { listData: FormConfirmData[] }) => {
       </thead>
       <tbody>
         {props.listData.map((elem) => {
-          if (elem.type == 'STRING') {
+          if (elem.type == TypeConst.Col.STRING) {
             return (
               <tr key={elem.id}>
                 <td>{elem.name}</td>
                 {elem.value ? <td>{elem.value}</td> : <td>None</td>}
               </tr>
             );
-          } else if (elem.type == 'IMAGE') {
+          } else if (elem.type == TypeConst.Col.IMAGE) {
             return (
               <tr key={elem.id}>
                 <td>{elem.name}</td>

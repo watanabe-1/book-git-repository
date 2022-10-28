@@ -7,6 +7,7 @@ import '../../../css/view/stepper/stepper.css';
 /**
  * stepsに渡した配列の要素分だけ作成
  * activeStepが現在のstep
+ * noLable はラベルを出すかどうか
  * @returns stepper
  */
 const Stepper = ({

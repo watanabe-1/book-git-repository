@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
-import { setSSR } from '../../on-server';
-import { fetchPost } from '../../../study/util/studyUtil';
 import { Context } from './Content';
+import { fetchPost } from '../../../study/util/studyUtil';
+import { UrlConst } from '../../../constant/urlConstant';
 import ConfirmList from '../../components/ConfirmList';
 import Button from 'react-bootstrap/Button';
 
@@ -10,7 +10,7 @@ const Confirm = (props) => {
 
   const onSubmit = async () => {
     //alert(JSON.stringify(currentState));
-    const res = await fetchPost('/category/result', currentState.form);
+    const res = await fetchPost(UrlConst.Category.RESULT, currentState.form);
     if (res.ok) {
       // 確認画面へ
       props.handleNext();
@@ -18,8 +18,6 @@ const Confirm = (props) => {
       props.handleBack();
     }
   };
-  // SSRフラグをfalseに
-  setSSR(false);
 
   return (
     <div>

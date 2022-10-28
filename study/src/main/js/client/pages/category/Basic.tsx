@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Context } from './Content';
-import { onServer, isSSR } from '../../on-server';
+import { onServer, executeFirst } from '../../on-server';
 import {
   fetchGet,
   fetchPost,
@@ -9,8 +9,11 @@ import {
   getInputFile,
 } from '../../../study/util/studyUtil';
 import { CategoryUi, ErrorResults } from '../../../@types/studyUtilType';
-import { Formik } from 'formik';
+import { FieldConst } from '../../../constant/fieldConstant';
+import { CommonConst } from '../../../constant/commonConstant';
+import { UrlConst } from '../../../constant/urlConstant';
 import yup from '../../yup/message/ja';
+import { Formik } from 'formik';
 import BodysLodingSpinner from '../../components/BodysLodingSpinner';
 import TextBoxOnValidate from '../../components/TextBoxOnValidate';
 import TextArea from '../../components/TextArea';
@@ -18,6 +21,7 @@ import SelectBox from '../../components/SelectBox';
 import RadioBtn from '../../components/RadioBtn';
 import CheckBox from '../../components/CheckBox';
 import FileBoxOnValidate from '../../components/FileBoxOnValidate';
+import SubmitButton from '../../components/SubmitButton';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
@@ -64,7 +68,7 @@ const Basic = (props) => {
    * 画面情報取得
    */
   const fetchInfo = async () => {
-    const response = await fetchGet('/category/info');
+    const response = await fetchGet(UrlConst.Category.INFO);
     setInfo(await response.json());
   };
 
@@ -73,17 +77,15 @@ const Basic = (props) => {
    */
   const fetchConfirm = async (form) => {
     setConfirmLoading(true);
-    const response = await fetchPost('/category/confirm', form);
+    const response = await fetchPost(UrlConst.Category.CONFIRM, form);
     setConfirmLoading(false);
 
     return response;
   };
 
   useEffect(() => {
-    //ssrが行われなかった時
-    if (!isSSR()) {
-      fetchInfo();
-    }
+    // SSRが実行されたかされていないかで処理が変わる
+    executeFirst(fetchInfo);
   }, []);
 
   console.log(info);
@@ -95,24 +97,32 @@ const Basic = (props) => {
       .string()
       .required()
       .test(
-        'server',
+        CommonConst.SERVER_TEST_NAME,
         () => {
-          return getServerErrMsg(errData, 'catCode', setErrData);
+          return getServerErrMsg(
+            errData,
+            FieldConst.Category.CAT_CODE,
+            setErrData
+          );
         },
         (value) => {
-          return isServerErr(errData, 'catCode');
+          return isServerErr(errData, FieldConst.Category.CAT_CODE);
         }
       ),
     catName: yup
       .string()
       .required()
       .test(
-        'server',
+        CommonConst.SERVER_TEST_NAME,
         () => {
-          return getServerErrMsg(errData, 'catName', setErrData);
+          return getServerErrMsg(
+            errData,
+            FieldConst.Category.CAT_NAME,
+            setErrData
+          );
         },
         (value) => {
-          return isServerErr(errData, 'catName');
+          return isServerErr(errData, FieldConst.Category.CAT_NAME);
         }
       ),
     note: yup.string(),
@@ -120,12 +130,16 @@ const Basic = (props) => {
     catType: yup.string(),
     active: yup.bool(),
     catIcon: yup.mixed().test(
-      'server',
+      CommonConst.SERVER_TEST_NAME,
       () => {
-        return getServerErrMsg(errData, 'catIcon', setErrData);
+        return getServerErrMsg(
+          errData,
+          FieldConst.Category.CAT_ICON,
+          setErrData
+        );
       },
       (value) => {
-        return isServerErr(errData, 'catIcon');
+        return isServerErr(errData, FieldConst.Category.CAT_ICON);
       }
     ),
   });
@@ -167,7 +181,7 @@ const Basic = (props) => {
                 <Col sm="6">
                   <TextBoxOnValidate
                     title="カテゴリーコード"
-                    name="catCode"
+                    name={FieldConst.Category.CAT_CODE}
                     value={values.catCode}
                     touched={touched.catCode}
                     error={errors.catCode}
@@ -177,7 +191,7 @@ const Basic = (props) => {
                 <Col sm="6">
                   <TextBoxOnValidate
                     title="カテゴリー名"
-                    name="catName"
+                    name={FieldConst.Category.CAT_NAME}
                     value={values.catName}
                     touched={touched.catName}
                     error={errors.catName}
@@ -187,7 +201,7 @@ const Basic = (props) => {
                 <Col sm="12">
                   <TextArea
                     title="メモ"
-                    name="note"
+                    name={FieldConst.Category.NOTE}
                     value={values.note}
                     onChange={handleChange}
                   />
@@ -195,7 +209,7 @@ const Basic = (props) => {
                 <Col sm="12">
                   <SelectBox
                     title="画像タイプ"
-                    name="imgType"
+                    name={FieldConst.Category.IMG_TYPE}
                     value={values.imgTypes}
                     typeList={info.imgTypes}
                     onChange={handleChange}
@@ -207,7 +221,7 @@ const Basic = (props) => {
                 <Col sm="4">
                   <RadioBtn
                     title="カテゴリータイプ"
-                    name="catType"
+                    name={FieldConst.Category.CAT_TYPE}
                     value={values.catType}
                     typeList={info.catTypes}
                     onChange={handleChange}
@@ -215,7 +229,7 @@ const Basic = (props) => {
                 </Col>
                 <Col sm="4">
                   <CheckBox
-                    name="active"
+                    name={FieldConst.Category.ACTIVE}
                     value={values.active}
                     flag={info.active}
                     onChange={handleChange}
@@ -227,26 +241,21 @@ const Basic = (props) => {
                 <Col sm="12">
                   <FileBoxOnValidate
                     title="アイコンのアップロード"
-                    name="catIcon"
+                    name={FieldConst.Category.CAT_ICON}
                     value={values.catIcon}
                     error={errors.catIcon}
                     accept="image/*"
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      setFieldValue('catIcon', getInputFile(event));
+                      setFieldValue(
+                        FieldConst.Category.CAT_ICON,
+                        getInputFile(event)
+                      );
                     }}
                   />
                 </Col>
               </Row>
               <hr className="my-4" />
-              {isConfirmLoading ? (
-                <Button variant="outline-primary" disabled>
-                  <BodysLodingSpinner />;
-                </Button>
-              ) : (
-                <Button variant="primary" type="submit">
-                  確認
-                </Button>
-              )}
+              <SubmitButton title="確認" isLoading={isConfirmLoading} />
               <Button
                 ref={buttonElement}
                 onClick={(event) => {
