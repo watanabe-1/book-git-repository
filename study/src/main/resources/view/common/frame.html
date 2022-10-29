@@ -4,10 +4,10 @@
   th:replace="~{common/template :: layout(~{::title},~{::body/content()},~{::#jsScript},~{})}"
 >
   <head>
-    <title th:text="${jstitle}"></title>
+    <title th:text="${jsTitle}"></title>
     <div id="jsScript" th:remove="tag" th:utext="${jsScript}"></div>
   </head>
   <body>
-    <div th:remove="tag" th:utext="${jsbody}"></div>
+    <div th:remove="tag" th:utext="${jsBody}"></div>
   </body>
 </html>

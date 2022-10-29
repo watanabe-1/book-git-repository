@@ -1,15 +1,19 @@
 package org.watanabe.app.study.util;
 
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
 import org.mozilla.universalchardet.UniversalDetector;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.web.multipart.MultipartFile;
 import org.terasoluna.gfw.common.exception.BusinessException;
@@ -18,10 +22,12 @@ import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import lombok.extern.slf4j.XSlf4j;
 
 /**
  * ファイルを扱うutilクラス
  */
+@XSlf4j
 public class StudyFileUtil {
 
   /**
@@ -192,6 +198,12 @@ public class StudyFileUtil {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
 
+    // 文字コード判定に失敗した場合はutf8を指定
+    if (result == null) {
+      log.error("", "!!!!!!!!文字コード判定に失敗しました!!!!!!!!");
+      result = StandardCharsets.UTF_8.name();
+    }
+
     return result;
   }
 
@@ -207,6 +219,40 @@ public class StudyFileUtil {
     multipart.transferTo(convFile);
 
     return convFile;
+  }
+
+  /**
+   * クラスパス配下のファイルの読み込み
+   * 
+   * @param path パス
+   * @param charsetName 文字コード
+   * @param delimiter 区切り文字
+   * @return 読み込んだファイルの中身
+   */
+  public static String readClassPathFile(String path, String charsetName, String delimiter) {
+    ClassPathResource file = new ClassPathResource(path);
+    String ret = null;
+
+    // キャラセットが指定されていない場合
+    if (StudyStringUtil.isNullOrEmpty(charsetName)) {
+      charsetName = detectFileEncoding(file);
+    }
+
+    // 区切り文字が指定されていない場合
+    if (delimiter == null) {
+      delimiter = "\n";
+    }
+
+    try (InputStream in = file.getInputStream();
+        BufferedReader br =
+            new BufferedReader(new InputStreamReader(in, charsetName))) {
+      ret = br.lines().collect(Collectors.joining(delimiter));
+      log.info("", new StringBuffer().append(path).append(" file loaded."));
+    } catch (IOException e) {
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+    }
+
+    return ret;
   }
 
 }

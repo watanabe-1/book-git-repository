@@ -1,5 +1,6 @@
 package org.watanabe.app.study.util;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.terasoluna.gfw.common.exception.BusinessException;
@@ -265,6 +266,33 @@ public class StudyStringUtil {
     return str.charAt(0) == c && str.charAt(str.length() - 1) == c
         ? str.substring(1, str.length() - 1)
         : str;
+  }
+
+  /**
+   * 文字列から指定の文字列を削除
+   * 
+   * @param str 置換対象
+   * @param targets 削除対象文字列のリスト
+   * @return 削除語文字列
+   */
+  public static String delete(String str, List<String> targets) {
+    return delete(str, targets.toArray(new String[targets.size()]));
+  }
+
+  /**
+   * 文字列から指定の文字列を削除
+   * 
+   * @param str 置換対象
+   * @param targets 削除対象文字列
+   * @return 削除語文字列
+   */
+  public static String delete(String str, String... targets) {
+    String replaced = str;
+    for (String target : targets) {
+      replaced = replaced.replace(target, "");
+    }
+
+    return replaced;
   }
 
   /**

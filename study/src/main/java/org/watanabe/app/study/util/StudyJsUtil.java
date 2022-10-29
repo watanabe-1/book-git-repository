@@ -1,17 +1,17 @@
 package org.watanabe.app.study.util;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.web.servlet.ModelAndView;
 import org.watanabe.app.study.api.js.ServerApi;
 import org.watanabe.app.study.form.Form;
@@ -19,12 +19,11 @@ import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import lombok.extern.slf4j.XSlf4j;
 
 /**
- * コントローラーの抽象クラス<br/>
- * サーバーでjsを実行する設定を行う
+ * js(react)実行用utilクラス
  *
  */
 @XSlf4j
-public abstract class StudyJsUtil {
+public class StudyJsUtil {
 
   /**
    * reactjs用view名
@@ -34,12 +33,12 @@ public abstract class StudyJsUtil {
   /**
    * reactjs用view-title
    */
-  public static final String VIEW_TITLE = "jstitle";
+  public static final String VIEW_TITLE = "jsTitle";
 
   /**
    * reactjs用view-body
    */
-  public static final String VIEW_BODY = "jsbody";
+  public static final String VIEW_BODY = "jsBody";
 
   /**
    * reactjs用view-script
@@ -75,26 +74,16 @@ public abstract class StudyJsUtil {
       String scriptPath, ServerApi serverApi, boolean isSSR) {
     model.setViewName(VIEW_NAME);
 
+    // react用bodyを作成
     String body = render(request, scriptPath, serverApi, isSSR);
-    // 最大1000まで
-    int cnt = 0;
-    StringBuffer scripts = new StringBuffer();
-    while (cnt < 1000) {
-      String serverDataScript = readScript(body);
-      if (!StudyStringUtil.isNullOrEmpty(serverDataScript)) {
-        scripts.append(serverDataScript);
-        body = body.replace(serverDataScript, "");
-      } else {
-        break;
-      }
-      cnt++;
-    }
-    log.info("", new StringBuffer().append("置換scriptタグ数:").append(cnt));
+    // scriptタグの抜き出し
+    List<String> scriptList = readScripts(body);
+    body = StudyStringUtil.delete(body, scriptList);
+    log.info("", new StringBuffer().append("置換scriptタグ数:").append(scriptList.size()));
 
     model.addObject(VIEW_TITLE, title);
     model.addObject(VIEW_BODY, body);
-    model.addObject(VIEW_SCRIPT, scripts.toString());
-
+    model.addObject(VIEW_SCRIPT, scriptList.stream().collect(Collectors.joining("")));
   }
 
   /**
@@ -110,13 +99,8 @@ public abstract class StudyJsUtil {
   public static String render(HttpServletRequest request, String scriptPath, ServerApi serverApi,
       boolean isSSR) {
     String ret = "";
-    try {
-      ret = isSSR ? renderSSR(request, scriptPath, serverApi) : renderCSR(request, scriptPath);
-    } catch (ScriptException e) {
-      log.error("", e.getMessage());
-    } catch (IOException e) {
-      log.error("", e.getMessage());
-    }
+    ret = isSSR ? renderSSR(request, scriptPath, serverApi) : renderCSR(request, scriptPath);
+
     return ret;
   }
 
@@ -127,40 +111,22 @@ public abstract class StudyJsUtil {
    * @param scriptPath jsファイルのパス
    * @param serverApi jsに埋め込むjavaオブジェクト
    * @return 実行結果
-   * @throws ScriptException
-   * @throws IOException
    */
-  public static String renderSSR(HttpServletRequest request, String scriptPath, ServerApi serverApi)
-      throws ScriptException, IOException {
+  public static String renderSSR(HttpServletRequest request, String scriptPath,
+      ServerApi serverApi) {
     GraalJSScriptEngine engine = initializeEngine(request, scriptPath, serverApi);
-    String ret = new StringBuffer()
-        .append(addRoute(engine.eval("window.renderAppOnServer()").toString()))
+    String ret = null;
+    try {
+      ret = engine.eval("window.renderAppOnServer()").toString();
+    } catch (ScriptException e) {
+      log.error("", e.toString());
+    }
+    return new StringBuffer()
+        .append(addRoute(ret))
         .append(createSourcePathScript(scriptPath, request.getContextPath()))
         .append(createIsSSRScript(true))
-        .toString();
-
-    // root配下にサーバーデータ格納scriptタグを含めないようにする(hydrate時に差分が出ないように)
-    StringBuffer serverDataScripts = new StringBuffer();
-    // 最大1000まで
-    int cnt = 0;
-    while (cnt < 1000) {
-      String serverDataScript = readServerDataScript(ret);
-      if (!StudyStringUtil.isNullOrEmpty(serverDataScript)) {
-        serverDataScripts.append(serverDataScript);
-        ret = ret.replace(serverDataScript, "");
-      } else {
-        break;
-      }
-      cnt++;
-    }
-    ret = new StringBuffer()
-        .append(ret)
-        .append(serverDataScripts.toString())
         .append(createRenderWhenAvailableScript("hydrateApp"))
         .toString();
-    log.info("", new StringBuffer().append("置換script数:").append(cnt));
-
-    return ret;
   }
 
   /**
@@ -216,7 +182,7 @@ public abstract class StudyJsUtil {
    * @return ソースパス格納スクリプトタグ
    */
   private static String createSourcePathScript(String scriptPath, String contextPath) {
-    return String.format("<script src=\"%s\"></script>\n",
+    return String.format("<script src=\"%s\"></script>",
         scriptPath.replace("/static", contextPath));
   }
 
@@ -231,49 +197,43 @@ public abstract class StudyJsUtil {
   }
 
   /**
-   * jsファイル実行出力結果からサーバーデータ格納scriptタグ取得
+   * jsファイル実行出力結果からscriptタグをすべて取得
    * 
    * @param outPut jsファイル出力結果
    * @return サーバーデータ格納scriptタグ
    */
-  private static String readServerDataScript(String outPut) {
-    String startStr = "<script class=\"serverData\">";
-    String endStr = "</script>";
-    int startIndex = outPut.indexOf(startStr);
-    int endIndex = outPut.indexOf(endStr, startIndex) + endStr.length();
+  private static List<String> readScripts(String outPut) {
+    // 正規表現のパターンを作成
+    // [\s\S] = 改行を含む全ての文字１字
+    // * = 直前の文字を0文字以上繰り返す
+    // ? = ?をつけることで最小マッチ（条件に合う最も短い範囲）
+    Pattern p = Pattern.compile("<script[\\s\\S]*?</script>");
+    Matcher m = p.matcher(outPut);
+    List<String> ret = new ArrayList<>();
+    int cnt = 0;
+    while (m.find()) {
+      String script = m.group();
+      ret.add(script);
+      log.info("", new StringBuffer().append(cnt++).append(" 一致した部分は : ").append(script));
+    }
 
-    return startIndex >= 0 ? outPut.substring(startIndex, endIndex) : "";
-  }
-
-  /**
-   * jsファイル実行出力結果からscriptタグ取得
-   * 
-   * @param outPut jsファイル出力結果
-   * @return サーバーデータ格納scriptタグ
-   */
-  private static String readScript(String outPut) {
-    String startStr = "<script";
-    String endStr = "</script>";
-    int startIndex = outPut.indexOf(startStr);
-    int endIndex = outPut.indexOf(endStr, startIndex) + endStr.length();
-
-    return startIndex >= 0 ? outPut.substring(startIndex, endIndex) : "";
+    // <script src= から始まるものを先頭に変更し、それ以外は昇順でソート(見栄え用)
+    return ret.stream()
+        .sorted(Comparator.comparing((script) -> {
+          return script.indexOf("src=") >= 0
+              ? new StringBuffer().append("a").append(script).toString()
+              : new StringBuffer().append("z").append(script).toString();
+        }))
+        .collect(Collectors.toList());
   }
 
   /**
    * jsファイルの読み込み
    * 
    * @param path パス
-   * @return 読み込んだファイルの中身
-   * @throws IOException
    */
-  private static String readFile(String path) throws IOException {
-    InputStream in = new ClassPathResource(path).getInputStream();
-    BufferedReader reader =
-        new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8.name()));
-    log.info("", new StringBuffer().append(path).append(" js file loaded."));
-
-    return reader.lines().collect(Collectors.joining(""));
+  public static String readJsFile(String path) {
+    return StudyFileUtil.readClassPathFile(path, StandardCharsets.UTF_8.name(), "");
   }
 
   /**
@@ -283,11 +243,9 @@ public abstract class StudyJsUtil {
    * @param scriptPath jsファイルのパス
    * @param serverApi jsに埋め込むjavaオブジェクト
    * @return js実行エンジン
-   * @throws ScriptException
-   * @throws IOException
    */
   private static GraalJSScriptEngine initializeEngine(HttpServletRequest request, String scriptPath,
-      ServerApi serverApi) throws ScriptException, IOException {
+      ServerApi serverApi) {
     // Source loadcompatibility = Source.create("js", "load('nashorn:mozilla_compat.js')");
     GraalJSScriptEngine engine = GraalJSScriptEngine.create(
         null,
@@ -299,27 +257,27 @@ public abstract class StudyJsUtil {
     // .allowExperimentalOptions(true)
     // .option("js.nashorn-compat", "true")
     );
-    // engine.eval("load('nashorn:mozilla_compat.js')");
-    engine.eval(String.format(
-        "window = { location: { hostname: 'localhost' }, isServer: true, requestUrl: \"%s\" }",
-        request.getRequestURI()));
-
-    if (!Objects.isNull(serverApi)) {
-      engine.put("api", serverApi);
-      engine.eval("window.api = api");
-    }
-
-    engine.eval("navigator = {}");
-    // selfをそのままだと解決できないため、グルーバルオブジェクトとして定義
-    engine.eval("self = {}");
-    // engine.eval("TextEncoder = TextEncoder");
     try {
-      engine.eval(readFile("/static/js/depens.bundle.js"));
+      // engine.eval("load('nashorn:mozilla_compat.js')");
+      engine.eval(String.format(
+          "window = { location: { hostname: 'localhost' }, isServer: true, requestUrl: \"%s\" }",
+          request.getRequestURI()));
+
+      if (!Objects.isNull(serverApi)) {
+        engine.put("api", serverApi);
+        engine.eval("window.api = api");
+      }
+
+      engine.eval("navigator = {}");
+      // selfをそのままだと解決できないため、グルーバルオブジェクトとして定義
+      engine.eval("self = {}");
+      // engine.eval("TextEncoder = TextEncoder");
+      engine.eval(readJsFile("/static/js/depens.bundle.js"));
       // TextEncoderがwebapi(ブラウザで用意されているapi)のため別で読み込みしなおす
       // text-encoding-polyfill
-      engine.eval(readFile("/static/js/webapi.bundle.js"));
+      engine.eval(readJsFile("/static/js/webapi.bundle.js"));
       engine.eval("TextEncoder = window.TextEncoder");
-      engine.eval(readFile(scriptPath));
+      engine.eval(readJsFile(scriptPath));
     } catch (ScriptException e) {
       log.error("", e.toString());
     }
