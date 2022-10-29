@@ -151,7 +151,7 @@ public class StudyStringUtil {
   }
 
   /**
-   * オブジェクトをcsvに変換
+   * オブジェクトをcsv形式の文字列に変換
    * 
    * @param target 変換対象
    * @param pojoType カラム情報が記載されているクラス
@@ -163,7 +163,7 @@ public class StudyStringUtil {
   }
 
   /**
-   * オブジェクトをtsvに変換
+   * オブジェクトをtsv形式の文字列に変換
    * 
    * @param target 変換対象
    * @param pojoType カラム情報が記載されているクラス
@@ -175,7 +175,7 @@ public class StudyStringUtil {
   }
 
   /**
-   * オブジェクトを文字列に変換
+   * オブジェクトを区切り文字で区切った文字列に変換
    * 
    * @param target 変換対象
    * @param pojoType カラム情報が記載されているクラス
@@ -273,7 +273,7 @@ public class StudyStringUtil {
    * 
    * @param str 置換対象
    * @param targets 削除対象文字列のリスト
-   * @return 削除語文字列
+   * @return 削除後文字列
    */
   public static String delete(String str, List<String> targets) {
     return delete(str, targets.toArray(new String[targets.size()]));
@@ -284,7 +284,7 @@ public class StudyStringUtil {
    * 
    * @param str 置換対象
    * @param targets 削除対象文字列
-   * @return 削除語文字列
+   * @return 削除後文字列
    */
   public static String delete(String str, String... targets) {
     String replaced = str;
