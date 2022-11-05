@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { Context } from './Content';
-import { fetchPost } from '../../../study/util/studyUtil';
-import { UrlConst } from '../../../constant/urlConstant';
-import ConfirmList from '../../components/ConfirmList';
+import { fetchPost } from '../../../../study/util/studyUtil';
+import { UrlConst } from '../../../../constant/urlConstant';
+import ConfirmList from '../../../components/ConfirmList';
 import Button from 'react-bootstrap/Button';
 
 const Confirm = (props) => {

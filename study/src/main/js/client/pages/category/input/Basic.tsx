@@ -1,27 +1,27 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Context } from './Content';
-import { onServer, executeFirst } from '../../on-server';
+import { onServer, executeFirst } from '../../../on-server';
 import {
   fetchGet,
   fetchPost,
   getServerErrMsg,
   isServerErr,
   getInputFile,
-} from '../../../study/util/studyUtil';
-import { CategoryUi, ErrorResults } from '../../../@types/studyUtilType';
-import { FieldConst } from '../../../constant/fieldConstant';
-import { CommonConst } from '../../../constant/commonConstant';
-import { UrlConst } from '../../../constant/urlConstant';
-import yup from '../../yup/message/ja';
+} from '../../../../study/util/studyUtil';
+import { CategoryUi, ErrorResults } from '../../../../@types/studyUtilType';
+import { FieldConst } from '../../../../constant/fieldConstant';
+import { CommonConst } from '../../../../constant/commonConstant';
+import { UrlConst } from '../../../../constant/urlConstant';
+import yup from '../../../yup/message/ja';
 import { Formik } from 'formik';
-import BodysLodingSpinner from '../../components/BodysLodingSpinner';
-import TextBoxOnValidate from '../../components/TextBoxOnValidate';
-import TextArea from '../../components/TextArea';
-import SelectBox from '../../components/SelectBox';
-import RadioBtn from '../../components/RadioBtn';
-import CheckBox from '../../components/CheckBox';
-import FileBoxOnValidate from '../../components/FileBoxOnValidate';
-import SubmitButton from '../../components/SubmitButton';
+import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
+import TextBoxOnValidate from '../../../components/TextBoxOnValidate';
+import TextArea from '../../../components/TextArea';
+import SelectBox from '../../../components/SelectBox';
+import RadioBtn from '../../../components/RadioBtn';
+import CheckBox from '../../../components/CheckBox';
+import FileBoxOnValidate from '../../../components/FileBoxOnValidate';
+import SubmitButton from '../../../components/SubmitButton';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
