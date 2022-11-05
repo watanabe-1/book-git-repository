@@ -8,12 +8,16 @@ import {
   isServerErr,
   getInputFile,
 } from '../../../../study/util/studyUtil';
-import { CategoryUi, ErrorResults } from '../../../../@types/studyUtilType';
+import {
+  CategoryUi,
+  Category,
+  ErrorResults,
+} from '../../../../@types/studyUtilType';
 import { FieldConst } from '../../../../constant/fieldConstant';
 import { CommonConst } from '../../../../constant/commonConstant';
 import { UrlConst } from '../../../../constant/urlConstant';
 import yup from '../../../yup/message/ja';
-import { Formik } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import TextBoxOnValidate from '../../../components/TextBoxOnValidate';
 import TextArea from '../../../components/TextArea';
@@ -92,76 +96,76 @@ const Basic = (props) => {
   // 非同期が完了するまで次の処理に進まない
   if (!info.catTypes) return <BodysLodingSpinner />;
 
-  const schema = yup.object().shape({
-    catCode: yup
-      .string()
-      .required()
-      .test(
-        CommonConst.SERVER_TEST_NAME,
-        () => {
-          return getServerErrMsg(
-            errData,
-            FieldConst.Category.CAT_CODE,
-            setErrData
-          );
-        },
-        (value) => {
-          return isServerErr(errData, FieldConst.Category.CAT_CODE);
-        }
-      ),
-    catName: yup
-      .string()
-      .required()
-      .test(
-        CommonConst.SERVER_TEST_NAME,
-        () => {
-          return getServerErrMsg(
-            errData,
-            FieldConst.Category.CAT_NAME,
-            setErrData
-          );
-        },
-        (value) => {
-          return isServerErr(errData, FieldConst.Category.CAT_NAME);
-        }
-      ),
-    note: yup.string(),
-    imgType: yup.string(),
-    catType: yup.string(),
-    active: yup.bool(),
-    catIcon: yup.mixed().test(
+  //yupで使用するスキーマの設定
+  const additions = {};
+  additions[FieldConst.Category.CAT_CODE] = yup
+    .string()
+    .required()
+    .test(
       CommonConst.SERVER_TEST_NAME,
       () => {
         return getServerErrMsg(
           errData,
-          FieldConst.Category.CAT_ICON,
+          FieldConst.Category.CAT_CODE,
           setErrData
         );
       },
       (value) => {
-        return isServerErr(errData, FieldConst.Category.CAT_ICON);
+        return isServerErr(errData, FieldConst.Category.CAT_CODE);
       }
-    ),
-  });
+    );
+  additions[FieldConst.Category.CAT_NAME] = yup
+    .string()
+    .required()
+    .test(
+      CommonConst.SERVER_TEST_NAME,
+      () => {
+        return getServerErrMsg(
+          errData,
+          FieldConst.Category.CAT_NAME,
+          setErrData
+        );
+      },
+      (value) => {
+        return isServerErr(errData, FieldConst.Category.CAT_NAME);
+      }
+    );
+  additions[FieldConst.Category.NOTE] = yup.string();
+  additions[FieldConst.Category.IMG_TYPE] = yup.string();
+  additions[FieldConst.Category.CAT_TYPE] = yup.string();
+  additions[FieldConst.Category.ACTIVE] = yup.bool();
+  additions[FieldConst.Category.CAT_ICON] = yup.mixed().test(
+    CommonConst.SERVER_TEST_NAME,
+    () => {
+      return getServerErrMsg(errData, FieldConst.Category.CAT_ICON, setErrData);
+    },
+    (value) => {
+      return isServerErr(errData, FieldConst.Category.CAT_ICON);
+    }
+  );
+  // スキーマにセット
+  const schema = yup.object().shape(additions);
 
   return (
     <div>
       <Formik
         validationSchema={schema}
         onSubmit={handleSubmit}
-        initialValues={{
-          catCode: currentState.form ? currentState.form.catCode : '',
-          catName: currentState.form ? currentState.form.catName : '',
-          note: currentState.form ? currentState.form.note : '',
-          imgType: currentState.form
-            ? currentState.form.imgType
-            : info.imgTypes[0].code,
-          catType: currentState.form ? currentState.form.catType : '',
-          active: currentState.form ? currentState.form.active : '0',
-          catIcon: currentState.form ? currentState.form.catIcon : null,
-        }}
+        initialValues={
+          {
+            catCode: currentState.form ? currentState.form.catCode : '',
+            catName: currentState.form ? currentState.form.catName : '',
+            note: currentState.form ? currentState.form.note : '',
+            imgType: currentState.form
+              ? currentState.form.imgType
+              : info.imgTypes[0].code,
+            catType: currentState.form ? currentState.form.catType : '',
+            active: currentState.form ? currentState.form.active : '0',
+            catIcon: currentState.form ? currentState.form.catIcon : null,
+          } as Category
+        }
       >
-        {(props) => {
+        {(props: FormikProps<Category>) => {
           const {
             values,
             touched,
@@ -210,7 +214,7 @@ const Basic = (props) => {
                   <SelectBox
                     title="画像タイプ"
                     name={FieldConst.Category.IMG_TYPE}
-                    value={values.imgTypes}
+                    value={values.imgType}
                     typeList={info.imgTypes}
                     onChange={handleChange}
                   />
