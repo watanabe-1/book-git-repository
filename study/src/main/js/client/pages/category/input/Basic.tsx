@@ -4,17 +4,15 @@ import { onServer, executeFirst } from '../../../on-server';
 import {
   fetchGet,
   fetchPost,
-  getServerErrMsg,
-  isServerErr,
   getInputFile,
 } from '../../../../study/util/studyUtil';
+import { addServerValidateFuncs } from '../../../../study/util/studyYupUtil';
 import {
   CategoryUi,
   Category,
   ErrorResults,
 } from '../../../../@types/studyUtilType';
 import { FieldConst } from '../../../../constant/fieldConstant';
-import { CommonConst } from '../../../../constant/commonConstant';
 import { UrlConst } from '../../../../constant/urlConstant';
 import yup from '../../../yup/message/ja';
 import { Formik, FormikProps } from 'formik';
@@ -98,50 +96,23 @@ const Basic = (props) => {
 
   //yupで使用するスキーマの設定
   const additions = {};
-  additions[FieldConst.Category.CAT_CODE] = yup
-    .string()
-    .required()
-    .test(
-      CommonConst.SERVER_TEST_NAME,
-      () => {
-        return getServerErrMsg(
-          errData,
-          FieldConst.Category.CAT_CODE,
-          setErrData
-        );
-      },
-      (value) => {
-        return isServerErr(errData, FieldConst.Category.CAT_CODE);
-      }
-    );
-  additions[FieldConst.Category.CAT_NAME] = yup
-    .string()
-    .required()
-    .test(
-      CommonConst.SERVER_TEST_NAME,
-      () => {
-        return getServerErrMsg(
-          errData,
-          FieldConst.Category.CAT_NAME,
-          setErrData
-        );
-      },
-      (value) => {
-        return isServerErr(errData, FieldConst.Category.CAT_NAME);
-      }
-    );
+  additions[FieldConst.Category.CAT_CODE] = yup.string().required();
+  additions[FieldConst.Category.CAT_NAME] = yup.string().required();
   additions[FieldConst.Category.NOTE] = yup.string();
   additions[FieldConst.Category.IMG_TYPE] = yup.string();
   additions[FieldConst.Category.CAT_TYPE] = yup.string();
   additions[FieldConst.Category.ACTIVE] = yup.bool();
-  additions[FieldConst.Category.CAT_ICON] = yup.mixed().test(
-    CommonConst.SERVER_TEST_NAME,
-    () => {
-      return getServerErrMsg(errData, FieldConst.Category.CAT_ICON, setErrData);
-    },
-    (value) => {
-      return isServerErr(errData, FieldConst.Category.CAT_ICON);
-    }
+  additions[FieldConst.Category.CAT_ICON] = yup.mixed();
+  // サーバーでのバリデーション結果を反映する関数をセット
+  addServerValidateFuncs(
+    additions,
+    [
+      FieldConst.Category.CAT_CODE,
+      FieldConst.Category.CAT_NAME,
+      FieldConst.Category.CAT_ICON,
+    ],
+    errData,
+    setErrData
   );
   // スキーマにセット
   const schema = yup.object().shape(additions);
