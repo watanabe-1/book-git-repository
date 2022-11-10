@@ -13,6 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.springframework.web.servlet.ModelAndView;
+import org.terasoluna.gfw.common.exception.BusinessException;
+import org.terasoluna.gfw.common.message.ResultMessages;
 import org.watanabe.app.study.api.js.ServerApi;
 import org.watanabe.app.study.form.Form;
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
@@ -98,10 +100,7 @@ public class StudyJsUtil {
    */
   public static String render(HttpServletRequest request, String scriptPath, ServerApi serverApi,
       boolean isSSR) {
-    String ret = "";
-    ret = isSSR ? renderSSR(request, scriptPath, serverApi) : renderCSR(request, scriptPath);
-
-    return ret;
+    return isSSR ? renderSSR(request, scriptPath, serverApi) : renderCSR(request, scriptPath);
   }
 
   /**
@@ -119,7 +118,7 @@ public class StudyJsUtil {
     try {
       ret = engine.eval("window.renderAppOnServer()").toString();
     } catch (ScriptException e) {
-      log.error("", e.toString());
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
     return new StringBuffer()
         .append(addRoute(ret))
@@ -258,7 +257,6 @@ public class StudyJsUtil {
     // .option("js.nashorn-compat", "true")
     );
     try {
-      // engine.eval("load('nashorn:mozilla_compat.js')");
       engine.eval(String.format(
           "window = { location: { hostname: 'localhost' }, isServer: true, requestUrl: \"%s\" }",
           request.getRequestURI()));
@@ -271,7 +269,6 @@ public class StudyJsUtil {
       engine.eval("navigator = {}");
       // selfをそのままだと解決できないため、グルーバルオブジェクトとして定義
       engine.eval("self = {}");
-      // engine.eval("TextEncoder = TextEncoder");
       engine.eval(readJsFile("/static/js/depens.bundle.js"));
       // TextEncoderがwebapi(ブラウザで用意されているapi)のため別で読み込みしなおす
       // text-encoding-polyfill
@@ -279,7 +276,7 @@ public class StudyJsUtil {
       engine.eval("TextEncoder = window.TextEncoder");
       engine.eval(readJsFile(scriptPath));
     } catch (ScriptException e) {
-      log.error("", e.toString());
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
 
     return engine;
