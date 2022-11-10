@@ -26,7 +26,7 @@ book-git-repository\study に使用しているライブラリ情報が入って
    - book-git-repository\study\src\main\resources\config\properties\database.properties を環境に合わせて修正
 
 2. ビルドからログインまで
-   - お好みで book-git-repository\study\WebContent\images 内の画像を好きな画像に変更する
+   - お好みで book-git-repository\study\src\main\resources\static\images 内の画像を好きな画像に変更する
    - book-git-repository\bat\bootrunAndDaemonwatch.bat を実行することでサーバの起動と js のファイル監視が可能
      - または book-git-repository\study で`gradle bootrun`コマンドを実行すると spring boot サーバが立ち上がる
      - または book-git-repository\study で `gradlew --no-daemon watch`コマンドを実行すると js のファイル監視が可能
