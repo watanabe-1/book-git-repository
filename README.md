@@ -64,5 +64,5 @@ book-git-repository\study に使用しているライブラリ情報が入って
 - -DB 定義は book-git-repository\spreadsheet\DB 定義.xlsx
   - Google スプレッドシートに取り込み、book-git-repository\spreadsheet\gas 配下のマクロファイルを設定すれば create 文生成などのマクロが使用可能
 - 家計簿データの例は book-git-repository\example 配下に
-- java の formatter は google が公開しているものを使用 → [git](https://github.com/google/google-java-format)
+- java の formatter は google が公開しているものを使用 → [google-java-format](https://github.com/google/google-java-format)
 - js(ts、json) の formatter は prettier,eslint を使用
