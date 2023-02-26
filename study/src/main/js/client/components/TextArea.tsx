@@ -13,7 +13,7 @@ const TextArea = (props: {
 }) => {
   return (
     <Form.Group controlId={props.name}>
-      <Form.Label>{props.title}</Form.Label>
+      {props.title ? <Form.Label>{props.title}</Form.Label> : null}
       <Form.Control
         as="textarea"
         value={props.value}

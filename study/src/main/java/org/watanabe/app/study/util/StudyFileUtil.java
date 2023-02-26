@@ -200,7 +200,7 @@ public class StudyFileUtil {
 
     // 文字コード判定に失敗した場合はutf8を指定
     if (result == null) {
-      log.error("", "!!!!!!!!文字コード判定に失敗しました!!!!!!!!");
+      log.warn("", "!!!!!!!!文字コード判定に失敗しました!!!!!!!!");
       result = StandardCharsets.UTF_8.name();
     }
 
@@ -226,10 +226,9 @@ public class StudyFileUtil {
    * 
    * @param path パス
    * @param charsetName 文字コード
-   * @param delimiter 区切り文字
    * @return 読み込んだファイルの中身
    */
-  public static String readClassPathFile(String path, String charsetName, String delimiter) {
+  public static String readClassPathFile(String path, String charsetName) {
     ClassPathResource file = new ClassPathResource(path);
     String ret = null;
 
@@ -238,15 +237,10 @@ public class StudyFileUtil {
       charsetName = detectFileEncoding(file);
     }
 
-    // 区切り文字が指定されていない場合
-    if (delimiter == null) {
-      delimiter = "\n";
-    }
-
     try (InputStream in = file.getInputStream();
         BufferedReader br =
             new BufferedReader(new InputStreamReader(in, charsetName))) {
-      ret = br.lines().collect(Collectors.joining(delimiter));
+      ret = br.lines().collect(Collectors.joining());
       log.info("", new StringBuffer().append(path).append(" file loaded."));
     } catch (IOException e) {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));

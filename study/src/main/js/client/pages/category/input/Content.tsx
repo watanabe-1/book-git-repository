@@ -5,8 +5,17 @@ import Result from './Result';
 import Stepper from '../../../components/Stepper';
 import BodysHead from '../../../components/BodysHead';
 import Col from 'react-bootstrap/Col';
+import { Category, FormConfirmData } from '../../../../@types/studyUtilType';
 
-export const Context = createContext(null);
+type CategoryInput = {
+  form: Category;
+  confirm: FormConfirmData[];
+};
+
+export const Context = createContext<{
+  currentState: CategoryInput;
+  setCurrentState: React.Dispatch<React.SetStateAction<CategoryInput>>;
+} | null>(null);
 
 const steps = [
   'カテゴリー情報登録フォーム',
@@ -28,7 +37,10 @@ const getStepContent = (stepIndex, handleNext, handleBack, handleReset) => {
 };
 
 const Content = () => {
-  const [currentState, setCurrentState] = useState({});
+  const [currentState, setCurrentState] = useState<CategoryInput>({
+    form: null,
+    confirm: null,
+  });
   const value = {
     currentState,
     setCurrentState,

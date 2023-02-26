@@ -18,7 +18,8 @@ public class StudyUtil {
     AppUserDetails userDetails =
         (AppUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-    return userDetails.getAccount().getUserId();// get logged in userId
+    // ログインユーザーのユーザーIDを取得
+    return userDetails.getAccount().getUserId();
   }
 
   /**

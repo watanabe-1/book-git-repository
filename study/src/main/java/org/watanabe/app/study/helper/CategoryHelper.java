@@ -70,7 +70,7 @@ public class CategoryHelper {
         MultipartFile catIcon = catForm.getCatIcon();
 
         // 画像をアップロードしたとき
-        if (!catIcon.isEmpty()) {
+        if (!Objects.isNull(catIcon) && !catIcon.isEmpty()) {
           // アップロードファイルを一時保存するためのHelperメソッドを呼び出す
           // 一時保存したファイルの識別するためのIDがHelperメソッドの返り値として返却される
           String imgId = uploadHelper.saveTemporaryFile(catIcon);
@@ -89,7 +89,10 @@ public class CategoryHelper {
         // フォームの値をエンティティにコピーし、共通項目をセット
         StudyBeanUtil.copyAndSetStudyEntityProperties(catForm, cat);
         // imgaeIdをセット
-        cat.setImgId(catForm.getImgIds().getImgId());
+        if (StudyStringUtil.isNullOrEmpty(cat.getImgId())) {
+          cat.setImgId(catForm.getImgIds().getImgId());
+        }
+
 
         updCnt += categoryService.updateOne(cat, catForm.getCatCode());
       }

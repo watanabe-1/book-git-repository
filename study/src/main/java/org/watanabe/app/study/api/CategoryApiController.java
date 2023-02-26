@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.watanabe.app.study.dto.data.FormConfirmData;
+import org.watanabe.app.study.dto.list.CategoryFormList;
 import org.watanabe.app.study.dto.ui.CategoryUi;
 import org.watanabe.app.study.entity.Category;
 import org.watanabe.app.study.form.CategoryForm;
@@ -63,9 +64,6 @@ public class CategoryApiController extends ApiController {
   /**
    * 画面情報取得
    * 
-   * @param form 送信されたデータ
-   * @param model モデル
-   * @param date 開いている画面の指定されている日付け
    * @return json(カテゴリーごとの家計簿情報)
    */
   @RequestMapping(value = "/category/info", method = RequestMethod.GET)
@@ -147,5 +145,37 @@ public class CategoryApiController extends ApiController {
     return null;
 
   }
+
+  /**
+   * 画面情報取得
+   * 
+   * @return json(カテゴリーの一覧)
+   */
+  @RequestMapping(value = "/category/listdata", method = RequestMethod.GET)
+  @ResponseBody
+  public CategoryFormList getListData() {
+    return categoryService.findAlljoinImage();
+  }
+
+  /**
+   * カテゴリー情報一覧更新
+   * 
+   * @param catListParam 送信されたデータ
+   * @param result エラーチェック]-+結果
+   * @param model モデル
+   * @return json(カテゴリーの一覧)
+   */
+  @RequestMapping(value = "/category/listdataUpdate", method = RequestMethod.POST)
+  @ResponseBody
+  public CategoryFormList listUpdate(@Validated @ModelAttribute CategoryFormList catListParam,
+      BindingResult result, ModelAndView model) throws BindException {
+    throwBindExceptionIfNeeded(result);
+
+    // カテゴリー情報の更新
+    categoryHelper.updatCeategorys(catListParam);
+
+    return getListData();
+  }
+
 
 }

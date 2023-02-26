@@ -15,7 +15,7 @@ const FileBoxOnValidate = (props: {
 }) => {
   return (
     <Form.Group controlId={props.name}>
-      <Form.Label>{props.title}</Form.Label>
+      {props.title ? <Form.Label>{props.title}</Form.Label> : null}
       <Form.Control
         type="file"
         accept={props.accept}

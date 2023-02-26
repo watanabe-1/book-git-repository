@@ -118,7 +118,10 @@ public class StudyJsUtil {
     try {
       ret = engine.eval("window.renderAppOnServer()").toString();
     } catch (ScriptException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      // log.error("", Arrays.asList(e.getStackTrace()).stream()
+      // .map(line -> line.toString()).collect(Collectors.joining("\n")));
+      throw new BusinessException(
+          ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
     return new StringBuffer()
         .append(addRoute(ret))
@@ -232,7 +235,7 @@ public class StudyJsUtil {
    * @param path パス
    */
   public static String readJsFile(String path) {
-    return StudyFileUtil.readClassPathFile(path, StandardCharsets.UTF_8.name(), "");
+    return StudyFileUtil.readClassPathFile(path, StandardCharsets.UTF_8.name());
   }
 
   /**
@@ -258,8 +261,8 @@ public class StudyJsUtil {
     );
     try {
       engine.eval(String.format(
-          "window = { location: { hostname: 'localhost' }, isServer: true, requestUrl: \"%s\" }",
-          request.getRequestURI()));
+          "window = { location: { hostname: 'localhost' }, isServer: true, requestUrl: \"%s\", contextPath: \"%s\" }",
+          request.getRequestURI(), request.getContextPath()));
 
       if (!Objects.isNull(serverApi)) {
         engine.put("api", serverApi);

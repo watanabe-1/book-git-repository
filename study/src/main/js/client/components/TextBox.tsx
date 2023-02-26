@@ -5,20 +5,27 @@ import Form from 'react-bootstrap/Form';
  *
  * @returns form内のテキストボックス
  */
-const TextBox = (props: {
-  title: string;
+const TextBox = ({
+  title,
+  name,
+  value,
+  onChange,
+  hidden = false,
+}: {
+  title?: string;
   name: string;
-  value: any;
-  onChange;
+  value?: any;
+  onChange?;
+  hidden?: boolean;
 }) => {
   return (
-    <Form.Group controlId={props.name}>
-      <Form.Label>{props.title}</Form.Label>
+    <Form.Group controlId={name}>
+      {title ? <Form.Label>{title}</Form.Label> : null}
       <Form.Control
-        type="text"
-        name={props.name}
-        value={props.value}
-        onChange={props.onChange}
+        type={hidden ? 'hidden' : 'text'}
+        name={name}
+        value={value}
+        onChange={onChange}
       />
     </Form.Group>
   );

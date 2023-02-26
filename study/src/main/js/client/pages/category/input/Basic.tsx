@@ -50,7 +50,7 @@ const Basic = (props) => {
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form) => {
+  const handleSubmit = async (form: Category) => {
     const res = await fetchConfirm(form);
     const json = await res.json();
 

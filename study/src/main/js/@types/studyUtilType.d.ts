@@ -42,6 +42,14 @@ export type Category = {
   updUser: String;
   catIcon: any;
   imgIds: Image;
+  delete: string;
+};
+
+/**
+ * カテゴリーリスト
+ */
+export type CategoryFormList = {
+  catDataList: Category[];
 };
 
 /**

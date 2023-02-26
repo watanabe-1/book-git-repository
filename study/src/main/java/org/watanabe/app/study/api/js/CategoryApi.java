@@ -26,4 +26,13 @@ public class CategoryApi implements ServerApi {
   public String getInfo() {
     return StudyStringUtil.objectToJsonStr(categoryApiController.getInfo());
   }
+
+  /**
+   * 画面リスト情報取得
+   * 
+   * @return 画面リスト情報
+   */
+  public String getListData() {
+    return StudyStringUtil.objectToJsonStr(categoryApiController.getListData());
+  } 
 }

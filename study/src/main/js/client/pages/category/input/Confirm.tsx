@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 
 const Confirm = (props) => {
   const { currentState } = useContext(Context);
+  const form = currentState.form;
 
   const onSubmit = async () => {
     //alert(JSON.stringify(currentState));

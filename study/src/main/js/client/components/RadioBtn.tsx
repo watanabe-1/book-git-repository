@@ -15,7 +15,7 @@ const RadioBtn = (props: {
 }) => {
   return (
     <Form.Group controlId={props.name}>
-      <Form.Label>{props.title}</Form.Label>
+      {props.title ? <Form.Label>{props.title}</Form.Label> : null}
       <br />
       {props.typeList.map((i) => (
         <Form.Check

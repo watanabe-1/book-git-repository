@@ -15,7 +15,7 @@ const SelectBox = (props: {
 }) => {
   return (
     <Form.Group controlId={props.name}>
-      <Form.Label>{props.title}</Form.Label>
+      {props.title ? <Form.Label>{props.title}</Form.Label> : null}
       <Form.Select name={props.name} onChange={props.onChange}>
         {props.typeList.map((i) => (
           <option selected={i.code == props.value} value={i.code}>
