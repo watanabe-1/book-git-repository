@@ -63,7 +63,7 @@ public class CategoryHelper {
     // 全件数送信されるため、変更してなくても更新される。とりあえず仮で実装
     int updCnt = 0;
     for (CategoryForm catForm : catListParam.getCatDataList()) {
-      if (DeleteFlag.isDelete(catForm.getDeleteFlag())) {
+      if (DeleteFlag.isDelete(catForm.getDelete())) {
         updCnt += categoryService.deleteOne(catForm.getCatCode());
       } else {
         // アップロードしたICON

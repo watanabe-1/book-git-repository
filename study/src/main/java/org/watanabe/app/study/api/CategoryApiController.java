@@ -154,7 +154,10 @@ public class CategoryApiController extends ApiController {
   @RequestMapping(value = "/category/listdata", method = RequestMethod.GET)
   @ResponseBody
   public CategoryFormList getListData() {
-    return categoryService.findAlljoinImage();
+    CategoryFormList catFormList = categoryService.findAlljoinImage();
+    StudyBeanUtil.setStudyEntityListPropertiesNull(catFormList.getCatDataList());
+
+    return catFormList;
   }
 
   /**

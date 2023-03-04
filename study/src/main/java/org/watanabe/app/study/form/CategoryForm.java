@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.watanabe.app.common.validation.UploadFileMaxSize;
 import org.watanabe.app.common.validation.UploadFileMediaType;
 import org.watanabe.app.common.validation.UploadFileNotEmpty;
+import org.watanabe.app.study.entity.Entity;
 import org.watanabe.app.study.entity.Image;
 import org.watanabe.app.study.util.StudyStringUtil;
 import lombok.Data;
@@ -19,7 +20,7 @@ import lombok.Setter;
  *
  */
 @Data
-public class CategoryForm implements Serializable, Form {
+public class CategoryForm implements Serializable, Form, Entity {
 
   /* シリアルキー. */
   private String serialKey;
@@ -81,7 +82,7 @@ public class CategoryForm implements Serializable, Form {
   /* 削除フラグ. */
   @Getter
   @Setter
-  private String deleteFlag;
+  private String delete;
 
 
   /**

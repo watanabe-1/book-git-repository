@@ -1,5 +1,6 @@
 import { ErrorResults } from '../../@types/studyUtilType';
 import { CommonConst } from '../../constant/commonConstant';
+import { format, objToFormData } from './studyYupUtil';
 
 /**
  * aタグにセットされているhref属性にパラメーターをセットする共通関数
@@ -689,81 +690,4 @@ export function getInputFile(event: React.ChangeEvent<HTMLInputElement>) {
   return event.currentTarget.files !== null
     ? event.currentTarget.files[0]
     : null;
-}
-
-/**
- * リスト表示用の一意の名称の取得
- * @param classname クラス名
- * @param base ベース
- * @param index インデックス
- * @returns
- */
-export function getListItemId(classname: string, base: string, index: number) {
-  return (
-    classname +
-    CommonConst.FORMAT_SPECIFIER +
-    index +
-    CommonConst.FORMAT_SPECIFIER +
-    base
-  );
-}
-
-/**
- * 簡易的なformat用関数
- * @param format  対象
- * @param args 変換用引数
- * @returns 返還後の値
- */
-export function format(format: string, args: string[]) {
-  const formatArray = format.split(CommonConst.FORMAT_SPECIFIER);
-  let ret = '';
-  if (formatArray.length > 1) {
-    formatArray.forEach((str, index) => {
-      ret = ret + str;
-      if (args[index]) {
-        ret = ret + args[index];
-      }
-    });
-  } else {
-    ret = format;
-  }
-  return ret;
-}
-
-/**
- * オブジェクトの並列探索を行いFormDataに変換
- * @param obj 対象
- * @return FormData
- */
-function objToFormData(obj: {}) {
-  const data = new FormData();
-  let stack = [];
-
-  stack.push(obj);
-
-  while (stack.length) {
-    for (const j in stack[0]) {
-      if (
-        stack[0][j] &&
-        stack[0][j].constructor === Object &&
-        !stack[0][j].length
-      ) {
-        // console.log(`pushu側${j} : ${stack[0][j]}`);
-        const childStack = {};
-        for (const k in stack[0][j]) {
-          // 再帰的に検索する場合key情報を引き継ぐ
-          childStack[j + '.' + k] = stack[0][j][k];
-        }
-        // 取得結果がobjectの場合は再帰的に探索するため対象に改めて追加
-        stack.push(childStack);
-      } else {
-        // console.log(`${j} : ${stack[0][j]}`);
-        const formattedKey = format(j, ['[', '].']);
-        // console.log('format:' + formattedKey);
-        if (stack[0][j]) data.append(formattedKey, stack[0][j]);
-      }
-    }
-    stack.shift();
-  }
-  return data;
 }

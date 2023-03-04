@@ -1,6 +1,7 @@
 package org.watanabe.app.study.util;
 
 import java.util.Date;
+import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.watanabe.app.study.entity.Entity;
 
@@ -38,6 +39,29 @@ public class StudyBeanUtil {
     }
     target.setUpdUser(user);
     target.setUpdDate(now);
+  }
+
+  /**
+   * studyで固定使用しているカラムの値にnullをセットする
+   * 
+   * @param target セット対象
+   */
+  public static void setStudyEntityPropertiesNull(Entity target) {
+    target.setInsUser(null);
+    target.setInsDate(null);
+    target.setUpdUser(null);
+    target.setUpdDate(null);
+  }
+
+  /**
+   * studyで固定使用しているカラムの値にnullをセットする
+   * 
+   * @param target セット対象
+   */
+  public static void setStudyEntityListPropertiesNull(List<? extends Entity> targetList) {
+    targetList.forEach((form) -> {
+      StudyBeanUtil.setStudyEntityPropertiesNull(form);
+    });
   }
 
 }

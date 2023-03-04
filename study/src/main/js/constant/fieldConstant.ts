@@ -16,7 +16,7 @@ export namespace FieldConst {
     export const UPD_USER = 'updUser';
     export const CAT_ICON = 'catIcon';
     export const IMG_IDS = 'imgIds';
-    export const DELETE = 'deleteFlag';
+    export const DELETE = 'delete';
   }
 
   /**

@@ -10,17 +10,21 @@ import {
   getServerErrMsg,
   isServerErr,
   getInputFile,
-  getListItemId,
   getContextPath,
   addContextPath,
   pathJoin,
 } from '../../../../study/util/studyUtil';
-import { addServerValidateFuncs } from '../../../../study/util/studyYupUtil';
+import {
+  addServerValidateFuncs,
+  buildListItemId,
+  buildListTableFormObj,
+} from '../../../../study/util/studyYupUtil';
 import {
   CategoryUi,
   Category,
   CategoryFormList,
   ErrorResults,
+  buildListTableFormObjConfig,
 } from '../../../../@types/studyUtilType';
 import { FieldConst } from '../../../../constant/fieldConstant';
 import { ClassConst } from '../../../../constant/classConstant';
@@ -122,94 +126,46 @@ const ListTable = () => {
   console.log(info);
   console.log(list);
 
+  const toObjConfig: buildListTableFormObjConfig = {
+    className: ClassConst.CAT_DATA_LIST,
+    list: [
+      {
+        name: FieldConst.Category.CAT_CODE,
+        addition: {
+          yup: yup.string().required(),
+          isServerValidation: true,
+          errData: errData,
+          setErrData: setErrData,
+        },
+      },
+      {
+        name: FieldConst.Category.CAT_NAME,
+        addition: {
+          yup: yup.string().required(),
+          isServerValidation: true,
+          errData: errData,
+          setErrData: setErrData,
+        },
+      },
+      {
+        name: FieldConst.Category.CAT_ICON,
+        addition: {
+          yup: yup.mixed(),
+          isServerValidation: true,
+          errData: errData,
+          setErrData: setErrData,
+        },
+      },
+    ],
+  };
+
+  const listTableFormObj = buildListTableFormObj(list.catDataList, toObjConfig);
   // //yupで使用するスキーマの設定
-  const additions = {};
+  const additions = listTableFormObj.additions;
   // 初期値
-  const initialValues = {};
+  const initialValues = listTableFormObj.initialValues;
   // リスト表示用一意の識別名称
-  const nameList = [];
-  list.catDataList.forEach((value, index) => {
-    const names = {};
-    names[FieldConst.Category.CAT_CODE] = getListItemId(
-      ClassConst.CAT_DATA_LIST,
-      FieldConst.Category.CAT_CODE,
-      index
-    );
-    names[FieldConst.Category.CAT_NAME] = getListItemId(
-      ClassConst.CAT_DATA_LIST,
-      FieldConst.Category.CAT_NAME,
-      index
-    );
-    names[FieldConst.Category.NOTE] = getListItemId(
-      ClassConst.CAT_DATA_LIST,
-      FieldConst.Category.NOTE,
-      index
-    );
-    names[FieldConst.Category.IMG_TYPE] = getListItemId(
-      ClassConst.CAT_DATA_LIST,
-      FieldConst.Category.IMG_TYPE,
-      index
-    );
-    names[FieldConst.Category.IMG_ID] = getListItemId(
-      ClassConst.CAT_DATA_LIST,
-      FieldConst.Category.IMG_ID,
-      index
-    );
-    names[FieldConst.Category.CAT_TYPE] = getListItemId(
-      ClassConst.CAT_DATA_LIST,
-      FieldConst.Category.CAT_TYPE,
-      index
-    );
-    names[FieldConst.Category.ACTIVE] = getListItemId(
-      ClassConst.CAT_DATA_LIST,
-      FieldConst.Category.ACTIVE,
-      index
-    );
-    names[FieldConst.Category.CAT_ICON] = getListItemId(
-      ClassConst.CAT_DATA_LIST,
-      FieldConst.Category.CAT_ICON,
-      index
-    );
-    names[FieldConst.Category.IMG_IDS] = getListItemId(
-      ClassConst.CAT_DATA_LIST,
-      FieldConst.Category.IMG_IDS,
-      index
-    );
-    names[FieldConst.Category.DELETE] = getListItemId(
-      ClassConst.CAT_DATA_LIST,
-      FieldConst.Category.DELETE,
-      index
-    );
-    nameList[index] = names;
-
-    // スキーマ設定用
-    additions[names[FieldConst.Category.CAT_CODE]] = yup.string().required();
-    additions[names[FieldConst.Category.CAT_NAME]] = yup.string().required();
-    additions[names[FieldConst.Category.CAT_ICON]] = yup.mixed();
-    // サーバーでのバリデーション結果を反映する関数をセット
-    addServerValidateFuncs(
-      additions,
-      [
-        names[FieldConst.Category.CAT_CODE],
-        names[FieldConst.Category.CAT_NAME],
-        names[FieldConst.Category.CAT_ICON],
-      ],
-      errData,
-      setErrData
-    );
-
-    // 初期値設定用
-    initialValues[names[FieldConst.Category.CAT_CODE]] = value.catCode;
-    initialValues[names[FieldConst.Category.CAT_NAME]] = value.catName;
-    initialValues[names[FieldConst.Category.NOTE]] = value.note;
-    initialValues[names[FieldConst.Category.IMG_TYPE]] = value.imgType;
-    initialValues[names[FieldConst.Category.CAT_TYPE]] = value.catType;
-    initialValues[names[FieldConst.Category.IMG_ID]] = value.imgIds.imgId;
-    initialValues[names[FieldConst.Category.ACTIVE]] = value.active;
-    initialValues[names[FieldConst.Category.CAT_ICON]] = value.catIcon;
-    initialValues[names[FieldConst.Category.IMG_IDS]] = value.imgIds;
-    initialValues[names[FieldConst.Category.DELETE]] = value.delete;
-  });
+  const nameList = listTableFormObj.nameList;
 
   // console.log('initialValuesです。');
   console.log(initialValues);
@@ -219,7 +175,7 @@ const ListTable = () => {
   // 初期値がキチンとセットされたことを確認して画面に表示
   if (
     !initialValues[
-      getListItemId(ClassConst.CAT_DATA_LIST, FieldConst.Category.CAT_CODE, 0)
+      buildListItemId(ClassConst.CAT_DATA_LIST, FieldConst.Category.CAT_CODE, 0)
     ]
   )
     return <BodysLodingSpinner />;
@@ -342,12 +298,24 @@ const ListTable = () => {
                         </td>
                         <td>
                           <label>
-                            {values[names[FieldConst.Category.IMG_ID]]}
+                            {
+                              values[names[FieldConst.Category.IMG_IDS]][
+                                FieldConst.Category.IMG_ID
+                              ]
+                            }
                           </label>
                           <TextBox
                             title={null}
-                            name={names[FieldConst.Category.IMG_ID]}
-                            value={values[names[FieldConst.Category.IMG_ID]]}
+                            name={
+                              names[FieldConst.Category.IMG_IDS] +
+                              '.' +
+                              [FieldConst.Category.IMG_ID]
+                            }
+                            value={
+                              values[names[FieldConst.Category.IMG_IDS]][
+                                FieldConst.Category.IMG_ID
+                              ]
+                            }
                             onChange={handleChange}
                             hidden
                           />

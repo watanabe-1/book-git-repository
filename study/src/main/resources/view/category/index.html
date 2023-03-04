@@ -60,7 +60,7 @@
                   th:each="cat : ${isDeleteList}"
                   th:value="${cat.value}"
                   th:text="${cat.name}"
-                  th:field="*{catDataList[__${st.index}__].deleteFlag}"
+                  th:field="*{catDataList[__${st.index}__].delete}"
                 />
               </td>
               <td class="center" hidden>

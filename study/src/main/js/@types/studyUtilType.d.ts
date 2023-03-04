@@ -125,3 +125,19 @@ export type FormConfirmData = {
   value: string;
   type: string;
 };
+
+/**
+ * ListTableForm作成時使用object作成メソッドで使用するconfigのタイプ
+ */
+export type buildListTableFormObjConfig = {
+  className: string;
+  list: {
+    name: string;
+    addition: {
+      yup: RequiredStringSchema<string, AnyObject>;
+      isServerValidation: boolean;
+      errData: ErrorResults;
+      setErrData: (value: React.SetStateAction<{}>) => void;
+    };
+  }[];
+};
