@@ -118,8 +118,7 @@ public class StudyJsUtil {
     try {
       ret = engine.eval("window.renderAppOnServer()").toString();
     } catch (ScriptException e) {
-      // log.error("", Arrays.asList(e.getStackTrace()).stream()
-      // .map(line -> line.toString()).collect(Collectors.joining("\n")));
+      log.error("", e, "");
       throw new BusinessException(
           ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }

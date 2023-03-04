@@ -56,7 +56,7 @@ book-git-repository\study に使用しているライブラリ情報が入って
 
 ### その他
 
-- ログは C:\logs\study 配下に出力
+- ログは book-git-repository\study\logs 配下に出力
 - -DB 定義は book-git-repository\spreadsheet\DB 定義.xlsx
   - Google スプレッドシートに取り込み、book-git-repository\spreadsheet\gas 配下のマクロファイルを設定すれば create 文生成などのマクロが使用可能
 - 家計簿データの例は book-git-repository\example 配下に
