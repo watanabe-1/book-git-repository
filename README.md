@@ -38,11 +38,7 @@ book-git-repository\study に使用しているライブラリ情報が入って
 1. gradle を使用し eclips プロジェクトの作成
    - book-git-repository\study で`gradlew eclips`コマンドを実施
 2. eclips に gradle プロジェクトとして import
-3. プロジェクトを選択して[右クリック] -> [プロパティ] -> [Java のビルドパス]
-   - [study/main/java]：[bin/main] -> [build/classes/java/main]に変更
-   - [src/main/resources]：[bin/main] -> [build/resources/main]に変更
-   - 上記設定を行うと java ファイル編集、コンパイル後に自動的にサーバーに反映されるようになる
-4. js のファイル監視がされている状態では js ファイルを編集、保存すると自動的にトランスパイルされサーバに配置される
+3. js のファイル監視がされている状態では js ファイルを編集、保存すると自動的にトランスパイルされサーバに配置される
 
 ### デバッグ(eclips)
 
