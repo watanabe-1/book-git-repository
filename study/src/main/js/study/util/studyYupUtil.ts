@@ -1,11 +1,11 @@
 import BaseSchema from 'yup/lib/schema';
 import { AnyObject, ObjectShape } from 'yup/lib/object';
-import { getServerErrMsg, isServerErr } from './studyUtil';
 import { CommonConst } from '../../constant/commonConstant';
 import {
   ErrorResults,
   buildListTableFormObjConfig,
 } from '../../@types/studyUtilType';
+import { format } from './studyUtil';
 
 /**
  * サーバーでバリデーションを行った結果を反映するようの関数をyupにセット
@@ -57,13 +57,69 @@ export function addServerValidateFuncs(
 }
 
 /**
- * リスト表示用の一意の名称の取得
+ * サーバーでエラーがあった場合のエラーメッセージを取得
+ * @param errData エラー結果格納変数
+ * @param key エラー対象判別用key
+ * @param setErrData エラー結果格納変数更新メソッド
+ * @returns エラーメッセージ
+ */
+export function getServerErrMsg(
+  errData: ErrorResults,
+  key: string,
+  setErrData: (value: React.SetStateAction<{}>) => void
+) {
+  console.log('エラーメッセージ');
+  console.log(errData);
+  // buildEscapeListItemIdメソッドでkeyを作成していたら変換
+  const formattedKey = formatEscapeListItemId(key);
+  if (errData) {
+    const errors = errData.errorResults;
+    for (let i = 0; i < errors.length; ++i) {
+      const FieldName = errors[i].itemPath;
+      if (FieldName == formattedKey) {
+        const cloneErrData = errData;
+        // エラー配列から対象の初期化
+        cloneErrData.errorResults[i].itemPath = '';
+        setErrData(cloneErrData);
+        return errors[i].message;
+      }
+    }
+  }
+  return 'エラーです';
+}
+/**
+ * サーバーでエラーがあったかの判定を行う
+ * @param errData エラー結果格納変数
+ * @param key エラー対象判別用key
+ * @returns 判定結果
+ */
+
+export function isServerErr(errData: ErrorResults, key: string) {
+  console.log(errData);
+  // buildEscapeListItemIdメソッドでkeyを作成していたら変換
+  const formattedKey = formatEscapeListItemId(key);
+  if (errData) {
+    const errors = errData.errorResults;
+    console.log('エラー：' + errors);
+    for (let i = 0; i < errors.length; ++i) {
+      const FieldName = errors[i].itemPath;
+      if (FieldName == formattedKey) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+/**
+ * リスト表示用のエスケープ済みの一意の名称の取得
  * @param classname クラス名
  * @param base ベース
  * @param index インデックス
  * @returns
  */
-export function buildListItemId(
+export function buildEscapeListItemId(
   classname: string,
   base: string,
   index: number
@@ -78,25 +134,25 @@ export function buildListItemId(
 }
 
 /**
- * 簡易的なformat用関数
- * @param format  対象
+ * エスケープをおこなっていたbuildEscapeListItemIdからサーバーに返却用のIDに変換
+ * @param escapeListItemId  対象
  * @param args 変換用引数
  * @returns 返還後の値
  */
-export function format(format: string, args: string[]) {
-  const formatArray = format.split(CommonConst.FORMAT_SPECIFIER);
-  let ret = '';
-  if (formatArray.length > 1) {
-    formatArray.forEach((str, index) => {
-      ret = ret + str;
-      if (args[index] && formatArray.length != index + 1) {
-        ret = ret + args[index];
+export function formatEscapeListItemId(escapeListItemId: string) {
+  const args = escapeListItemId
+    .split(CommonConst.FORMAT_SPECIFIER)
+    .map((target, index) => {
+      if (index == 0) {
+        return '[';
+      } else if (index == 1) {
+        return '].';
+      } else {
+        return '.';
       }
     });
-  } else {
-    ret = format;
-  }
-  return ret;
+  // console.log('format:' + j);
+  return format(escapeListItemId, args);
 }
 
 /**
@@ -127,20 +183,8 @@ export function objToFormData(obj: {}) {
         stack.push(childStack);
       } else {
         // console.log(`${j} : ${stack[0][j]}`);
-        // buildListItemIdメソッドでkeyを作成していたらformatで変換
-        const args = j
-          .split(CommonConst.FORMAT_SPECIFIER)
-          .map((target, index) => {
-            if (index == 0) {
-              return '[';
-            } else if (index == 1) {
-              return '].';
-            } else {
-              return '.';
-            }
-          });
-        // console.log('format:' + j);
-        const formattedKey = format(j, args);
+        // buildEscapeListItemIdメソッドでkeyを作成していたら変換
+        const formattedKey = formatEscapeListItemId(j);
         // console.log('formatted:' + formattedKey);
         // 中身がないものやかぶりは送らない
         if (stack[0][j] && !data.get(formattedKey)) {
@@ -214,11 +258,11 @@ export function buildListTableFormObj(
           // 取得結果がobjectの場合は再帰的に探索するため対象に改めて追加
           stack.push(childStack);
           // 送り返すように初期値に保持
-          names[j] = buildListItemId(config.className, j, index);
+          names[j] = buildEscapeListItemId(config.className, j, index);
           initialValues[names[j]] = stack[0][j];
         } else {
           // console.log(j);
-          names[j] = buildListItemId(config.className, j, index);
+          names[j] = buildEscapeListItemId(config.className, j, index);
           // 個別の設定が指定されていなかったらform更新可能データ対象外
           if (mutchconfig) {
             // console.log(j);

@@ -7,16 +7,18 @@ import { onServer, executeFirst } from '../../../on-server';
 import {
   fetchGet,
   fetchPost,
-  getServerErrMsg,
-  isServerErr,
   getInputFile,
   getContextPath,
   addContextPath,
   pathJoin,
 } from '../../../../study/util/studyUtil';
 import {
+  getServerErrMsg,
+  isServerErr,
+} from '../../../../study/util/studyYupUtil';
+import {
   addServerValidateFuncs,
-  buildListItemId,
+  buildEscapeListItemId,
   buildListTableFormObj,
 } from '../../../../study/util/studyYupUtil';
 import {
@@ -175,7 +177,11 @@ const ListTable = () => {
   // 初期値がキチンとセットされたことを確認して画面に表示
   if (
     !initialValues[
-      buildListItemId(ClassConst.CAT_DATA_LIST, FieldConst.Category.CAT_CODE, 0)
+      buildEscapeListItemId(
+        ClassConst.CAT_DATA_LIST,
+        FieldConst.Category.CAT_CODE,
+        0
+      )
     ]
   )
     return <BodysLodingSpinner />;

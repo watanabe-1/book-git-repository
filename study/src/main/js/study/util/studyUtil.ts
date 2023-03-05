@@ -1,6 +1,5 @@
-import { ErrorResults } from '../../@types/studyUtilType';
 import { CommonConst } from '../../constant/commonConstant';
-import { format, objToFormData } from './studyYupUtil';
+import { objToFormData } from './studyYupUtil';
 
 /**
  * aタグにセットされているhref属性にパラメーターをセットする共通関数
@@ -628,59 +627,6 @@ export async function fetchPost(
   // console.log(json);
   return res;
 }
-
-/**
- * サーバーでエラーがあった場合のエラーメッセージを取得
- * @param errData エラー結果格納変数
- * @param setErrData エラー結果格納変数更新メソッド
- * @returns エラーメッセージ
- */
-export function getServerErrMsg(
-  errData: ErrorResults,
-  target: string,
-  setErrData: (value: React.SetStateAction<{}>) => void
-) {
-  console.log('エラーメッセージ');
-  console.log(errData);
-  const formatedTarget = format(target, ['[', '].']);
-  if (errData) {
-    const errors = errData.errorResults;
-    for (let i = 0; i < errors.length; ++i) {
-      const FieldName = errors[i].itemPath;
-      if (FieldName == formatedTarget) {
-        const cloneErrData = errData;
-        // エラー配列から対象の初期化
-        cloneErrData.errorResults[i].itemPath = '';
-        setErrData(cloneErrData);
-        return errors[i].message;
-      }
-    }
-  }
-  return 'エラーです';
-}
-
-/**
- * サーバーでエラーがあったかの判定を行う
- * @param errData エラー結果格納変数
- * @returns 判定結果
- */
-export function isServerErr(errData: ErrorResults, target: string) {
-  console.log(errData);
-  const formatedTarget = format(target, ['[', '].']);
-  if (errData) {
-    const errors = errData.errorResults;
-    console.log('エラー：' + errors);
-    for (let i = 0; i < errors.length; ++i) {
-      const FieldName = errors[i].itemPath;
-      if (FieldName == formatedTarget) {
-        return false;
-      }
-    }
-  }
-
-  return true;
-}
-
 /**
  * inputのファイルを取得
  * @param event inputのチェンジイベント
@@ -690,4 +636,26 @@ export function getInputFile(event: React.ChangeEvent<HTMLInputElement>) {
   return event.currentTarget.files !== null
     ? event.currentTarget.files[0]
     : null;
+}
+
+/**
+ * 簡易的なformat用関数
+ * @param format  対象
+ * @param args 変換用引数
+ * @returns 返還後の値
+ */
+export function format(format: string, args: string[]) {
+  const formatArray = format.split(CommonConst.FORMAT_SPECIFIER);
+  let ret = '';
+  if (formatArray.length > 1) {
+    formatArray.forEach((str, index) => {
+      ret = ret + str;
+      if (args[index] && formatArray.length != index + 1) {
+        ret = ret + args[index];
+      }
+    });
+  } else {
+    ret = format;
+  }
+  return ret;
 }
