@@ -143,19 +143,44 @@ export function addContextPath(url: string): string {
 /**
  * パスを結合
  *
- * @return コンテキストパスを結合したパス
+ * @param base ベース
+ * @param add 追加対象
+ * @return 結合したパス
  */
 export function pathJoin(base: string, add: string): string {
-  const SLASH = '/';
-  // 先頭
-  const addHead = add.slice(0, 1);
-  // 末尾
-  const baseFoot = base.slice(-1);
+  return JoinBase(base, add, '/');
+}
 
-  if (baseFoot == SLASH) {
-    return addHead == SLASH ? base.slice(0, -1) + add : base + add;
+/**
+ * keyを結合
+ *
+ * @param base ベース
+ * @param add 追加対象
+ * @return 結合したパス
+ */
+export function keyJoin(base: string, add: string): string {
+  return JoinBase(base, add, '.');
+}
+
+/**
+ * 区切り文字で結合
+ *
+ * @param base ベース
+ * @param add 追加す対象
+ * @param separator 区切り文字1文字
+ * @return 結合したもの
+ */
+export function JoinBase(base: string, add: string, separator: string): string {
+  const len = separator.length;
+  // 先頭
+  const addHead = add.slice(0, len);
+  // 末尾
+  const baseFoot = base.slice(-len);
+
+  if (baseFoot == separator) {
+    return addHead == separator ? base.slice(0, -len) + add : base + add;
   } else {
-    return addHead == SLASH ? base + add : base + SLASH + add;
+    return addHead == separator ? base + add : base + separator + add;
   }
 }
 

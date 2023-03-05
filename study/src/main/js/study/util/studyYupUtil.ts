@@ -5,7 +5,7 @@ import {
   ErrorResults,
   buildListTableFormObjConfig,
 } from '../../@types/studyUtilType';
-import { format } from './studyUtil';
+import { format, keyJoin } from './studyUtil';
 
 /**
  * サーバーでバリデーションを行った結果を反映するようの関数をyupにセット
@@ -177,7 +177,7 @@ export function objToFormData(obj: {}) {
         const childStack = {};
         for (const k in stack[0][j]) {
           // 再帰的に検索する場合key情報を引き継ぐ
-          childStack[j + '.' + k] = stack[0][j][k];
+          childStack[keyJoin(j, k)] = stack[0][j][k];
         }
         // 取得結果がobjectの場合は再帰的に探索するため対象に改めて追加
         stack.push(childStack);
@@ -186,10 +186,11 @@ export function objToFormData(obj: {}) {
         // buildEscapeListItemIdメソッドでkeyを作成していたら変換
         const formattedKey = formatEscapeListItemId(j);
         // console.log('formatted:' + formattedKey);
-        // 中身がないものやかぶりは送らない
-        if (stack[0][j] && !data.get(formattedKey)) {
+        // 中身がないものはおくらない
+        if (stack[0][j]) {
           // console.log('type:' + Object.prototype.toString.call(stack[0][j]));
-          data.append(formattedKey, stack[0][j]);
+          // かぶりは上書き(基本的にかぶりはない想定)
+          data.set(formattedKey, stack[0][j]);
         }
       }
     }
@@ -203,19 +204,47 @@ export function objToFormData(obj: {}) {
  * @param obj 対象
  * @return 配列
  */
-// export function objToObjArray(obj: {}) {
-//   let objArray = [];
-//   for (const key in obj) {
-//     const keyArray = key.split(CommonConst.FORMAT_SPECIFIER);
-//     if (keyArray.length > 1) {
-//       const index = keyArray[1];
-//       const newKey = keyArray[2];
-//       objArray[index][newKey] = obj[key];
-//     }
-//   }
-
-//   return objArray;
-// }
+export function objToObjArray(obj: {}) {
+  let objArray: {}[] = [];
+  for (const key in obj) {
+    const keyArray = key.split(CommonConst.FORMAT_SPECIFIER);
+    if (keyArray.length > 1) {
+      let newObj = {};
+      // console.log(keyArray);
+      keyArray.forEach((value, index) => {
+        if (index == 1) {
+          // console.log(value);
+          if (objArray[value]) {
+            newObj = objArray[value];
+          } else {
+            objArray[value] = newObj;
+          }
+        } else if (index >= 2) {
+          // console.log(JSON.stringify(newObj[value]));
+          // console.log(JSON.stringify(objArray));
+          if (newObj[value]) {
+            newObj = newObj[value];
+          } else {
+            newObj[value] = {};
+          }
+          // 最終周の時
+          if (keyArray.length - 1 == index) {
+            // 他の項目とかぶりが生じた場合はそれはオブジェクトではなくなっているので
+            //判定を行うが基本的にかぶりが起きないように収支済みのためかぶりない想定
+            // またかぶりがあった場合は上書き
+            if (newObj && newObj.constructor === Object) {
+              newObj[value] = obj[key];
+            } else {
+              newObj = obj[key];
+            }
+          }
+        }
+      });
+    }
+  }
+  console.log(objArray);
+  return objArray;
+}
 
 /**
  * リストテーブルフォーム画面用にobj[]からobjに変換し、必要な情報を定義したオブジェクトを作成
@@ -233,7 +262,7 @@ export function buildListTableFormObj(
   // 初期値
   const initialValues = {};
   // リスト表示用一意の識別名称
-  const nameList = [];
+  const nameList: {}[] = [];
   objArray.forEach((obj, index) => {
     const names = {};
     let stack = [];
@@ -253,13 +282,10 @@ export function buildListTableFormObj(
           const childStack = {};
           for (const k in stack[0][j]) {
             // 再帰的に検索する場合key情報を引き継ぐ
-            childStack[j + '.' + k] = stack[0][j][k];
+            childStack[keyJoin(j, k)] = stack[0][j][k];
           }
           // 取得結果がobjectの場合は再帰的に探索するため対象に改めて追加
           stack.push(childStack);
-          // 送り返すように初期値に保持
-          names[j] = buildEscapeListItemId(config.className, j, index);
-          initialValues[names[j]] = stack[0][j];
         } else {
           // console.log(j);
           names[j] = buildEscapeListItemId(config.className, j, index);

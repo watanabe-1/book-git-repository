@@ -11,10 +11,12 @@ import {
   getContextPath,
   addContextPath,
   pathJoin,
+  keyJoin,
 } from '../../../../study/util/studyUtil';
 import {
   getServerErrMsg,
   isServerErr,
+  objToObjArray,
 } from '../../../../study/util/studyYupUtil';
 import {
   addServerValidateFuncs,
@@ -128,6 +130,7 @@ const ListTable = () => {
   console.log(info);
   console.log(list);
 
+  // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成するための設定
   const toObjConfig: buildListTableFormObjConfig = {
     className: ClassConst.CAT_DATA_LIST,
     list: [
@@ -160,9 +163,9 @@ const ListTable = () => {
       },
     ],
   };
-
+  // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成
   const listTableFormObj = buildListTableFormObj(list.catDataList, toObjConfig);
-  // //yupで使用するスキーマの設定
+  // yupで使用するスキーマの設定
   const additions = listTableFormObj.additions;
   // 初期値
   const initialValues = listTableFormObj.initialValues;
@@ -173,18 +176,16 @@ const ListTable = () => {
   console.log(initialValues);
   // スキーマにセット
   const schema = yup.object().shape(additions);
-
-  // 初期値がキチンとセットされたことを確認して画面に表示
-  if (
-    !initialValues[
-      buildEscapeListItemId(
-        ClassConst.CAT_DATA_LIST,
-        FieldConst.Category.CAT_CODE,
-        0
-      )
-    ]
-  )
-    return <BodysLodingSpinner />;
+  // if (
+  //   !initialValues[
+  //     buildEscapeListItemId(
+  //       ClassConst.CAT_DATA_LIST,
+  //       FieldConst.Category.CAT_CODE,
+  //       0
+  //     )
+  //   ]
+  // )
+  //   return <BodysLodingSpinner />;
 
   return (
     <div className="container">
@@ -305,21 +306,34 @@ const ListTable = () => {
                         <td>
                           <label>
                             {
-                              values[names[FieldConst.Category.IMG_IDS]][
-                                FieldConst.Category.IMG_ID
+                              values[
+                                names[
+                                  keyJoin(
+                                    FieldConst.Category.IMG_IDS,
+                                    FieldConst.Category.IMG_ID
+                                  )
+                                ]
                               ]
                             }
                           </label>
                           <TextBox
                             title={null}
                             name={
-                              names[FieldConst.Category.IMG_IDS] +
-                              '.' +
-                              [FieldConst.Category.IMG_ID]
+                              names[
+                                keyJoin(
+                                  FieldConst.Category.IMG_IDS,
+                                  FieldConst.Category.IMG_ID
+                                )
+                              ]
                             }
                             value={
-                              values[names[FieldConst.Category.IMG_IDS]][
-                                FieldConst.Category.IMG_ID
+                              values[
+                                names[
+                                  keyJoin(
+                                    FieldConst.Category.IMG_IDS,
+                                    FieldConst.Category.IMG_ID
+                                  )
+                                ]
                               ]
                             }
                             onChange={handleChange}
@@ -338,11 +352,21 @@ const ListTable = () => {
                           <img
                             src={addContextPath(
                               pathJoin(
-                                values[names[FieldConst.Category.IMG_IDS]][
-                                  FieldConst.Image.IMG_PATH
+                                values[
+                                  names[
+                                    keyJoin(
+                                      FieldConst.Category.IMG_IDS,
+                                      FieldConst.Image.IMG_PATH
+                                    )
+                                  ]
                                 ],
-                                values[names[FieldConst.Category.IMG_IDS]][
-                                  FieldConst.Image.IMG_NAME
+                                values[
+                                  names[
+                                    keyJoin(
+                                      FieldConst.Category.IMG_IDS,
+                                      FieldConst.Image.IMG_NAME
+                                    )
+                                  ]
                                 ]
                               )
                             )}
