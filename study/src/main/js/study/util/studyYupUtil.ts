@@ -6,6 +6,8 @@ import {
   buildListTableFormObjConfig,
 } from '../../@types/studyUtilType';
 import { format, keyJoin } from './studyUtil';
+import { Table } from 'react-bootstrap';
+import { FormikProps } from 'formik/dist/types';
 
 /**
  * サーバーでバリデーションを行った結果を反映するようの関数をyupにセット
@@ -263,6 +265,11 @@ export function buildListTableFormObj(
   const initialValues = {};
   // リスト表示用一意の識別名称
   const nameList: {}[] = [];
+  // テーブル：ヘッダー
+  const headers = [];
+  //テーブル: 行
+  const rows = [];
+
   objArray.forEach((obj, index) => {
     const names = {};
     let stack = [];
@@ -272,7 +279,7 @@ export function buildListTableFormObj(
     while (stack.length) {
       for (const j in stack[0]) {
         // 設定を取得
-        const mutchconfig = config.list.find((config) => config.name == j);
+        const mutchconfig = config.list.find((v) => v.name == j);
         if (
           stack[0][j] &&
           stack[0][j].constructor === Object &&
@@ -289,7 +296,7 @@ export function buildListTableFormObj(
         } else {
           // console.log(j);
           names[j] = buildEscapeListItemId(config.className, j, index);
-          // 個別の設定が指定されていなかったらform更新可能データ対象外
+          // 個別の設定が指定されていなかったら
           if (mutchconfig) {
             // console.log(j);
             // スキーマ設定用
@@ -317,14 +324,29 @@ export function buildListTableFormObj(
       }
       stack.shift();
     }
-
     nameList[index] = names;
   });
-
   const result = {
     additions: additions,
     initialValues: initialValues,
-    nameList: nameList,
+    getRows: (props: FormikProps<unknown>) => {
+      return nameList.map((names) => {
+        return {
+          cells: config.list.map((v) => {
+            return {
+              value: v.table.getCell(props, names),
+              hidden: v.table.hidden,
+            };
+          }),
+        };
+      });
+    },
+    headers: config.list.map((v) => {
+      return {
+        value: v.table.head,
+        hidden: v.table.hidden,
+      };
+    }),
   };
 
   console.log('nakami');

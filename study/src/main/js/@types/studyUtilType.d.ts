@@ -133,6 +133,11 @@ export type buildListTableFormObjConfig = {
   className: string;
   list: {
     name: string;
+    table: {
+      head: string;
+      getCell: (props: FormikProps<?>, names: {}) => JSX.Element;
+      hidden: boolean;
+    };
     addition: {
       yup: RequiredStringSchema<string, AnyObject>;
       isServerValidation: boolean;

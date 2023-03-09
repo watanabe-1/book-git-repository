@@ -49,6 +49,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import FileBoxOnValidateAndImg from '../../../components/FileBoxOnValidateAndImg';
 
 /**
  * カテゴリー リスト形式確認画面
@@ -135,7 +136,43 @@ const ListTable = () => {
     className: ClassConst.CAT_DATA_LIST,
     list: [
       {
+        name: FieldConst.Category.DELETE,
+        table: {
+          head: '削除',
+          getCell: (props: FormikProps<{}>, names: {}) => {
+            const name = names[FieldConst.Category.DELETE];
+            return (
+              <CheckBox
+                name={toObjConfig.className}
+                value={props.values[name]}
+                flag={info.delete}
+                onChange={props.handleChange}
+              />
+            );
+          },
+          hidden: false,
+        },
+        addition: null,
+      },
+      {
         name: FieldConst.Category.CAT_CODE,
+        table: {
+          head: 'カテゴリーコード',
+          getCell: (props: FormikProps<{}>, names: {}) => {
+            const name = names[FieldConst.Category.CAT_CODE];
+            return (
+              <TextBoxOnValidate
+                title={null}
+                name={name}
+                value={props.values[name]}
+                touched={props.touched[name]}
+                error={props.errors[name]}
+                onChange={props.handleChange}
+              />
+            );
+          },
+          hidden: true,
+        },
         addition: {
           yup: yup.string().required(),
           isServerValidation: true,
@@ -145,6 +182,23 @@ const ListTable = () => {
       },
       {
         name: FieldConst.Category.CAT_NAME,
+        table: {
+          head: 'カテゴリー名',
+          getCell: (props: FormikProps<{}>, names: {}) => {
+            const name = names[FieldConst.Category.CAT_NAME];
+            return (
+              <TextBoxOnValidate
+                title={null}
+                name={name}
+                value={props.values[name]}
+                touched={props.touched[name]}
+                error={props.errors[name]}
+                onChange={props.handleChange}
+              />
+            );
+          },
+          hidden: false,
+        },
         addition: {
           yup: yup.string().required(),
           isServerValidation: true,
@@ -153,7 +207,148 @@ const ListTable = () => {
         },
       },
       {
+        name: FieldConst.Category.CAT_TYPE,
+        table: {
+          head: 'カテゴリータイプ',
+          getCell: (props: FormikProps<{}>, names: {}) => {
+            const name = names[FieldConst.Category.CAT_TYPE];
+            return (
+              <RadioBtn
+                title={null}
+                name={name}
+                value={props.values[name]}
+                typeList={info.catTypes}
+                onChange={props.handleChange}
+              />
+            );
+          },
+          hidden: false,
+        },
+        addition: null,
+      },
+      {
+        name: FieldConst.Category.NOTE,
+        table: {
+          head: 'メモ',
+          getCell: (props: FormikProps<{}>, names: {}) => {
+            const name = names[FieldConst.Category.NOTE];
+            return (
+              <TextArea
+                title={null}
+                name={name}
+                value={props.values[name]}
+                onChange={props.handleChange}
+              />
+            );
+          },
+          hidden: false,
+        },
+        addition: null,
+      },
+      {
+        name: FieldConst.Category.IMG_TYPE,
+        table: {
+          head: '画像タイプ',
+          getCell: (props: FormikProps<{}>, names: {}) => {
+            const name = names[FieldConst.Category.IMG_TYPE];
+            return (
+              <SelectBox
+                title={null}
+                name={name}
+                value={props.values[name]}
+                typeList={info.imgTypes}
+                onChange={props.handleChange}
+              />
+            );
+          },
+          hidden: false,
+        },
+        addition: null,
+      },
+      {
+        name: keyJoin(FieldConst.Category.IMG_IDS, FieldConst.Category.IMG_ID),
+        table: {
+          head: '画像ID',
+          getCell: (props: FormikProps<{}>, names: {}) => {
+            const name =
+              names[
+                keyJoin(FieldConst.Category.IMG_IDS, FieldConst.Category.IMG_ID)
+              ];
+            return (
+              <>
+                <label>{props.values[name]}</label>
+                <TextBox
+                  title={null}
+                  name={name}
+                  value={props.values[name]}
+                  onChange={props.handleChange}
+                  hidden
+                />
+              </>
+            );
+          },
+          hidden: false,
+        },
+        addition: null,
+      },
+      {
+        name: FieldConst.Category.ACTIVE,
+        table: {
+          head: 'アクティブフラグ',
+          getCell: (props: FormikProps<{}>, names: {}) => {
+            const name = names[FieldConst.Category.ACTIVE];
+            return (
+              <CheckBox
+                name={name}
+                value={props.values[name]}
+                flag={info.active}
+                onChange={props.handleChange}
+              />
+            );
+          },
+          hidden: false,
+        },
+        addition: null,
+      },
+      {
         name: FieldConst.Category.CAT_ICON,
+        table: {
+          head: '画像',
+          getCell: (props: FormikProps<{}>, names: {}) => {
+            const name = names[FieldConst.Category.CAT_ICON];
+            return (
+              <FileBoxOnValidateAndImg
+                title={null}
+                name={name}
+                value={props.values[name]}
+                error={props.errors[name]}
+                accept="image/*"
+                src={addContextPath(
+                  pathJoin(
+                    props.values[
+                      names[
+                        keyJoin(
+                          FieldConst.Category.IMG_IDS,
+                          FieldConst.Image.IMG_PATH
+                        )
+                      ]
+                    ],
+                    props.values[
+                      names[
+                        keyJoin(
+                          FieldConst.Category.IMG_IDS,
+                          FieldConst.Image.IMG_NAME
+                        )
+                      ]
+                    ]
+                  )
+                )}
+                setFieldValue={props.setFieldValue}
+              ></FileBoxOnValidateAndImg>
+            );
+          },
+          hidden: false,
+        },
         addition: {
           yup: yup.mixed(),
           isServerValidation: true,
@@ -169,23 +364,15 @@ const ListTable = () => {
   const additions = listTableFormObj.additions;
   // 初期値
   const initialValues = listTableFormObj.initialValues;
-  // リスト表示用一意の識別名称
-  const nameList = listTableFormObj.nameList;
+  // テーブル：ヘッダー
+  const headers = listTableFormObj.headers;
+  //テーブル: 行
+  const getRows = listTableFormObj.getRows;
 
   // console.log('initialValuesです。');
   console.log(initialValues);
   // スキーマにセット
   const schema = yup.object().shape(additions);
-  // if (
-  //   !initialValues[
-  //     buildEscapeListItemId(
-  //       ClassConst.CAT_DATA_LIST,
-  //       FieldConst.Category.CAT_CODE,
-  //       0
-  //     )
-  //   ]
-  // )
-  //   return <BodysLodingSpinner />;
 
   return (
     <div className="container">
@@ -226,170 +413,22 @@ const ListTable = () => {
               <Table bordered>
                 <thead>
                   <tr>
-                    <th>削除</th>
-                    <th hidden>カテゴリーコード</th>
-                    <th>カテゴリー名</th>
-                    <th>カテゴリータイプ</th>
-                    <th>メモ</th>
-                    <th>画像タイプ</th>
-                    <th>画像ID</th>
-                    <th>アクティブフラグ</th>
-                    <th>画像</th>
+                    {headers.map((head) => {
+                      return <th hidden={head.hidden}>{head.value}</th>;
+                    })}
                   </tr>
                 </thead>
                 <tbody>
-                  {nameList.map((names, index) => {
+                  {getRows(props).map((row, index) => {
                     // console.log('valuesです');
                     // console.log(values);
                     // console.log(values.catCode0);
                     // console.log(values['catCode0']);
                     return (
                       <tr key={index}>
-                        <td>
-                          <CheckBox
-                            name={names[FieldConst.Category.DELETE]}
-                            value={values[names[FieldConst.Category.DELETE]]}
-                            flag={info.delete}
-                            onChange={handleChange}
-                          />
-                        </td>
-                        <td hidden>
-                          <TextBoxOnValidate
-                            title={null}
-                            name={names[FieldConst.Category.CAT_CODE]}
-                            value={values[names[FieldConst.Category.CAT_CODE]]}
-                            touched={
-                              touched[names[FieldConst.Category.CAT_CODE]]
-                            }
-                            error={errors[names[FieldConst.Category.CAT_CODE]]}
-                            onChange={handleChange}
-                          />
-                        </td>
-                        <td>
-                          <TextBoxOnValidate
-                            title={null}
-                            name={names[FieldConst.Category.CAT_NAME]}
-                            value={values[names[FieldConst.Category.CAT_NAME]]}
-                            touched={
-                              touched[names[FieldConst.Category.CAT_NAME]]
-                            }
-                            error={errors[names[FieldConst.Category.CAT_NAME]]}
-                            onChange={handleChange}
-                          />
-                        </td>
-                        <td>
-                          <RadioBtn
-                            title={null}
-                            name={names[FieldConst.Category.CAT_TYPE]}
-                            value={values[names[FieldConst.Category.CAT_TYPE]]}
-                            typeList={info.catTypes}
-                            onChange={handleChange}
-                          />
-                        </td>
-                        <td>
-                          <TextArea
-                            title={null}
-                            name={names[FieldConst.Category.NOTE]}
-                            value={values[names[FieldConst.Category.NOTE]]}
-                            onChange={handleChange}
-                          />
-                        </td>
-                        <td>
-                          <SelectBox
-                            title={null}
-                            name={names[FieldConst.Category.IMG_TYPE]}
-                            value={values[names[FieldConst.Category.IMG_TYPE]]}
-                            typeList={info.imgTypes}
-                            onChange={handleChange}
-                          />
-                        </td>
-                        <td>
-                          <label>
-                            {
-                              values[
-                                names[
-                                  keyJoin(
-                                    FieldConst.Category.IMG_IDS,
-                                    FieldConst.Category.IMG_ID
-                                  )
-                                ]
-                              ]
-                            }
-                          </label>
-                          <TextBox
-                            title={null}
-                            name={
-                              names[
-                                keyJoin(
-                                  FieldConst.Category.IMG_IDS,
-                                  FieldConst.Category.IMG_ID
-                                )
-                              ]
-                            }
-                            value={
-                              values[
-                                names[
-                                  keyJoin(
-                                    FieldConst.Category.IMG_IDS,
-                                    FieldConst.Category.IMG_ID
-                                  )
-                                ]
-                              ]
-                            }
-                            onChange={handleChange}
-                            hidden
-                          />
-                        </td>
-                        <td>
-                          <CheckBox
-                            name={names[FieldConst.Category.ACTIVE]}
-                            value={values[names[FieldConst.Category.ACTIVE]]}
-                            flag={info.active}
-                            onChange={handleChange}
-                          />
-                        </td>
-                        <td>
-                          <img
-                            src={addContextPath(
-                              pathJoin(
-                                values[
-                                  names[
-                                    keyJoin(
-                                      FieldConst.Category.IMG_IDS,
-                                      FieldConst.Image.IMG_PATH
-                                    )
-                                  ]
-                                ],
-                                values[
-                                  names[
-                                    keyJoin(
-                                      FieldConst.Category.IMG_IDS,
-                                      FieldConst.Image.IMG_NAME
-                                    )
-                                  ]
-                                ]
-                              )
-                            )}
-                            className="mh-100 mw-100"
-                            width="50"
-                            height="30"
-                          ></img>
-                          <FileBoxOnValidate
-                            title={null}
-                            name={names[FieldConst.Category.CAT_ICON]}
-                            value={values[names[FieldConst.Category.CAT_ICON]]}
-                            error={errors[names[FieldConst.Category.CAT_ICON]]}
-                            accept="image/*"
-                            onChange={(
-                              event: React.ChangeEvent<HTMLInputElement>
-                            ) => {
-                              setFieldValue(
-                                names[FieldConst.Category.CAT_ICON],
-                                getInputFile(event)
-                              );
-                            }}
-                          />
-                        </td>
+                        {row.cells.map((cell) => {
+                          return <td hidden={cell.hidden}>{cell.value}</td>;
+                        })}
                       </tr>
                     );
                   })}
