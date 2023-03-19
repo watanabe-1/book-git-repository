@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.watanabe.app.study.mapper.CategoryMapper">
-	<select id="findAll" resultType="org.watanabe.app.study.entity.Category">
+<mapper namespace="org.book.app.study.mapper.CategoryMapper">
+	<select id="findAll" resultType="org.book.app.study.entity.Category">
     select SERIAL_KEY, CAT_CODE, CAT_NAME, CAT_TYPE, NOTE, IMG_TYPE, IMG_ID, ACTIVE, INS_DATE, INS_USER, UPD_DATE, UPD_USER from CATEGORY
       order by CAT_CODE
 	</select>
-	<select id="findOne" resultType="org.watanabe.app.study.entity.Category">
+	<select id="findOne" resultType="org.book.app.study.entity.Category">
     select SERIAL_KEY, CAT_CODE, CAT_NAME, CAT_TYPE, NOTE, IMG_TYPE, IMG_ID, ACTIVE, INS_DATE, INS_USER, UPD_DATE, UPD_USER from CATEGORY
       where CAT_CODE = #{catCode}
 	</select>
@@ -57,7 +57,7 @@
 	</select>
 
 	<!-- テーブルのSELECT結果をどのようにマッピングするか指定 -->
-	<resultMap id="categoryMap" type="org.watanabe.app.study.entity.Category">
+	<resultMap id="categoryMap" type="org.book.app.study.entity.Category">
 		<id property="catCode" column="CAT_CODE" />
 		<result property="catName" column="CAT_NAME" />
 		<result property="catType" column="CAT_TYPE" />
@@ -71,7 +71,7 @@
 		<association property="imgIds" resultMap="detailResult" />
 	</resultMap>
 
-	<resultMap id="detailResult" type="org.watanabe.app.study.entity.Image">
+	<resultMap id="detailResult" type="org.book.app.study.entity.Image">
 		<result property="imgId" column="IMG_ID" />
 		<result property="imgPath" column="IMG_PATH" />
 		<result property="imgName" column="IMG_NAME" />

@@ -50,12 +50,12 @@
 	</appender>
 
 	<!-- Application Loggers -->
-	<logger name="org.watanabe.app">
+	<logger name="org.book.app">
 		<!-- (9) -->
 		<level value="debug" />
 	</logger>
 
-	<logger name="org.watanabe.app.study.helper">
+	<logger name="org.book.app.study.helper">
 		<level value="trace" />
 	</logger>
 

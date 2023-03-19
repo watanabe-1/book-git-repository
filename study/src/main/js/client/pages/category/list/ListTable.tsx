@@ -143,7 +143,7 @@ const ListTable = () => {
             const name = names[FieldConst.Category.DELETE];
             return (
               <CheckBox
-                name={toObjConfig.className}
+                name={name}
                 value={props.values[name]}
                 flag={info.delete}
                 onChange={props.handleChange}

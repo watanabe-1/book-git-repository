@@ -12,7 +12,7 @@ apply plugin: 'eclipse'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'com.github.node-gradle.node'
 
-group = 'org.watanabe.app'
+group = 'org.book.app'
 version = '0.0.1-SNAPSHOT'
 description = 'study'
 

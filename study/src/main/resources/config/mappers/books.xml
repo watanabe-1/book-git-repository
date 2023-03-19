@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.watanabe.app.study.mapper.BooksMapper">
-	<select id="findAll" resultType="org.watanabe.app.study.entity.Books">
+<mapper namespace="org.book.app.study.mapper.BooksMapper">
+	<select id="findAll" resultType="org.book.app.study.entity.Books">
     select SERIAL_KEY, BOOKS_ID, USER_ID, BOOKS_TYPE, BOOKS_DATE, BOOKS_PLACE, CAT_CODE, BOOKS_METHOD, BOOKS_AMMOUNT, INS_DATE, INS_USER, UPD_DATE, UPD_USER from BOOKS
       order by BOOKS_ID, USER_ID
 	</select>
-	<select id="findOne" resultType="org.watanabe.app.study.entity.Books">
+	<select id="findOne" resultType="org.book.app.study.entity.Books">
     select SERIAL_KEY, BOOKS_ID, USER_ID, BOOKS_TYPE, BOOKS_DATE, BOOKS_PLACE, CAT_CODE, BOOKS_METHOD, BOOKS_AMMOUNT, INS_DATE, INS_USER, UPD_DATE, UPD_USER from BOOKS
       where BOOKS_ID = #{booksId} AND USER_ID = #{userId}
 	</select>
@@ -79,7 +79,7 @@
 	</select>
 
 	<!-- テーブルのSELECT結果をどのようにマッピングするか指定 -->
-	<resultMap id="byBooksDateAndBooksTypeMap" type="org.watanabe.app.study.entity.Books">
+	<resultMap id="byBooksDateAndBooksTypeMap" type="org.book.app.study.entity.Books">
 		<id property="booksId" column="BOOKS_ID" />
 		<result property="booksType" column="BOOKS_TYPE" />
 		<result property="booksDate" column="BOOKS_DATE" />
@@ -94,19 +94,19 @@
 		<association property="catCodes" resultMap="byBooksDateAndBooksTypeMapdetailResultCategory" />
 	</resultMap>
 
-	<resultMap id="byBooksDateAndBooksTypeMapdetailResultCategory" type="org.watanabe.app.study.entity.Category">
+	<resultMap id="byBooksDateAndBooksTypeMapdetailResultCategory" type="org.book.app.study.entity.Category">
 		<result property="catCode" column="CAT_CODE" />
 		<result property="catName" column="CAT_NAME" />
 		<association property="imgIds" resultMap="byBooksDateAndBooksTypeMapdetailResultImage" />
 	</resultMap>
 
-	<resultMap id="byBooksDateAndBooksTypeMapdetailResultImage" type="org.watanabe.app.study.entity.Image">
+	<resultMap id="byBooksDateAndBooksTypeMapdetailResultImage" type="org.book.app.study.entity.Image">
 		<result property="imgId" column="IMG_ID" />
 		<result property="imgPath" column="IMG_PATH" />
 		<result property="imgName" column="IMG_NAME" />
 	</resultMap>
 
-	<select id="findByUserId" resultType="org.watanabe.app.study.entity.Books">
+	<select id="findByUserId" resultType="org.book.app.study.entity.Books">
 		select SERIAL_KEY, BOOKS_ID, USER_ID, BOOKS_TYPE, BOOKS_DATE, BOOKS_PLACE, CAT_CODE, BOOKS_METHOD, BOOKS_AMMOUNT, INS_DATE, INS_USER, UPD_DATE, UPD_USER from BOOKS
 		where USER_ID = #{userId} order by BOOKS_ID, USER_ID
 	</select>

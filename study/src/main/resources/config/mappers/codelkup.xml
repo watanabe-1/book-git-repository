@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.watanabe.app.study.mapper.CodelkupMapper">
-  <select id="findAll" resultType="org.watanabe.app.study.entity.Codelkup">
+<mapper namespace="org.book.app.study.mapper.CodelkupMapper">
+  <select id="findAll" resultType="org.book.app.study.entity.Codelkup">
     select SERIAL_KEY, LIST_NAME, CODE, DESCRIPTION, SHORT_VALUE, LONG_VALUE, EDITABLE, ACTIVE, SEQUENCE, UDF1, UDF2, UDF3, UDF4, UDF5, UDF6, UDF7, NOTE, INS_DATE, INS_USER, UPD_DATE, UPD_USER from CODELKUP
       order by LIST_NAME, CODE
   </select>
-  <select id="findOne" resultType="org.watanabe.app.study.entity.Codelkup">
+  <select id="findOne" resultType="org.book.app.study.entity.Codelkup">
     select SERIAL_KEY, LIST_NAME, CODE, DESCRIPTION, SHORT_VALUE, LONG_VALUE, EDITABLE, ACTIVE, SEQUENCE, UDF1, UDF2, UDF3, UDF4, UDF5, UDF6, UDF7, NOTE, INS_DATE, INS_USER, UPD_DATE, UPD_USER from CODELKUP
       where LIST_NAME = #{listName} AND CODE = #{code}
   </select>
