@@ -2,6 +2,8 @@ package org.book.app.study.util;
 
 import java.util.Objects;
 import org.book.app.study.enums.type.ColType;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 /**
  * メッセージ用utilクラス
@@ -73,5 +75,45 @@ public class StudyMessageUtil {
       sb.append(fieldName).append(SEPARATOR_BY_BINDERROR_FIELD);
     }
     return StudyStringUtil.replaceFirstOneRight(sb.toString(), SEPARATOR_BY_BINDERROR_FIELD, "");
+  }
+
+  /**
+   * エラーを結果に追加
+   * 
+   * @param result エラー結果
+   * @param field 対象フィールド名
+   * @param code エラーコード
+   */
+  public static void addError(BindingResult result, String field, String code) {
+    addError(result, field, code, "");
+  }
+
+  /**
+   * エラーを結果に追加
+   * 
+   * @param result エラー結果
+   * @param field 対象フィールド名
+   * @param code エラーコード
+   * @param arguments エラー文字列内で参照する値
+   */
+  public static void addError(BindingResult result, String field, String code,
+      Object... arguments) {
+    addErrorOndefMsg(result, field, code, arguments, code);
+  }
+
+  /**
+   * エラーを結果に追加(デフォルトメッセージ有)
+   * 
+   * @param result エラー結果
+   * @param field 対象フィールド名
+   * @param code エラーコード
+   * @param arguments エラー文字列内で参照する値
+   * @param defaultMessage デフォルトメッセージ
+   */
+  public static void addErrorOndefMsg(BindingResult result, String field,
+      String code, Object[] arguments, String defaultMessage) {
+    result.addError(
+        new FieldError(result.getObjectName(), field, null, false, new String[] {code}, arguments,
+            defaultMessage));
   }
 }

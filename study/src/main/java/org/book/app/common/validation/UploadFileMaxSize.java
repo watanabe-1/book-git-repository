@@ -14,12 +14,12 @@ import org.book.app.common.validation.UploadFileMaxSize.List;
  * ファイルのサイズが許容サイズ内であることを検証するためのバリデーションの実装<br>
  * ファイルのサイズが、許容サイズ内であることを検証するための、アノテーションを作成
  */
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = UploadFileMaxSizeValidator.class)
 @Repeatable(List.class)
 public @interface UploadFileMaxSize {
-  String message() default "{org.book.app.common.validation.UploadFileMaxSize.message}";
+  String message() default "{UploadFileMaxSize.message}";
 
   long value() default (1024 * 1024);
 
@@ -27,7 +27,7 @@ public @interface UploadFileMaxSize {
 
   Class<? extends Payload>[] payload() default {};
 
-  @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+  @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
   @Retention(RUNTIME)
   @Documented
   @interface List {

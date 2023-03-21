@@ -23,7 +23,6 @@ import org.book.app.study.util.StudyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.multipart.MultipartFile;
 import lombok.extern.slf4j.XSlf4j;
 
@@ -154,11 +153,10 @@ public class CategoryHelper {
       CategoryForm catForm = catDataList.get(i);
       if (categoryService.countCatNameExceptCatCode(catForm.getCatCode(),
           catForm.getCatName()) > 0) {
-        result.addError(
-            new FieldError(result.getObjectName(),
-                StudyMessageUtil.getArrayFieldName("catDataList", i, "catName"),
-                "入力したカテゴリー名は既に登録されています。"));
-        log.error("入力したカテゴリー名は既に登録されています。", catForm.getCatName());
+        StudyMessageUtil.addError(result,
+            StudyMessageUtil.getArrayFieldName("catDataList", i, "catName"),
+            "CategoryNameDuplication.message", catForm.getCatName());
+        log.error("CategoryNameDuplication.message", catForm.getCatName());
       }
 
     }

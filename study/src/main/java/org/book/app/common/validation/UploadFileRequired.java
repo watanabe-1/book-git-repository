@@ -14,18 +14,18 @@ import org.book.app.common.validation.UploadFileRequired.List;
  * ファイルが選択されていることを検証するためのバリデーションの実装<br>
  * ファイルが、選択されていることを検証するための、アノテーションを作成
  */
-@Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+@Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Constraint(validatedBy = UploadFileRequiredValidator.class)
 @Repeatable(List.class)
 public @interface UploadFileRequired {
-  String message() default "{org.book.app.common.validation.UploadFileRequired.message}";
+  String message() default "{UploadFileRequired.message}";
 
   Class<?>[] groups() default {};
 
   Class<? extends Payload>[] payload() default {};
 
-  @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE })
+  @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
   @Retention(RUNTIME)
   @Documented
   @interface List {
