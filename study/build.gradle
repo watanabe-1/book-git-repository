@@ -52,7 +52,7 @@ eclipse {
             //	return target instanceof SourceFolder && target.path.startsWith(srcBase + "/java") 
             //}*.output = classBase
             cp.entries.findAll {it instanceof SourceFolder && it.path.startsWith(srcBase + "/java") }*.output = classBase
-            cp.entries.findAll {it instanceof SourceFolder && it.path.startsWith(srcBase + "/resources") }*.output = resourcesBase
+           // cp.entries.findAll {it instanceof SourceFolder && it.path.startsWith(srcBase + "/resources") }*.output = resourcesBase
         }
     }
 }

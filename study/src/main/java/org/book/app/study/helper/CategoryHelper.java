@@ -5,9 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.apache.commons.io.FilenameUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 import org.book.app.study.dto.data.FormConfirmData;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.entity.Category;
@@ -23,11 +20,18 @@ import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyMessageUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.multipart.MultipartFile;
+import lombok.extern.slf4j.XSlf4j;
 
 /**
  * カテゴリーの関する処理を行うためのHelperクラスを作成
  */
 @Component
+@XSlf4j
 public class CategoryHelper {
 
   /**
@@ -139,9 +143,31 @@ public class CategoryHelper {
   }
 
   /**
+   * アップデート時のエラーチェックを実施<br>
+   * エラー時はBindingResultに結果をセット
+   * 
+   * @return 更新件数
+   */
+  public void validateIfDoUpdate(CategoryFormList catListParam, BindingResult result) {
+    List<CategoryForm> catDataList = catListParam.getCatDataList();
+    for (int i = 0; i < catDataList.size(); i++) {
+      CategoryForm catForm = catDataList.get(i);
+      if (categoryService.countCatNameExceptCatCode(catForm.getCatCode(),
+          catForm.getCatName()) > 0) {
+        result.addError(
+            new FieldError(result.getObjectName(),
+                StudyMessageUtil.getArrayFieldName("catDataList", i, "catName"),
+                "入力したカテゴリー名は既に登録されています。"));
+        log.error("入力したカテゴリー名は既に登録されています。", catForm.getCatName());
+      }
+
+    }
+  }
+
+  /**
    * 確認画面用のデータに加工
    * 
-   * @param form        フォーム入力値
+   * @param form フォーム入力値
    * @param contextPath コンテキストパス
    * @return
    */

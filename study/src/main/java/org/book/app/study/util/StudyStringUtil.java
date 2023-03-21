@@ -40,7 +40,7 @@ public class StudyStringUtil {
    * ベースのパスと追加のパスを結合し返却する
    * 
    * @param basePath ベースとなるパス
-   * @param addPath  追加したいパス
+   * @param addPath 追加したいパス
    * @return String 結合したパス
    */
   public static String pathJoin(String basePath, String addPath) {
@@ -73,30 +73,47 @@ public class StudyStringUtil {
   /**
    * 置換対象が文字列の先頭にあった場合のみ置換、それ以外は置換せずに返却
    * 
-   * @param str     置換対象
-   * @param target  置換文字列
-   * @param addPath 置換語文字列
+   * @param str 置換対象
+   * @param target 置換文字列
+   * @param replaceMent 置換語文字列
    * @return String 置換結果
    */
   public static String replaceFirstOneLeft(String str, String target, String replaceMent) {
     // 置換対象が文字列の先頭ににあった場合のみ置換、それ以外は置換せずに返却
-    return Objects.equals(target.indexOf(replaceMent), 0) ? str.replace(target, replaceMent) : str;
+    return Objects.equals(target.indexOf(replaceMent), 0) ? str.replaceFirst(target, replaceMent)
+        : str;
   }
 
   /**
    * 置換対象が文字列の最後尾にあった場合のみ置換、それ以外は置換せずに返却
    * 
-   * @param str     置換対象
-   * @param target  置換文字列
-   * @param addPath 置換語文字列
+   * @param str 置換対象
+   * @param target 置換文字列
+   * @param replaceMent 置換語文字列
    * @return String 置換結果
    */
   public static String replaceFirstOneRight(String str, String target, String replaceMent) {
     // 置換対象が文字列の最後尾ににあった場合のみ置換、それ以外は置換せずに返却
-    return Objects.equals(target.lastIndexOf(replaceMent), replaceMent.length())
-        ? str.replace(target, replaceMent)
+    return Objects.equals(target.lastIndexOf(replaceMent), target.length())
+        ? replaceLast(str, target, replaceMent)
         : str;
 
+  }
+
+  /**
+   * 最後尾からマッチしたものを一つだけ置換
+   * 
+   * @param str 置換対象
+   * @param regex 置換文字列(正規表現可)
+   * @param replacement 置換語文字列
+   * @return 置換結果
+   */
+  public static String replaceLast(String str, String regex, String replacement) {
+    if (str == null || str.isEmpty()) {
+      return str;
+    }
+
+    return str.replaceFirst(regex + "(?!.*?" + regex + ")", replacement);
   }
 
   /**
@@ -123,7 +140,7 @@ public class StudyStringUtil {
    * 文字列を区切り文字基準に分割
    * 
    * @param line 分割対象
-   * @param sep  区切り文字
+   * @param sep 区切り文字
    * @return 分割結果
    */
   public static String[] split(String line, char sep) {
@@ -153,8 +170,8 @@ public class StudyStringUtil {
   /**
    * オブジェクトをcsv形式の文字列に変換
    * 
-   * @param target    変換対象
-   * @param pojoType  カラム情報が記載されているクラス
+   * @param target 変換対象
+   * @param pojoType カラム情報が記載されているクラス
    * @param isHeadder ヘッダーをつけるか
    * @return String csv文字列
    */
@@ -165,8 +182,8 @@ public class StudyStringUtil {
   /**
    * オブジェクトをtsv形式の文字列に変換
    * 
-   * @param target    変換対象
-   * @param pojoType  カラム情報が記載されているクラス
+   * @param target 変換対象
+   * @param pojoType カラム情報が記載されているクラス
    * @param isHeadder ヘッダーをつけるか
    * @return String tsv文字列
    */
@@ -177,11 +194,11 @@ public class StudyStringUtil {
   /**
    * オブジェクトを区切り文字で区切った文字列に変換
    * 
-   * @param target    変換対象
-   * @param pojoType  カラム情報が記載されているクラス
-   * @param sep       区切り文字
+   * @param target 変換対象
+   * @param pojoType カラム情報が記載されているクラス
+   * @param sep 区切り文字
    * @param isHeadder ヘッダーをつけるか
-   * @param isQuote   文字列にダブルクオートをつけるか
+   * @param isQuote 文字列にダブルクオートをつけるか
    * @return String 文字列
    */
   public static String objectToStrByCsvMapper(Object target, Class<?> pojoType, char sep,
@@ -247,7 +264,7 @@ public class StudyStringUtil {
    * 文字列の最初の文字が引数2と同じか判定
    * 
    * @param target 判定対象
-   * @param first  判定文字
+   * @param first 判定文字
    * @return 判定結果
    */
   public static boolean isFirstChar(String target, char first) {
@@ -271,7 +288,7 @@ public class StudyStringUtil {
   /**
    * 文字列から指定の文字列を削除
    * 
-   * @param str     置換対象
+   * @param str 置換対象
    * @param targets 削除対象文字列のリスト
    * @return 削除後文字列
    */
@@ -282,7 +299,7 @@ public class StudyStringUtil {
   /**
    * 文字列から指定の文字列を削除
    * 
-   * @param str     置換対象
+   * @param str 置換対象
    * @param targets 削除対象文字列
    * @return 削除後文字列
    */

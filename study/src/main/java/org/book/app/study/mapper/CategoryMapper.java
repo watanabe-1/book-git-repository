@@ -53,7 +53,7 @@ public interface CategoryMapper {
   /**
    * 1行update プライマルキーをWhere句に指定 プライマルキー：@Param("catCodeWhere")String catCode
    * 
-   * @param cat     entity(Category)
+   * @param cat entity(Category)
    * @param catCode CAT_CODE(カテゴリーコード)
    * @return update行数
    */
@@ -80,4 +80,14 @@ public interface CategoryMapper {
    * @return 検索結果(複数行)
    */
   List<Category> findAllJoinImage();
+
+  /**
+   * 検索対象のカテゴリーを除いてカテゴリー名に対して重複件数を取得
+   * 
+   * @param catCode CAT_CODE(カテゴリーコード)
+   * @param catName CAT_NAME(カテゴリー名)
+   * @return 件数
+   */
+  int countCatNameExceptCatCode(@Param("catCode") String catCode, @Param("catName") String catName);
+
 }

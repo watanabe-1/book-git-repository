@@ -4,6 +4,17 @@ import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FilenameUtils;
+import org.book.app.study.dto.data.FormConfirmData;
+import org.book.app.study.dto.list.CategoryFormList;
+import org.book.app.study.dto.ui.CategoryUi;
+import org.book.app.study.entity.Category;
+import org.book.app.study.form.CategoryForm;
+import org.book.app.study.helper.CategoryHelper;
+import org.book.app.study.helper.UploadHelper;
+import org.book.app.study.service.CategoryService;
+import org.book.app.study.service.api.CategoryApiService;
+import org.book.app.study.util.StudyBeanUtil;
+import org.book.app.study.util.StudyUtil;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
@@ -16,17 +27,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.book.app.study.dto.data.FormConfirmData;
-import org.book.app.study.dto.list.CategoryFormList;
-import org.book.app.study.dto.ui.CategoryUi;
-import org.book.app.study.entity.Category;
-import org.book.app.study.form.CategoryForm;
-import org.book.app.study.helper.CategoryHelper;
-import org.book.app.study.helper.UploadHelper;
-import org.book.app.study.service.CategoryService;
-import org.book.app.study.service.api.CategoryApiService;
-import org.book.app.study.util.StudyBeanUtil;
-import org.book.app.study.util.StudyUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
 
@@ -73,9 +73,9 @@ public class CategoryApiController extends ApiController {
   /**
    * 画面情報取得
    * 
-   * @param form  送信されたデータ
+   * @param form 送信されたデータ
    * @param model モデル
-   * @param date  開いている画面の指定されている日付け
+   * @param date 開いている画面の指定されている日付け
    * @return json(カテゴリーごとの家計簿情報)
    * @throws BindException
    */
@@ -92,9 +92,9 @@ public class CategoryApiController extends ApiController {
   /**
    * カテゴリー登録
    * 
-   * @param form   送信されたデータ
+   * @param form 送信されたデータ
    * @param result エラーチェック]-+結果
-   * @param model  モデル
+   * @param model モデル
    * @return json
    */
   @RequestMapping(value = "/category/result", method = RequestMethod.POST)
@@ -162,14 +162,15 @@ public class CategoryApiController extends ApiController {
    * カテゴリー情報一覧更新
    * 
    * @param catListParam 送信されたデータ
-   * @param result       エラーチェック]-+結果
-   * @param model        モデル
+   * @param result エラーチェック]-+結果
+   * @param model モデル
    * @return json(カテゴリーの一覧)
    */
   @RequestMapping(value = "/category/listdataUpdate", method = RequestMethod.POST)
   @ResponseBody
   public CategoryFormList listUpdate(@Validated @ModelAttribute CategoryFormList catListParam,
       BindingResult result, ModelAndView model) throws BindException {
+    categoryHelper.validateIfDoUpdate(catListParam, result);
     throwBindExceptionIfNeeded(result);
 
     // カテゴリー情報の更新

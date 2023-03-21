@@ -1,14 +1,14 @@
 package org.book.app.study.service;
 
 import java.util.List;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.entity.Category;
 import org.book.app.study.form.CategoryForm;
 import org.book.app.study.mapper.CategoryMapper;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * CATEGORY:カテゴリー(カテゴリー定義テーブル)のserviceクラス
@@ -74,7 +74,7 @@ public class CategoryService {
   /**
    * 1行update プライマルキーをWhere句に指定 プライマルキー：String catCode
    * 
-   * @param cat     entity(Category)
+   * @param cat entity(Category)
    * @param catCode CAT_CODE(カテゴリーコード)
    * @return update行数
    */
@@ -121,5 +121,16 @@ public class CategoryService {
     }).toList());
 
     return catDatalist;
+  }
+
+  /**
+   * 検索対象のカテゴリーを除いてカテゴリー名に対して重複件数を取得
+   * 
+   * @param catCode CAT_CODE(カテゴリーコード)
+   * @param catName CAT_NAME(カテゴリー名)
+   * @return 件数
+   */
+  public int countCatNameExceptCatCode(String catCode, String catName) {
+    return categoryMapper.countCatNameExceptCatCode(catCode, catName);
   }
 }

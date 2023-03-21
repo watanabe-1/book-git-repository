@@ -1,6 +1,7 @@
 package org.book.app.study.api;
 
 import java.util.Locale;
+import org.book.app.study.dto.error.ErrorResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.terasoluna.gfw.common.exception.BusinessException;
-import org.book.app.study.dto.error.ErrorResults;
 
 /**
  * api用コントローラー親クラス
@@ -46,7 +46,7 @@ public class ApiController {
    * リクエストパラメータとして送信したデータをJavaBeanにバインドする際に、<br/>
    * 入力値に不正な値が指定された場合に発生する例外クラス
    * 
-   * @param e      BindException
+   * @param e BindException
    * @param locale ロケール
    */
   @ExceptionHandler(BindException.class)
@@ -65,7 +65,7 @@ public class ApiController {
    * 
    * 業務エラーの例外クラス
    * 
-   * @param e      MethodArgumentNotValidException
+   * @param e MethodArgumentNotValidException
    * @param locale ロケール
    */
   @ExceptionHandler(BusinessException.class)
@@ -73,9 +73,6 @@ public class ApiController {
   @ResponseBody
   public ErrorResults handleHttpBusinessException(BusinessException e, Locale locale) {
     ErrorResults errorResults = new ErrorResults();
-
-    // implement error handling.
-    // omitted
 
     // addErrResult(e, locale, errorResults);
 
@@ -88,7 +85,7 @@ public class ApiController {
    * [@RequestBody] アノテーションを使用してリクエストBodyに格納されているデータを<br/>
    * JavaBeanにバインドする際に、入力値に不正な値が指定された場合に発生する例外クラス
    * 
-   * @param e      MethodArgumentNotValidException
+   * @param e MethodArgumentNotValidException
    * @param locale ロケール
    */
   @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -109,7 +106,7 @@ public class ApiController {
    * JavaBeanにバインドする際に、Bodyに格納されているデータからJavaBeanを生成できなかった場合に<br/>
    * する例外クラス
    * 
-   * @param e      MethodArgumentNotValidException
+   * @param e MethodArgumentNotValidException
    * @param locale ロケール
    */
   @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -127,8 +124,8 @@ public class ApiController {
   /**
    * BindExceptionのエラー結果をエラー保持用javabeenにセットを行う
    * 
-   * @param e            BindException
-   * @param locale       ロケール
+   * @param e BindException
+   * @param locale ロケール
    * @param errorResults セット対象
    */
   private void addErrResult(BindException e, Locale locale, ErrorResults errorResults) {
@@ -141,4 +138,17 @@ public class ApiController {
           objectError.getObjectName());
     });
   }
+
+  /**
+   * BindExceptionのエラー結果をエラー保持用javabeenにセットを行う
+   * 
+   * @param e BindException
+   * @param locale ロケール
+   * @param errorResults セット対象
+   */
+  // private void addErrResult(ResultMessagesNotificationException e, Locale locale,
+  // ErrorResults errorResults) {
+  //
+  //
+  // }
 }
