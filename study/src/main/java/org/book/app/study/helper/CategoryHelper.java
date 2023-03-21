@@ -145,6 +145,8 @@ public class CategoryHelper {
    * アップデート時のエラーチェックを実施<br>
    * エラー時はBindingResultに結果をセット
    * 
+   * @param catListParam 更新対象
+   * @param result 結果
    * @return 更新件数
    */
   public void validateIfDoUpdate(CategoryFormList catListParam, BindingResult result) {
