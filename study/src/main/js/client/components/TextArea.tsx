@@ -5,20 +5,21 @@ import Form from 'react-bootstrap/Form';
  *
  * @returns form内のテキストエリア
  */
-const TextArea = (props: {
-  title: string;
-  name: string;
-  value: any;
-  onChange;
+const TextArea = ({
+  title = null,
+  name,
+  value,
+  onChange,
+}: {
+  title?: string;
+  name?: string;
+  value?: string | number | string[];
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
-    <Form.Group controlId={props.name}>
-      {props.title ? <Form.Label>{props.title}</Form.Label> : null}
-      <Form.Control
-        as="textarea"
-        value={props.value}
-        onChange={props.onChange}
-      />
+    <Form.Group controlId={name}>
+      {title ? <Form.Label>{title}</Form.Label> : null}
+      <Form.Control as="textarea" value={value} onChange={onChange} />
     </Form.Group>
   );
 };

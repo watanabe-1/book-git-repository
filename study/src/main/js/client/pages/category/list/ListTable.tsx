@@ -7,12 +7,15 @@ import { onServer, executeFirst } from '../../../on-server';
 import {
   fetchGet,
   fetchPost,
-  getInputFile,
   getContextPath,
   addContextPath,
   pathJoin,
   keyJoin,
 } from '../../../../study/util/studyUtil';
+import {
+  getInputFile,
+  getSetInputFileFunc,
+} from '../../../../study/util/studyFormUtil';
 import {
   getServerErrMsg,
   isServerErr,
@@ -162,7 +165,6 @@ const ListTable = () => {
             const name = names[FieldConst.Category.CAT_CODE];
             return (
               <TextBoxOnValidate
-                title={null}
                 name={name}
                 value={props.values[name]}
                 touched={props.touched[name]}
@@ -188,7 +190,6 @@ const ListTable = () => {
             const name = names[FieldConst.Category.CAT_NAME];
             return (
               <TextBoxOnValidate
-                title={null}
                 name={name}
                 value={props.values[name]}
                 touched={props.touched[name]}
@@ -214,7 +215,6 @@ const ListTable = () => {
             const name = names[FieldConst.Category.CAT_TYPE];
             return (
               <RadioBtn
-                title={null}
                 name={name}
                 value={props.values[name]}
                 typeList={info.catTypes}
@@ -234,7 +234,6 @@ const ListTable = () => {
             const name = names[FieldConst.Category.NOTE];
             return (
               <TextArea
-                title={null}
                 name={name}
                 value={props.values[name]}
                 onChange={props.handleChange}
@@ -253,7 +252,6 @@ const ListTable = () => {
             const name = names[FieldConst.Category.IMG_TYPE];
             return (
               <SelectBox
-                title={null}
                 name={name}
                 value={props.values[name]}
                 typeList={info.imgTypes}
@@ -278,7 +276,6 @@ const ListTable = () => {
               <>
                 <label>{props.values[name]}</label>
                 <TextBox
-                  title={null}
                   name={name}
                   value={props.values[name]}
                   onChange={props.handleChange}
@@ -318,32 +315,30 @@ const ListTable = () => {
             const name = names[FieldConst.Category.CAT_ICON];
             return (
               <FileBoxOnValidateAndImg
-                title={null}
                 name={name}
-                value={props.values[name]}
                 error={props.errors[name]}
                 accept="image/*"
-                src={addContextPath(
-                  pathJoin(
-                    props.values[
-                      names[
-                        keyJoin(
-                          FieldConst.Category.IMG_IDS,
-                          FieldConst.Image.IMG_PATH
-                        )
-                      ]
-                    ],
-                    props.values[
-                      names[
-                        keyJoin(
-                          FieldConst.Category.IMG_IDS,
-                          FieldConst.Image.IMG_NAME
-                        )
-                      ]
+                path={
+                  props.values[
+                    names[
+                      keyJoin(
+                        FieldConst.Category.IMG_IDS,
+                        FieldConst.Image.IMG_PATH
+                      )
                     ]
-                  )
-                )}
-                setFieldValue={props.setFieldValue}
+                  ]
+                }
+                fileName={
+                  props.values[
+                    names[
+                      keyJoin(
+                        FieldConst.Category.IMG_IDS,
+                        FieldConst.Image.IMG_NAME
+                      )
+                    ]
+                  ]
+                }
+                onChange={getSetInputFileFunc(name, props.setFieldValue)}
               ></FileBoxOnValidateAndImg>
             );
           },

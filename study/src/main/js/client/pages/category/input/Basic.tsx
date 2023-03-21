@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Context } from './Content';
 import { onServer, executeFirst } from '../../../on-server';
+import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
 import {
-  fetchGet,
-  fetchPost,
   getInputFile,
-} from '../../../../study/util/studyUtil';
+  getSetInputFileFunc,
+} from '../../../../study/util/studyFormUtil';
 import { addServerValidateFuncs } from '../../../../study/util/studyYupUtil';
 import {
   CategoryUi,
@@ -217,15 +217,12 @@ const Basic = (props) => {
                   <FileBoxOnValidate
                     title="アイコンのアップロード"
                     name={FieldConst.Category.CAT_ICON}
-                    value={values.catIcon}
                     error={errors.catIcon}
                     accept="image/*"
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      setFieldValue(
-                        FieldConst.Category.CAT_ICON,
-                        getInputFile(event)
-                      );
-                    }}
+                    onChange={getSetInputFileFunc(
+                      FieldConst.Category.CAT_ICON,
+                      props.setFieldValue
+                    )}
                   />
                 </Col>
               </Row>

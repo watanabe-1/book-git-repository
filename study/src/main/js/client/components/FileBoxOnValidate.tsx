@@ -5,26 +5,29 @@ import Form from 'react-bootstrap/Form';
  *
  * @returns form内のファイル用インプットボックス
  */
-const FileBoxOnValidate = (props: {
-  title: string;
-  name: string;
-  value: any;
-  error: any;
-  accept: string;
-  onChange;
+const FileBoxOnValidate = ({
+  title = null,
+  name,
+  error,
+  accept,
+  onChange,
+}: {
+  title?: string;
+  name?: string;
+  error?: any;
+  accept?: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
-    <Form.Group controlId={props.name}>
-      {props.title ? <Form.Label>{props.title}</Form.Label> : null}
+    <Form.Group controlId={name}>
+      {title ? <Form.Label>{title}</Form.Label> : null}
       <Form.Control
         type="file"
-        accept={props.accept}
-        onChange={props.onChange}
-        isInvalid={!!props.error}
+        accept={accept}
+        onChange={onChange}
+        isInvalid={!!error}
       />
-      <Form.Control.Feedback type="invalid">
-        {props.error}
-      </Form.Control.Feedback>
+      <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
     </Form.Group>
   );
 };

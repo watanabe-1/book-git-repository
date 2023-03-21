@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
  * @returns form内のテキストボックス
  */
 const TextBox = ({
-  title,
+  title = null,
   name,
   value,
   onChange,
@@ -14,7 +14,7 @@ const TextBox = ({
 }: {
   title?: string;
   name: string;
-  value?: any;
+  value?: string | number | string[];
   onChange?;
   hidden?: boolean;
 }) => {

@@ -652,16 +652,6 @@ export async function fetchPost(
   // console.log(json);
   return res;
 }
-/**
- * inputのファイルを取得
- * @param event inputのチェンジイベント
- * @returns ファイル
- */
-export function getInputFile(event: React.ChangeEvent<HTMLInputElement>) {
-  return event.currentTarget.files !== null
-    ? event.currentTarget.files[0]
-    : null;
-}
 
 /**
  * 簡易的なformat用関数

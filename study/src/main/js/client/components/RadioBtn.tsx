@@ -6,25 +6,31 @@ import { Type } from '../../@types/studyUtilType';
  *
  * @returns form内のラジオボタン
  */
-const RadioBtn = (props: {
-  title: string;
-  name: string;
-  value: any;
-  typeList: Type[];
-  onChange;
+const RadioBtn = ({
+  title = null,
+  name,
+  value,
+  typeList,
+  onChange,
+}: {
+  title?: string;
+  name?: string;
+  value?: string;
+  typeList?: Type[];
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
-    <Form.Group controlId={props.name}>
-      {props.title ? <Form.Label>{props.title}</Form.Label> : null}
+    <Form.Group controlId={name}>
+      {title ? <Form.Label>{title}</Form.Label> : null}
       <br />
-      {props.typeList.map((i) => (
+      {typeList.map((i) => (
         <Form.Check
           type="radio"
           inline
           value={i.code}
           label={i.name}
-          checked={i.code == props.value}
-          onChange={props.onChange}
+          checked={i.code == value}
+          onChange={onChange}
         />
       ))}
     </Form.Group>

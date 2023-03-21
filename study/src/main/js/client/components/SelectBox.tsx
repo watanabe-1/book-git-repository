@@ -6,19 +6,25 @@ import { Type } from '../../@types/studyUtilType';
  *
  * @returns form内のセレクトボックス
  */
-const SelectBox = (props: {
-  title: string;
-  name: string;
-  value: any;
-  typeList: Type[];
-  onChange;
+const SelectBox = ({
+  title = null,
+  name,
+  value,
+  typeList,
+  onChange,
+}: {
+  title?: string;
+  name?: string;
+  value?: string;
+  typeList?: Type[];
+  onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }) => {
   return (
-    <Form.Group controlId={props.name}>
-      {props.title ? <Form.Label>{props.title}</Form.Label> : null}
-      <Form.Select name={props.name} onChange={props.onChange}>
-        {props.typeList.map((i) => (
-          <option selected={i.code == props.value} value={i.code}>
+    <Form.Group controlId={name}>
+      {title ? <Form.Label>{title}</Form.Label> : null}
+      <Form.Select name={name} onChange={onChange}>
+        {typeList.map((i) => (
+          <option selected={i.code == value} value={i.code}>
             {i.name}
           </option>
         ))}

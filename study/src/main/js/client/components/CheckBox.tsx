@@ -6,20 +6,25 @@ import { Flag } from '../../@types/studyUtilType';
  *
  * @returns form内のチェックボックス
  */
-const CheckBox = (props: {
-  name: string;
-  value: any;
-  flag: Flag;
-  onChange;
+const CheckBox = ({
+  name,
+  value,
+  flag,
+  onChange,
+}: {
+  name?: string;
+  value?: string;
+  flag?: Flag;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
-    <Form.Group controlId={props.name}>
+    <Form.Group controlId={name}>
       <Form.Check
         type="checkbox"
-        value={props.flag.value}
-        label={props.flag.name}
-        checked={props.flag.value == props.value}
-        onChange={props.onChange}
+        value={flag.value}
+        label={flag.name}
+        checked={flag.value == value}
+        onChange={onChange}
       />
     </Form.Group>
   );
