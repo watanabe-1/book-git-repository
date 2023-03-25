@@ -146,3 +146,30 @@ export type buildListTableFormObjConfig = {
     };
   }[];
 };
+
+/**
+ * tableカラム用
+ */
+export type TableColumn = {
+  name: string;
+  value: string;
+  filterValue: string;
+  hidden: boolean;
+};
+
+/**
+ * tableセル用
+ */
+export type TableCell = {
+  name: string;
+  value: string;
+  element: JSX.Element;
+  hidden: boolean;
+};
+
+/**
+ * table行用
+ */
+export type TableRow = {
+  cells: TableCell[];
+};

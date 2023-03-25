@@ -334,16 +334,20 @@ export function buildListTableFormObj(
         return {
           cells: config.list.map((v) => {
             return {
-              value: v.table.getCell(props, names),
+              name: v.name,
+              value: props.values[names[v.name]],
+              element: v.table.getCell(props, names),
               hidden: v.table.hidden,
             };
           }),
         };
       });
     },
-    headers: config.list.map((v) => {
+    columns: config.list.map((v) => {
       return {
+        name: v.name,
         value: v.table.head,
+        filterValue: '',
         hidden: v.table.hidden,
       };
     }),

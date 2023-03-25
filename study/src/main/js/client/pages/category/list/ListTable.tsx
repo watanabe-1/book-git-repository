@@ -53,6 +53,8 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import FileBoxOnValidateAndImg from '../../../components/FileBoxOnValidateAndImg';
+import TextBoxExclusionForm from '../../../components/TextBoxExclusionForm';
+import SortAndFilterTable from '../../../components/SortTable';
 
 /**
  * カテゴリー リスト形式確認画面
@@ -94,6 +96,14 @@ const ListTable = () => {
       // 再バリデーション実施
       buttonElement.current.click();
     }
+  };
+
+  /**
+   * 送信ボタン
+   * @param form 送信パラメータ
+   */
+  const handleChangeTest = async (e) => {
+    console.log(e.target.value);
   };
 
   /**
@@ -149,7 +159,11 @@ const ListTable = () => {
                 name={name}
                 value={props.values[name]}
                 flag={info.delete}
-                onChange={props.handleChange}
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  console.log(JSON.stringify(props.values));
+                  props.handleChange(e);
+                }}
               />
             );
           },
@@ -360,7 +374,7 @@ const ListTable = () => {
   // 初期値
   const initialValues = listTableFormObj.initialValues;
   // テーブル：ヘッダー
-  const headers = listTableFormObj.headers;
+  const columns = listTableFormObj.columns;
   //テーブル: 行
   const getRows = listTableFormObj.getRows;
 
@@ -405,30 +419,7 @@ const ListTable = () => {
                   バリデーション実施
                 </Button>
               </div>
-              <Table bordered>
-                <thead>
-                  <tr>
-                    {headers.map((head) => {
-                      return <th hidden={head.hidden}>{head.value}</th>;
-                    })}
-                  </tr>
-                </thead>
-                <tbody>
-                  {getRows(props).map((row, index) => {
-                    // console.log('valuesです');
-                    // console.log(values);
-                    // console.log(values.catCode0);
-                    // console.log(values['catCode0']);
-                    return (
-                      <tr key={index}>
-                        {row.cells.map((cell) => {
-                          return <td hidden={cell.hidden}>{cell.value}</td>;
-                        })}
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
+              <SortAndFilterTable pColumns={columns} pRows={getRows(props)} />
             </Form>
           );
         }}
