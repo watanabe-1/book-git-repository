@@ -54,7 +54,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import FileBoxOnValidateAndImg from '../../../components/FileBoxOnValidateAndImg';
 import TextBoxExclusionForm from '../../../components/TextBoxExclusionForm';
-import SortAndFilterTable from '../../../components/SortTable';
+import SortAndFilterTable from '../../../components/SortAndFilterTable';
 
 /**
  * カテゴリー リスト形式確認画面
