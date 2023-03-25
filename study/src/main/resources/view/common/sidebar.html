@@ -121,15 +121,6 @@
                       カテゴリー_確認
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a
-                      class="link-dark d-inline-flex text-decoration-none rounded"
-                      th:href="@{/category/index}"
-                    >
-                      <span data-feather="package"></span>
-                      カテゴリー_確認_old
-                    </a>
-                  </li>
                 </ul>
               </div>
             </div>
@@ -254,6 +245,72 @@
                         ログアウト
                       </a>
                     </form>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item">
+            <button
+              class="btn btn-toggle d-inline-flex align-items-center rounded border-0"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#collapseSeven"
+              aria-expanded="false"
+              aria-controls="collapseSeven"
+            >
+              旧メニュー
+            </button>
+            <div
+              id="collapseSeven"
+              class="collapse"
+              aria-labelledby="headingOne"
+              data-bs-parent="#accordionExample"
+            >
+              <div>
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                  <li class="nav-item">
+                    <button
+                      class="btn btn-toggle d-inline-flex align-items-center rounded border-0"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseSevenOne"
+                      aria-expanded="false"
+                      aria-controls="collapseSevenOne"
+                    >
+                      旧カテゴリー
+                    </button>
+                    <div
+                      id="collapseSevenOne"
+                      class="collapse"
+                      aria-labelledby="headingOne"
+                      data-bs-parent="#accordionExample"
+                    >
+                      <div>
+                        <ul
+                          class="btn-toggle-nav list-unstyled fw-normal pb-1 small"
+                        >
+                          <li class="nav-item">
+                            <a
+                              class="link-dark d-inline-flex text-decoration-none rounded"
+                              th:href="@{/category/thymeleaf/input}"
+                            >
+                              <span data-feather="package"></span>
+                              カテゴリー_登録
+                            </a>
+                          </li>
+                          <li class="nav-item">
+                            <a
+                              class="link-dark d-inline-flex text-decoration-none rounded"
+                              th:href="@{/category/thymeleaf/index}"
+                            >
+                              <span data-feather="package"></span>
+                              カテゴリー_確認
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
                   </li>
                 </ul>
               </div>
