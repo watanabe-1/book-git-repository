@@ -14,10 +14,10 @@ const RadioBtn = ({
   onChange,
 }: {
   title?: string;
-  name?: string;
-  value?: string;
-  typeList?: Type[];
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  name: string;
+  value: string;
+  typeList: Type[];
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
     <Form.Group controlId={name}>

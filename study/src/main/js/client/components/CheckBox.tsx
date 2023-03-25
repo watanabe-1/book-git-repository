@@ -12,10 +12,10 @@ const CheckBox = ({
   flag,
   onChange,
 }: {
-  name?: string;
-  value?: string;
-  flag?: Flag;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  name: string;
+  value: string;
+  flag: Flag;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
     <Form.Group controlId={name}>

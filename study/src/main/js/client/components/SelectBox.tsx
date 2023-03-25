@@ -14,10 +14,10 @@ const SelectBox = ({
   onChange,
 }: {
   title?: string;
-  name?: string;
-  value?: string;
-  typeList?: Type[];
-  onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  name: string;
+  value: string;
+  typeList: Type[];
+  onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }) => {
   return (
     <Form.Group controlId={name}>

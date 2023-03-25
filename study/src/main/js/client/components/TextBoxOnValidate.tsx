@@ -15,11 +15,11 @@ const TextBoxOnValidate = ({
   onChange,
 }: {
   title?: string;
-  name?: string;
-  value?: string | number | string[];
-  touched?: FormikTouched<unknown>;
-  error?: any;
-  onChange?;
+  name: string;
+  value: string | number | string[];
+  touched: FormikTouched<unknown>;
+  error: any;
+  onChange;
 }) => {
   return (
     <Form.Group controlId={name}>

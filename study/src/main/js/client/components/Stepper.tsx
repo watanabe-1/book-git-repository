@@ -15,8 +15,8 @@ const Stepper = ({
   activeStep,
   noLable = false,
 }: {
-  steps?: string[];
-  activeStep?: number;
+  steps: string[];
+  activeStep: number;
   noLable?: boolean;
 }) => {
   return (

@@ -12,9 +12,9 @@ const TextArea = ({
   onChange,
 }: {
   title?: string;
-  name?: string;
-  value?: string | number | string[];
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  name: string;
+  value: string | number | string[];
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
     <Form.Group controlId={name}>

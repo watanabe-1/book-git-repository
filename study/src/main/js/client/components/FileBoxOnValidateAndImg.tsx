@@ -17,13 +17,13 @@ const FileBoxOnValidateAndImg = ({
   onChange,
 }: {
   title?: string;
-  name?: string;
-  error?: any;
-  accept?: string;
-  path?: string;
+  name: string;
+  error: any;
+  accept: string;
+  path: string;
   fileName?: string;
   isAddContextPath?: boolean;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const newPath = fileName ? pathJoin(path, fileName) : path;
 

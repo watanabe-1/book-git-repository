@@ -13,20 +13,16 @@ const TextBox = ({
   hidden = false,
 }: {
   title?: string;
-  name: string;
+  name?: string;
   value?: string | number | string[];
-  onChange?;
+  onChange;
   hidden?: boolean;
 }) => {
+  const type = hidden ? 'hidden' : 'text';
   return (
     <Form.Group controlId={name}>
       {title ? <Form.Label>{title}</Form.Label> : null}
-      <Form.Control
-        type={hidden ? 'hidden' : 'text'}
-        name={name}
-        value={value}
-        onChange={onChange}
-      />
+      <Form.Control type={type} name={name} value={value} onChange={onChange} />
     </Form.Group>
   );
 };

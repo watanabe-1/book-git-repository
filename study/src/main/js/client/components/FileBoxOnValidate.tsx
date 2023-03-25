@@ -13,10 +13,10 @@ const FileBoxOnValidate = ({
   onChange,
 }: {
   title?: string;
-  name?: string;
-  error?: any;
-  accept?: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  name: string;
+  error: any;
+  accept: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   return (
     <Form.Group controlId={name}>
