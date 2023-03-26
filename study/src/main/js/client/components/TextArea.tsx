@@ -19,7 +19,11 @@ const TextArea = ({
   return (
     <Form.Group controlId={name}>
       {title ? <Form.Label>{title}</Form.Label> : null}
-      <Form.Control as="textarea" value={value} onChange={onChange} />
+      <Form.Control
+        as="textarea"
+        value={value ? value : ''}
+        onChange={onChange}
+      />
     </Form.Group>
   );
 };

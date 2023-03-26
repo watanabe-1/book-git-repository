@@ -99,14 +99,6 @@ const ListTable = () => {
   };
 
   /**
-   * 送信ボタン
-   * @param form 送信パラメータ
-   */
-  const handleChangeTest = async (e) => {
-    console.log(e.target.value);
-  };
-
-  /**
    * 画面情報取得
    */
   const fetchInfo = async () => {
