@@ -119,11 +119,7 @@ const ListTable = () => {
                 name={name}
                 value={props.values[name]}
                 flag={info.delete}
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  console.log(JSON.stringify(props.values));
-                  props.handleChange(e);
-                }}
+                onChange={(e) => props.handleChange(e)}
               />
             );
           },

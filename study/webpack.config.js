@@ -149,7 +149,7 @@ module.exports = {
     ],
   },
   resolve: {
-    // .js と .vue 拡張子は import で付いてなくても解決
+    // '.js', '.jsx', '.ts', '.tsx'拡張子は import で付いてなくても解決
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     // import するモジュールでパス付きでないものは npm の node_modules に入ってる
     modules: ['node_modules'],
