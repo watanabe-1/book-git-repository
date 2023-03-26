@@ -21,8 +21,8 @@ book-git-repository\study に使用しているライブラリ情報が入って
 
    - PostgreSQL をインストール → [PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
    - スキーマの作成
-   - 作成したスキーマで book-git-repository\DB\sql\DDL\ALL\CREATE_ALL.sql の実行
-   - 作成したスキーマで book-git-repository\DB\sql\DML\INSERT 内の sql の実行
+   - 作成したスキーマで book-git-repository\db\sql\DDL\ALL\CREATE_ALL.sql の実行
+   - 作成したスキーマで book-git-repository\db\sql\DML\INSERT 内の sql の実行
    - book-git-repository\study\src\main\resources\config\properties\database.properties を環境に合わせて修正
 
 2. ビルドからログインまで
