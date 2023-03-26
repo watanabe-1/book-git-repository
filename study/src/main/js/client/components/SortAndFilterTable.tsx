@@ -40,7 +40,7 @@ const SortAndFilterTable = ({
     sortDirection: ASCENDING,
   });
 
-  const handleSort = (column) => {
+  const handleSort = (column: TableColumn) => {
     if (isSort) {
       const { sortColumn, sortDirection } = tableData;
 
@@ -64,7 +64,7 @@ const SortAndFilterTable = ({
   };
 
   const { columns, sortColumn, sortDirection } = tableData;
-  const handleFilterChange = (column, value) => {
+  const handleFilterChange = (column: TableColumn, value: string) => {
     if (isFilter) {
       const newColumns = columns.map((c) => {
         if (c.name === column.name) {

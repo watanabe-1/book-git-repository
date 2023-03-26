@@ -37,47 +37,45 @@ const SortAndFilterFormTable = ({
   const schema = yup.object().shape(additions);
 
   return (
-    <div className="container">
-      <Formik
-        validationSchema={schema}
-        onSubmit={handleFormSubmit}
-        initialValues={initialValues}
-        enableReinitialize
-      >
-        {(props: FormikProps<{}>) => {
-          const {
-            values,
-            touched,
-            errors,
-            dirty,
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            handleReset,
-            setFieldValue,
-            validateForm,
-          } = props;
-          return (
-            <Form noValidate onSubmit={handleSubmit}>
-              <div className="text-end">
-                <SubmitButton title="更新" isLoading={isFormSubmitLoading} />
-                <Button
-                  ref={buttonElement}
-                  onClick={(event) => {
-                    validateForm(values);
-                  }}
-                  hidden
-                >
-                  バリデーション実施
-                </Button>
-              </div>
-              <SortAndFilterTable pColumns={columns} pRows={getRows(props)} />
-            </Form>
-          );
-        }}
-      </Formik>
-    </div>
+    <Formik
+      validationSchema={schema}
+      onSubmit={handleFormSubmit}
+      initialValues={initialValues}
+      enableReinitialize
+    >
+      {(props: FormikProps<{}>) => {
+        const {
+          values,
+          touched,
+          errors,
+          dirty,
+          isSubmitting,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          handleReset,
+          setFieldValue,
+          validateForm,
+        } = props;
+        return (
+          <Form noValidate onSubmit={handleSubmit}>
+            <div className="text-end">
+              <SubmitButton title="更新" isLoading={isFormSubmitLoading} />
+              <Button
+                ref={buttonElement}
+                onClick={(event) => {
+                  validateForm(values);
+                }}
+                hidden
+              >
+                バリデーション実施
+              </Button>
+            </div>
+            <SortAndFilterTable pColumns={columns} pRows={getRows(props)} />
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
 
