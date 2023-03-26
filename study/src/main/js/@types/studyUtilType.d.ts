@@ -129,7 +129,7 @@ export type FormConfirmData = {
 /**
  * ListTableForm作成時使用object作成メソッドで使用するconfigのタイプ
  */
-export type buildListTableFormObjConfig = {
+export type BuildListTableFormObjConfig = {
   className: string;
   list: {
     name: string;
@@ -144,6 +144,28 @@ export type buildListTableFormObjConfig = {
       errData: ErrorResults;
       setErrData: (value: React.SetStateAction<{}>) => void;
     };
+  }[];
+};
+
+/**
+ * ListTableForm作成時使用object作成メソッドで作成obj
+ */
+export type TableFormObjConfig = {
+  additions: {};
+  initialValues: {};
+  getRows: (props: FormikProps<unknown>) => {
+    cells: {
+      name: string;
+      value: any;
+      element: JSX.Element;
+      hidden: boolean;
+    }[];
+  }[];
+  columns: {
+    name: string;
+    value: string;
+    filterValue: string;
+    hidden: boolean;
   }[];
 };
 

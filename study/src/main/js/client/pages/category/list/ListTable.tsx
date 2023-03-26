@@ -1,60 +1,28 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import { initialize } from '../../../init';
-import Table from 'react-bootstrap/Table';
-import { FormConfirmData } from '../../../../@types/studyUtilType';
-import { TypeConst } from '../../../../constant/typeConstant';
-import { onServer, executeFirst } from '../../../on-server';
+import { FormikProps } from 'formik';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  fetchGet,
-  fetchPost,
-  getContextPath,
-  addContextPath,
-  pathJoin,
-  keyJoin,
-} from '../../../../study/util/studyUtil';
-import {
-  getInputFile,
-  getSetInputFileFunc,
-} from '../../../../study/util/studyFormUtil';
-import {
-  getServerErrMsg,
-  isServerErr,
-  objToObjArray,
-} from '../../../../study/util/studyYupUtil';
-import {
-  addServerValidateFuncs,
-  buildEscapeListItemId,
-  buildListTableFormObj,
-} from '../../../../study/util/studyYupUtil';
-import {
-  CategoryUi,
-  Category,
+  BuildListTableFormObjConfig,
   CategoryFormList,
+  CategoryUi,
   ErrorResults,
-  buildListTableFormObjConfig,
 } from '../../../../@types/studyUtilType';
-import { FieldConst } from '../../../../constant/fieldConstant';
 import { ClassConst } from '../../../../constant/classConstant';
-import { CommonConst } from '../../../../constant/commonConstant';
+import { FieldConst } from '../../../../constant/fieldConstant';
 import { UrlConst } from '../../../../constant/urlConstant';
-import yup from '../../../yup/message/ja';
-import { Formik, FormikProps } from 'formik';
+import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
+import { fetchGet, fetchPost, keyJoin } from '../../../../study/util/studyUtil';
+import { buildListTableFormObj } from '../../../../study/util/studyYupUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
+import CheckBox from '../../../components/CheckBox';
+import FileBoxOnValidateAndImg from '../../../components/FileBoxOnValidateAndImg';
+import RadioBtn from '../../../components/RadioBtn';
+import SelectBox from '../../../components/SelectBox';
+import SortAndFilterFormTable from '../../../components/SortAndFilterFormTable';
+import TextArea from '../../../components/TextArea';
 import TextBox from '../../../components/TextBox';
 import TextBoxOnValidate from '../../../components/TextBoxOnValidate';
-import TextArea from '../../../components/TextArea';
-import SelectBox from '../../../components/SelectBox';
-import RadioBtn from '../../../components/RadioBtn';
-import CheckBox from '../../../components/CheckBox';
-import FileBoxOnValidate from '../../../components/FileBoxOnValidate';
-import SubmitButton from '../../../components/SubmitButton';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import FileBoxOnValidateAndImg from '../../../components/FileBoxOnValidateAndImg';
-import TextBoxExclusionForm from '../../../components/TextBoxExclusionForm';
-import SortAndFilterTable from '../../../components/SortAndFilterTable';
+import { executeFirst, onServer } from '../../../on-server';
+import yup from '../../../yup/message/ja';
 
 /**
  * カテゴリー リスト形式確認画面
@@ -137,7 +105,7 @@ const ListTable = () => {
   console.log(list);
 
   // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成するための設定
-  const toObjConfig: buildListTableFormObjConfig = {
+  const toObjConfig: BuildListTableFormObjConfig = {
     className: ClassConst.CAT_DATA_LIST,
     list: [
       {
@@ -361,61 +329,14 @@ const ListTable = () => {
   };
   // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成
   const listTableFormObj = buildListTableFormObj(list.catDataList, toObjConfig);
-  // yupで使用するスキーマの設定
-  const additions = listTableFormObj.additions;
-  // 初期値
-  const initialValues = listTableFormObj.initialValues;
-  // テーブル：ヘッダー
-  const columns = listTableFormObj.columns;
-  //テーブル: 行
-  const getRows = listTableFormObj.getRows;
-
-  // console.log('initialValuesです。');
-  console.log(initialValues);
-  // スキーマにセット
-  const schema = yup.object().shape(additions);
 
   return (
     <div className="container">
-      <Formik
-        validationSchema={schema}
-        onSubmit={handleSubmit}
-        initialValues={initialValues}
-        enableReinitialize
-      >
-        {(props: FormikProps<{}>) => {
-          const {
-            values,
-            touched,
-            errors,
-            dirty,
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            handleReset,
-            setFieldValue,
-            validateForm,
-          } = props;
-          return (
-            <Form noValidate onSubmit={handleSubmit}>
-              <div className="text-end">
-                <SubmitButton title="更新" isLoading={isUpdListLoading} />
-                <Button
-                  ref={buttonElement}
-                  onClick={(event) => {
-                    validateForm(values);
-                  }}
-                  hidden
-                >
-                  バリデーション実施
-                </Button>
-              </div>
-              <SortAndFilterTable pColumns={columns} pRows={getRows(props)} />
-            </Form>
-          );
-        }}
-      </Formik>
+      <SortAndFilterFormTable
+        tableFormConfig={listTableFormObj}
+        handleFormSubmit={handleSubmit}
+        isFormSubmitLoading={isUpdListLoading}
+      />
       {initInfoScript}
       {initListScript}
     </div>

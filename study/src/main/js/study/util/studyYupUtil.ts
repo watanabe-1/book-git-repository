@@ -3,7 +3,7 @@ import { AnyObject, ObjectShape } from 'yup/lib/object';
 import { CommonConst } from '../../constant/commonConstant';
 import {
   ErrorResults,
-  buildListTableFormObjConfig,
+  BuildListTableFormObjConfig,
 } from '../../@types/studyUtilType';
 import { format, keyJoin } from './studyUtil';
 import { Table } from 'react-bootstrap';
@@ -257,7 +257,7 @@ export function objToObjArray(obj: {}) {
  */
 export function buildListTableFormObj(
   objArray: {}[],
-  config: buildListTableFormObjConfig
+  config: BuildListTableFormObjConfig
 ) {
   // //yupで使用するスキーマの設定
   const additions = {};
