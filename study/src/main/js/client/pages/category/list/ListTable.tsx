@@ -5,6 +5,7 @@ import {
   CategoryFormList,
   CategoryUi,
   ErrorResults,
+  Image,
 } from '../../../../@types/studyUtilType';
 import { ClassConst } from '../../../../constant/classConstant';
 import { FieldConst } from '../../../../constant/fieldConstant';
@@ -21,8 +22,14 @@ import SortAndFilterFormTable from '../../../components/SortAndFilterFormTable';
 import TextArea from '../../../components/TextArea';
 import TextBox from '../../../components/TextBox';
 import TextBoxOnValidate from '../../../components/TextBoxOnValidate';
-import { executeFirst, onServer } from '../../../on-server';
+import {
+  executeFuncIfNeeded,
+  executeFuncsIfNeeded,
+  onServer,
+} from '../../../on-server';
 import yup from '../../../yup/message/ja';
+import Slider from '../../../components/Slider';
+import ModalSlider from '../../../components/ModalSlider';
 
 /**
  * カテゴリー リスト形式確認画面
@@ -45,6 +52,12 @@ const ListTable = () => {
     ErrorResults,
     React.Dispatch<React.SetStateAction<{}>>
   ];
+  const [initialImageList, initlImageListScript] = onServer(
+    (api) => api.getImageList(),
+    [],
+    'category.imageList'
+  ) as [Image[], JSX.Element];
+  const [imageList, setImageList] = useState(initialImageList);
   const [isUpdListLoading, setUpdListLoading] = useState(false);
   const buttonElement = useRef<HTMLButtonElement>(null);
 
@@ -83,6 +96,14 @@ const ListTable = () => {
   };
 
   /**
+   * 画像リスト情報取得
+   */
+  const fetchImageListData = async () => {
+    const response = await fetchGet(UrlConst.Category.IMAGELISTDATA);
+    setImageList(await response.json());
+  };
+
+  /**
    * リストデータ更新
    */
   const fetchUpdListData = async (form) => {
@@ -95,8 +116,7 @@ const ListTable = () => {
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFirst(fetchInfo);
-    executeFirst(fetchListData);
+    executeFuncsIfNeeded([fetchInfo, fetchListData, fetchImageListData]);
   }, []);
 
   if (!info.catTypes || !list.catDataList) return <BodysLodingSpinner />;
@@ -245,11 +265,11 @@ const ListTable = () => {
             return (
               <>
                 <label>{props.values[name]}</label>
-                <TextBox
-                  name={name}
-                  value={props.values[name]}
-                  onChange={props.handleChange}
-                  hidden
+                <ModalSlider
+                  imageList={imageList}
+                  setFieldValue={(value) => {
+                    props.setFieldValue(name, value);
+                  }}
                 />
               </>
             );
@@ -335,6 +355,7 @@ const ListTable = () => {
       />
       {initInfoScript}
       {initListScript}
+      {initlImageListScript}
     </div>
   );
 };

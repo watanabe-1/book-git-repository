@@ -7,6 +7,7 @@ export namespace UrlConst {
     export const RESULT = '/category/result';
     export const LIST = '/category/list';
     export const LISTDATA = '/category/listdata';
+    export const IMAGELISTDATA = '/category/imageList';
     export const LISTDATAUPDATE = '/category/listdataUpdate';
   }
 }

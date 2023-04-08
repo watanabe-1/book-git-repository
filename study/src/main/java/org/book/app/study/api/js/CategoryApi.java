@@ -1,8 +1,8 @@
 package org.book.app.study.api.js;
 
-import org.springframework.stereotype.Component;
 import org.book.app.study.api.CategoryApiController;
 import org.book.app.study.util.StudyStringUtil;
+import org.springframework.stereotype.Component;
 import lombok.AllArgsConstructor;
 
 /**
@@ -34,5 +34,14 @@ public class CategoryApi implements ServerApi {
    */
   public String getListData() {
     return StudyStringUtil.objectToJsonStr(categoryApiController.getListData());
+  }
+
+  /**
+   * 画像情報一覧取得
+   * 
+   * @return 画像情報一覧
+   */
+  public String getImageList() {
+    return StudyStringUtil.objectToJsonStr(categoryApiController.getImageList());
   }
 }

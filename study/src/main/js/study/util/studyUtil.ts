@@ -144,22 +144,43 @@ export function addContextPath(url: string): string {
  * パスを結合
  *
  * @param base ベース
- * @param add 追加対象
+ * @param adds 追加対象
  * @return 結合したパス
  */
-export function pathJoin(base: string, add: string): string {
-  return JoinBase(base, add, '/');
+export function pathJoin(base: string, ...adds: string[]): string {
+  return JoinBases(base, adds, '/');
 }
 
 /**
  * keyを結合
  *
  * @param base ベース
- * @param add 追加対象
+ * @param adds 追加対象
  * @return 結合したパス
  */
-export function keyJoin(base: string, add: string): string {
-  return JoinBase(base, add, '.');
+export function keyJoin(base: string, ...adds: string[]): string {
+  return JoinBases(base, adds, '.');
+}
+
+/**
+ * 区切り文字で結合
+ *
+ * @param base ベース
+ * @param adds 追加する対象
+ * @param separator 区切り文字1文字
+ * @return 結合したもの
+ */
+export function JoinBases(
+  base: string,
+  adds: string[],
+  separator: string
+): string {
+  let ret = base;
+  adds.forEach((add) => {
+    ret = JoinBase(ret, add, separator);
+  });
+
+  return ret;
 }
 
 /**

@@ -1,4 +1,3 @@
-import { addRoundedRectPath } from 'chart.js/helpers';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -34,7 +33,7 @@ const Stepper = ({
                   }
                 >
                   <span className="step">{index + 1}</span>
-                  {!noLable ? <span className="title">{label}</span> : ''}
+                  {!noLable && <span className="title">{label}</span>}
                 </li>
               ))}
             </ul>

@@ -60,17 +60,37 @@ export function setSSR(isSSR) {
   //console.log(anyWindow.isSSR);
   anyWindow.isSSR = isSSR;
 }
+
 /**
  * SSRがされてない場合は引数の関数を実行
  * SSRがされている場合は、SSRフラグをfalseに
  * @param func SSRされていない時に実行するファンクション
  */
-export function executeFirst(func = null) {
+export function executeFuncIfNeeded(func: () => any = null) {
   if (!isSSR()) {
     //ssrが行われなかった時
     if (func) {
       func();
     }
+  } else {
+    // SSRフラグをfalseに
+    setSSR(false);
+  }
+}
+
+/**
+ * SSRがされてない場合は引数の関数を実行
+ * SSRがされている場合は、SSRフラグをfalseに
+ * @param funcs SSRされていない時に実行するファンクション達
+ */
+export function executeFuncsIfNeeded(funcs: (() => any)[] = null) {
+  if (!isSSR()) {
+    //ssrが行われなかった時
+    funcs.forEach((func) => {
+      if (func) {
+        func();
+      }
+    });
   } else {
     // SSRフラグをfalseに
     setSSR(false);

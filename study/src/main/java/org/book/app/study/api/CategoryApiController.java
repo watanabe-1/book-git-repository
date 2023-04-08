@@ -8,10 +8,12 @@ import org.book.app.study.dto.data.FormConfirmData;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.dto.ui.CategoryUi;
 import org.book.app.study.entity.Category;
+import org.book.app.study.entity.Image;
 import org.book.app.study.form.CategoryForm;
 import org.book.app.study.helper.CategoryHelper;
 import org.book.app.study.helper.UploadHelper;
 import org.book.app.study.service.CategoryService;
+import org.book.app.study.service.ImageService;
 import org.book.app.study.service.api.CategoryApiService;
 import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyUtil;
@@ -60,6 +62,11 @@ public class CategoryApiController extends ApiController {
   private final CategoryService categoryService;
 
   /**
+   * 画像情報 Service
+   */
+  private final ImageService imageService;
+
+  /**
    * 画面情報取得
    * 
    * @return json(カテゴリーごとの家計簿情報)
@@ -71,7 +78,7 @@ public class CategoryApiController extends ApiController {
   }
 
   /**
-   * 画面情報取得
+   * 確認画面情報取得
    * 
    * @param form 送信されたデータ
    * @param model モデル
@@ -145,7 +152,7 @@ public class CategoryApiController extends ApiController {
   }
 
   /**
-   * 画面情報取得
+   * リスト画面情報取得
    * 
    * @return json(カテゴリーの一覧)
    */
@@ -156,6 +163,17 @@ public class CategoryApiController extends ApiController {
     StudyBeanUtil.setStudyEntityListPropertiesNull(catFormList.getCatDataList());
 
     return catFormList;
+  }
+
+  /**
+   * 画像情報一覧取得
+   * 
+   * @return json(画像情報一覧)
+   */
+  @RequestMapping(value = "/category/imageList", method = RequestMethod.GET)
+  @ResponseBody
+  public List<Image> getImageList() {
+    return imageService.findAll();
   }
 
   /**

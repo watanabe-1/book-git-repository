@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import { Context } from './Content';
-import { onServer, executeFirst } from '../../../on-server';
+import { onServer, executeFuncIfNeeded } from '../../../on-server';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
 import {
   getInputFile,
@@ -87,7 +87,7 @@ const Basic = (props) => {
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFirst(fetchInfo);
+    executeFuncIfNeeded(fetchInfo);
   }, []);
 
   console.log(info);
