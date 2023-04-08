@@ -267,8 +267,26 @@ const ListTable = () => {
                 <label>{props.values[name]}</label>
                 <ModalSlider
                   imageList={imageList}
-                  setFieldValue={(value) => {
-                    props.setFieldValue(name, value);
+                  setImage={(image) => {
+                    props.setFieldValue(name, image.imgId);
+                    props.setFieldValue(
+                      names[
+                        keyJoin(
+                          FieldConst.Category.IMG_IDS,
+                          FieldConst.Image.IMG_PATH
+                        )
+                      ],
+                      image.imgPath
+                    );
+                    props.setFieldValue(
+                      names[
+                        keyJoin(
+                          FieldConst.Category.IMG_IDS,
+                          FieldConst.Image.IMG_NAME
+                        )
+                      ],
+                      image.imgName
+                    );
                   }}
                 />
               </>
@@ -329,7 +347,7 @@ const ListTable = () => {
                   ]
                 }
                 onChange={getSetInputFileFunc(name, props.setFieldValue)}
-              ></FileBoxOnValidateAndImg>
+              />
             );
           },
           hidden: false,

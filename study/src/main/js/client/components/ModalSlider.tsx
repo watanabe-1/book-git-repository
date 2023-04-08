@@ -18,11 +18,11 @@ import Row from 'react-bootstrap/Row';
 const ModalSlider = ({
   title = null,
   imageList,
-  setFieldValue = null,
+  setImage = null,
 }: {
   title?: string;
   imageList: Image[];
-  setFieldValue?: (value: string) => void;
+  setImage?: (value: Image) => void;
 }) => {
   const [index, setIndex] = useState(0);
 
@@ -32,7 +32,7 @@ const ModalSlider = ({
   const handleShow = () => setShow(true);
 
   const handleSelect = (e) => {
-    setFieldValue(imageList[index].imgId);
+    if (setImage) setImage(imageList[index]);
     handleClose();
   };
 
@@ -65,7 +65,7 @@ const ModalSlider = ({
           <Button variant="secondary" onClick={handleClose}>
             閉じる
           </Button>
-          {setFieldValue && (
+          {setImage && (
             <Button variant="primary" onClick={handleSelect}>
               変更
             </Button>
