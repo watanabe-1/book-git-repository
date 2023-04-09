@@ -390,6 +390,7 @@ const ListTable = () => {
         tableFormConfig={listTableFormObj}
         handleFormSubmit={handleSubmit}
         isFormSubmitLoading={isUpdListLoading}
+        buttonElement={buttonElement}
       />
       {initInfoScript}
       {initListScript}

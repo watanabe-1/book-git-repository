@@ -15,13 +15,13 @@ const SortAndFilterFormTable = ({
   tableFormConfig,
   handleFormSubmit,
   isFormSubmitLoading = false,
+  buttonElement,
 }: {
   tableFormConfig: TableFormObjConfig;
   handleFormSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   isFormSubmitLoading?: boolean;
+  buttonElement: React.MutableRefObject<HTMLButtonElement>;
 }) => {
-  const buttonElement = useRef<HTMLButtonElement>(null);
-
   // yupで使用するスキーマの設定
   const additions = tableFormConfig.additions;
   // 初期値
