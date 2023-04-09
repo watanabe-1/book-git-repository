@@ -11,7 +11,12 @@ import { ClassConst } from '../../../../constant/classConstant';
 import { FieldConst } from '../../../../constant/fieldConstant';
 import { UrlConst } from '../../../../constant/urlConstant';
 import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
-import { fetchGet, fetchPost, keyJoin } from '../../../../study/util/studyUtil';
+import {
+  addContextPath,
+  fetchGet,
+  fetchPost,
+  keyJoin,
+} from '../../../../study/util/studyUtil';
 import { buildListTableFormObj } from '../../../../study/util/studyYupUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import CheckBox from '../../../components/CheckBox';
@@ -346,7 +351,22 @@ const ListTable = () => {
                     ]
                   ]
                 }
-                onChange={getSetInputFileFunc(name, props.setFieldValue)}
+                onChange={getSetInputFileFunc(
+                  props.setFieldValue,
+                  name,
+                  names[
+                    keyJoin(
+                      FieldConst.Category.IMG_IDS,
+                      FieldConst.Image.IMG_PATH
+                    )
+                  ],
+                  names[
+                    keyJoin(
+                      FieldConst.Category.IMG_IDS,
+                      FieldConst.Image.IMG_NAME
+                    )
+                  ]
+                )}
               />
             );
           },

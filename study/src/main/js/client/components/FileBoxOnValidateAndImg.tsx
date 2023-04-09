@@ -13,7 +13,6 @@ const FileBoxOnValidateAndImg = ({
   accept,
   path,
   fileName = null,
-  isAddContextPath = true,
   onChange,
 }: {
   title?: string;
@@ -30,7 +29,7 @@ const FileBoxOnValidateAndImg = ({
   return (
     <>
       <img
-        src={isAddContextPath ? addContextPath(newPath) : newPath}
+        src={path.startsWith('data:') ? newPath : addContextPath(newPath)}
         className="mh-100 mw-100"
         width="50"
         height="30"

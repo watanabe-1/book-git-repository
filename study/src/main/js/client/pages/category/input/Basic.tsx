@@ -220,8 +220,8 @@ const Basic = (props) => {
                     error={errors.catIcon}
                     accept="image/*"
                     onChange={getSetInputFileFunc(
-                      FieldConst.Category.CAT_ICON,
-                      props.setFieldValue
+                      props.setFieldValue,
+                      FieldConst.Category.CAT_ICON
                     )}
                   />
                 </Col>

@@ -16,14 +16,30 @@ export function getInputFile(event: React.ChangeEvent<HTMLInputElement>) {
  * @returns inputされたファイルをセットする関数
  */
 export function getSetInputFileFunc(
-  name: string,
   setFieldValue: (
     field: string,
     value: unknown,
     shouldValidate?: boolean
-  ) => void
+  ) => void,
+  fileKey: string,
+  imgPathKey?: string,
+  imgNameKey?: string
 ) {
   return (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFieldValue(name, getInputFile(event));
+    setFieldValue(fileKey, getInputFile(event));
+    // 以下画像置き換え処理
+    if (imgPathKey && imgNameKey) {
+      const file = event.target.files[0];
+      // ファイルタイプのチェック
+      if (!file.type.startsWith('image/')) {
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        setFieldValue(imgPathKey, reader.result);
+        setFieldValue(imgNameKey, null);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 }
