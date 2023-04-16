@@ -1,5 +1,5 @@
 import { Formik, FormikProps } from 'formik';
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { TableFormObjConfig } from '../../@types/studyUtilType';
@@ -15,12 +15,12 @@ const SortAndFilterFormTable = ({
   tableFormConfig,
   handleFormSubmit,
   isFormSubmitLoading = false,
-  buttonElement,
+  validateButton,
 }: {
   tableFormConfig: TableFormObjConfig;
   handleFormSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
   isFormSubmitLoading?: boolean;
-  buttonElement: React.MutableRefObject<HTMLButtonElement>;
+  validateButton: React.MutableRefObject<HTMLButtonElement>;
 }) => {
   // yupで使用するスキーマの設定
   const additions = tableFormConfig.additions;
@@ -62,7 +62,7 @@ const SortAndFilterFormTable = ({
             <div className="text-end">
               <SubmitButton title="更新" isLoading={isFormSubmitLoading} />
               <Button
-                ref={buttonElement}
+                ref={validateButton}
                 onClick={(event) => {
                   validateForm(values);
                 }}
