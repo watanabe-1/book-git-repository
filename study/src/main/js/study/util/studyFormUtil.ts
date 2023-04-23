@@ -11,9 +11,11 @@ export function getInputFile(event: React.ChangeEvent<HTMLInputElement>) {
 
 /**
  * inputされたファイルをセットする関数を返却
- * @param name セット対象名
  * @param setFieldValue フィールドにセットするformikの関数
- * @returns inputされたファイルをセットする関数
+ * @param fileKey  セット対象名
+ * @param imgPathKey セット対象パス名
+ * @param imgNameKey セット対象画像名
+ * @returns
  */
 export function getSetInputFileFunc(
   setFieldValue: (

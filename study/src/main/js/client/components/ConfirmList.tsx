@@ -2,6 +2,7 @@ import React from 'react';
 import Table from 'react-bootstrap/Table';
 import { FormConfirmData } from '../../@types/studyUtilType';
 import { TypeConst } from '../../constant/typeConstant';
+import ImageIcon from './ImageIcon';
 /**
  *
  * @returns form確認画面リスト表示用
@@ -21,17 +22,21 @@ const ConfirmList = (props: { listData: FormConfirmData[] }) => {
             return (
               <tr key={elem.id}>
                 <td>{elem.name}</td>
-                {elem.value ? <td>{elem.value}</td> : <td>None</td>}
+                {elem.value && typeof elem.value == 'string' ? (
+                  <td>{elem.value}</td>
+                ) : (
+                  <td>None</td>
+                )}
               </tr>
             );
           } else if (elem.type == TypeConst.Col.IMAGE) {
             return (
               <tr key={elem.id}>
                 <td>{elem.name}</td>
-                {elem.value ? (
-                  <td>{<img width="50" height="30" src={elem.value} />}</td>
+                {elem.value && typeof elem.value != 'string' ? (
+                  <td>{<ImageIcon path={null} file={elem.value} />}</td>
                 ) : (
-                  <td>None</td>
+                  <td>{<ImageIcon path={null} />}</td>
                 )}
               </tr>
             );

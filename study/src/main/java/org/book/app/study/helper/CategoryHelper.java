@@ -5,17 +5,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import org.apache.commons.io.FilenameUtils;
-import org.book.app.study.dto.data.FormConfirmData;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.entity.Category;
-import org.book.app.study.entity.Image;
 import org.book.app.study.enums.flag.DeleteFlag;
-import org.book.app.study.enums.type.CategoryType;
-import org.book.app.study.enums.type.ColType;
-import org.book.app.study.enums.type.ImageType;
 import org.book.app.study.form.CategoryForm;
 import org.book.app.study.service.CategoryService;
-import org.book.app.study.service.ImageService;
 import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyMessageUtil;
 import org.book.app.study.util.StudyStringUtil;
@@ -44,12 +38,6 @@ public class CategoryHelper {
    */
   @Autowired
   private UploadHelper uploadHelper;
-
-  /**
-   * 画像情報 Service
-   */
-  @Autowired
-  private ImageService imageService;
 
   /**
    * カテゴリー情報保存用リスト
@@ -165,59 +153,21 @@ public class CategoryHelper {
   }
 
   /**
-   * 確認画面用のデータに加工
+   * インサート時のエラーチェックを実施<br>
+   * エラー時はBindingResultに結果をセット
    * 
-   * @param form フォーム入力値
-   * @param contextPath コンテキストパス
-   * @return
+   * @param catForm 挿入対象
+   * @param result 結果
+   * @return 更新件数
    */
-  public List<FormConfirmData> getConfirmList(CategoryForm form, String contextPath) {
-    List<FormConfirmData> list = new ArrayList<FormConfirmData>();
-    int index = 0;
-
-    list.add(new FormConfirmData(index++, "カテゴリーコード",
-        StudyMessageUtil.getConfirmMessage(form.getCatCode()),
-        ColType.STRING.getCode()));
-    list.add(new FormConfirmData(index++, "カテゴリー名",
-        StudyMessageUtil.getConfirmMessage(form.getCatName()),
-        ColType.STRING.getCode()));
-    list.add(new FormConfirmData(index++, "メモ", StudyMessageUtil.getConfirmMessage(form.getNote()),
-        ColType.STRING.getCode()));
-    list.add(
-        new FormConfirmData(index++, "画像タイプ",
-            StudyMessageUtil.getConfirmMessage(
-                StudyStringUtil.isNullOrEmpty(form.getImgType()) ? null
-                    : ImageType.codeOf(form.getImgType()).getName(),
-                ColType.SELECT),
-            ColType.STRING.getCode()));
-    list.add(new FormConfirmData(index++, "カテゴリータイプ",
-        StudyMessageUtil.getConfirmMessage(
-            StudyStringUtil.isNullOrEmpty(form.getCatType()) ? null
-                : CategoryType.codeOf(form.getCatType()).getName(),
-            ColType.RADIO),
-        ColType.STRING.getCode()));
-    list.add(
-        new FormConfirmData(index++, "アクティブ",
-            StudyMessageUtil.getConfirmMessage(form.getActive(), ColType.CHECK),
-            ColType.STRING.getCode()));
-
-    // アップロードしたICON
-    MultipartFile catIcon = form.getCatIcon();
-    String imgPath = null;
-    // 画像をアップロードしたとき
-    if (!Objects.equals(catIcon, null)) {
-      // アップロードされたICONの拡張子
-      String imgExt = FilenameUtils.getExtension(catIcon.getOriginalFilename());
-      // アップロードされたファイルをbase64にエンコードした後にstring型に変換
-      imgPath = uploadHelper.encodeBase64(catIcon, imgExt);
-    } else {
-      Image img = imageService.findOne(StudyUtil.getNoImageCode());
-      imgPath = StudyStringUtil.pathJoin(contextPath, img.getImgPath(), img.getImgName());
+  public void validateIfDoInsert(CategoryForm catForm, BindingResult result) {
+    if (categoryService.countCatNameExceptCatCode(catForm.getCatCode(),
+        catForm.getCatName()) > 0) {
+      StudyMessageUtil.addError(result,
+          "catName",
+          "CategoryNameDuplication.message", catForm.getCatName());
+      log.error("CategoryNameDuplication.message", catForm.getCatName());
     }
-
-    list.add(new FormConfirmData(index++, "アイコン", imgPath, ColType.IMAGE.getCode()));
-
-    return list;
   }
 
 }

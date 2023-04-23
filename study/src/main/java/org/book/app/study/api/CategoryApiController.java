@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FilenameUtils;
-import org.book.app.study.dto.data.FormConfirmData;
+import org.book.app.study.dto.error.ErrorResults;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.dto.ui.CategoryUi;
 import org.book.app.study.entity.Category;
@@ -83,17 +83,17 @@ public class CategoryApiController extends ApiController {
    * @param form 送信されたデータ
    * @param model モデル
    * @param date 開いている画面の指定されている日付け
-   * @return json(カテゴリーごとの家計簿情報)
+   * @return json(空データ)
    * @throws BindException
    */
   @RequestMapping(value = "/category/confirm", method = RequestMethod.POST)
   @ResponseBody
-  public List<FormConfirmData> confirm(@ModelAttribute @Validated CategoryForm form,
+  public ErrorResults confirm(@ModelAttribute @Validated CategoryForm form,
       BindingResult result, ModelAndView model, HttpServletRequest request) throws BindException {
     throwBindExceptionIfNeeded(result);
     log.info("checkInputのformの中身", form);
 
-    return categoryHelper.getConfirmList(form, request.getContextPath());
+    return new ErrorResults();
   }
 
   /**
@@ -108,6 +108,7 @@ public class CategoryApiController extends ApiController {
   @ResponseBody
   public String result(@ModelAttribute @Validated CategoryForm form,
       BindingResult result, ModelAndView model) throws BindException {
+    categoryHelper.validateIfDoInsert(form, result);
     throwBindExceptionIfNeeded(result);
     // アップロードしたICON
     MultipartFile catIcon = form.getCatIcon();

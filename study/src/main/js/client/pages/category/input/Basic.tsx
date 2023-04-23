@@ -56,7 +56,11 @@ const Basic = (props) => {
 
     if (res.ok) {
       //コンテキストにform,confirmDataデータをセット
-      setCurrentState({ ...currentState, form: form, confirm: json });
+      setCurrentState({
+        ...currentState,
+        form: form,
+        info: info,
+      });
       // 確認画面へ
       props.handleNext();
     } else {

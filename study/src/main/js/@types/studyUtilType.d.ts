@@ -122,7 +122,7 @@ export type ErrorResults = {
 export type FormConfirmData = {
   id: string;
   name: string;
-  value: string;
+  value: string | File;
   type: string;
 };
 

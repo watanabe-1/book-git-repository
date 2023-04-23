@@ -5,11 +5,16 @@ import Result from './Result';
 import Stepper from '../../../components/Stepper';
 import BodysHead from '../../../components/BodysHead';
 import Col from 'react-bootstrap/Col';
-import { Category, FormConfirmData } from '../../../../@types/studyUtilType';
+import {
+  Category,
+  CategoryUi,
+  FormConfirmData,
+} from '../../../../@types/studyUtilType';
 
 type CategoryInput = {
   form: Category;
   confirm: FormConfirmData[];
+  info: CategoryUi;
 };
 
 export const Context = createContext<{
@@ -40,6 +45,7 @@ const Content = () => {
   const [currentState, setCurrentState] = useState<CategoryInput>({
     form: null,
     confirm: null,
+    info: null,
   });
   const value = {
     currentState,
