@@ -90,4 +90,20 @@ public interface CategoryMapper {
    */
   int countCatNameExceptCatCode(@Param("catCode") String catCode, @Param("catName") String catName);
 
+  /**
+   * カテゴリーコードの件数を取得
+   * 
+   * @param catCode CAT_CODE(カテゴリーコード)
+   * @return 件数
+   */
+  int countCatCode(@Param("catCode") String catCode);
+
+  /**
+   * カテゴリー名の件数を取得
+   * 
+   * @param catName CAT_NAME(カテゴリー名)
+   * @return 件数
+   */
+  int countCatName(@Param("catName") String catName);
+
 }

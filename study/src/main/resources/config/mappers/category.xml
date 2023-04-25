@@ -82,4 +82,14 @@
 		  where CAT_CODE &lt;&gt; #{catCode} AND CAT_NAME = #{catName}
 	</select>
 
+	<select id="countCatCode" resultType="java.lang.Integer">
+		select COUNT(1) from CATEGORY
+		  where CAT_CODE = #{catCode} 
+	</select>
+
+	<select id="countCatName" resultType="java.lang.Integer">
+		select COUNT(1) from CATEGORY
+		  where CAT_NAME = #{catName} 
+	</select>
+
 </mapper>

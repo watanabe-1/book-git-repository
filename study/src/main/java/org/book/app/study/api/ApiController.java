@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.terasoluna.gfw.common.exception.BusinessException;
+import lombok.extern.slf4j.XSlf4j;
 
 /**
  * api用コントローラー親クラス
  *
  */
 @Controller
+@XSlf4j
 public class ApiController {
 
   /**
@@ -130,12 +132,16 @@ public class ApiController {
    */
   private void addErrResult(BindException e, Locale locale, ErrorResults errorResults) {
     e.getBindingResult().getFieldErrors().forEach(fieldError -> {
-      errorResults.add(true, fieldError.getCode(), messageSource.getMessage(fieldError, locale),
+      String msg = messageSource.getMessage(fieldError, locale);
+      errorResults.add(true, fieldError.getCode(), msg,
           fieldError.getField());
+      log.debug(msg);
     });
     e.getBindingResult().getGlobalErrors().forEach(objectError -> {
+      String msg = messageSource.getMessage(objectError, locale);
       errorResults.add(true, objectError.getCode(), messageSource.getMessage(objectError, locale),
           objectError.getObjectName());
+      log.debug(msg);
     });
   }
 

@@ -133,4 +133,24 @@ public class CategoryService {
   public int countCatNameExceptCatCode(String catCode, String catName) {
     return categoryMapper.countCatNameExceptCatCode(catCode, catName);
   }
+
+  /**
+   * カテゴリーコードの件数を取得
+   * 
+   * @param catCode CAT_CODE(カテゴリーコード)
+   * @return 件数
+   */
+  public int countCatCode(String catCode) {
+    return categoryMapper.countCatCode(catCode);
+  }
+
+  /**
+   * カテゴリー名の件数を取得
+   * 
+   * @param catName CAT_NAME(カテゴリー名)
+   * @return 件数
+   */
+  public int countCatName(String catName) {
+    return categoryMapper.countCatName(catName);
+  }
 }

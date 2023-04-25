@@ -18,13 +18,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
-import lombok.extern.slf4j.XSlf4j;
 
 /**
  * カテゴリーの関する処理を行うためのHelperクラスを作成
  */
 @Component
-@XSlf4j
 public class CategoryHelper {
 
   /**
@@ -146,7 +144,6 @@ public class CategoryHelper {
         StudyMessageUtil.addError(result,
             StudyMessageUtil.getArrayFieldName("catDataList", i, "catName"),
             "CategoryNameDuplication.message", catForm.getCatName());
-        log.error("CategoryNameDuplication.message", catForm.getCatName());
       }
 
     }
@@ -161,12 +158,18 @@ public class CategoryHelper {
    * @return 更新件数
    */
   public void validateIfDoInsert(CategoryForm catForm, BindingResult result) {
-    if (categoryService.countCatNameExceptCatCode(catForm.getCatCode(),
+    if (categoryService.countCatCode(
+        catForm.getCatCode()) > 0) {
+      StudyMessageUtil.addError(result,
+          "catCode",
+          "CategoryCodeDuplication.message", catForm.getCatCode());
+    }
+
+    if (categoryService.countCatName(
         catForm.getCatName()) > 0) {
       StudyMessageUtil.addError(result,
           "catName",
           "CategoryNameDuplication.message", catForm.getCatName());
-      log.error("CategoryNameDuplication.message", catForm.getCatName());
     }
   }
 

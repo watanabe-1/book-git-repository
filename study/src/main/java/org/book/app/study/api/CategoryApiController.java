@@ -17,11 +17,9 @@ import org.book.app.study.service.ImageService;
 import org.book.app.study.service.api.CategoryApiService;
 import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyUtil;
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -90,6 +88,7 @@ public class CategoryApiController extends ApiController {
   @ResponseBody
   public ErrorResults confirm(@ModelAttribute @Validated CategoryForm form,
       BindingResult result, ModelAndView model, HttpServletRequest request) throws BindException {
+    categoryHelper.validateIfDoInsert(form, result);
     throwBindExceptionIfNeeded(result);
     log.info("checkInputのformの中身", form);
 
@@ -132,15 +131,8 @@ public class CategoryApiController extends ApiController {
     // フォームの値をエンティティにコピーし、共通項目をセット
     StudyBeanUtil.copyAndSetStudyEntityProperties(form, cat);
 
-    try {
-      // dbのカテゴリーテーブルに登録
-      categoryService.saveOne(cat);
-    } catch (DuplicateKeyException dke) {
-      result.addError(
-          new FieldError(result.getObjectName(), "catCode", "入力したカテゴリーは既に登録されています。"));
-      log.error("Exception happend!", dke);
-      throwBindExceptionIfNeeded(result);
-    }
+    // dbのカテゴリーテーブルに登録
+    categoryService.saveOne(cat);
 
     // 画像をアップロードしたとき
     if (!Objects.equals(catIcon, null)) {
