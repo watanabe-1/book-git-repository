@@ -147,7 +147,7 @@
                   <li class="nav-item">
                     <a
                       class="link-dark d-inline-flex text-decoration-none rounded"
-                      th:href="@{/thymeleaf/books/input}"
+                      th:href="@{/books/input}"
                     >
                       <span data-feather="package"></span>
                       家計簿_登録
@@ -306,6 +306,58 @@
                             >
                               <span data-feather="package"></span>
                               カテゴリー_確認
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </li>
+                  <li class="nav-item">
+                    <button
+                      class="btn btn-toggle d-inline-flex align-items-center rounded border-0"
+                      type="button"
+                      data-bs-toggle="collapse"
+                      data-bs-target="#collapseFourOne"
+                      aria-expanded="false"
+                      aria-controls="collapseFourOne"
+                    >
+                      旧家計簿
+                    </button>
+                    <div
+                      id="collapseFourOne"
+                      class="collapse"
+                      aria-labelledby="headingOne"
+                      data-bs-parent="#accordionExample"
+                    >
+                      <div>
+                        <ul
+                          class="btn-toggle-nav list-unstyled fw-normal pb-1 small"
+                        >
+                          <li class="nav-item">
+                            <a
+                              class="link-dark d-inline-flex text-decoration-none rounded"
+                              th:href="@{/thymeleaf/books/input}"
+                            >
+                              <span data-feather="package"></span>
+                              家計簿_登録
+                            </a>
+                          </li>
+                          <li class="nav-item">
+                            <a
+                              class="link-dark d-inline-flex text-decoration-none rounded"
+                              th:href="@{/thymeleaf/books/export}"
+                            >
+                              <span data-feather="package"></span>
+                              家計簿_出力
+                            </a>
+                          </li>
+                          <li class="nav-item">
+                            <a
+                              class="link-dark d-inline-flex text-decoration-none rounded"
+                              th:href="@{/thymeleaf/books/index}"
+                            >
+                              <span data-feather="package"></span>
+                              家計簿_一覧
                             </a>
                           </li>
                         </ul>

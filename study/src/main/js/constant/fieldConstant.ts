@@ -34,4 +34,24 @@ export namespace FieldConst {
     export const UPD_DATE = 'updDate';
     export const UPD_USER = 'updUser';
   }
+
+  /**
+   * 家計簿
+   */
+  export namespace Books {
+    export const SERIAL_KEY = 'serialKey';
+    export const BOOKS_ID = 'booksId';
+    export const USER_ID = 'userId';
+    export const BOOKS_TYPE = 'booksType';
+    export const BOOKS_DATE = 'booksDate';
+    export const BOOKS_PLACE = 'booksPlace';
+    export const CAT_CODE = 'catCode';
+    export const BOOKS_METHOD = 'booksMethod';
+    export const BOOKS_AMMOUNT = 'booksAmmount';
+    export const INS_DATE = 'insDate';
+    export const INS_USER = 'insUser';
+    export const UPD_DATE = 'updDate';
+    export const UPD_USER = 'updUser';
+    export const BOOKS_FILE = 'booksFile';
+  }
 }

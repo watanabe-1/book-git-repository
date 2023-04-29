@@ -28,7 +28,21 @@ const steps = [
   'カテゴリー情報登録完了',
 ];
 
-const getStepContent = (stepIndex, handleNext, handleBack, handleReset) => {
+/**
+ * ステップ数に応じて画面を返却する
+ *
+ * @param stepIndex 数値
+ * @param handleNext 次画面
+ * @param handleBack 前画面
+ * @param handleReset 最初の画面
+ * @returns
+ */
+const getStepContent = (
+  stepIndex: number,
+  handleNext: () => void,
+  handleBack: () => void,
+  handleReset: () => void
+) => {
   switch (stepIndex) {
     case 0:
       return <Basic handleNext={handleNext} />;

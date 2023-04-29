@@ -40,7 +40,7 @@ export type Category = {
   insUser: String;
   updDate: Date;
   updUser: String;
-  catIcon: any;
+  catIcon: File;
   imgIds: Image;
   delete: string;
 };
@@ -70,6 +70,7 @@ export type Books = {
   updDate: Date;
   updUser: String;
   catCodes: Category;
+  booksFile: File;
 };
 
 /**
@@ -97,6 +98,14 @@ export type CategoryUi = {
   catTypes: Type[];
   active: Flag;
   delete: Flag;
+};
+
+/**
+ * 家計簿UI
+ */
+export type BooksUi = {
+  form: Books;
+  booksTypes: Type[];
 };
 
 /**

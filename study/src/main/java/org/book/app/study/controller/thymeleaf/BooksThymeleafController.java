@@ -14,7 +14,6 @@ import org.book.app.study.util.StudyModelUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
 import org.book.app.study.view.DownloadCsvView;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -22,25 +21,25 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import lombok.AllArgsConstructor;
 
 /**
  * 家計簿コントローラ.
  *
  */
 @Controller
+@AllArgsConstructor
 public class BooksThymeleafController {
 
   /**
    * 家計簿 Service
    */
-  @Autowired
-  private BooksService booksService;
+  private final BooksService booksService;
 
   /**
    * 家計簿 Helper
    */
-  @Autowired
-  private BooksHelper booksHelper;
+  private final BooksHelper booksHelper;
 
   /**
    * 家計簿登録画面
@@ -74,7 +73,7 @@ public class BooksThymeleafController {
       return input(form, model);
     }
 
-    model.setViewName("/thymeleaf/books/result");
+    model.setViewName("books/result");
     List<Books> booksList = booksHelper.csvToBooksList(form.getBooksFile(), form.getBooksType());
     // 取得したファイル内の日付の最小値、最大値、帳票タイプ(支出)に合わせて今登録済みの内容を削除
     booksService.deleteByBooksDateAndBooksTypeAndUserId(

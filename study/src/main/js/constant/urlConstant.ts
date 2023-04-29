@@ -10,4 +10,11 @@ export namespace UrlConst {
     export const IMAGELISTDATA = '/category/imageList';
     export const LISTDATAUPDATE = '/category/listdataUpdate';
   }
+
+  /** 家計簿 */
+  export namespace Books {
+    export const INFO = '/books/info';
+    export const RESULT = '/books/result';
+    export const LIST = '/books/list';
+  }
 }

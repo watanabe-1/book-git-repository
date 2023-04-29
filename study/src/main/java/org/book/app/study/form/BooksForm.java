@@ -3,19 +3,19 @@ package org.book.app.study.form;
 import java.io.Serializable;
 import java.util.Date;
 import javax.validation.constraints.NotBlank;
-import org.springframework.web.multipart.MultipartFile;
 import org.book.app.common.validation.UploadFileMaxSize;
 import org.book.app.common.validation.UploadFileMediaType;
 import org.book.app.common.validation.UploadFileNotEmpty;
 import org.book.app.common.validation.UploadFileRequired;
 import org.book.app.study.util.StudyFileUtil;
+import org.springframework.web.multipart.MultipartFile;
 import lombok.Data;
 
 /**
  * BOOKS:家計簿(家計簿データ保存テーブル)のformクラス
  */
 @Data
-public class BooksForm implements Serializable {
+public class BooksForm implements Serializable, Form {
 
   /**
    * アップロードされたファイル
@@ -23,7 +23,8 @@ public class BooksForm implements Serializable {
   @UploadFileRequired
   @UploadFileNotEmpty
   @UploadFileMaxSize
-  @UploadFileMediaType(exts = StudyFileUtil.EXTENSION_BY_CSV, mediaTypes = StudyFileUtil.MEDIATYPE_BY_CSV)
+  @UploadFileMediaType(exts = StudyFileUtil.EXTENSION_BY_CSV,
+      mediaTypes = StudyFileUtil.MEDIATYPE_BY_CSV)
   private MultipartFile booksFile;
 
   /**
@@ -106,4 +107,9 @@ public class BooksForm implements Serializable {
    * 画面：タブ
    */
   private String tab;
+
+  /**
+   * ssr判定
+   */
+  private String ssr;
 }
