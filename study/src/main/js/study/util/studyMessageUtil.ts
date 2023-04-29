@@ -6,6 +6,7 @@ import { TypeConst } from '../../constant/typeConstant';
  *
  * @param value 入力内容
  * @param type 入力タイプ
+ * @param convert 変換内容
  * @return 確認画面メッセージ
  */
 export function getConfirmMessage(

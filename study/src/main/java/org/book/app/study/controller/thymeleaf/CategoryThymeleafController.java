@@ -68,7 +68,7 @@ public class CategoryThymeleafController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/category/thymeleaf/input", method = RequestMethod.GET)
+  @RequestMapping(value = "/thymeleaf/category/input", method = RequestMethod.GET)
   public ModelAndView input(HttpServletRequest request, @ModelAttribute CategoryForm form,
       ModelAndView model) {
     model.setViewName("/category/input");
@@ -87,7 +87,7 @@ public class CategoryThymeleafController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/category/thymeleaf/confirm", method = RequestMethod.POST)
+  @RequestMapping(value = "/thymeleaf/category/confirm", method = RequestMethod.POST)
   public ModelAndView confirm(HttpServletRequest request,
       @ModelAttribute @Validated CategoryForm form, BindingResult result,
       ModelAndView model) {
@@ -136,7 +136,7 @@ public class CategoryThymeleafController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/category/thymeleaf/result", method = RequestMethod.POST)
+  @RequestMapping(value = "/thymeleaf/category/result", method = RequestMethod.POST)
   public ModelAndView result(HttpServletRequest request, @ModelAttribute CategoryForm form,
       BindingResult result,
       ModelAndView model) {
@@ -172,7 +172,7 @@ public class CategoryThymeleafController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/category/thymeleaf/index", method = RequestMethod.GET)
+  @RequestMapping(value = "/thymeleaf/category/index", method = RequestMethod.GET)
   public ModelAndView displayList(ModelAndView model) {
     model.setViewName("category/index");
     // 画面にセット
@@ -189,10 +189,10 @@ public class CategoryThymeleafController {
    * @param catListParam 画面送信情報
    * @return リダイレクト先
    */
-  @RequestMapping(value = "/category/thymeleaf/listUpdate", method = RequestMethod.POST)
+  @RequestMapping(value = "/thymeleaf/category/listUpdate", method = RequestMethod.POST)
   public ModelAndView listUpdate(@Validated @ModelAttribute CategoryFormList catListParam,
       BindingResult result, ModelAndView model) {
-    model.setViewName("redirect:/category/thymeleaf/index");
+    model.setViewName("redirect:/thymeleaf/category/index");
     if (result.hasErrors()) {
       List<String> errorList = result.getAllErrors().stream()
           .map(error -> error.getDefaultMessage()).distinct().toList();

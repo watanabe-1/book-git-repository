@@ -232,7 +232,7 @@ export function objToObjArray(obj: {}) {
           // 最終周の時
           if (keyArray.length - 1 == index) {
             // 他の項目とかぶりが生じた場合はそれはオブジェクトではなくなっているので
-            //判定を行うが基本的にかぶりが起きないように収支済みのためかぶりない想定
+            //判定を行うが基本的にかぶりが起きないように修正済みのためかぶりない想定
             // またかぶりがあった場合は上書き
             if (newObj && newObj.constructor === Object) {
               newObj[value] = obj[key];

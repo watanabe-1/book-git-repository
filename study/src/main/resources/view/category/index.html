@@ -14,7 +14,7 @@
     >
       <h1 class="h3">カテゴリー一覧</h1>
       <div class="btn-group ml-auto">
-        <a class="btn btn-link" th:href="@{/category/thymeleaf/input}">
+        <a class="btn btn-link" th:href="@{/thymeleaf/category/input}">
           <span data-feather="user-plus"></span>
           カテゴリー登録
         </a>
@@ -25,7 +25,7 @@
         <label class="text-danger" th:text="${error}"></label>
       </div>
       <form
-        th:action="@{/category/thymeleaf/listUpdate}"
+        th:action="@{/thymeleaf/category/listUpdate}"
         th:object="${catListParam}"
         enctype="multipart/form-data"
         th:method="post"

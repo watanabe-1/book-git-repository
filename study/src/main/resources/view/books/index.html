@@ -14,7 +14,7 @@
     >
       <h1 class="h3">家計簿一覧</h1>
       <div class="btn-group ml-auto">
-        <a class="btn btn-link" th:href="@{/books/input}">
+        <a class="btn btn-link" th:href="@{/thymeleaf/books/input}">
           <span data-feather="user-plus"></span>
           家計簿一括登録
         </a>
@@ -63,7 +63,7 @@
         <div class="col-6">
           <a
             class="btn btn-link"
-            th:href="@{/books/index(date = ${#dates.format(backDate, 'yyyy/MM/dd')}, tab = ${tab})}"
+            th:href="@{/thymeleaf/books/index(date = ${#dates.format(backDate, 'yyyy/MM/dd')}, tab = ${tab})}"
             id="datepicker-right"
           >
             <span data-feather="user-plus">前月</span>
@@ -74,7 +74,7 @@
           ></span>
           <a
             class="btn btn-link"
-            th:href="@{/books/index(date = ${#dates.format(nextDate, 'yyyy/MM/dd')}, tab = ${tab})}"
+            th:href="@{/thymeleaf/books/index(date = ${#dates.format(nextDate, 'yyyy/MM/dd')}, tab = ${tab})}"
             id="datepicker-left"
           >
             <span data-feather="user-plus">次月</span>
@@ -86,7 +86,7 @@
             placeholder="日付を選択してください"
             readonly="readonly"
           />
-          <a hidden th:href="@{/books/index}" id="datepicker"></a>
+          <a hidden th:href="@{/thymeleaf/books/index}" id="datepicker"></a>
         </div>
         <div class="col-2">
           <span data-feather="user-plus"
@@ -196,7 +196,7 @@
             <a
               hiidden
               id="restBarAndLineByYear"
-              th:href="@{/ajax/books/chart/byYear/all}"
+              th:href="@{/ajax/thymeleaf/books/chart/byYear/all}"
             ></a>
           </div>
           <div class="row border-bottom my-2"></div>
@@ -214,7 +214,7 @@
             <a
               hiidden
               id="restCategory"
-              th:href="@{/ajax/books/chart/byMonth/category}"
+              th:href="@{/ajax/thymeleaf/books/chart/byMonth/category}"
             ></a>
           </div>
           <div class="row border-bottom my-2"></div>
@@ -228,7 +228,7 @@
             <a
               hiidden
               id="restMethod"
-              th:href="@{/ajax/books/chart/byMonth/method}"
+              th:href="@{/ajax/thymeleaf/books/chart/byMonth/method}"
             ></a>
           </div>
         </div>
@@ -260,12 +260,12 @@
           <a
             hiidden
             id="syukujitsuList"
-            th:href="@{/ajax/books/calendar/syukujitsu}"
+            th:href="@{/ajax/thymeleaf/books/calendar/syukujitsu}"
           ></a>
           <a
             hiidden
             id="AmountByDayList"
-            th:href="@{/ajax/books/calendar/AmountByDay}"
+            th:href="@{/ajax/thymeleaf/books/calendar/AmountByDay}"
           ></a>
         </div>
       </div>
