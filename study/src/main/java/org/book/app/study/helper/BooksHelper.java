@@ -13,9 +13,6 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
 import org.book.app.study.dto.data.BooksChartData;
 import org.book.app.study.dto.data.BooksChartDatasets;
 import org.book.app.study.dto.file.BooksColumn;
@@ -29,6 +26,9 @@ import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyFileUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 家計簿のHelperクラスを作成
@@ -78,11 +78,29 @@ public class BooksHelper {
   }
 
   /**
+   * 対象の家計簿データから最大日付(収入日、購入日)を取得
+   * 
+   * @return 最大日付(収入日、購入日)
+   */
+  public Date getMaxBooksDate(List<Books> booksList) {
+    return booksList.stream().max(Comparator.comparing(Books::getBooksDate)).get().getBooksDate();
+  }
+
+  /**
+   * 対象の家計簿データから最少日付(収入日、購入日)を取得
+   * 
+   * @return 最少日付(収入日、購入日)
+   */
+  public Date getMinBooksDate(List<Books> booksList) {
+    return booksList.stream().min(Comparator.comparing(Books::getBooksDate)).get().getBooksDate();
+  }
+
+  /**
    * アップロードされたファイルデータをもとにentytiにセットし返却
    * 
    * @param booksFile アップロードされたデータ
    * @param booksType アップロードされたデータの種類
-   * @param charset   文字コード
+   * @param charset 文字コード
    * @return Books セットされたentity
    */
   public List<Books> csvToBooksList(MultipartFile booksFile, String booksType) {
@@ -90,7 +108,8 @@ public class BooksHelper {
     String user = StudyUtil.getLoginUser();
     List<Books> booksList = new ArrayList<Books>();
 
-    List<BooksColumn> booksColList = StudyFileUtil.csvFileToList(booksFile, BooksColumn.class, false);
+    List<BooksColumn> booksColList =
+        StudyFileUtil.csvFileToList(booksFile, BooksColumn.class, false);
     booksColList.forEach(col -> {
       Books books = new Books();
       books.setBooksId(UUID.randomUUID().toString());
@@ -161,7 +180,7 @@ public class BooksHelper {
   /**
    * 1月ごとの家計簿データを取得
    * 
-   * @param date      基準日付
+   * @param date 基準日付
    * @param booksType 家計簿の種類
    * @return 家計簿データ
    */
@@ -174,7 +193,7 @@ public class BooksHelper {
   /**
    * 基準日から1年前までの家計簿データを取得
    * 
-   * @param date      基準日付
+   * @param date 基準日付
    * @param booksType 家計簿の種類
    * @return 家計簿データ
    */
@@ -188,7 +207,7 @@ public class BooksHelper {
    * 基準年の家計簿データを取得<br>
    * 基準年がnullの場合は全年度のデータ取得
    * 
-   * @param date      基準日付
+   * @param date 基準日付
    * @param booksType 家計簿の種類
    * @return 家計簿データ
    */
@@ -206,7 +225,7 @@ public class BooksHelper {
   /**
    * 1月ごとのデータをセットする
    * 
-   * @param bdd      セット対象
+   * @param bdd セット対象
    * @param booksMap セット元データ
    */
   public void setChartDataByMonth(BooksChartData bdd, Map<String, Long> booksMap) {
@@ -226,7 +245,7 @@ public class BooksHelper {
   /**
    * 年月ごとのデータをセットする
    * 
-   * @param bdd      セット対象
+   * @param bdd セット対象
    * @param booksMap セット元データ
    */
   public void setChartDataByYear(BooksChartData bdd, Date date) {
@@ -240,8 +259,7 @@ public class BooksHelper {
     // 支出を取得
     List<Books> booksByExpenses = findOneYearAgoByDateAndType(date, BooksType.EXPENSES.getCode());
     // 収入を取得
-    List<Books> booksByIncome = findOneYearAgoByDateAndType(date, BooksType.INCOME.getCode());
-    ;
+    List<Books> booksByIncome = findOneYearAgoByDateAndType(date, BooksType.INCOME.getCode());;
 
     // セット対象
     List<BooksChartDatasets> dataSets = new ArrayList<>();
@@ -260,7 +278,8 @@ public class BooksHelper {
     int indexByMethod = 0;
     // indexを使用したいためforeachではなくfor文を使用
     for (String keyByMethod : booksByMethodMap.keySet()) {
-      Map<String, Long> booksByMethodAndMonthMap = groupByBooksDateAndSortToLong(booksByMethodMap.get(keyByMethod));
+      Map<String, Long> booksByMethodAndMonthMap =
+          groupByBooksDateAndSortToLong(booksByMethodMap.get(keyByMethod));
 
       setChartDatasetsByYear(dataSets, dataSets.size(), booksByMethodAndMonthMap, date, keyByMethod,
           BAR, backgroundColorsByBar.get(indexByMethod), borderColorsByBar.get(indexByMethod),
@@ -291,14 +310,16 @@ public class BooksHelper {
     }
 
     // 総支出
-    Map<String, Long> booksByMonthSumAmountDataByExpenses = groupByBooksDateAndSortToLong(booksByExpenses);
+    Map<String, Long> booksByMonthSumAmountDataByExpenses =
+        groupByBooksDateAndSortToLong(booksByExpenses);
 
     // lineの先頭に追加
     setChartDatasetsByYear(dataSets, barSize, booksByMonthSumAmountDataByExpenses, date,
         LABEL_MAX_EXPENSES, LINE, RGB_WHITE, borderColorsByLine.get(indexByLine++), false);
 
     // 総収入
-    Map<String, Long> booksByMonthSumAmountDataByIncome = groupByBooksDateAndSortToLong(booksByIncome);
+    Map<String, Long> booksByMonthSumAmountDataByIncome =
+        groupByBooksDateAndSortToLong(booksByIncome);
 
     // lineの先頭に追加
     setChartDatasetsByYear(dataSets, barSize, booksByMonthSumAmountDataByIncome, date,
@@ -329,15 +350,15 @@ public class BooksHelper {
   /**
    * 年ごとのデータセットをセットする
    * 
-   * @param dataSets        セット対象
-   * @param dataSetsIndex   追加場所
-   * @param booksMapByYear  年ごとのデータ
-   * @param date            基準日付
-   * @param label           ラベル
-   * @param type            タイプ
+   * @param dataSets セット対象
+   * @param dataSetsIndex 追加場所
+   * @param booksMapByYear 年ごとのデータ
+   * @param date 基準日付
+   * @param label ラベル
+   * @param type タイプ
    * @param backgroundColor バックグラウンドカラー
-   * @param borderColor     ボーダーカラー
-   * @param isHidden        初期表示をhiddenにするか
+   * @param borderColor ボーダーカラー
+   * @param isHidden 初期表示をhiddenにするか
    * 
    */
   public void setChartDatasetsByYear(List<BooksChartDatasets> dataSets, int dataSetsIndex,
@@ -428,10 +449,10 @@ public class BooksHelper {
   /**
    * 集約とソートを行う
    * 
-   * @param target      対象
+   * @param target 対象
    * @param groupingKey 集約キー
-   * @param downstream  集約関数
-   * @param comparator  ソートキー
+   * @param downstream 集約関数
+   * @param comparator ソートキー
    * @return 集約、ソート後のmap
    */
   public Map<String, Long> groupAndSortToLong(List<Books> target,
@@ -450,9 +471,9 @@ public class BooksHelper {
   /**
    * 集約とソートを行う
    * 
-   * @param target      対象
+   * @param target 対象
    * @param groupingKey 集約キー
-   * @param comparator  ソートキー
+   * @param comparator ソートキー
    * @return 集約、ソート後のmap
    */
   public Map<String, List<Books>> groupAndSortToList(List<Books> target,

@@ -75,8 +75,8 @@ public class StudyDateUtil {
   /**
    * 日付けに対して計算を行う
    * 
-   * @param Date   計算したい日付
-   * @param field  計算したい日付の種類(年、月、日、時間、分) Calendar.YEARなどを利用して指定
+   * @param Date 計算したい日付
+   * @param field 計算したい日付の種類(年、月、日、時間、分) Calendar.YEARなどを利用して指定
    * @param amount 値
    * @return String 変換語の日付
    */
@@ -163,8 +163,8 @@ public class StudyDateUtil {
   /**
    * 初もしくは末の日付けを取得
    * 
-   * @param date     変更したい日付
-   * @param type     "start" or "end"
+   * @param date 変更したい日付
+   * @param type "start" or "end"
    * @param dateType 計算したい日付の種類(年、月、日、時間、分) Calendar.YEARなどを利用して指定
    * @return Date 変換語の日付
    */
@@ -188,7 +188,8 @@ public class StudyDateUtil {
 
     Calendar cal = dateToCalendar(date);
     // 初もしくは末の値を取得
-    int value = Objects.equals(START, type) ? cal.getActualMinimum(field) : cal.getActualMaximum(field);
+    int value =
+        Objects.equals(START, type) ? cal.getActualMinimum(field) : cal.getActualMaximum(field);
     // 取得した値をセット
     cal.set(field, value);
 
@@ -205,8 +206,9 @@ public class StudyDateUtil {
   public static List<String> getbetweenYears(Date min, Date max) {
     List<String> result = new ArrayList<>();
     Date currentDate = min;
+    int maxYear = getYearOfInt(max);
 
-    while (currentDate.compareTo(max) < 0) {
+    while (getYearOfInt(currentDate) <= maxYear) {
       result.add(getYearOfStr(currentDate));
       currentDate = calculateDate(currentDate, Calendar.YEAR, 1);
     }
@@ -282,7 +284,7 @@ public class StudyDateUtil {
   /**
    * StringからDateに変換
    * 
-   * @param str        変換対象
+   * @param str 変換対象
    * @param fmtPattern 変換パターン
    * @return Date
    */
@@ -303,7 +305,7 @@ public class StudyDateUtil {
   /**
    * DateからStringに変換
    * 
-   * @param date       変換対象
+   * @param date 変換対象
    * @param fmtPattern 変換パターン
    * @return Date
    */
@@ -316,7 +318,7 @@ public class StudyDateUtil {
   /**
    * 指定の日に置き換えて返却
    * 
-   * @param Date   変更したい日付
+   * @param Date 変更したい日付
    * @param String 置き換え先の日
    * @return Date 変換語の日付
    */

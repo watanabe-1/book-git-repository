@@ -13,8 +13,10 @@ export namespace UrlConst {
 
   /** 家計簿 */
   export namespace Books {
-    export const INFO = '/books/info';
+    export const UPLOAD_INFO = '/books/uploadInfo';
+    export const DOWNLOAD_INFO = '/books/downloadInfo';
     export const RESULT = '/books/result';
+    export const DOWNLOAD = '/books/download';
     export const LIST = '/books/list';
   }
 }

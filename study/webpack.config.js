@@ -23,12 +23,14 @@ module.exports = {
     ];
     // 各画面
     glob.sync('./src/main/js/view/**/*.ts').forEach((file) => {
-      const name = file.replace('./src/main/js/view/', '').replace('.ts', '');
+      const name = file.replace('src\\main\\js\\view\\', '').replace('.ts', '');
       entries[name] = path.resolve(file);
     });
     // react
     glob.sync('./src/main/js/client/pages/**/*.tsx').forEach((file) => {
-      const name = file.replace('./src/main/js/client', '').replace('.tsx', '');
+      const name = file
+        .replace('src\\main\\js\\client\\', '')
+        .replace('.tsx', '');
       entries[name] = path.resolve(file);
     });
     return entries;

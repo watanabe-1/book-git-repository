@@ -106,6 +106,7 @@ export type CategoryUi = {
 export type BooksUi = {
   form: Books;
   booksTypes: Type[];
+  booksYears: string[];
 };
 
 /**

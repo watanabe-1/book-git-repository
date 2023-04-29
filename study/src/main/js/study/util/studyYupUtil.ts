@@ -1,5 +1,5 @@
-import BaseSchema from 'yup/lib/schema';
-import { AnyObject, ObjectShape } from 'yup/lib/object';
+import { Schema } from 'yup/index';
+import { AnyObject, ObjectShape } from 'yup/index';
 import { CommonConst } from '../../constant/commonConstant';
 import {
   ErrorResults,
@@ -18,7 +18,7 @@ import { FormikProps } from 'formik/dist/types';
  * @param setErrData エラー結果格納変数更新メソッド
  */
 export function addServerValidateFunc(
-  yup: BaseSchema<string, AnyObject, string>,
+  yup: Schema<string, AnyObject, string>,
   target: string,
   errData: ErrorResults,
   setErrData: (value: React.SetStateAction<{}>) => void
@@ -43,7 +43,7 @@ export function addServerValidateFunc(
  * @param setErrData エラー結果格納変数更新メソッド
  */
 export function addServerValidateFuncs(
-  additions: { [x: string]: BaseSchema<string, AnyObject, string> },
+  additions: { [x: string]: Schema<string, AnyObject, string> },
   targets: string[],
   errData: ErrorResults,
   setErrData: (value: React.SetStateAction<{}>) => void

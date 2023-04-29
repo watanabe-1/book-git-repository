@@ -81,7 +81,7 @@ public class CategoryApiController extends ApiController {
    * @param model モデル
    * @param date 開いている画面の指定されている日付け
    * @return json(空データ)
-   * @throws BindException
+   * @throws null
    */
   @RequestMapping(value = "/category/confirm", method = RequestMethod.POST)
   @ResponseBody
@@ -100,7 +100,7 @@ public class CategoryApiController extends ApiController {
    * @param form 送信されたデータ
    * @param result エラーチェック]-+結果
    * @param model モデル
-   * @return json
+   * @return null
    */
   @RequestMapping(value = "/category/result", method = RequestMethod.POST)
   @ResponseBody

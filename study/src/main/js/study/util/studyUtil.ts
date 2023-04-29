@@ -1,3 +1,4 @@
+import { Type } from '../../@types/studyUtilType';
 import { CommonConst } from '../../constant/commonConstant';
 import { objToFormData } from './studyYupUtil';
 
@@ -694,4 +695,27 @@ export function format(format: string, args: string[]) {
     ret = format;
   }
   return ret;
+}
+
+/**
+ * String型をtype型に変換
+ * @param str  対象
+ * @returns type
+ */
+export function stringToType(str: string) {
+  return {
+    code: str,
+    name: str,
+  } as Type;
+}
+
+/**
+ * String型をtype型に変換
+ * @param str  対象
+ * @returns type
+ */
+export function ToTypeArrayIfisStringArray(array: Type[] | String[]) {
+  return array.map((str) =>
+    typeof str == 'string' ? stringToType(str) : (str as Type)
+  );
 }

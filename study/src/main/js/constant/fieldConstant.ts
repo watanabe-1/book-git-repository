@@ -53,5 +53,6 @@ export namespace FieldConst {
     export const UPD_DATE = 'updDate';
     export const UPD_USER = 'updUser';
     export const BOOKS_FILE = 'booksFile';
+    export const BOOKS_YEAR = 'booksYear';
   }
 }

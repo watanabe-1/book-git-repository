@@ -16,15 +16,24 @@ public class BooksApi implements ServerApi {
   /**
    * カテゴリー画面api
    */
-  private final BooksApiController categoryApiController;
+  private final BooksApiController booksApiController;
 
   /**
-   * 画面情報取得
+   * アップロード画面情報取得
    * 
    * @return 画面情報
    */
-  public String getInfo() {
-    return StudyStringUtil.objectToJsonStr(categoryApiController.getInfo());
+  public String getUploadInfo() {
+    return StudyStringUtil.objectToJsonStr(booksApiController.getUploadInfo());
+  }
+
+  /**
+   * ダウンロード画面情報取得
+   * 
+   * @return 画面情報
+   */
+  public String getDownloadInfo() {
+    return StudyStringUtil.objectToJsonStr(booksApiController.getDownloadInfo());
   }
 
 }

@@ -1,5 +1,6 @@
 package org.book.app.study.dto.ui;
 
+import java.util.List;
 import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.form.BooksForm;
 import lombok.Data;
@@ -19,5 +20,10 @@ public class BooksUi {
    * 家計簿タイプ
    */
   private BooksType[] booksTypes;
+
+  /**
+   * 家計簿日付け一覧
+   */
+  private List<String> booksYears;
 
 }

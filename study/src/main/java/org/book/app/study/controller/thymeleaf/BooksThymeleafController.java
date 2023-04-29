@@ -1,6 +1,5 @@
 package org.book.app.study.controller.thymeleaf;
 
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import org.book.app.study.dto.file.BooksColumn;
@@ -77,8 +76,8 @@ public class BooksThymeleafController {
     List<Books> booksList = booksHelper.csvToBooksList(form.getBooksFile(), form.getBooksType());
     // 取得したファイル内の日付の最小値、最大値、帳票タイプ(支出)に合わせて今登録済みの内容を削除
     booksService.deleteByBooksDateAndBooksTypeAndUserId(
-        booksList.stream().min(Comparator.comparing(Books::getBooksDate)).get().getBooksDate(),
-        booksList.stream().max(Comparator.comparing(Books::getBooksDate)).get().getBooksDate(),
+        booksHelper.getMinBooksDate(booksList),
+        booksHelper.getMaxBooksDate(booksList),
         form.getBooksType(), StudyUtil.getLoginUser());
     booksService.saveBulk(booksList);
 
@@ -99,8 +98,8 @@ public class BooksThymeleafController {
     List<Books> booksList = booksService.findByUserId(StudyUtil.getLoginUser());
 
     model.addObject("booksYears", StudyDateUtil.getbetweenYears(
-        booksList.stream().min(Comparator.comparing(Books::getBooksDate)).get().getBooksDate(),
-        booksList.stream().max(Comparator.comparing(Books::getBooksDate)).get().getBooksDate()));
+        booksHelper.getMinBooksDate(booksList),
+        booksHelper.getMaxBooksDate(booksList)));
     model.addObject("booksTypes", BooksType.values());
 
     return model;

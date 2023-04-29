@@ -41,4 +41,21 @@ public class BooksController {
     return model;
   }
 
+  /**
+   * 家計簿出力画面
+   * 
+   * @param request リクエスト
+   * @param form 送信されたデータ
+   * @param model モデル
+   * @return 画面表示用モデル
+   */
+  @RequestMapping(value = "/books/export", method = RequestMethod.GET)
+  public ModelAndView export(HttpServletRequest request, @ModelAttribute BooksForm form,
+      ModelAndView model) {
+    StudyJsUtil.setJsTemplate(model, "家計簿情報出力", request,
+        "/static/js/pages/books/export/export.bundle.js", booksApi, form);
+
+    return model;
+  }
+
 }

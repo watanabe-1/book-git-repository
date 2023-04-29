@@ -135,7 +135,7 @@ const Basic = (props) => {
               : info.imgTypes[0].code,
             catType: currentState.form ? currentState.form.catType : '',
             active: currentState.form ? currentState.form.active : '0',
-            catIcon: currentState.form ? currentState.form.catIcon : null,
+            catIcon: currentState.form ? currentState.form.catIcon : '',
           } as Category
         }
       >
