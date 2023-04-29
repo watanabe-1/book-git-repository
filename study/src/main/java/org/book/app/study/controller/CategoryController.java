@@ -27,6 +27,7 @@ public class CategoryController {
   /**
    * カテゴリー登録画面
    * 
+   * @param request リクエスト
    * @param form 送信されたデータ
    * @param model モデル
    * @return 入力画面HTML名
@@ -43,6 +44,7 @@ public class CategoryController {
   /**
    * カテゴリー登録画面
    * 
+   * @param request リクエスト
    * @param form 送信されたデータ
    * @param model モデル
    * @return 入力画面HTML名

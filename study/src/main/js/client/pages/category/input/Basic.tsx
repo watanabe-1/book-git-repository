@@ -52,7 +52,6 @@ const Basic = (props) => {
    */
   const handleSubmit = async (form: Category) => {
     const res = await fetchConfirm(form);
-    const json = await res.json();
 
     if (res.ok) {
       //コンテキストにform,confirmDataデータをセット
@@ -64,7 +63,7 @@ const Basic = (props) => {
       // 確認画面へ
       props.handleNext();
     } else {
-      setErrData(json);
+      setErrData(await res.json());
       // 再バリデーション実施
       buttonElement.current.click();
     }

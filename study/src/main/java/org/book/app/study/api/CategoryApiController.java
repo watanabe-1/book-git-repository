@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FilenameUtils;
-import org.book.app.study.dto.error.ErrorResults;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.dto.ui.CategoryUi;
 import org.book.app.study.entity.Category;
@@ -86,13 +85,13 @@ public class CategoryApiController extends ApiController {
    */
   @RequestMapping(value = "/category/confirm", method = RequestMethod.POST)
   @ResponseBody
-  public ErrorResults confirm(@ModelAttribute @Validated CategoryForm form,
+  public String confirm(@ModelAttribute @Validated CategoryForm form,
       BindingResult result, ModelAndView model, HttpServletRequest request) throws BindException {
     categoryHelper.validateIfDoInsert(form, result);
     throwBindExceptionIfNeeded(result);
     log.info("checkInputのformの中身", form);
 
-    return new ErrorResults();
+    return null;
   }
 
   /**
