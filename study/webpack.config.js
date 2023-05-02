@@ -23,13 +23,19 @@ module.exports = {
     ];
     // 各画面
     glob.sync('./src/main/js/view/**/*.ts').forEach((file) => {
-      const name = file.replace('src\\main\\js\\view\\', '').replace('.ts', '');
+      const name = file
+        // windows環境とlinux環境のどちらの環境でも正しくパスを置換出来るように事前にパスの区切り文字を'/'に置換する
+        // ただし、entries[name]に渡すパスの区切り文字も'/'になってしまうがwindows環境でも現状だと\も/も区切り文字として認識してくれているため問題なし
+        .replaceAll(path.sep, '/')
+        .replace('src/main/js/view/', '')
+        .replace('.ts', '');
       entries[name] = path.resolve(file);
     });
     // react
     glob.sync('./src/main/js/client/pages/**/*.tsx').forEach((file) => {
       const name = file
-        .replace('src\\main\\js\\client\\', '')
+        .replaceAll(path.sep, '/')
+        .replace('src/main/js/client/', '')
         .replace('.tsx', '');
       entries[name] = path.resolve(file);
     });
