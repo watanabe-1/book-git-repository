@@ -1,6 +1,11 @@
 package org.book.app.study.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.book.app.study.entity.Account;
+import org.book.app.study.enums.type.AccountType;
+import org.book.app.study.form.AccountForm;
+import org.book.app.study.service.AccountService;
+import org.book.app.study.service.AppUserDetails;
+import org.book.app.study.util.StudyBeanUtil;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,36 +17,30 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.book.app.study.entity.Account;
-import org.book.app.study.enums.type.AccountType;
-import org.book.app.study.form.AccountForm;
-import org.book.app.study.service.AccountService;
-import org.book.app.study.service.AppUserDetails;
-import org.book.app.study.util.StudyBeanUtil;
+import lombok.RequiredArgsConstructor;
 
 /**
  * アカウントコントローラ.
  *
  */
 @Controller
+@RequiredArgsConstructor
 public class AccountController {
 
   /**
    * アカウントサービス
    */
-  @Autowired
-  private AccountService accountService;
+  private final AccountService accountService;
 
   /**
    * パスワードエンコーダー
    */
-  @Autowired
-  private BCryptPasswordEncoder passwordEncoder;
+  private final BCryptPasswordEncoder passwordEncoder;
 
   /**
    * アカウント情報一覧.
    * 
-   * @param form  アクションフォーム
+   * @param form アクションフォーム
    * @param model モデル
    * @return 入力画面HTML名
    */
@@ -59,7 +58,7 @@ public class AccountController {
   /**
    * アカウント情報入力.
    * 
-   * @param form  アクションフォーム
+   * @param form アクションフォーム
    * @param model モデル
    * @return 入力画面HTML名
    */
@@ -76,8 +75,8 @@ public class AccountController {
    * アカウント情報入力確認.
    * 
    * @param formアクションフォーム
-   * @param result        フォームバインド結果
-   * @param model         モデル
+   * @param result フォームバインド結果
+   * @param model モデル
    * @return 入力確認画面HTML名
    */
   @RequestMapping(value = "/system/account/confirm", method = RequestMethod.POST)
@@ -101,9 +100,9 @@ public class AccountController {
    * アカウント情報登録.
    * 
    * @param userDetail 認証済みユーザ情報
-   * @param form       アクションフォーム
-   * @param result     フォームバインド結果
-   * @param model      モデル
+   * @param form アクションフォーム
+   * @param result フォームバインド結果
+   * @param model モデル
    * @return 登録完了画面HTML名
    */
   @RequestMapping(value = "/system/account/store", method = RequestMethod.POST)

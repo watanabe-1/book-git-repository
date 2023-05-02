@@ -1,14 +1,19 @@
 package org.book.app.study.view;
 
 import java.nio.charset.StandardCharsets;
-import org.springframework.stereotype.Component;
-import org.springframework.ui.ModelMap;
+import org.book.app.study.helper.DownloadHelper;
 import org.book.app.study.util.StudyFileUtil;
 import org.book.app.study.util.StudyModelUtil;
 import org.book.app.study.util.StudyStringUtil;
+import org.springframework.stereotype.Component;
+import org.springframework.ui.ModelMap;
 
 @Component
 public class DownloadTsvView extends AbstractDownloadTextFileView {
+
+  public DownloadTsvView(DownloadHelper downloadHelper) {
+    super(downloadHelper);
+  }
 
   /**
    * ファイルネームを取得する

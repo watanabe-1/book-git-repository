@@ -243,7 +243,7 @@ public class StudyDateUtil {
    * @return 年/月 文字列
    */
   public static String getYearMonth(Date date) {
-    return dateToStr(date, StudyDateUtil.FMT_YEAR_MONTH_SLASH);
+    return dateToStr(date, FMT_YEAR_MONTH_SLASH);
   }
 
   /**
@@ -253,7 +253,7 @@ public class StudyDateUtil {
    * @return 年/月/日 文字列
    */
   public static String getYearMonthDay(Date date) {
-    return dateToStr(date, StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH);
+    return dateToStr(date, FMT_YEAR_MONTH_DAY_SLASH);
   }
 
   /**
@@ -315,20 +315,4 @@ public class StudyDateUtil {
     return sdFormat.format(date);
   }
 
-  /**
-   * 指定の日に置き換えて返却
-   * 
-   * @param Date 変更したい日付
-   * @param String 置き換え先の日
-   * @return Date 変換語の日付
-   */
-  public static Date replaceDay(Date date, String newDay) {
-    Date newdate = new Date();
-    StringBuffer sb = new StringBuffer();
-
-    sb.append(getYearMonth(date)).append(newDay);
-    newdate = strToDate(sb.toString(), FMT_YEAR_MONTH_DAY_SLASH);
-
-    return newdate;
-  }
 }

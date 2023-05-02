@@ -20,12 +20,13 @@ public class DownloadHelper {
   /**
    * 日本語対応フォーマット
    */
-  private static final String CONTENT_DISPOSITION_FORMAT = "attachment; filename=\"%s\"; filename*=UTF-8''%s";
+  private static final String CONTENT_DISPOSITION_FORMAT =
+      "attachment; filename=\"%s\"; filename*=UTF-8''%s";
 
   /**
    * 日本語対応フォーマットでファイル名を指定
    * 
-   * @param headers  ヘッダー
+   * @param headers ヘッダー
    * @param fileName ファイル名
    */
   public void addContentDisposition(HttpHeaders headers, String fileName)
@@ -38,8 +39,8 @@ public class DownloadHelper {
   /**
    * 日本語対応フォーマットでファイル名を指定
    * 
-   * @param response    レスポンス
-   * @param fileName    ファイル名
+   * @param response レスポンス
+   * @param fileName ファイル名
    * @param ContentType コンテンツタイプ
    */
   public void addContentDisposition(HttpServletResponse response, String fileName,
@@ -55,7 +56,7 @@ public class DownloadHelper {
    * outputStreamにファイルデータをセット
    * 
    * @param outputStream OutputStream
-   * @param sbyte        ファイルデータ
+   * @param sbyte ファイルデータ
    */
   public void setFileData(OutputStream outputStream, byte sbyte[]) {
     for (int i = 0; i < sbyte.length; i++) {

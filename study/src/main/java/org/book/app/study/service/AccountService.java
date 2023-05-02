@@ -1,20 +1,20 @@
 package org.book.app.study.service;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.book.app.study.entity.Account;
 import org.book.app.study.mapper.AccountMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 /**
  * ACCOUNT:アカウント(アカウント情報保持テーブル)のserviceクラス
  */
 @Service
+@RequiredArgsConstructor
 public class AccountService {
 
-  @Autowired
-  private AccountMapper accountMapper;
+  private final AccountMapper accountMapper;
 
   /**
    * 全検索
@@ -71,7 +71,7 @@ public class AccountService {
   /**
    * 1行update プライマルキーをWhere句に指定 プライマルキー：String userId
    * 
-   * @param acc    entity(Account)
+   * @param acc entity(Account)
    * @param userId USER_ID(ユーザーID)
    * @return update行数
    */

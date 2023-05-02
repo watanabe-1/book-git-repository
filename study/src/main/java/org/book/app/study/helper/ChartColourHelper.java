@@ -9,8 +9,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.book.app.study.dto.data.BooksChartData;
 import org.book.app.study.dto.data.BooksChartDatasets;
 import org.book.app.study.entity.Templatechartcolour;
@@ -24,18 +22,20 @@ import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyCodeUtil;
 import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyUtil;
+import org.springframework.stereotype.Component;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 色テンプレート確認を行うためのHelperクラスを作成
  */
 @Component
+@RequiredArgsConstructor
 public class ChartColourHelper {
 
   /**
    * チャート色テンプレート Service
    */
-  @Autowired
-  private TemplatechartcolourService TemplatechartcolourService;
+  private final TemplatechartcolourService TemplatechartcolourService;
 
   /**
    * ダミーデータ作成用基準値
@@ -50,7 +50,7 @@ public class ChartColourHelper {
   /**
    * 設定されている色テンプレートを変更
    * 
-   * @param templateId   テンプレートid
+   * @param templateId テンプレートid
    * @param templateName テンプレート名
    * @return 更新数
    */
@@ -77,7 +77,7 @@ public class ChartColourHelper {
   /**
    * 図用データをシード値指定で取得
    * 
-   * @param qty    個数
+   * @param qty 個数
    * @param coeffR シード値作成のための係数R
    * @param coeffG シード値作成のための係数G
    * @param coeffB シード値作成のための係数B
@@ -108,8 +108,8 @@ public class ChartColourHelper {
   /**
    * ダミー図用データをセット
    * 
-   * @param bdd    セット対象
-   * @param qty    個数
+   * @param bdd セット対象
+   * @param qty 個数
    * @param coeffR シード値作成のための係数R
    * @param coeffG シード値作成のための係数G
    * @param coeffB シード値作成のための係数B
@@ -166,7 +166,8 @@ public class ChartColourHelper {
   public List<Templatechartcolour> getLoginUsersAllTempColours(Templatechartcolour activeColour) {
     String commonUserId = StudyUtil.getCommonUser();
     // ログインユーザーが作成したテンプレートを取得
-    List<Templatechartcolour> allTempColours = TemplatechartcolourService.findByUserId(StudyUtil.getLoginUser());
+    List<Templatechartcolour> allTempColours =
+        TemplatechartcolourService.findByUserId(StudyUtil.getLoginUser());
 
     // 現在設定しているテンプレートが共通かどうか
     if (Objects.equals(activeColour.getUserId(), commonUserId)) {
@@ -224,7 +225,7 @@ public class ChartColourHelper {
   /**
    * rgb形式で色を作成し返却
    * 
-   * @param standard     作成する色の個数
+   * @param standard 作成する色の個数
    * @param transparency 透明度 (0～1の間)
    * @return List<String> 作成した色のリスト
    */
@@ -239,11 +240,11 @@ public class ChartColourHelper {
   /**
    * rgb形式で色を作成し返却
    * 
-   * @param standard     作成する色の個数
+   * @param standard 作成する色の個数
    * @param transparency 透明度 (0～1の間)
-   * @param coeffR       シード値作成のための係数R
-   * @param coeffG       シード値作成のための係数G
-   * @param coeffB       シード値作成のための係数B
+   * @param coeffR シード値作成のための係数R
+   * @param coeffG シード値作成のための係数G
+   * @param coeffB シード値作成のための係数B
    * @return List<String> 作成した色のリスト
    */
   public List<String> getRgbaList(int standard, float transparency, int coeffR, int coeffG,

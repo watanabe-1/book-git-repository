@@ -6,24 +6,25 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.UUID;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DuplicateKeyException;
-import org.springframework.stereotype.Component;
-import org.springframework.web.multipart.MultipartFile;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
 import org.book.app.study.dto.dir.Dir;
 import org.book.app.study.entity.Image;
 import org.book.app.study.form.CategoryForm;
 import org.book.app.study.service.ImageService;
 import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyStringUtil;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
+import org.terasoluna.gfw.common.exception.BusinessException;
+import org.terasoluna.gfw.common.message.ResultMessages;
+import lombok.RequiredArgsConstructor;
 
 /**
  * アップロードを行うためのHelperクラスを作成
  */
 @Component
+@RequiredArgsConstructor
 public class UploadHelper {
 
   /**
@@ -53,14 +54,12 @@ public class UploadHelper {
   /**
    * 画像情報 Service
    */
-  @Autowired
-  private ImageService imageService;
+  private final ImageService imageService;
 
   /**
    * 起動ディレクトリ情報
    */
-  @Autowired
-  private Dir fileDir;
+  private final Dir fileDir;
 
   /**
    * ファイルを一時ファイルとして保存
@@ -99,10 +98,10 @@ public class UploadHelper {
    * ファイルを本保存
    * 
    * @param uploadDirPath 保管ディレクトリパス
-   * @param baseNameCode  新ファイル名のベースとなるコード
-   * @param imgId         画像ID
-   * @param ImgExt        画像拡張子
-   * @param ingType       画像タイプ
+   * @param baseNameCode 新ファイル名のベースとなるコード
+   * @param imgId 画像ID
+   * @param ImgExt 画像拡張子
+   * @param ingType 画像タイプ
    * @return String 発番した画像ID
    */
   public void saveImageFile(String uploadDirPath, String baseNameCode, String imgId, String ImgExt,
@@ -184,7 +183,7 @@ public class UploadHelper {
    * エンコードしたものを文字列に変更(同時に拡張子を指定)
    * 
    * @param imageForm アップロードされたデータ
-   * @param String    アップロードされたファイルの拡張子
+   * @param String アップロードされたファイルの拡張子
    * @return String
    */
   public String encodeBase64(MultipartFile multipartFile, String expand) {

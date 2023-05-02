@@ -1,8 +1,8 @@
 package org.book.app.study.util;
 
+import org.book.app.study.service.CodelkupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.book.app.study.service.CodelkupService;
 
 /**
  * コードのUtilクラスを作成
@@ -16,7 +16,8 @@ public class StudyCodeUtil {
   private static CodelkupService codelkupService;
 
   /**
-   * コード情報 Serviceのセッター
+   * コード情報 Serviceのセッター<br>
+   * 右記@AutowiredはeclipsだとUnnecesaryの注意が出るが必要
    * 
    * @param codelkupService コード情報 Service
    */
@@ -29,7 +30,7 @@ public class StudyCodeUtil {
    * コードルックアップテーブルを検索し、ショートを取得
    * 
    * @param listName リストネーム
-   * @param code     コード
+   * @param code コード
    * @return ショート
    */
   public static String getShort(String listName, String code) {

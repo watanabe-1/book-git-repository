@@ -10,14 +10,14 @@ import org.book.app.study.service.BooksService;
 import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyUtil;
 import org.springframework.stereotype.Service;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 家計簿画面情報取得用サービス
  *
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BooksApiService {
 
   /**

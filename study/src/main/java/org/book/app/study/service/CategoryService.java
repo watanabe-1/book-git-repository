@@ -6,18 +6,18 @@ import org.book.app.study.entity.Category;
 import org.book.app.study.form.CategoryForm;
 import org.book.app.study.mapper.CategoryMapper;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 /**
  * CATEGORY:カテゴリー(カテゴリー定義テーブル)のserviceクラス
  */
 @Service
+@RequiredArgsConstructor
 public class CategoryService {
 
-  @Autowired
-  private CategoryMapper categoryMapper;
+  private final CategoryMapper categoryMapper;
 
   /**
    * 全検索

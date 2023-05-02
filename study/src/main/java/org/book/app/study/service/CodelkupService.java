@@ -1,20 +1,20 @@
 package org.book.app.study.service;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.book.app.study.entity.Codelkup;
 import org.book.app.study.mapper.CodelkupMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 /**
  * CODELKUP:コードルックアップ(コード定義テーブル(明細))のserviceクラス
  */
 @Service
+@RequiredArgsConstructor
 public class CodelkupService {
 
-  @Autowired
-  private CodelkupMapper codelkupMapper;
+  private final CodelkupMapper codelkupMapper;
 
   /**
    * 全検索
@@ -29,7 +29,7 @@ public class CodelkupService {
    * 1行検索(引数にプライマルキーを指定)
    * 
    * @param listName LIST_NAME(リストネーム)
-   * @param code     CODE(コード)
+   * @param code CODE(コード)
    * @return 検索結果(1行)
    */
   public Codelkup findOne(String listName, String code) {
@@ -94,7 +94,7 @@ public class CodelkupService {
    * 1行delete(引数にプライマルキーを指定)
    * 
    * @param listName LIST_NAME(リストネーム)
-   * @param code     CODE(コード)
+   * @param code CODE(コード)
    * @return delete行数
    */
   @Transactional

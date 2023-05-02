@@ -1,7 +1,6 @@
 package org.book.app.study.util;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
@@ -48,7 +47,7 @@ public class StudyStringUtil {
     final String ENMARK = "\\";
     StringBuffer sb = new StringBuffer();
 
-    // 「/」が文字列の先頭ににあった場合そのまま結合、なければ「/」をはさんで結合
+    // 「/」が文字列の先頭にあった場合そのまま結合、なければ「/」をはさんで結合
     return addPath.indexOf(SLASH) == 0 || addPath.indexOf(ENMARK) == 0
         ? sb.append(basePath).append(addPath).toString()
         : sb.append(basePath).append(SLASH).append(addPath).toString();
@@ -113,7 +112,9 @@ public class StudyStringUtil {
       return str;
     }
 
-    return str.replaceFirst(regex + "(?!.*?" + regex + ")", replacement);
+    return str.replaceFirst(
+        new StringBuffer().append(regex).append("(?!.*?").append(regex).append(")").toString(),
+        replacement);
   }
 
   /**
@@ -272,7 +273,7 @@ public class StudyStringUtil {
   }
 
   /**
-   * 文字列前後のダブルクォーテーションを削除するFunction
+   * 文字列前後のダブルクォーテーションを削除する
    * 
    * @param str 文字列
    * @return 前後のダブルクォーテーションを削除した文字列
@@ -312,26 +313,4 @@ public class StudyStringUtil {
     return replaced;
   }
 
-  /**
-   * urlにセットするパラムを作成
-   * 
-   * @param param keyにパラム名、itemにvalue
-   * @return String urlにセットするパラム
-   */
-  public static String createUrlParam(Map<String, String> param) {
-    int index = 0;
-    StringBuffer sb = new StringBuffer();
-
-    for (String key : param.keySet()) {
-      if (index == 0) {
-        sb.append("?");
-      } else {
-        sb.append("&");
-      }
-      sb.append(key).append("=").append(param.get(key));
-      index++;
-    }
-
-    return sb.toString();
-  }
 }

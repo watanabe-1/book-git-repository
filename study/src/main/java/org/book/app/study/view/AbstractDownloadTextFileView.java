@@ -6,31 +6,31 @@ import java.io.OutputStream;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.book.app.study.helper.DownloadHelper;
+import org.book.app.study.util.StudyFileUtil;
+import org.book.app.study.util.StudyModelUtil;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.view.AbstractView;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
-import org.book.app.study.helper.DownloadHelper;
-import org.book.app.study.util.StudyFileUtil;
-import org.book.app.study.util.StudyModelUtil;
+import lombok.RequiredArgsConstructor;
 
 /**
  * テキストファイルダウンロード用抽象クラス
  */
+@RequiredArgsConstructor
 public abstract class AbstractDownloadTextFileView extends AbstractView {
 
   /**
    * ファイルダウンロード Helper
    */
-  @Autowired
-  private DownloadHelper downloadHelper;
+  private final DownloadHelper downloadHelper;
 
   /**
    * レスポンスをレンダーする
    * 
-   * @param model    Model object
-   * @param request  current HTTP request
+   * @param model Model object
+   * @param request current HTTP request
    * @param response current HTTP response
    */
   @Override

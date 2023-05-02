@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
 
 /**
@@ -38,7 +38,7 @@ import lombok.extern.slf4j.XSlf4j;
  */
 @Controller
 @XSlf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class CategoryThymeleafController {
 
   /**

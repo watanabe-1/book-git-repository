@@ -14,7 +14,6 @@ import org.apache.commons.io.FilenameUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
-import org.springframework.web.multipart.MultipartFile;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import com.fasterxml.jackson.databind.MappingIterator;
@@ -57,7 +56,7 @@ public class StudyFileUtil {
   /**
    * 拡張子を追加
    * 
-   * @param fileName  追加対象
+   * @param fileName 追加対象
    * @param extension 追加する拡張子
    * @return 拡張子を追加したファイル名
    */
@@ -70,8 +69,8 @@ public class StudyFileUtil {
   /**
    * csvファイルを読み込む
    * 
-   * @param inSoursc  InputStreamSource
-   * @param pojoType  カラム情報が記載されているクラス
+   * @param inSoursc InputStreamSource
+   * @param pojoType カラム情報が記載されているクラス
    * @param isHeadder ヘッダーをつけるか
    * @return List
    */
@@ -84,8 +83,8 @@ public class StudyFileUtil {
   /**
    * tsvファイルを読み込む
    * 
-   * @param inSoursc  InputStreamSource
-   * @param pojoType  カラム情報が記載されているクラス
+   * @param inSoursc InputStreamSource
+   * @param pojoType カラム情報が記載されているクラス
    * @param isHeadder ヘッダーをつけるか
    * @return List
    */
@@ -98,12 +97,12 @@ public class StudyFileUtil {
   /**
    * テキストファイルを読み込む
    * 
-   * @param inSoursc    InputStreamSource
+   * @param inSoursc InputStreamSource
    * @param charsetName 文字コード
-   * @param pojoType    カラム情報が記載されているクラス
-   * @param sep         区切り文字
-   * @param isHeadder   ヘッダーをつけるか
-   * @param isQuote     文字列にダブルクオートをつけるか
+   * @param pojoType カラム情報が記載されているクラス
+   * @param sep 区切り文字
+   * @param isHeadder ヘッダーをつけるか
+   * @param isQuote 文字列にダブルクオートをつけるか
    * @return List
    */
   public static <T> List<T> fileToListByCsvMapper(InputStreamSource inSoursc, String charsetName,
@@ -124,7 +123,8 @@ public class StudyFileUtil {
 
     try (InputStream in = inSoursc.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(in, charsetName))) {
-      MappingIterator<T> objectMappingIterator = mapper.readerFor(pojoType).with(schema).readValues(br);
+      MappingIterator<T> objectMappingIterator =
+          mapper.readerFor(pojoType).with(schema).readValues(br);
 
       while (objectMappingIterator.hasNext()) {
         result.add(objectMappingIterator.next());
@@ -205,23 +205,9 @@ public class StudyFileUtil {
   }
 
   /**
-   * MultipartFileからfileに変換
-   * 
-   * @param multipart MultipartFile
-   * @return convFile file
-   */
-  public static File multipartToFile(MultipartFile multipart)
-      throws IllegalStateException, IOException {
-    File convFile = new File(multipart.getOriginalFilename());
-    multipart.transferTo(convFile);
-
-    return convFile;
-  }
-
-  /**
    * クラスパス配下のファイルの読み込み
    * 
-   * @param path        パス
+   * @param path パス
    * @param charsetName 文字コード
    * @return 読み込んだファイルの中身
    */

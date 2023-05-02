@@ -2,20 +2,20 @@ package org.book.app.study.service;
 
 import java.util.Date;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.book.app.study.entity.Books;
 import org.book.app.study.mapper.BooksMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 /**
  * BOOKS:家計簿(家計簿データ保存テーブル)のserviceクラス
  */
 @Service
+@RequiredArgsConstructor
 public class BooksService {
 
-  @Autowired
-  private BooksMapper booksMapper;
+  private final BooksMapper booksMapper;
 
   /**
    * 全検索
@@ -30,7 +30,7 @@ public class BooksService {
    * 1行検索(引数にプライマルキーを指定)
    * 
    * @param booksId BOOKS_ID(家計簿ID)
-   * @param userId  USER_ID(ユーザーID)
+   * @param userId USER_ID(ユーザーID)
    * @return 検索結果(1行)
    */
   public Books findOne(String booksId, String userId) {
@@ -73,9 +73,9 @@ public class BooksService {
   /**
    * 1行update プライマルキーをWhere句に指定 プライマルキー：String booksId, String userId
    * 
-   * @param boo     entity(Books)
+   * @param boo entity(Books)
    * @param booksId BOOKS_ID(家計簿ID)
-   * @param userId  USER_ID(ユーザーID)
+   * @param userId USER_ID(ユーザーID)
    * @return update行数
    */
   @Transactional
@@ -97,7 +97,7 @@ public class BooksService {
    * 1行delete(引数にプライマルキーを指定)
    * 
    * @param booksId BOOKS_ID(家計簿ID)
-   * @param userId  USER_ID(ユーザーID)
+   * @param userId USER_ID(ユーザーID)
    * @return delete行数
    */
   @Transactional
@@ -108,10 +108,10 @@ public class BooksService {
   /**
    * 家計簿日付を指定してdelete(引数にプライマルキーを指定)
    * 
-   * @param start     から
-   * @param end       まで
+   * @param start から
+   * @param end まで
    * @param booksType 家計簿の種類
-   * @param userId    USER_ID(ユーザーID)
+   * @param userId USER_ID(ユーザーID)
    * @return delete行数
    */
   @Transactional
@@ -123,10 +123,10 @@ public class BooksService {
   /**
    * 家計簿日付、家計簿種類を指定して対象を取得
    * 
-   * @param start     から
-   * @param end       まで
+   * @param start から
+   * @param end まで
    * @param booksType 家計簿の種類
-   * @param userId    USER_ID(ユーザーID)
+   * @param userId USER_ID(ユーザーID)
    * @return 検索結果(複数行)
    */
   public List<Books> findByBooksDateAndBooksTypeAndUserIdJoinCategory(Date start, Date end,
@@ -138,7 +138,7 @@ public class BooksService {
   /**
    * ユーザーIDで検索
    * 
-   * @param booksId   BOOKS_ID(家計簿ID)
+   * @param booksId BOOKS_ID(家計簿ID)
    * @param booksType 家計簿の種類
    * @return 検索結果(複数行)
    */

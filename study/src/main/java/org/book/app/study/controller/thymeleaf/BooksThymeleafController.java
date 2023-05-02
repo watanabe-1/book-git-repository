@@ -20,14 +20,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 家計簿コントローラ.
  *
  */
 @Controller
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BooksThymeleafController {
 
   /**

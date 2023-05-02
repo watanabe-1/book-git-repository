@@ -2,7 +2,6 @@ package org.book.app.study.api;
 
 import java.util.Locale;
 import org.book.app.study.dto.error.ErrorResults;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -27,7 +26,6 @@ public class ApiController {
   /**
    * メッセージソース
    */
-  @Autowired
   protected MessageSource messageSource;
 
   /**

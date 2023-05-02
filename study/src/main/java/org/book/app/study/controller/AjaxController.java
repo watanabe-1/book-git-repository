@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 図色確認画面で使用するajax応答クラス
@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
  */
 @Controller
 @RequestMapping(value = "/ajax")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AjaxController extends ApiController {
 
   /**

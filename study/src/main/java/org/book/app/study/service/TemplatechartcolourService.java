@@ -2,20 +2,20 @@ package org.book.app.study.service;
 
 import java.util.Date;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.book.app.study.entity.Templatechartcolour;
 import org.book.app.study.mapper.TemplatechartcolourMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 /**
  * TEMPLATECHARTCOLOUR:チャートカラーマスタ(図の表示に使用するrgbaの組み合わせを管理するマスタ)のserviceクラス
  */
 @Service
+@RequiredArgsConstructor
 public class TemplatechartcolourService {
 
-  @Autowired
-  private TemplatechartcolourMapper templatechartcolourMapper;
+  private final TemplatechartcolourMapper templatechartcolourMapper;
 
   /**
    * 全検索
@@ -72,7 +72,7 @@ public class TemplatechartcolourService {
   /**
    * 1行update プライマルキーをWhere句に指定 プライマルキー：String templateId
    * 
-   * @param tem        entity(Templatechartcolour)
+   * @param tem entity(Templatechartcolour)
    * @param templateId TEMPLATE_ID(色の組み合わせID)
    * @return update行数
    */
@@ -126,9 +126,9 @@ public class TemplatechartcolourService {
   /**
    * 1行update active、templateNameを更新
    * 
-   * @param active       更新値
+   * @param active 更新値
    * @param templateName 更新値
-   * @param templateId   TEMPLATE_ID(色の組み合わせID)
+   * @param templateId TEMPLATE_ID(色の組み合わせID)
    * @return update行数
    */
   @Transactional

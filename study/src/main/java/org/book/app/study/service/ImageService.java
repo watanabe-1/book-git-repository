@@ -1,20 +1,20 @@
 package org.book.app.study.service;
 
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.book.app.study.entity.Image;
 import org.book.app.study.mapper.ImageMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import lombok.RequiredArgsConstructor;
 
 /**
  * IMAGE:画像パス(画像パス保存テーブル)のserviceクラス
  */
 @Service
+@RequiredArgsConstructor
 public class ImageService {
 
-  @Autowired
-  private ImageMapper imageMapper;
+  private final ImageMapper imageMapper;
 
   /**
    * 全検索
@@ -71,7 +71,7 @@ public class ImageService {
   /**
    * 1行update プライマルキーをWhere句に指定 プライマルキー：String imgId
    * 
-   * @param ima   entity(Image)
+   * @param ima entity(Image)
    * @param imgId IMG_ID(画像ID)
    * @return update行数
    */

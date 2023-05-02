@@ -14,28 +14,27 @@ import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyMessageUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
+import lombok.RequiredArgsConstructor;
 
 /**
  * カテゴリーの関する処理を行うためのHelperクラスを作成
  */
 @Component
+@RequiredArgsConstructor
 public class CategoryHelper {
 
   /**
    * カテゴリー情報 Service
    */
-  @Autowired
-  private CategoryService categoryService;
+  private final CategoryService categoryService;
 
   /**
    * ファイル保存用 Helper
    */
-  @Autowired
-  private UploadHelper uploadHelper;
+  private final UploadHelper uploadHelper;
 
   /**
    * カテゴリー情報保存用リスト

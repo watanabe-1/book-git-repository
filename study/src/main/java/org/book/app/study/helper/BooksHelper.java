@@ -26,33 +26,33 @@ import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyFileUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import lombok.RequiredArgsConstructor;
 
 /**
  * 家計簿のHelperクラスを作成
  */
 @Component
+@RequiredArgsConstructor
 public class BooksHelper {
 
   /**
    * 家計簿 Service
    */
-  @Autowired
-  private BooksService booksService;
+  private final BooksService booksService;
 
   /**
    * 図の色 Helper
    */
-  @Autowired
-  private ChartColourHelper chartColourHelper;
+
+  private final ChartColourHelper chartColourHelper;
 
   /**
    * カテゴリーヘルパー
    */
-  @Autowired
-  private CategoryHelper categoryHelper;
+
+  private final CategoryHelper categoryHelper;
 
   /**
    * カテゴリーネームを取得するようのファンクション
