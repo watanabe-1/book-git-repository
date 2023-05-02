@@ -641,12 +641,12 @@ export async function fetchGet(baseurl: string, params: {} = {}) {
 /**
  * post通信を行う
  * @param baseurl 通信先
- * @param body 送付パラム
+ * @param params 送付パラム
  * @returns 通信結果
  */
 export async function fetchPost(
   baseurl: string,
-  body: {} = {}
+  params: {} = {}
 ): Promise<Response> {
   const headers = () => {
     const headers: {} = {};
@@ -655,15 +655,15 @@ export async function fetchPost(
     return headers;
   };
 
-  const data = objToFormData(body);
-  console.log(...data.entries());
+  const body = objToFormData(params);
+  console.log(...body.entries());
 
   const res: Response = await window.fetch(
     pathJoin(getContextPath(), baseurl),
     {
       method: 'POST',
       headers: headers(),
-      body: data,
+      body: body,
     }
   );
   console.log(res);
