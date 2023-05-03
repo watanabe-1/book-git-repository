@@ -1,13 +1,13 @@
 package org.book.app.study.controller;
 
 import javax.servlet.http.HttpServletRequest;
+import org.book.app.study.form.Form;
+import org.book.app.study.util.StudyJsUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.book.app.study.form.Form;
-import org.book.app.study.util.StudyJsUtil;
 import lombok.extern.slf4j.XSlf4j;
 
 /**
@@ -30,7 +30,7 @@ public class TopController {
     // log.info("i.ab.cd.1002", "replace_value_5");
 
     StudyJsUtil.setJsTemplate(model, "study top", request,
-        "/static/js/pages/top.bundle.js", null, form);
+        "/static/js/pages/common/top/top.bundle.js", null, form);
 
     return model;
   }
