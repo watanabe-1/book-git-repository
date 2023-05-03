@@ -21,27 +21,33 @@ module.exports = {
       'bootstrap',
       './src/main/js/view/common/sidebar',
     ];
-
-    glob
-      .sync([
-        // 各画面
-        './src/main/js/view/**/*.ts',
-        // react
-        './src/main/js/client/pages/**/*.tsx',
-      ])
-      .forEach((file) => {
-        const name = file
-          // windows環境とlinux環境のどちらの環境でも正しくパスを置換出来るように事前にパスの区切り文字を'/'に置換する
-          // ただし、entries[name]に渡すパスの区切り文字も'/'になってしまうがwindows環境でも現状だと\も/も区切り文字として認識してくれているため問題なし
-          .replaceAll(path.sep, '/')
-          // 各画面
-          .replace('src/main/js/view/', '')
-          // react
-          .replace('src/main/js/client/', '')
-          // .tsまたは.tsx
-          .replace(path.extname(file), '');
-        entries[name] = path.resolve(file);
-      });
+    // entriesにファイルをセット
+    const setEntries = (fileName, replaceSearchValue) => {
+      const name = fileName
+        // windows環境とlinux環境のどちらの環境でも正しくパスを置換出来るように事前にパスの区切り文字を'/'に置換する
+        // ただし、entries[name]に渡すパスの区切り文字も'/'になってしまうがwindows環境でも現状だと\も/も区切り文字として認識してくれているため問題なし
+        .replaceAll(path.sep, '/')
+        .replace(replaceSearchValue, '')
+        .replace(path.extname(fileName), '');
+      entries[name] = path.resolve(fileName);
+    };
+    // reactを使用していない各画面で使用するファイル
+    glob.sync('./src/main/js/view/**/*.ts').forEach((file) => {
+      setEntries(file, 'src/main/js/view/');
+    });
+    // reactを使用して画面を構成するファイル
+    glob.sync('./src/main/js/client/pages/**/*.tsx').forEach((file) => {
+      const fileName = path.basename(file);
+      const folderName = path.basename(path.dirname(file));
+      const expectedFileName =
+        folderName.charAt(0).toUpperCase() +
+        folderName.slice(1) +
+        path.extname(fileName);
+      // 一階層上のフォルダ名の先頭を大文字にした値と同じファイル名のみ対象とする(余計なフォルダは除く)
+      if (fileName === expectedFileName) {
+        setEntries(file, 'src/main/js/client/');
+      }
+    });
     return entries;
   },
   output: {
