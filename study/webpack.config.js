@@ -22,14 +22,14 @@ module.exports = {
       './src/main/js/view/common/sidebar',
     ];
     // entriesにファイルをセット
-    const setEntries = (fileName, replaceSearchValue) => {
-      const name = fileName
+    const setEntries = (filePath, replaceSearchValue) => {
+      const name = filePath
         // windows環境とlinux環境のどちらの環境でも正しくパスを置換出来るように事前にパスの区切り文字を'/'に置換する
         // ただし、entries[name]に渡すパスの区切り文字も'/'になってしまうがwindows環境でも現状だと\も/も区切り文字として認識してくれているため問題なし
         .replaceAll(path.sep, '/')
         .replace(replaceSearchValue, '')
-        .replace(path.extname(fileName), '');
-      entries[name] = path.resolve(fileName);
+        .replace(path.extname(filePath), '');
+      entries[name] = path.resolve(filePath);
     };
     // reactを使用していない各画面で使用するファイル
     glob.sync('./src/main/js/view/**/*.ts').forEach((file) => {

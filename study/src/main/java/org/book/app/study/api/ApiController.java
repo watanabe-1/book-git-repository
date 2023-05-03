@@ -36,7 +36,7 @@ public class ApiController {
    * @param result バインド結果
    * @throws BindException
    */
-  public void throwBindExceptionIfNeeded(BindingResult result) throws BindException {
+  public void throwBindExceptionIfHasErrors(BindingResult result) throws BindException {
     // エラーがあった場合
     if (result.hasErrors()) {
       throw new BindException(result);

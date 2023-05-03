@@ -81,7 +81,7 @@ public class BooksApiController extends ApiController {
   @ResponseBody
   public String result(@ModelAttribute @Validated BooksForm form,
       BindingResult result, ModelAndView model) throws BindException {
-    throwBindExceptionIfNeeded(result);
+    throwBindExceptionIfHasErrors(result);
 
     List<Books> booksList = booksHelper.csvToBooksList(form.getBooksFile(), form.getBooksType());
     // 取得したファイル内の日付の最小値、最大値、帳票タイプ(支出)に合わせて今登録済みの内容を削除

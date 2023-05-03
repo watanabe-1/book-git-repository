@@ -88,7 +88,7 @@ public class CategoryApiController extends ApiController {
   public String confirm(@ModelAttribute @Validated CategoryForm form,
       BindingResult result, ModelAndView model, HttpServletRequest request) throws BindException {
     categoryHelper.validateIfDoInsert(form, result);
-    throwBindExceptionIfNeeded(result);
+    throwBindExceptionIfHasErrors(result);
     log.info("checkInputのformの中身", form);
 
     return null;
@@ -107,7 +107,7 @@ public class CategoryApiController extends ApiController {
   public String result(@ModelAttribute @Validated CategoryForm form,
       BindingResult result, ModelAndView model) throws BindException {
     categoryHelper.validateIfDoInsert(form, result);
-    throwBindExceptionIfNeeded(result);
+    throwBindExceptionIfHasErrors(result);
     // アップロードしたICON
     MultipartFile catIcon = form.getCatIcon();
 
@@ -181,7 +181,7 @@ public class CategoryApiController extends ApiController {
   public CategoryFormList listUpdate(@Validated @ModelAttribute CategoryFormList catListParam,
       BindingResult result, ModelAndView model) throws BindException {
     categoryHelper.validateIfDoUpdate(catListParam, result);
-    throwBindExceptionIfNeeded(result);
+    throwBindExceptionIfHasErrors(result);
 
     // カテゴリー情報の更新
     categoryHelper.updatCeategorys(catListParam);
