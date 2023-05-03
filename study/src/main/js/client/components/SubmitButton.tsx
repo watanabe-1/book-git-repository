@@ -16,7 +16,7 @@ const SubmitButton = ({
 }) => {
   return isLoading ? (
     <Button variant="outline-primary" disabled>
-      <BodysLodingSpinner />;
+      <BodysLodingSpinner />
     </Button>
   ) : (
     <Button variant="primary" type="submit">
