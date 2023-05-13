@@ -1,6 +1,7 @@
 package org.book.app.study.api.js;
 
 import org.book.app.study.api.BooksApiController;
+import org.book.app.study.form.BooksForm;
 import org.book.app.study.util.StudyStringUtil;
 import org.springframework.stereotype.Component;
 import lombok.AllArgsConstructor;
@@ -34,6 +35,16 @@ public class BooksApi implements ServerApi {
    */
   public String getDownloadInfo() {
     return StudyStringUtil.objectToJsonStr(booksApiController.getDownloadInfo());
+  }
+
+  /**
+   * 家計簿確認画面情報取得
+   * 
+   * @param form booksForm
+   * @return 画面情報
+   */
+  public String getHouseholdInfo(BooksForm form) {
+    return StudyStringUtil.objectToJsonStr(booksApiController.getHouseholdInfo(form));
   }
 
 }

@@ -163,6 +163,7 @@ export type BuildListTableFormObjConfig = {
 export type TableFormObjConfig = {
   additions: {};
   initialValues: {};
+  rowName: config.className;
   getRows: (props: FormikProps<unknown>) => {
     cells: {
       name: string;

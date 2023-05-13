@@ -1,13 +1,16 @@
 package org.book.app.study.service.api;
 
+import java.util.Date;
 import java.util.List;
-import org.book.app.study.dto.ui.BooksUi;
+import org.book.app.study.dto.ui.books.BooksUi;
+import org.book.app.study.dto.ui.books.HouseholdUi;
 import org.book.app.study.entity.Books;
 import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.form.BooksForm;
 import org.book.app.study.helper.BooksHelper;
 import org.book.app.study.service.BooksService;
 import org.book.app.study.util.StudyDateUtil;
+import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +58,30 @@ public class BooksApiService {
     ui.setBooksYears(StudyDateUtil.getbetweenYears(
         booksHelper.getMinBooksDate(booksList),
         booksHelper.getMaxBooksDate(booksList)));
+
+    return ui;
+  }
+
+  /**
+   * 家計簿確認画面情報取得
+   * 
+   * @param form booksForm
+   * @return 画面情報
+   */
+  public HouseholdUi getHouseholdInfo(BooksForm form) {
+    HouseholdUi ui = new HouseholdUi();
+    Date date = form.getDate() == null ? StudyDateUtil.getStartDateByMonth(StudyUtil.getNowDate())
+        : form.getDate();
+    String tab =
+        StudyStringUtil.isNullOrEmpty(form.getTab()) ? booksHelper.getDefaltTab() : form.getTab();
+    List<Books> booksByExpenses =
+        booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode());
+    List<Books> booksByIncome = booksHelper.findByMonthAndType(date, BooksType.INCOME.getCode());
+    ui.setYear(StudyDateUtil.getYearOfStr(date));
+    ui.setMonth(StudyDateUtil.getMonthOfStr(date));
+    ui.setExpensesList(booksByExpenses);
+    ui.setIncomeList(booksByIncome);
+    ui.setTab(tab);
 
     return ui;
   }

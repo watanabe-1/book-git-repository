@@ -1,7 +1,7 @@
 package org.book.app.study.service.api;
 
 import org.springframework.stereotype.Service;
-import org.book.app.study.dto.ui.CategoryUi;
+import org.book.app.study.dto.ui.category.CategoryUi;
 import org.book.app.study.enums.flag.ActiveFlag;
 import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.enums.type.CategoryType;

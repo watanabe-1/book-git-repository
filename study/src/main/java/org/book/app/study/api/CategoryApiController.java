@@ -5,7 +5,7 @@ import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FilenameUtils;
 import org.book.app.study.dto.list.CategoryFormList;
-import org.book.app.study.dto.ui.CategoryUi;
+import org.book.app.study.dto.ui.category.CategoryUi;
 import org.book.app.study.entity.Category;
 import org.book.app.study.entity.Image;
 import org.book.app.study.form.CategoryForm;
@@ -178,7 +178,8 @@ public class CategoryApiController extends ApiController {
    */
   @RequestMapping(value = "/category/listdataUpdate", method = RequestMethod.POST)
   @ResponseBody
-  public CategoryFormList listUpdate(@Validated @ModelAttribute CategoryFormList catListParam,
+  public CategoryFormList listUpdate(
+      @ModelAttribute @Validated CategoryFormList catListParam,
       BindingResult result, ModelAndView model) throws BindException {
     categoryHelper.validateIfDoUpdate(catListParam, result);
     throwBindExceptionIfHasErrors(result);

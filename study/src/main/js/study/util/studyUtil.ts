@@ -195,9 +195,13 @@ export function JoinBases(
 export function JoinBase(base: string, add: string, separator: string): string {
   const len = separator.length;
   // 先頭
-  const addHead = add.slice(0, len);
+  const addHead = add ? add.slice(0, len) : null;
   // 末尾
-  const baseFoot = base.slice(-len);
+  const baseFoot = base ? base.slice(-len) : null;
+
+  if (addHead == null) return baseFoot;
+
+  if (baseFoot == null) return addHead;
 
   if (baseFoot == separator) {
     return addHead == separator ? base.slice(0, -len) + add : base + add;
@@ -650,13 +654,14 @@ export async function fetchPost(
 ): Promise<Response> {
   const headers = () => {
     const headers: {} = {};
-    //headers['Content-Type'] = 'multipart/form-data';
+    //headers['Content-Type'] = 'application/json';
     headers[getCsrfTokenHeader()] = getCsrfToken();
     return headers;
   };
 
   const body = objToFormData(params);
   console.log(...body.entries());
+  //console.log(JSON.stringify(params));
 
   const res: Response = await window.fetch(
     pathJoin(getContextPath(), baseurl),
@@ -718,4 +723,14 @@ export function ToTypeArrayIfisStringArray(array: Type[] | String[]) {
   return array.map((str) =>
     typeof str == 'string' ? stringToType(str) : (str as Type)
   );
+}
+
+/**
+ * null もしくは emptyの時valueで置き換え
+ * @param target  対象
+ * @param target  対象
+ * @returns type
+ */
+export function nullOrEmptyValueLogic(target: unknown, value: unknown) {
+  return target ? target : value;
 }

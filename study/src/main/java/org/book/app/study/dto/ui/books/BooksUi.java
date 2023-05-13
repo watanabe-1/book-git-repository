@@ -1,4 +1,4 @@
-package org.book.app.study.dto.ui;
+package org.book.app.study.dto.ui.books;
 
 import java.util.List;
 import org.book.app.study.enums.type.BooksType;

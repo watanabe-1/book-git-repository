@@ -8,13 +8,13 @@ import React from 'react';
  * @returns
  */
 export function onServer(
-  callback,
+  callback: (api: any, param?: any) => string,
   defaultValue,
   valueIdentifier: string
 ): [any, JSX.Element] {
   const anyWindow: any = window;
   if (anyWindow.isServer) {
-    const jsonValue = callback(anyWindow.api);
+    const jsonValue = callback(anyWindow.api, anyWindow.param);
     const sanitizedJson = jsonValue
       .replace(/\\/g, '\\\\')
       .replace(/"/g, '\\"')

@@ -58,4 +58,20 @@ public class BooksController {
     return model;
   }
 
+  /**
+   * 家計簿確認画面
+   * 
+   * @param request リクエスト
+   * @param form 送信されたデータ
+   * @param model モデル
+   * @return 画面表示用モデル
+   */
+  @RequestMapping(value = "/books/household", method = RequestMethod.GET)
+  public ModelAndView household(HttpServletRequest request, @ModelAttribute BooksForm form,
+      ModelAndView model) {
+    StudyJsUtil.setJsTemplate(model, "家計簿確認画面", request,
+        "/static/js/pages/books/household/household.bundle.js", booksApi, form);
+
+    return model;
+  }
 }

@@ -237,6 +237,26 @@ public class StudyDateUtil {
   }
 
   /**
+   * 引数から月のみ抜き出し返却
+   * 
+   * @param date 取得対象
+   * @return 月 数値
+   */
+  public static int getMonthOfInt(Date date) {
+    return dateToLocalDate(date).getMonthValue();
+  }
+
+  /**
+   * 引数から月のみ抜き出し返却
+   * 
+   * @param date 取得対象
+   * @return 月 文字列
+   */
+  public static String getMonthOfStr(Date date) {
+    return String.valueOf(getMonthOfInt(date));
+  }
+
+  /**
    * 引数から年/月のみ抜き出し返却
    * 
    * @param date 取得対象

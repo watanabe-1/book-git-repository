@@ -2,7 +2,8 @@ package org.book.app.study.api;
 
 import java.util.List;
 import org.book.app.study.dto.file.BooksColumn;
-import org.book.app.study.dto.ui.BooksUi;
+import org.book.app.study.dto.ui.books.BooksUi;
+import org.book.app.study.dto.ui.books.HouseholdUi;
 import org.book.app.study.entity.Books;
 import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.form.BooksForm;
@@ -67,6 +68,18 @@ public class BooksApiController extends ApiController {
   @ResponseBody
   public BooksUi getDownloadInfo() {
     return booksApiService.getDownloadInfo();
+  }
+
+  /**
+   * 家計簿確認画面情報取得
+   * 
+   * @param form booksForm
+   * @return json(家計簿確認画面情報取得)
+   */
+  @RequestMapping(value = "/books/householdInfo", method = RequestMethod.GET)
+  @ResponseBody
+  public HouseholdUi getHouseholdInfo(@ModelAttribute BooksForm form) {
+    return booksApiService.getHouseholdInfo(form);
   }
 
   /**

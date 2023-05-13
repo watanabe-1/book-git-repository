@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import BodysLodingSpinner from './BodysLodingSpinner';
-import { getNoImagePath } from '../../study/util/studyUtil';
+import { addContextPath, getNoImagePath } from '../../study/util/studyUtil';
 
 /**
  *
@@ -12,12 +12,14 @@ const ImageIcon = ({
   file = null,
   path,
   hidden = false,
+  isAddContextPath = true,
 }: {
   width?: string;
   height?: string;
   file?: File;
   path: string;
   hidden?: boolean;
+  isAddContextPath?: boolean;
 }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -35,11 +37,11 @@ const ImageIcon = ({
 
       reader.readAsDataURL(file);
     } else if (path) {
-      setPreviewImage(path);
+      setPreviewImage(isAddContextPath ? addContextPath(path) : path);
     } else {
       setPreviewImage(getNoImagePath());
     }
-  }, []);
+  }, [path, file]);
 
   return (
     <div>

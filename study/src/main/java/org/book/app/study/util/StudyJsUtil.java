@@ -10,13 +10,13 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.script.ScriptException;
 import javax.servlet.http.HttpServletRequest;
+import org.book.app.study.api.js.ServerApi;
+import org.book.app.study.form.Form;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.springframework.web.servlet.ModelAndView;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
-import org.book.app.study.api.js.ServerApi;
-import org.book.app.study.form.Form;
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 import lombok.extern.slf4j.XSlf4j;
 
@@ -50,34 +50,35 @@ public class StudyJsUtil {
   /**
    * js実行テンプレートのセット
    * 
-   * @param model      モデル
-   * @param title      タイトル
-   * @param request    リクエスト
+   * @param model モデル
+   * @param title タイトル
+   * @param request リクエスト
    * @param scriptPath jsファイルのパス
-   * @param serverApi  jsに埋め込むjavaオブジェクト
-   * @param form       form
+   * @param serverApi jsに埋め込むjavaオブジェクト
+   * @param form ssr判定用兼パラメータ用
    */
   public static void setJsTemplate(ModelAndView model, String title, HttpServletRequest request,
       String scriptPath, ServerApi serverApi, Form form) {
-    setJsTemplate(model, title, request, scriptPath, serverApi, isSSR(form));
+    setJsTemplate(model, title, request, scriptPath, serverApi, form, isSSR(form));
   }
 
   /**
    * js実行テンプレートのセット
    * 
-   * @param model      モデル
-   * @param title      タイトル
-   * @param request    リクエスト
+   * @param model モデル
+   * @param title タイトル
+   * @param request リクエスト
    * @param scriptPath jsファイルのパス
-   * @param serverApi  jsに埋め込むjavaオブジェクト
-   * @param isSSR      jsを実行するか
+   * @param serverApi jsに埋め込むjavaオブジェクト
+   * @param param jsに埋め込むjavaオブジェクトパラメータ
+   * @param isSSR jsを実行するか
    */
   public static void setJsTemplate(ModelAndView model, String title, HttpServletRequest request,
-      String scriptPath, ServerApi serverApi, boolean isSSR) {
+      String scriptPath, ServerApi serverApi, Object param, boolean isSSR) {
     model.setViewName(VIEW_NAME);
 
     // react用bodyを作成
-    String body = render(request, scriptPath, serverApi, isSSR);
+    String body = render(request, scriptPath, serverApi, param, isSSR);
     // scriptタグの抜き出し
     List<String> scriptList = readScripts(body);
     body = StudyStringUtil.delete(body, scriptList);
@@ -92,28 +93,32 @@ public class StudyJsUtil {
    * react jsを読み込み実行する<br/>
    * もしくはreact js をクライアントで実行する環境を整える
    * 
-   * @param request    リクエスト
+   * @param request リクエスト
    * @param scriptPath jsファイルのパス
-   * @param serverApi  jsに埋め込むjavaオブジェクト
-   * @param isSSR      jsを実行するか
+   * @param serverApi jsに埋め込むjavaオブジェクト
+   * @param param jsに埋め込むjavaオブジェクトパラメータ
+   * @param isSSR jsを実行するか
    * @return 実行結果
    */
   public static String render(HttpServletRequest request, String scriptPath, ServerApi serverApi,
+      Object param,
       boolean isSSR) {
-    return isSSR ? renderSSR(request, scriptPath, serverApi) : renderCSR(request, scriptPath);
+    return isSSR ? renderSSR(request, scriptPath, serverApi, param)
+        : renderCSR(request, scriptPath);
   }
 
   /**
    * react jsを読み込み実行する<br/>
    * 
-   * @param request    リクエスト
+   * @param request リクエスト
    * @param scriptPath jsファイルのパス
-   * @param serverApi  jsに埋め込むjavaオブジェクト
+   * @param serverApi jsに埋め込むjavaオブジェクト
+   * @param param jsに埋め込むjavaオブジェクトパラメータ
    * @return 実行結果
    */
   public static String renderSSR(HttpServletRequest request, String scriptPath,
-      ServerApi serverApi) {
-    GraalJSScriptEngine engine = initializeEngine(request, scriptPath, serverApi);
+      ServerApi serverApi, Object param) {
+    GraalJSScriptEngine engine = initializeEngine(request, scriptPath, serverApi, param);
     String ret = null;
     try {
       ret = engine.eval("window.renderAppOnServer()").toString();
@@ -133,7 +138,7 @@ public class StudyJsUtil {
   /**
    * react jsをクライアントで実行する<br/>
    * 
-   * @param request    リクエスト
+   * @param request リクエスト
    * @param scriptPath jsファイルのパス
    * @return 実行準備結果
    */
@@ -163,7 +168,7 @@ public class StudyJsUtil {
   /**
    * ソースパス格納スクリプトタグ作成
    * 
-   * @param scriptPath  ファイルパス
+   * @param scriptPath ファイルパス
    * @param contextPath コンテキストパス
    * @return ソースパス格納スクリプトタグ
    */
@@ -177,7 +182,7 @@ public class StudyJsUtil {
   /**
    * ソースパス格納スクリプトタグ作成
    * 
-   * @param scriptPath  ファイルパス
+   * @param scriptPath ファイルパス
    * @param contextPath コンテキストパス
    * @return ソースパス格納スクリプトタグ
    */
@@ -239,13 +244,14 @@ public class StudyJsUtil {
   /**
    * js実行エンジンの初期化
    * 
-   * @param request    リクエスト
+   * @param request リクエスト
    * @param scriptPath jsファイルのパス
-   * @param serverApi  jsに埋め込むjavaオブジェクト
+   * @param serverApi jsに埋め込むjavaオブジェクト
+   * @param param jsに埋め込むjavaオブジェクトパラメータ
    * @return js実行エンジン
    */
   private static GraalJSScriptEngine initializeEngine(HttpServletRequest request, String scriptPath,
-      ServerApi serverApi) {
+      ServerApi serverApi, Object param) {
     // Source loadcompatibility = Source.create("js",
     // "load('nashorn:mozilla_compat.js')");
     GraalJSScriptEngine engine = GraalJSScriptEngine.create(
@@ -263,9 +269,15 @@ public class StudyJsUtil {
           "window = { location: { hostname: 'localhost' }, isServer: true, requestUrl: \"%s\", contextPath: \"%s\" }",
           request.getRequestURI(), request.getContextPath()));
 
+      // api
       if (!Objects.isNull(serverApi)) {
         engine.put("api", serverApi);
         engine.eval("window.api = api");
+      }
+      // param
+      if (!Objects.isNull(param)) {
+        engine.put("param", param);
+        engine.eval("window.param = param");
       }
 
       engine.eval("navigator = {}");

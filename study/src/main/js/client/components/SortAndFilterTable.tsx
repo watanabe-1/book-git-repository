@@ -40,6 +40,9 @@ const SortAndFilterTable = ({
     sortDirection: ASCENDING,
   });
 
+  // console.log('pRows');
+  // console.log(pRows);
+
   const handleSort = (column: TableColumn) => {
     if (isSort) {
       const { sortColumn, sortDirection } = tableData;

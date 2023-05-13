@@ -139,7 +139,7 @@ public class ApiController {
     });
     e.getBindingResult().getGlobalErrors().forEach(objectError -> {
       String msg = messageSource.getMessage(objectError, locale);
-      errorResults.add(true, objectError.getCode(), messageSource.getMessage(objectError, locale),
+      errorResults.add(true, objectError.getCode(), msg,
           objectError.getObjectName());
       log.debug(msg);
     });

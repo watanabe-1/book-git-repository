@@ -1,4 +1,4 @@
-import { FormikProps } from 'formik';
+import { Field, FormikProps } from 'formik';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   BuildListTableFormObjConfig,
@@ -17,7 +17,10 @@ import {
   fetchPost,
   keyJoin,
 } from '../../../../study/util/studyUtil';
-import { buildListTableFormObj } from '../../../../study/util/studyYupUtil';
+import {
+  buildListTableFormObj,
+  objArrayToObj,
+} from '../../../../study/util/studyYupUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import CheckBox from '../../../components/CheckBox';
 import FileBoxOnValidateAndImg from '../../../components/FileBoxOnValidateAndImg';
@@ -71,7 +74,9 @@ const ListTable = () => {
    * @param form 送信パラメータ
    */
   const handleSubmit = async (form: {}) => {
-    const res = await fetchUpdListData(form);
+    const res = await fetchUpdListData(
+      objArrayToObj(form[ClassConst.CAT_DATA_LIST], ClassConst.CAT_DATA_LIST)
+    );
     const json = await res.json();
     console.log('sousinkekka');
     console.log(json);
@@ -140,12 +145,29 @@ const ListTable = () => {
           getCell: (props: FormikProps<{}>, names: {}) => {
             const name = names[FieldConst.Category.DELETE];
             return (
-              <CheckBox
-                name={name}
-                value={props.values[name]}
-                flag={info.delete}
-                onChange={(e) => props.handleChange(e)}
-              />
+              <Field name={name}>
+                {({ field, form, meta }) => {
+                  // console.log('Field');
+                  // console.log(field);
+                  // console.log('form');
+                  // console.log(form);
+                  // console.log('meta');
+                  // console.log(meta);
+                  // console.log('values');
+                  // console.log(props.values);
+                  // getFieldPropsで取得できる値はFieldタグのfieldと同じ(内部的に同じ関数が呼ばれている)
+                  // console.log('props.getFieldProps');
+                  // console.log(props.getFieldProps(name));
+                  return (
+                    <CheckBox
+                      name={field.name}
+                      value={field.value}
+                      flag={info.delete}
+                      onChange={field.onChange}
+                    />
+                  );
+                }}
+              </Field>
             );
           },
           hidden: false,
@@ -159,13 +181,19 @@ const ListTable = () => {
           getCell: (props: FormikProps<{}>, names: {}) => {
             const name = names[FieldConst.Category.CAT_CODE];
             return (
-              <TextBoxOnValidate
-                name={name}
-                value={props.values[name]}
-                touched={props.touched[name]}
-                error={props.errors[name]}
-                onChange={props.handleChange}
-              />
+              <Field name={name}>
+                {({ field, form, meta }) => {
+                  return (
+                    <TextBoxOnValidate
+                      name={field.name}
+                      value={field.value}
+                      touched={meta.touched}
+                      error={meta.error}
+                      onChange={field.onChange}
+                    />
+                  );
+                }}
+              </Field>
             );
           },
           hidden: true,
@@ -184,13 +212,19 @@ const ListTable = () => {
           getCell: (props: FormikProps<{}>, names: {}) => {
             const name = names[FieldConst.Category.CAT_NAME];
             return (
-              <TextBoxOnValidate
-                name={name}
-                value={props.values[name]}
-                touched={props.touched[name]}
-                error={props.errors[name]}
-                onChange={props.handleChange}
-              />
+              <Field name={name}>
+                {({ field, form, meta }) => {
+                  return (
+                    <TextBoxOnValidate
+                      name={field.name}
+                      value={field.value}
+                      touched={meta.touched}
+                      error={meta.error}
+                      onChange={field.onChange}
+                    />
+                  );
+                }}
+              </Field>
             );
           },
           hidden: false,
@@ -209,12 +243,18 @@ const ListTable = () => {
           getCell: (props: FormikProps<{}>, names: {}) => {
             const name = names[FieldConst.Category.CAT_TYPE];
             return (
-              <RadioBtn
-                name={name}
-                value={props.values[name]}
-                typeList={info.catTypes}
-                onChange={props.handleChange}
-              />
+              <Field name={name}>
+                {({ field, form, meta }) => {
+                  return (
+                    <RadioBtn
+                      name={field.name}
+                      value={field.value}
+                      typeList={info.catTypes}
+                      onChange={field.onChange}
+                    />
+                  );
+                }}
+              </Field>
             );
           },
           hidden: false,
@@ -228,11 +268,17 @@ const ListTable = () => {
           getCell: (props: FormikProps<{}>, names: {}) => {
             const name = names[FieldConst.Category.NOTE];
             return (
-              <TextArea
-                name={name}
-                value={props.values[name]}
-                onChange={props.handleChange}
-              />
+              <Field name={name}>
+                {({ field, form, meta }) => {
+                  return (
+                    <TextArea
+                      name={field.name}
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  );
+                }}
+              </Field>
             );
           },
           hidden: false,
@@ -246,12 +292,18 @@ const ListTable = () => {
           getCell: (props: FormikProps<{}>, names: {}) => {
             const name = names[FieldConst.Category.IMG_TYPE];
             return (
-              <SelectBox
-                name={name}
-                value={props.values[name]}
-                typeList={info.imgTypes}
-                onChange={props.handleChange}
-              />
+              <Field name={name}>
+                {({ field, form, meta }) => {
+                  return (
+                    <SelectBox
+                      name={field.name}
+                      value={field.value}
+                      typeList={info.imgTypes}
+                      onChange={field.onChange}
+                    />
+                  );
+                }}
+              </Field>
             );
           },
           hidden: false,
@@ -269,7 +321,7 @@ const ListTable = () => {
               ];
             return (
               <>
-                <label>{props.values[name]}</label>
+                <label>{props.getFieldProps(name).value}</label>
                 <ModalSlider
                   imageList={imageList}
                   setImage={(image) => {
@@ -308,12 +360,18 @@ const ListTable = () => {
           getCell: (props: FormikProps<{}>, names: {}) => {
             const name = names[FieldConst.Category.ACTIVE];
             return (
-              <CheckBox
-                name={name}
-                value={props.values[name]}
-                flag={info.active}
-                onChange={props.handleChange}
-              />
+              <Field name={name}>
+                {({ field, form, meta }) => {
+                  return (
+                    <CheckBox
+                      name={field.name}
+                      value={field.value}
+                      flag={info.active}
+                      onChange={field.onChange}
+                    />
+                  );
+                }}
+              </Field>
             );
           },
           hidden: false,
@@ -327,53 +385,59 @@ const ListTable = () => {
           getCell: (props: FormikProps<{}>, names: {}) => {
             const name = names[FieldConst.Category.CAT_ICON];
             return (
-              <FileBoxOnValidateAndImg
-                name={name}
-                error={props.errors[name]}
-                accept="image/*"
-                path={
-                  props.values[
-                    names[
-                      keyJoin(
-                        FieldConst.Category.IMG_IDS,
-                        FieldConst.Image.IMG_PATH
-                      )
-                    ]
-                  ]
-                }
-                fileName={
-                  props.values[
-                    names[
-                      keyJoin(
-                        FieldConst.Category.IMG_IDS,
-                        FieldConst.Image.IMG_NAME
-                      )
-                    ]
-                  ]
-                }
-                onChange={getSetInputFileFunc(
-                  props.setFieldValue,
-                  name,
-                  names[
-                    keyJoin(
-                      FieldConst.Category.IMG_IDS,
-                      FieldConst.Image.IMG_PATH
-                    )
-                  ],
-                  names[
-                    keyJoin(
-                      FieldConst.Category.IMG_IDS,
-                      FieldConst.Image.IMG_NAME
-                    )
-                  ]
-                )}
-              />
+              <Field name={name}>
+                {({ field, form, meta }) => {
+                  return (
+                    <FileBoxOnValidateAndImg
+                      name={field.name}
+                      error={meta.error}
+                      accept="image/*"
+                      path={
+                        props.getFieldProps(
+                          names[
+                            keyJoin(
+                              FieldConst.Category.IMG_IDS,
+                              FieldConst.Image.IMG_PATH
+                            )
+                          ]
+                        ).value
+                      }
+                      fileName={
+                        props.getFieldProps(
+                          names[
+                            keyJoin(
+                              FieldConst.Category.IMG_IDS,
+                              FieldConst.Image.IMG_NAME
+                            )
+                          ]
+                        ).value
+                      }
+                      onChange={getSetInputFileFunc(
+                        props.setFieldValue,
+                        name,
+                        names[
+                          keyJoin(
+                            FieldConst.Category.IMG_IDS,
+                            FieldConst.Image.IMG_PATH
+                          )
+                        ],
+                        names[
+                          keyJoin(
+                            FieldConst.Category.IMG_IDS,
+                            FieldConst.Image.IMG_NAME
+                          )
+                        ]
+                      )}
+                    />
+                  );
+                }}
+              </Field>
             );
           },
           hidden: false,
         },
         addition: {
-          yup: yup.mixed(),
+          yup: yup.mixed().nullable(),
           isServerValidation: true,
           errData: errData,
           setErrData: setErrData,

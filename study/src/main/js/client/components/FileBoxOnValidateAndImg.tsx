@@ -1,6 +1,7 @@
 import React from 'react';
 import { addContextPath, pathJoin } from '../../study/util/studyUtil';
 import FileBoxOnValidate from './FileBoxOnValidate';
+import ImageIcon from './ImageIcon';
 
 /**
  *
@@ -21,19 +22,16 @@ const FileBoxOnValidateAndImg = ({
   accept: string;
   path: string;
   fileName?: string;
-  isAddContextPath?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const newPath = fileName ? pathJoin(path, fileName) : path;
 
   return (
     <>
-      <img
-        src={path.startsWith('data:') ? newPath : addContextPath(newPath)}
-        className="mh-100 mw-100"
-        width="50"
-        height="30"
-      ></img>
+      <ImageIcon
+        path={path.startsWith('data:') ? newPath : addContextPath(newPath)}
+        isAddContextPath={false}
+      />
       <FileBoxOnValidate
         title={title}
         name={name}

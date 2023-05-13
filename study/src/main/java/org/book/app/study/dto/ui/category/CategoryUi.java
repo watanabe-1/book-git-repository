@@ -1,4 +1,4 @@
-package org.book.app.study.dto.ui;
+package org.book.app.study.dto.ui.category;
 
 import org.book.app.study.enums.flag.ActiveFlag;
 import org.book.app.study.enums.flag.DeleteFlag;

@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 
 const Result = (props) => {
   const handleClick = () => {
-    window.location.href = addContextPath(UrlConst.Books.LIST);
+    window.location.href = addContextPath(UrlConst.Books.HOUSEHOLD);
   };
 
   return (

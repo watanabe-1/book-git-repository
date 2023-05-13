@@ -46,6 +46,7 @@ export namespace FieldConst {
     export const BOOKS_DATE = 'booksDate';
     export const BOOKS_PLACE = 'booksPlace';
     export const CAT_CODE = 'catCode';
+    export const CAT_CODES = 'catCodes';
     export const BOOKS_METHOD = 'booksMethod';
     export const BOOKS_AMMOUNT = 'booksAmmount';
     export const INS_DATE = 'insDate';

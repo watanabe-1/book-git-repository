@@ -10,16 +10,18 @@ import BodysLodingSpinner from './BodysLodingSpinner';
 const SubmitButton = ({
   title,
   isLoading = false,
+  hidden = false,
 }: {
   title?: string;
   isLoading?: boolean;
+  hidden?: boolean;
 }) => {
   return isLoading ? (
-    <Button variant="outline-primary" disabled>
+    <Button variant="outline-primary" disabled hidden={hidden}>
       <BodysLodingSpinner />
     </Button>
   ) : (
-    <Button variant="primary" type="submit">
+    <Button variant="primary" type="submit" hidden={hidden}>
       {title}
     </Button>
   );
