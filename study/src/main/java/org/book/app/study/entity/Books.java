@@ -2,6 +2,8 @@ package org.book.app.study.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import org.book.app.study.util.StudyDateUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -33,6 +35,8 @@ public class Books implements Serializable, Entity {
   /**
    * 日付(収入日、購入日)
    */
+  @JsonFormat(pattern = StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH,
+      timezone = StudyDateUtil.TIMEZONE_ASIA_TOKYO)
   private Date booksDate;
 
   /**
