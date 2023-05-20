@@ -1,7 +1,7 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 import { Type } from '../../@types/studyUtilType';
-import { ToTypeArrayIfisStringArray } from '../../study/util/studyUtil';
+import { ToTypeArrayIfIsStringArray } from '../../study/util/studyUtil';
 import { FormikTouched } from 'formik';
 
 /**
@@ -27,7 +27,7 @@ const SelectBoxOnValidate = ({
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   isUnshiftEmpty?: boolean;
 }) => {
-  const newTypeList = ToTypeArrayIfisStringArray(typeList);
+  const newTypeList = ToTypeArrayIfIsStringArray(typeList);
 
   //先頭に空要素を追加
   if (isUnshiftEmpty) {

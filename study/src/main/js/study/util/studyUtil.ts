@@ -719,7 +719,7 @@ export function stringToType(str: string) {
  * @param str  対象
  * @returns type
  */
-export function ToTypeArrayIfisStringArray(array: Type[] | String[]) {
+export function ToTypeArrayIfIsStringArray(array: Type[] | String[]) {
   return array.map((str) =>
     typeof str == 'string' ? stringToType(str) : (str as Type)
   );
@@ -728,7 +728,7 @@ export function ToTypeArrayIfisStringArray(array: Type[] | String[]) {
 /**
  * null もしくは emptyの時valueで置き換え
  * @param target  対象
- * @param target  対象
+ * @param value  置き換える値
  * @returns type
  */
 export function nullOrEmptyValueLogic(target: unknown, value: unknown) {

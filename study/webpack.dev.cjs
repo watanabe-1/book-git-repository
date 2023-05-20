@@ -1,6 +1,6 @@
 const { merge } = require('webpack-merge');
 const path = require('path');
-const common = require('./webpack.config.js');
+const common = require('./webpack.config.cjs');
 
 /**
  * 本家の webpack.config.js に設定をマージ（オーバーライド）

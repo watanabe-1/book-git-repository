@@ -3,8 +3,10 @@ import Chart, {
   BubbleDataPoint,
   ChartData,
   ChartTypeRegistry,
+  Point,
   ScatterDataPoint,
 } from 'chart.js/auto';
+
 import { fontString } from 'chart.js/helpers';
 
 /**
@@ -21,6 +23,7 @@ export function doughnutChart(jsonData: ChartData, args: string[]): Chart {
     //console.log(jsonData.datasets[0].data)
     args[1] = 'データがありません';
   }
+
   //描画
   return new Chart(doughnutChart, {
     type: 'doughnut',
@@ -168,7 +171,7 @@ export function doughnutChart(jsonData: ChartData, args: string[]): Chart {
                 ctx.textBaseline = 'middle';
 
                 const padding: number = 5;
-                const position = element.tooltipPosition();
+                const position = element.tooltipPosition(true);
                 ctx.fillText(
                   dataString,
                   position.x,
@@ -201,6 +204,7 @@ export function barChart(jsonData: ChartData, args: string[]): Chart {
     //console.log(jsonData.datasets[0].data)
     args[1] = 'データがありません';
   }
+
   //描画
   return new Chart(barChart, {
     type: 'bar',
@@ -308,7 +312,7 @@ export function barChart(jsonData: ChartData, args: string[]): Chart {
                 //middle, top, bottom
                 ctx.textBaseline = 'middle';
 
-                const position = element.tooltipPosition();
+                const position = element.tooltipPosition(true);
                 ctx.fillText(dataString, position.x, position.y);
               });
             }
@@ -334,6 +338,7 @@ export function barAndLineChart(jsonData: ChartData, args: string[]) {
     args[1] = 'データがありません';
   }
   //console.log(config);
+
   //描画
   return new Chart(barAndLineChart, {
     type: 'bar',
@@ -394,7 +399,7 @@ export function updateDataBar(
     options: { scales: { x: { suggestedMax: number } } };
     data: ChartData<
       keyof ChartTypeRegistry,
-      (number | ScatterDataPoint | BubbleDataPoint)[],
+      (number | [number, number] | Point | BubbleDataPoint)[],
       unknown
     >;
     update: () => void;
