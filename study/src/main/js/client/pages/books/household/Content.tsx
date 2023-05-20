@@ -9,7 +9,6 @@ import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import {
   fetchGet,
   getLocationHrefParm,
-  getStudyDate,
   nullOrEmptyValueLogic,
 } from '../../../../study/util/studyUtil';
 import { UrlConst } from '../../../../constant/urlConstant';
@@ -19,6 +18,7 @@ import {
   getPreviousMonthDate,
 } from '../../../../study/util/studyDateUtil';
 import ListTable from './ListTable';
+import { useNavigate, useLocation, createSearchParams } from 'react-router-dom';
 
 /**
  * 家計簿確認用データ
@@ -31,6 +31,14 @@ export type HouseHoldData = {
   tab: string;
 };
 
+/**
+ * HouseHoldDataからDateを取得
+ * @param data HouseHoldData
+ * @returns Date
+ */
+const infoToDate = (data: HouseHoldData) =>
+  new Date(parseInt(data.year), parseInt(data.month));
+
 const Content = () => {
   const [initialInfo, initScript] = onServer(
     (api, param) => api.getHouseholdInfo(param),
@@ -39,6 +47,9 @@ const Content = () => {
   ) as [HouseHoldData, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const [key, setKey] = useState(info.tab);
+  const [date, setDate] = useState(infoToDate(info));
+  const navigate = useNavigate();
+  const location = useLocation();
 
   /**
    * 家計簿データの金額の合計を取得する
@@ -54,11 +65,11 @@ const Content = () => {
   /**
    * 画面情報取得
    */
-  const fetchInfo = async (date?: Date) => {
-    const paramTab = nullOrEmptyValueLogic(getLocationHrefParm('tab'), '');
-    const paramDate = date
-      ? date
-      : nullOrEmptyValueLogic(getLocationHrefParm('date'), null);
+  const fetchInfo = async () => {
+    //console.log('------fetchInfo yobidasareta-----');
+    // useSearchParamsはサーバー側で実行できないので一旦使用しない なにか解決策がわかれば変更する予定
+    const paramTab = nullOrEmptyValueLogic(getLocationHrefParm('tab'), key);
+    const paramDate = nullOrEmptyValueLogic(getLocationHrefParm('date'), date);
     const params = {};
     if (paramTab) params['tab'] = paramTab;
     if (paramDate) params['date'] = paramDate;
@@ -66,35 +77,49 @@ const Content = () => {
     const info = (await response.json()) as HouseHoldData;
     setInfo(info);
     setKey(info.tab);
+    setDate(infoToDate(info));
   };
 
   /**
-   * 次月の画面情報取得
-   * @param year 年
-   * @param month 月
+   * 次月のページに遷移
    */
-  const fetchNextInfo = async (year: string, month: string) => {
-    const date = new Date(parseInt(year), parseInt(month));
-    fetchInfo(getNextMonthDate(date));
+  const pushNextHistory = async () => {
+    pushHistory(getNextMonthDate(date), key);
   };
 
   /**
-   * 前月の画面情報取得
-   * @param year 年
-   * @param month 月
+   * 前月のページに遷移
    */
-  const fetchPreviousInfo = async (year: string, month: string) => {
-    const date = new Date(parseInt(year), parseInt(month));
-    fetchInfo(getPreviousMonthDate(date));
+  const pushPreviousHistory = async () => {
+    pushHistory(getPreviousMonthDate(date), key);
+  };
+
+  /**
+   * uelの書き換えを行い、ページ遷移する
+   *
+   * @param date 日付け
+   * @param tab タブ
+   */
+  const pushHistory = (date: Date, tab: string) => {
+    // navigateを使用してページ遷移を行う
+    navigate({
+      pathname: location.pathname,
+      search: createSearchParams({
+        date: String(date),
+        tab: tab,
+      }).toString(),
+    });
   };
 
   useEffect(() => {
+    // console.log('useEffect yobidasareta');
     // SSRが実行されたかされていないかで処理が変わる
     executeFuncIfNeeded(fetchInfo);
-  }, []);
+  }, [location]);
 
   console.log(info);
   console.log(key);
+  console.log(date);
   // 非同期が完了するまで次の処理に進まない
   if (!info.expensesList) return <BodysLodingSpinner />;
 
@@ -131,17 +156,11 @@ const Content = () => {
         </Row>
         <Row>
           <Col md={6}>
-            <a
-              className="btn btn-link"
-              onClick={() => fetchPreviousInfo(info.year, info.month)}
-            >
+            <a className="btn btn-link" onClick={() => pushPreviousHistory()}>
               <span>前月</span>
             </a>
             <span>{`${info.year}年${info.month}月`}</span>
-            <a
-              className="btn btn-link"
-              onClick={() => fetchNextInfo(info.year, info.month)}
-            >
+            <a className="btn btn-link" onClick={() => pushNextHistory()}>
               <span>次月</span>
             </a>
           </Col>

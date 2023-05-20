@@ -121,7 +121,8 @@ public class StudyJsUtil {
     GraalJSScriptEngine engine = initializeEngine(request, scriptPath, serverApi, param);
     String ret = null;
     try {
-      ret = engine.eval("window.renderAppOnServer()").toString();
+      ret = engine.eval(String.format("window.renderAppOnServer('%s')", request.getRequestURI()))
+          .toString();
     } catch (ScriptException e) {
       log.error("", e, "");
       throw new BusinessException(
@@ -280,8 +281,8 @@ public class StudyJsUtil {
         engine.eval("window.param = param");
       }
 
+      // navigator、selfをそのままだと解決できないため、グルーバルオブジェクトとして定義
       engine.eval("navigator = {}");
-      // selfをそのままだと解決できないため、グルーバルオブジェクトとして定義
       engine.eval("self = {}");
       engine.eval(readJsFile("/static/js/depens.bundle.js"));
       // TextEncoderがwebapi(ブラウザで用意されているapi)のため別で読み込みしなおす
