@@ -616,7 +616,7 @@ export function swichClass(
  * @param obj
  * @returns 判定結果
  */
-function isEmpty(obj: {}) {
+export function isObjEmpty(obj: {}) {
   for (let i in obj) {
     return false;
   }
@@ -633,7 +633,7 @@ export async function fetchGet(baseurl: string, params: {} = {}) {
   const query = new URLSearchParams(params);
   const url = pathJoin(getContextPath(), baseurl);
   const res: Response = await window.fetch(
-    isEmpty(params) ? url : url + '?' + query
+    isObjEmpty(params) ? url : url + '?' + query
   );
   if (!res.ok) {
     throw new Error(`unexpected status: ${res.status}`);

@@ -48,14 +48,14 @@ export function onServer(
 export function isSSR() {
   const anyWindow: any = window;
   //console.log(anyWindow.isSSR);
-  return anyWindow.isSSR;
+  return anyWindow.isSSR as boolean;
 }
 
 /**
  * ssr判定フラグにセット
  * @param isSSR
  */
-export function setSSR(isSSR) {
+export function setSSR(isSSR: boolean) {
   const anyWindow: any = window;
   //console.log(anyWindow.isSSR);
   anyWindow.isSSR = isSSR;
@@ -67,6 +67,7 @@ export function setSSR(isSSR) {
  * @param func SSRされていない時に実行するファンクション
  */
 export function executeFuncIfNeeded(func: () => any = null) {
+  console.log(`isSSR = ${isSSR()}`);
   if (!isSSR()) {
     //ssrが行われなかった時
     if (func) {

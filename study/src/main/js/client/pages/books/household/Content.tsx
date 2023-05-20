@@ -16,9 +16,11 @@ import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import {
   getNextMonthDate,
   getPreviousMonthDate,
+  isInvalidDate,
 } from '../../../../study/util/studyDateUtil';
 import ListTable from './ListTable';
 import { useNavigate, useLocation, createSearchParams } from 'react-router-dom';
+import Chart from './Chart';
 
 /**
  * 家計簿確認用データ
@@ -37,7 +39,7 @@ export type HouseHoldData = {
  * @returns Date
  */
 const infoToDate = (data: HouseHoldData) =>
-  new Date(parseInt(data.year), parseInt(data.month));
+  new Date(parseInt(data.year), parseInt(data.month) - 1);
 
 const Content = () => {
   const [initialInfo, initScript] = onServer(
@@ -46,10 +48,10 @@ const Content = () => {
     'books.householdInfo'
   ) as [HouseHoldData, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
-  const [key, setKey] = useState(info.tab);
-  const [date, setDate] = useState(infoToDate(info));
   const navigate = useNavigate();
   const location = useLocation();
+  const { tab } = info;
+  const date = infoToDate(info);
 
   /**
    * 家計簿データの金額の合計を取得する
@@ -68,30 +70,31 @@ const Content = () => {
   const fetchInfo = async () => {
     //console.log('------fetchInfo yobidasareta-----');
     // useSearchParamsはサーバー側で実行できないので一旦使用しない なにか解決策がわかれば変更する予定
-    const paramTab = nullOrEmptyValueLogic(getLocationHrefParm('tab'), key);
-    const paramDate = nullOrEmptyValueLogic(getLocationHrefParm('date'), date);
+    const paramTab = nullOrEmptyValueLogic(getLocationHrefParm('tab'), tab);
+    const paramDate = nullOrEmptyValueLogic(
+      getLocationHrefParm('date'),
+      isInvalidDate(date) ? null : date
+    );
     const params = {};
     if (paramTab) params['tab'] = paramTab;
     if (paramDate) params['date'] = paramDate;
     const response = await fetchGet(UrlConst.Books.HOUSEHOLD_INFO, params);
     const info = (await response.json()) as HouseHoldData;
     setInfo(info);
-    setKey(info.tab);
-    setDate(infoToDate(info));
   };
 
   /**
    * 次月のページに遷移
    */
   const pushNextHistory = async () => {
-    pushHistory(getNextMonthDate(date), key);
+    pushHistory(getNextMonthDate(date), tab);
   };
 
   /**
    * 前月のページに遷移
    */
   const pushPreviousHistory = async () => {
-    pushHistory(getPreviousMonthDate(date), key);
+    pushHistory(getPreviousMonthDate(date), tab);
   };
 
   /**
@@ -118,7 +121,7 @@ const Content = () => {
   }, [location]);
 
   console.log(info);
-  console.log(key);
+  console.log(tab);
   console.log(date);
   // 非同期が完了するまで次の処理に進まない
   if (!info.expensesList) return <BodysLodingSpinner />;
@@ -133,8 +136,8 @@ const Content = () => {
       <BodysHead title="家計簿確認画面" />
       <Tab.Container
         id="controlled-household-tab"
-        activeKey={key}
-        onSelect={(k) => setKey(k)}
+        activeKey={tab}
+        onSelect={(k) => setInfo({ ...info, tab: k })}
       >
         <Row>
           <Col>
@@ -181,7 +184,9 @@ const Content = () => {
           <Tab.Pane eventKey="tab2">
             <ListTable booksList={info.incomeList} />
           </Tab.Pane>
-          <Tab.Pane eventKey="tab3">Third tab content</Tab.Pane>
+          <Tab.Pane eventKey="tab3">
+            <Chart year={info.year} month={info.month} />
+          </Tab.Pane>
           <Tab.Pane eventKey="tab4">Fourth tab content</Tab.Pane>
         </Tab.Content>
       </Tab.Container>

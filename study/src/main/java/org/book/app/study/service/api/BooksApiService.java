@@ -3,6 +3,7 @@ package org.book.app.study.service.api;
 import java.util.Date;
 import java.util.List;
 import org.book.app.study.dto.ui.books.BooksUi;
+import org.book.app.study.dto.ui.books.HouseholdChartUi;
 import org.book.app.study.dto.ui.books.HouseholdUi;
 import org.book.app.study.entity.Books;
 import org.book.app.study.enums.type.BooksType;
@@ -82,6 +83,26 @@ public class BooksApiService {
     ui.setExpensesList(booksByExpenses);
     ui.setIncomeList(booksByIncome);
     ui.setTab(tab);
+
+    return ui;
+  }
+
+  /**
+   * 家計簿確認画面図情報取得
+   * 
+   * @param form booksForm
+   * @return 画面情報
+   */
+  public HouseholdChartUi getHouseholdChartInfo(BooksForm form) {
+    HouseholdChartUi ui = new HouseholdChartUi();
+    Date date = form.getDate() == null ? StudyDateUtil.getStartDateByMonth(StudyUtil.getNowDate())
+        : form.getDate();
+    ui.setMonthCategory(booksHelper
+        .getChartDataByMonthCategory(date));
+    ui.setMonthMethod(booksHelper
+        .getChartDataByMonthMethod(date));
+    ui.setYearAll(booksHelper
+        .getChartDatatByYearAll(date));
 
     return ui;
   }
