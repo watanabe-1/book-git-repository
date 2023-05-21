@@ -17,6 +17,7 @@ export namespace UrlConst {
     export const DOWNLOAD_INFO = '/books/downloadInfo';
     export const HOUSEHOLD_INFO = '/books/householdInfo';
     export const HOUSEHOLD_CHART_INFO = '/books/householdChartInfo';
+    export const HOUSEHOLD_CALENDAR_INFO = '/books/householdCalendarInfo';
     export const RESULT = '/books/result';
     export const DOWNLOAD = '/books/download';
     export const HOUSEHOLD = '/books/household';

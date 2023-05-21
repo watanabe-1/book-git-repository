@@ -3,6 +3,7 @@ package org.book.app.study.api;
 import java.util.List;
 import org.book.app.study.dto.file.BooksColumn;
 import org.book.app.study.dto.ui.books.BooksUi;
+import org.book.app.study.dto.ui.books.HouseholdCalendarUi;
 import org.book.app.study.dto.ui.books.HouseholdChartUi;
 import org.book.app.study.dto.ui.books.HouseholdUi;
 import org.book.app.study.entity.Books;
@@ -84,15 +85,27 @@ public class BooksApiController extends ApiController {
   }
 
   /**
-   * 家計簿確認画面情報取得
+   * 家計簿確認画面図情報取得
    * 
    * @param form booksForm
-   * @return json(家計簿確認画面情報取得)
+   * @return json(家計簿確認画面図情報取得)
    */
   @RequestMapping(value = "/books/householdChartInfo", method = RequestMethod.GET)
   @ResponseBody
   public HouseholdChartUi getHouseholdChartInfo(@ModelAttribute BooksForm form) {
     return booksApiService.getHouseholdChartInfo(form);
+  }
+
+  /**
+   * 家計簿確認画面カレンダー情報取得
+   * 
+   * @param form booksForm
+   * @return json(家計簿確認画面カレンダー情報取得)
+   */
+  @RequestMapping(value = "/books/householdCalendarInfo", method = RequestMethod.GET)
+  @ResponseBody
+  public HouseholdCalendarUi getHouseholdCalendarInfo(@ModelAttribute BooksForm form) {
+    return booksApiService.getHouseholdCalendarInfo(form);
   }
 
   /**

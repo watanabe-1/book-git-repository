@@ -31,6 +31,11 @@ public class HouseholdUi {
   private String month;
 
   /**
+   * 対象日
+   */
+  private String day;
+
+  /**
    * アクティブにするタブ
    */
   private String tab;

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import DoughnutChart from '../../../components/DoughnutChart';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import { ChartData } from 'chart.js';
@@ -19,7 +21,7 @@ export type HouseholdChartData = {
   yearAll: ChartData<'bar'>;
 };
 
-const Chart = ({ year, month }: { year: string; month: string }) => {
+const Chart = ({ year, month }: { year: number; month: number }) => {
   const [initiaChartData, initScript] = onServer(
     (api, param) => api.getHouseholdChartInfo(param),
     [],
@@ -27,9 +29,9 @@ const Chart = ({ year, month }: { year: string; month: string }) => {
   ) as [HouseholdChartData, JSX.Element];
   const [chartData, setChartData] = useState(initiaChartData);
   const { monthCategory, monthMethod, yearAll } = chartData;
-  const date = new Date(parseInt(year), parseInt(month) - 1);
+  const date = new Date(year, month - 1);
 
-  console.log('data');
+  console.log('chartdata');
   console.log(chartData);
 
   // 日付けが正しく設定されるまで
@@ -38,7 +40,7 @@ const Chart = ({ year, month }: { year: string; month: string }) => {
   /**
    * 1月ごとのカテゴリーチャート用データ取得
    */
-  const fetchMonthCategory = async () => {
+  const fetchInfo = async () => {
     const params = {};
     if (date) params['date'] = date;
     const response = await fetchGet(
@@ -54,7 +56,7 @@ const Chart = ({ year, month }: { year: string; month: string }) => {
   // 例 : タブを切り替えるたびに親の再レンダリングが動くが、その時は日付けは変わっていない しかし親から渡された日付けをそのままuseEffectの条件(第二引数)にした場合、親側ではレンダリングのたびに「new」で作り直しているため参照先が変わり毎回useEffectが実行される
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(fetchMonthCategory);
+    executeFuncIfNeeded(fetchInfo);
   }, [month]);
 
   return (

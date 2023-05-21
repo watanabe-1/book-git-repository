@@ -257,6 +257,26 @@ public class StudyDateUtil {
   }
 
   /**
+   * 引数から日のみ抜き出し返却
+   * 
+   * @param date 取得対象
+   * @return 日 数値
+   */
+  public static int getDayOfInt(Date date) {
+    return dateToLocalDate(date).getDayOfMonth();
+  }
+
+  /**
+   * 引数から日のみ抜き出し返却
+   * 
+   * @param date 取得対象
+   * @return 日 文字列
+   */
+  public static String getDayOfStr(Date date) {
+    return String.valueOf(getDayOfInt(date));
+  }
+
+  /**
    * 引数から年/月のみ抜き出し返却
    * 
    * @param date 取得対象

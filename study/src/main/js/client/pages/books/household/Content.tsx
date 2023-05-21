@@ -21,6 +21,7 @@ import {
 import ListTable from './ListTable';
 import { useNavigate, useLocation, createSearchParams } from 'react-router-dom';
 import Chart from './Chart';
+import Calendar from './Calendar';
 
 /**
  * 家計簿確認用データ
@@ -30,6 +31,7 @@ export type HouseHoldData = {
   incomeList: Books[];
   year: string;
   month: string;
+  day: string;
   tab: string;
 };
 
@@ -39,7 +41,7 @@ export type HouseHoldData = {
  * @returns Date
  */
 const infoToDate = (data: HouseHoldData) =>
-  new Date(parseInt(data.year), parseInt(data.month) - 1);
+  new Date(parseInt(data.year), parseInt(data.month) - 1, parseInt(data.day));
 
 const Content = () => {
   const [initialInfo, initScript] = onServer(
@@ -185,9 +187,15 @@ const Content = () => {
             <ListTable booksList={info.incomeList} />
           </Tab.Pane>
           <Tab.Pane eventKey="tab3">
-            <Chart year={info.year} month={info.month} />
+            <Chart year={parseInt(info.year)} month={parseInt(info.month)} />
           </Tab.Pane>
-          <Tab.Pane eventKey="tab4">Fourth tab content</Tab.Pane>
+          <Tab.Pane eventKey="tab4">
+            <Calendar
+              year={parseInt(info.year)}
+              month={parseInt(info.month)}
+              day={parseInt(info.day)}
+            />
+          </Tab.Pane>
         </Tab.Content>
       </Tab.Container>
       {initScript}

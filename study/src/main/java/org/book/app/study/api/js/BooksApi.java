@@ -57,4 +57,14 @@ public class BooksApi implements ServerApi {
     return StudyStringUtil.objectToJsonStr(booksApiController.getHouseholdChartInfo(form));
   }
 
+  /**
+   * 家計簿確認画面カレンダー情報取得
+   * 
+   * @param form 送信されたデータ
+   * @return 画面情報
+   */
+  public String getHouseholdCalendarInfo(BooksForm form) {
+    return StudyStringUtil.objectToJsonStr(booksApiController.getHouseholdCalendarInfo(form));
+  }
+
 }
