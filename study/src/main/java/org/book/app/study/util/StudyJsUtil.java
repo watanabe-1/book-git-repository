@@ -303,6 +303,6 @@ public class StudyJsUtil {
    * @param form フォーム
    */
   public static boolean isSSR(Form form) {
-    return form != null ? StudyStringUtil.isNullOrEmpty(form.getSsr()) : false;
+    return form != null ? !StudyStringUtil.isNullOrEmpty(form.getSsr()) : true;
   }
 }

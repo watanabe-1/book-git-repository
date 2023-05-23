@@ -2,7 +2,12 @@
 
 ## java spring framework の勉強用に自分用家計簿の作成
 
-### book-git-repository\study に使用しているライブラリ情報が入っている
+現在は thymeleaf を使用して作成した画面を勉強もかねて react を使用して同じように作成し直している途中です。
+
+カテゴリー系画面、家計簿系画面が thymeleaf→react でだいたい作成完了しています。
+それ以外の画面は thymeleaf を使用して作成されています。
+もともと作成していた thymeleaf での画面は旧メニューから確認出来ます。
+以下が本プロジェクトの説明になります。
 
 本プロジェクトは gradle を使用して構築されている
 
@@ -23,22 +28,39 @@ book-git-repository\study に使用しているライブラリ情報が入って
    - スキーマの作成
    - 作成したスキーマで book-git-repository\db\sql\DDL\ALL\CREATE_ALL.sql の実行
    - 作成したスキーマで book-git-repository\db\sql\DML\INSERT 内の sql の実行
-   - book-git-repository\study\src\main\resources\config\properties\database.properties を環境に合わせて修正
+   - book-git-repository\study\src\main\resources\config\properties\database.properties を環境に合わせて作成(下記参照)
+
+     ```properties:database.properties
+     jdbc.driverClassName=org.postgresql.Driver
+     jdbc.url=jdbc:postgresql://localhost:5432/studydb
+     jdbc.username=xxxx
+     jdbc.password=xxxx
+     jdbc.maxTotal=10
+     ```
 
 2. ビルドからログインまで
    - お好みで book-git-repository\study\src\main\resources\static\images 内の画像を好きな画像に変更する
-   - book-git-repository\bat\bootrunAndDaemonwatch.bat を実行することでサーバの起動と js のファイル監視が可能
-     - または book-git-repository\study で`gradle bootrun`コマンドを実行すると spring boot サーバが立ち上がる
-     - または book-git-repository\study で `gradlew --no-daemon watch`コマンドを実行すると js のファイル監視が可能
-   - ブラウザから[localhost:8080/study/](http://localhost:8080/study/)にアクセス
-   - admin/admin でシステム管理者としてログイン可能
+   - book-git-repository\bat\commond\bootrun.bat を実行することでビルドとサーバの起動が実行される
+   - サーバー起動後 admin/admin でシステム管理者としてログイン可能
 
-### 開発環境(eclips)
+### 開発環境(Java)
+
+#### eclips を使用する場合
 
 1. gradle を使用し eclips プロジェクトの作成
    - book-git-repository\study で`gradlew eclips`コマンドを実施
-2. eclips に gradle プロジェクトとして import
-3. js のファイル監視がされている状態では js ファイルを編集、保存すると自動的にトランスパイルされサーバに配置される
+2. eclips に gradle プロジェクトとして book-git-repository\study 配下を import
+3. book-git-repository\bat\commond\bootrun.bat(もしくは gradle bootrun コマンド)でサーバーが起動されている状態で compile を行うと、内容がサーバーに反映される
+4. java の formatter は google が公開しているものを使用 → [google-java-format]
+
+### 開発環境(js)
+
+1. book-git-repository\bat\commond\daemonwatch.bat(もしくは gradlew --no-daemon watch コマンド) を起動することで js のファイル監視が可能
+   - js のファイル監視がされている状態では js ファイルを編集、保存すると自動的にトラ
+     ンスパイルされ book-git-repository\study\src\main\resources\static 配下に出力され、サーバに反映される。
+2. js(ts、json) の formatter は prettier,eslint を使用(vscode などを使用する場合は拡張機能として導入可能)
+3. また react で作成してある画面は url パラメータに ssr="ssr"を渡すことで、SSR が可能
+   - 例 <http://localhost:8080/study/books/household?ssr="ssr>"
 
 ### デバッグ(eclips)
 
@@ -50,7 +72,7 @@ book-git-repository\study に使用しているライブラリ情報が入って
 ### js のみビルドしたい場合
 
 1. ライブラリのインストール(更新)
-   - book-git-repository\study で`gradlew npmInstall`コマンドを実施(初回やライブラリを更新する場合)
+   - book-git-repository\study で`gradlew npmInstall`コマンドを実施
 2. webpack を使用し js をビルド
    - book-git-repository\study で`gradlew webpack`コマンドを実施
 
@@ -60,5 +82,5 @@ book-git-repository\study に使用しているライブラリ情報が入って
 - -DB 定義は book-git-repository\spreadsheet\DB 定義.xlsx
   - Google スプレッドシートに取り込み、book-git-repository\spreadsheet\gas 配下のマクロファイルを設定すれば create 文生成などのマクロが使用可能
 - 家計簿データの例は book-git-repository\example 配下に
-- java の formatter は google が公開しているものを使用 → [google-java-format](https://github.com/google/google-java-format)
-- js(ts、json) の formatter は prettier,eslint を使用
+  - 家計簿登録画面からそのまま登録可能
+- 一度ビルドが完了している場合は、book-git-repository\bat\bootrunAndDaemonwatch.bat からサーバーの起動、js ファイル監視の起動をまとめて実行可能
