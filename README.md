@@ -44,7 +44,7 @@
 
 2. ビルドからログインまで
    - お好みで book-git-repository\study\src\main\resources\static\images 内の画像を好きな画像に変更する
-   - book-git-repository\study で `gradle bootrun` コマンドを実施(もしくは book-git-repository\bat\commond\bootrun.bat を実行)することでビルドとサーバの起動が実行される
+   - book-git-repository\study で `gradlew bootrun` コマンドを実施(もしくは book-git-repository\bat\commond\bootrun.bat を実行)することでビルドとサーバの起動が実行される
    - サーバー起動後 admin/admin でシステム管理者としてログイン可能
 
 ### 開発環境(Java - eclips)
