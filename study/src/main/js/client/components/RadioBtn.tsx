@@ -23,13 +23,15 @@ const RadioBtn = ({
     <Form.Group controlId={name}>
       {title ? <Form.Label>{title}</Form.Label> : null}
       <br />
-      {typeList.map((i) => (
+      {typeList.map((type, index) => (
         <Form.Check
           type="radio"
           inline
-          value={i.code}
-          label={i.name}
-          checked={i.code == value}
+          name={name}
+          id={`${name}-${index}`}
+          value={type.code}
+          label={type.name}
+          checked={type.code == value}
           onChange={onChange}
         />
       ))}
