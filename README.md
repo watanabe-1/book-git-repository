@@ -32,7 +32,7 @@
    - スキーマの作成
    - 作成したスキーマで book-git-repository\db\sql\DDL\ALL\CREATE_ALL.sql の実行
    - 作成したスキーマで book-git-repository\db\sql\DML\INSERT 内の sql の実行
-   - book-git-repository\study\src\main\resources\config\properties\database.properties を環境に合わせて作成(下記参照)
+   - book-git-repository\study\src\main\resources\config\properties\database.properties を環境に合わせて作成(下記例参照)
 
      ```properties:database.properties
      jdbc.driverClassName=org.postgresql.Driver
