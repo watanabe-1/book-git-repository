@@ -45,6 +45,22 @@ export function onServer(
 }
 
 /**
+ * ssrflagの削除
+ * @param valueIdentifier
+ * @param isSSR
+ */
+export function deleteSSR(valueIdentifier: string) {
+  const anyWindow: any = window;
+  if (anyWindow.ssrFlags) {
+    const isSSR = anyWindow.ssrFlags[valueIdentifier];
+    if (typeof isSSR !== 'undefined') {
+      // flagの削除
+      anyWindow.ssrFlags[valueIdentifier] = undefined;
+    }
+  }
+}
+
+/**
  * ssrが行われていたか判定
  * @param valueIdentifier
  */
@@ -53,8 +69,6 @@ export function isSSR(valueIdentifier: string): boolean {
   if (anyWindow.ssrFlags) {
     const isSSR = anyWindow.ssrFlags[valueIdentifier];
     console.log(`ssrFlag(${valueIdentifier}):${isSSR}`);
-    // flagの削除
-    anyWindow.ssrFlags[valueIdentifier] = undefined;
     if (isSSR) {
       // isSSRがtrueの時のみ
       return isSSR;
@@ -79,6 +93,8 @@ export function executeFuncIfNeeded(
     if (func) {
       func();
     }
+  } else {
+    deleteSSR(valueIdentifier);
   }
 }
 
