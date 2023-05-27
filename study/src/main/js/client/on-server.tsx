@@ -23,6 +23,8 @@ export function onServer(
     const scriptContent = `
             if(!window.serverData) { window.serverData = {} }
             window.serverData['${valueIdentifier}'] = JSON.parse("${sanitizedJson}".replace(/&lt;/g, '<').replace(/&gt;/g, '>'))
+            if(!window.ssrFlags) { window.ssrFlags = {} }
+            window.ssrFlags['${valueIdentifier}'] = true
         `;
     const initScript = (
       <script
@@ -44,56 +46,51 @@ export function onServer(
 
 /**
  * ssrが行われていたか判定
+ * @param valueIdentifier
  */
-export function isSSR() {
+export function isSSR(valueIdentifier: string): boolean {
   const anyWindow: any = window;
-  //console.log(anyWindow.isSSR);
-  return anyWindow.isSSR as boolean;
-}
-
-/**
- * ssr判定フラグにセット
- * @param isSSR
- */
-export function setSSR(isSSR: boolean) {
-  const anyWindow: any = window;
-  //console.log(anyWindow.isSSR);
-  anyWindow.isSSR = isSSR;
+  if (anyWindow.ssrFlags) {
+    const isSSR = anyWindow.ssrFlags[valueIdentifier];
+    console.log(`ssrFlag(${valueIdentifier}):${isSSR}`);
+    // flagの削除
+    anyWindow.ssrFlags[valueIdentifier] = undefined;
+    if (isSSR) {
+      // isSSRがtrueの時のみ
+      return isSSR;
+    }
+  }
+  // 取得できなかった時はfalseを返却
+  return false;
 }
 
 /**
  * SSRがされてない場合は引数の関数を実行
  * SSRがされている場合は、SSRフラグをfalseに
+ * @param valueIdentifiers
  * @param func SSRされていない時に実行するファンクション
  */
-export function executeFuncIfNeeded(func: () => any = null) {
-  console.log(`isSSR = ${isSSR()}`);
-  if (!isSSR()) {
+export function executeFuncIfNeeded(
+  valueIdentifier: string,
+  func: () => any = null
+) {
+  if (!isSSR(valueIdentifier)) {
     //ssrが行われなかった時
     if (func) {
       func();
     }
-  } else {
-    // SSRフラグをfalseに
-    setSSR(false);
   }
 }
 
 /**
  * SSRがされてない場合は引数の関数を実行
  * SSRがされている場合は、SSRフラグをfalseに
- * @param funcs SSRされていない時に実行するファンクション達
+ * @param targets SSRされていない時に実行するファンクション達
  */
-export function executeFuncsIfNeeded(funcs: (() => any)[] = null) {
-  if (!isSSR()) {
-    //ssrが行われなかった時
-    funcs.forEach((func) => {
-      if (func) {
-        func();
-      }
-    });
-  } else {
-    // SSRフラグをfalseに
-    setSSR(false);
-  }
+export function executeFuncsIfNeeded(
+  targets: { valueIdentifier: string; func: () => any }[]
+) {
+  targets.forEach((target) =>
+    executeFuncIfNeeded(target.valueIdentifier, target.func)
+  );
 }

@@ -18,6 +18,7 @@ import SelectBoxOnValidate from '../../../components/SelectBoxOnValidate';
 import SubmitButton from '../../../components/SubmitButton';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import yup from '../../../yup/message/ja';
+import { OnServerConst } from '../../../../constant/on-serverConst';
 
 /**
  * 家計簿ダウンロードForm
@@ -31,7 +32,7 @@ const InputForm = (props) => {
   const [initialInfo, initScript] = onServer(
     (api) => api.getDownloadInfo(),
     [],
-    'books.downloadInfo'
+    OnServerConst.Books.DOWNLOAD_INFO
   ) as [BooksUi, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const [errData, setErrData] = useState() as [
@@ -81,7 +82,7 @@ const InputForm = (props) => {
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(fetchInfo);
+    executeFuncIfNeeded(OnServerConst.Books.DOWNLOAD_INFO, fetchInfo);
   }, []);
 
   console.log(info);

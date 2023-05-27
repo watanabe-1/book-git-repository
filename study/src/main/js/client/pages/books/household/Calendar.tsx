@@ -11,6 +11,7 @@ import { isInvalidDate } from '../../../../study/util/studyDateUtil';
 import { Books, Syukujits } from '../../../../@types/studyUtilType';
 import '../../../../../css/view/calendar/calendar.css';
 import ListTable from './ListTable';
+import { OnServerConst } from '../../../../constant/on-serverConst';
 
 /**
  * 家計簿カレンダー用データ
@@ -36,7 +37,7 @@ const Calendar = ({
   const [initiaCalendarData, initScript] = onServer(
     (api, param) => api.getHouseholdCalendarInfo(param),
     [],
-    'books.householdCalendarInfo'
+    OnServerConst.Books.HOUSEHOLD_CALENDAR_INFO
   ) as [HouseholdCalendarData, JSX.Element];
   const [calendarData, setCalendarData] = useState(initiaCalendarData);
   const { syukujitsuList, amountList } = calendarData;
@@ -64,7 +65,7 @@ const Calendar = ({
   // 例 : タブを切り替えるたびに親の再レンダリングが動くが、その時は日付けは変わっていない しかし親から渡された日付けをそのままuseEffectの条件(第二引数)にした場合、親側ではレンダリングのたびに「new」で作り直しているため参照先が変わり毎回useEffectが実行される
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(fetchInfo);
+    executeFuncIfNeeded(OnServerConst.Books.HOUSEHOLD_CALENDAR_INFO, fetchInfo);
   }, [month]);
 
   /**

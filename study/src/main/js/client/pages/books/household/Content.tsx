@@ -22,6 +22,7 @@ import ListTable from './ListTable';
 import { useNavigate, useLocation, createSearchParams } from 'react-router-dom';
 import Chart from './Chart';
 import Calendar from './Calendar';
+import { OnServerConst } from '../../../../constant/on-serverConst';
 
 /**
  * 家計簿確認用データ
@@ -47,7 +48,7 @@ const Content = () => {
   const [initialInfo, initScript] = onServer(
     (api, param) => api.getHouseholdInfo(param),
     [],
-    'books.householdInfo'
+    OnServerConst.Books.HOUSEHOLD_INFO
   ) as [HouseHoldData, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const navigate = useNavigate();
@@ -119,7 +120,7 @@ const Content = () => {
   useEffect(() => {
     // console.log('useEffect yobidasareta');
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(fetchInfo);
+    executeFuncIfNeeded(OnServerConst.Books.HOUSEHOLD_INFO, fetchInfo);
   }, [location]);
 
   console.log(info);

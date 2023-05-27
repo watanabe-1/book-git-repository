@@ -28,12 +28,13 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import { OnServerConst } from '../../../../constant/on-serverConst';
 
 const Basic = (props) => {
   const [initialInfo, initScript] = onServer(
     (api) => api.getInfo(),
     [],
-    'category.info'
+    OnServerConst.Category.INFO
   ) as [CategoryUi, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const [errData, setErrData] = useState() as [
@@ -90,7 +91,7 @@ const Basic = (props) => {
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(fetchInfo);
+    executeFuncIfNeeded(OnServerConst.Category.INFO, fetchInfo);
   }, []);
 
   console.log(info);

@@ -38,6 +38,7 @@ import {
 import yup from '../../../yup/message/ja';
 import Slider from '../../../components/Slider';
 import ModalSlider from '../../../components/ModalSlider';
+import { OnServerConst } from '../../../../constant/on-serverConst';
 
 /**
  * カテゴリー リスト形式確認画面
@@ -47,13 +48,13 @@ const ListTable = () => {
   const [initialInfo, initInfoScript] = onServer(
     (api) => api.getInfo(),
     [],
-    'category.info'
+    OnServerConst.Category.INFO
   ) as [CategoryUi, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const [initialList, initListScript] = onServer(
     (api) => api.getListData(),
     [],
-    'category.list'
+    OnServerConst.Category.LIST
   ) as [CategoryFormList, JSX.Element];
   const [list, setList] = useState(initialList);
   const [errData, setErrData] = useState() as [
@@ -63,7 +64,7 @@ const ListTable = () => {
   const [initialImageList, initlImageListScript] = onServer(
     (api) => api.getImageList(),
     [],
-    'category.imageList'
+    OnServerConst.Category.IMAGE_LIST
   ) as [Image[], JSX.Element];
   const [imageList, setImageList] = useState(initialImageList);
   const [isUpdListLoading, setUpdListLoading] = useState(false);
@@ -126,7 +127,9 @@ const ListTable = () => {
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncsIfNeeded([fetchInfo, fetchListData, fetchImageListData]);
+    executeFuncIfNeeded(OnServerConst.Category.INFO, fetchInfo);
+    executeFuncIfNeeded(OnServerConst.Category.LIST, fetchListData);
+    executeFuncIfNeeded(OnServerConst.Category.IMAGE_LIST, fetchImageListData);
   }, []);
 
   if (!info.catTypes || !list.catDataList) return <BodysLodingSpinner />;

@@ -131,7 +131,6 @@ public class StudyJsUtil {
     return new StringBuffer()
         .append(addRoute(ret))
         .append(createSourcePathScript(scriptPath, request.getContextPath()))
-        .append(createIsSSRScript(true))
         .append(createRenderWhenAvailableScript("hydrateApp"))
         .toString();
   }
@@ -147,7 +146,6 @@ public class StudyJsUtil {
     return new StringBuffer()
         .append(addRoute(""))
         .append(createSourcePathScript(scriptPath, request.getContextPath()))
-        .append(createIsSSRScript(false))
         .append(createRenderWhenAvailableScript("renderApp"))
         .toString();
   }
@@ -190,16 +188,6 @@ public class StudyJsUtil {
   private static String createSourcePathScript(String scriptPath, String contextPath) {
     return String.format("<script src=\"%s\"></script>",
         scriptPath.replace("/static", contextPath));
-  }
-
-  /**
-   * ssrが行われたか判定したスクリプトタグ作成
-   * 
-   * @param isSSR ssrを行ったか
-   * @return スクリプトタグ
-   */
-  private static String createIsSSRScript(boolean isSSR) {
-    return String.format("<script>window.isSSR = %s</script>", isSSR);
   }
 
   /**
