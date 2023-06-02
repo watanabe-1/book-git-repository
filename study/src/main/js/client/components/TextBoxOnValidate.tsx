@@ -23,7 +23,7 @@ const TextBoxOnValidate = ({
 }) => {
   return (
     <Form.Group controlId={name}>
-      {title ? <Form.Label>{title}</Form.Label> : null}
+      {title && <Form.Label>{title}</Form.Label>}
       <Form.Control
         type="text"
         name={name}

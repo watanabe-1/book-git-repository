@@ -38,8 +38,9 @@ export type HouseHoldData = {
 
 /**
  * HouseHoldDataからDateを取得
+ *
  * @param data HouseHoldData
- * @returns Date
+ * @return Date
  */
 const infoToDate = (data: HouseHoldData) =>
   new Date(parseInt(data.year), parseInt(data.month) - 1, parseInt(data.day));

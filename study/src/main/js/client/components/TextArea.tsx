@@ -18,7 +18,7 @@ const TextArea = ({
 }) => {
   return (
     <Form.Group controlId={name}>
-      {title ? <Form.Label>{title}</Form.Label> : null}
+      {title && <Form.Label>{title}</Form.Label>}
       <Form.Control
         as="textarea"
         value={value ? value : ''}

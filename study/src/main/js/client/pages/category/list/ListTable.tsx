@@ -67,8 +67,6 @@ const ListTable = () => {
     OnServerConst.Category.IMAGE_LIST
   ) as [Image[], JSX.Element];
   const [imageList, setImageList] = useState(initialImageList);
-  const [isUpdListLoading, setUpdListLoading] = useState(false);
-  const buttonElement = useRef<HTMLButtonElement>(null);
 
   /**
    * 送信ボタン
@@ -85,8 +83,6 @@ const ListTable = () => {
       setList(json);
     } else {
       setErrData(json);
-      // 再バリデーション実施
-      buttonElement.current.click();
     }
   };
 
@@ -118,11 +114,7 @@ const ListTable = () => {
    * リストデータ更新
    */
   const fetchUpdListData = async (form) => {
-    setUpdListLoading(true);
-    const response = await fetchPost(UrlConst.Category.LISTDATAUPDATE, form);
-    setUpdListLoading(false);
-
-    return response;
+    return await fetchPost(UrlConst.Category.LISTDATAUPDATE, form);
   };
 
   useEffect(() => {
@@ -456,8 +448,6 @@ const ListTable = () => {
       <SortAndFilterFormTable
         tableFormConfig={listTableFormObj}
         handleFormSubmit={handleSubmit}
-        isFormSubmitLoading={isUpdListLoading}
-        validateButton={buttonElement}
       />
       {initInfoScript}
       {initListScript}

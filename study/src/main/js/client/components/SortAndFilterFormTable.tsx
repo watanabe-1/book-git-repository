@@ -1,5 +1,5 @@
-import { Field, FieldArray, FormikProvider, useFormik } from 'formik';
-import React, { useEffect, useRef } from 'react';
+import { FieldArray, FormikProps, FormikProvider, useFormik } from 'formik';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { TableFormObjConfig } from '../../@types/studyUtilType';
@@ -14,16 +14,14 @@ import yup from '../yup/message/ja';
 const SortAndFilterFormTable = ({
   tableFormConfig,
   handleFormSubmit,
-  isFormSubmitLoading = false,
-  validateButton,
   hiddenSubmitButton = false,
 }: {
   tableFormConfig: TableFormObjConfig;
   handleFormSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  isFormSubmitLoading?: boolean;
   validateButton?: React.MutableRefObject<HTMLButtonElement>;
   hiddenSubmitButton?: boolean;
 }) => {
+  const [isSubmitLoading, setSubmitLoading] = useState(false);
   // yupで使用するスキーマの設定
   const additions = tableFormConfig.additions;
   // 初期値
@@ -39,9 +37,19 @@ const SortAndFilterFormTable = ({
   // スキーマにセット
   const schema = yup.object().shape(additions);
 
+  /**
+   * 送信
+   * @param event formイベント
+   */
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    setSubmitLoading(true);
+    handleFormSubmit(event);
+    setSubmitLoading(false);
+  };
+
   const formik = useFormik<{}>({
     validationSchema: schema,
-    onSubmit: handleFormSubmit,
+    onSubmit: handleSubmit,
     initialValues: initialValues,
     enableReinitialize: true,
   });
@@ -60,22 +68,19 @@ const SortAndFilterFormTable = ({
 
   return (
     <FormikProvider value={formik}>
-      <Form noValidate onSubmit={formik.handleSubmit}>
+      <Form
+        noValidate
+        onSubmit={(event) => {
+          formik.handleSubmit(event);
+          formik.validateForm(formik.values);
+        }}
+      >
         <div className="text-end">
           <SubmitButton
             title="更新"
-            isLoading={isFormSubmitLoading}
+            isLoading={isSubmitLoading}
             hidden={hiddenSubmitButton}
           />
-          <Button
-            ref={validateButton}
-            onClick={(event) => {
-              formik.validateForm(formik.values);
-            }}
-            hidden
-          >
-            バリデーション実施
-          </Button>
         </div>
         <FieldArray name={rowName}>
           {(fieldArrayProps) => {

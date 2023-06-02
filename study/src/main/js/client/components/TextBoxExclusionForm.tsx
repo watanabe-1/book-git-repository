@@ -33,7 +33,7 @@ const TextBoxExclusionForm = ({
 
   return (
     <Form.Group>
-      {title ? <Form.Label>{title}</Form.Label> : null}
+      {title && <Form.Label>{title}</Form.Label>}
       <Form.Control
         type={type}
         value={inputValue}

@@ -47,7 +47,7 @@ const Calendar = ({
   console.log(calendarData);
 
   /**
-   * 1月ごとのカテゴリーチャート用データ取得
+   * カレンダー用データ取得
    */
   const fetchInfo = async () => {
     const params = {};

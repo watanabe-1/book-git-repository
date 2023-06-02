@@ -97,9 +97,18 @@ const SortAndFilterTable = ({
   }
 
   if (sortColumn && isSort) {
+    /**
+     * nameが一致するcellを取得
+     *
+     * @param row TableRow
+     * @returns cell
+     */
+    const findCell = (row: TableRow) =>
+      row.cells.find((cell) => cell.name == sortColumn);
+
     filteredAndSortedRows = filteredAndSortedRows.sort((aRow, bRow) => {
-      const aCell = aRow.cells.find((cell) => cell.name == sortColumn);
-      const bCell = bRow.cells.find((cell) => cell.name == sortColumn);
+      const aCell = findCell(aRow);
+      const bCell = findCell(bRow);
       let aValue = aCell.value;
       let bValue = bCell.value;
       if (typeof aValue === 'string' && typeof bValue === 'string') {

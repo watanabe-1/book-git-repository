@@ -17,7 +17,7 @@ const SimpleText = ({
 }) => {
   return (
     <div>
-      {title ? <label>{title}</label> : null}
+      {title && <label>{title}</label>}
       <div hidden={hidden} id={name}>
         {value}
       </div>

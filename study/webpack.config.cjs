@@ -14,7 +14,7 @@ module.exports = {
     entries['webapi'] = ['./src/main/js/client/webapi'];
     // 全画面共通
     entries['vendor'] = [
-      'popper.js',
+      '@popperjs/core',
       'flatpickr',
       'bootstrap',
       './src/main/js/view/common/sidebar',

@@ -33,7 +33,7 @@ const SelectBox = ({
   }
   return (
     <Form.Group controlId={name}>
-      {title ? <Form.Label>{title}</Form.Label> : null}
+      {title && <Form.Label>{title}</Form.Label>}
       <Form.Select name={name} onChange={onChange}>
         {newTypeList.map((type) => (
           <option selected={type.code == value} value={type.code}>

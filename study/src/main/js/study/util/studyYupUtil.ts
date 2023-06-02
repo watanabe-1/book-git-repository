@@ -48,7 +48,7 @@ export function addServerValidateFunc(
       if (isServerErr(errData, path))
         return createError({
           path,
-          message: getServerErrMsg(errData, path, setErrData),
+          message: extractAndDeleteServerErrMsg(errData, path, setErrData),
         });
       else return true;
     }
@@ -86,12 +86,12 @@ export function addServerValidateFuncs(
  * @param setErrData エラー結果格納変数更新メソッド
  * @returns エラーメッセージ
  */
-export function getServerErrMsg(
+export function extractAndDeleteServerErrMsg(
   errData: ErrorResults,
   key: string,
   setErrData: (value: React.SetStateAction<{}>) => void
 ) {
-  console.log('getServerErrMsgエラーメッセージ');
+  console.log('extractAndDeleteServerErrMsgエラーメッセージ');
   console.log(errData);
   console.log('key：' + key);
   if (errData) {

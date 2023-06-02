@@ -21,7 +21,7 @@ const RadioBtn = ({
 }) => {
   return (
     <Form.Group controlId={name}>
-      {title ? <Form.Label>{title}</Form.Label> : null}
+      {title && <span>{title}</span>}
       <br />
       {typeList.map((type, index) => (
         <Form.Check

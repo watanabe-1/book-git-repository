@@ -21,7 +21,7 @@ const TextBox = ({
   const type = hidden ? 'hidden' : 'text';
   return (
     <Form.Group controlId={name}>
-      {title ? <Form.Label>{title}</Form.Label> : null}
+      {title && <Form.Label>{title}</Form.Label>}
       <Form.Control type={type} name={name} value={value} onChange={onChange} />
     </Form.Group>
   );
