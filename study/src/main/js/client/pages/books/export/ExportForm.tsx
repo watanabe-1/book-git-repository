@@ -4,9 +4,11 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+
 import { BooksUi, ErrorResults } from '../../../../@types/studyUtilType';
-import { FieldConst } from '../../../../constant/fieldConstant';
-import { UrlConst } from '../../../../constant/urlConstant';
+import { fieldConst } from '../../../../constant/fieldConstant';
+import { onServerConst } from '../../../../constant/on-serverConst';
+import { urlConst } from '../../../../constant/urlConstant';
 import {
   downloadFile,
   getFilenameFromResponse,
@@ -18,7 +20,6 @@ import SelectBoxOnValidate from '../../../components/SelectBoxOnValidate';
 import SubmitButton from '../../../components/SubmitButton';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import yup from '../../../yup/message/ja';
-import { OnServerConst } from '../../../../constant/on-serverConst';
 
 /**
  * 家計簿ダウンロードForm
@@ -28,16 +29,16 @@ export type BooksDownloadForm = {
   booksYear: string;
 };
 
-const InputForm = (props) => {
+const InputForm = () => {
   const [initialInfo, initScript] = onServer(
     (api) => api.getDownloadInfo(),
     [],
-    OnServerConst.Books.DOWNLOAD_INFO
+    onServerConst.books.DOWNLOAD_INFO
   ) as [BooksUi, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const [errData, setErrData] = useState() as [
     ErrorResults,
-    React.Dispatch<React.SetStateAction<{}>>
+    React.Dispatch<React.SetStateAction<unknown>>
   ];
   const [isResultLoading, setResultLoading] = useState(false);
   //const [validated, setValidated] = useState(false);
@@ -65,16 +66,16 @@ const InputForm = (props) => {
    * 画面情報取得
    */
   const fetchInfo = async () => {
-    const response = await fetchGet(UrlConst.Books.DOWNLOAD_INFO);
+    const response = await fetchGet(urlConst.books.DOWNLOAD_INFO);
     setInfo(await response.json());
   };
 
   /**
    * 登録
    */
-  const fetchResult = async (form) => {
+  const fetchResult = async (form: BooksDownloadForm) => {
     setResultLoading(true);
-    const response = await fetchPost(UrlConst.Books.DOWNLOAD, form);
+    const response = await fetchPost(urlConst.books.DOWNLOAD, form);
     setResultLoading(false);
 
     return response;
@@ -82,7 +83,7 @@ const InputForm = (props) => {
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(OnServerConst.Books.DOWNLOAD_INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConst.books.DOWNLOAD_INFO, fetchInfo);
   }, []);
 
   console.log(info);
@@ -91,12 +92,12 @@ const InputForm = (props) => {
 
   //yupで使用するスキーマの設定
   const additions = {};
-  additions[FieldConst.Books.BOOKS_TYPE] = yup.string().required();
-  additions[FieldConst.Books.BOOKS_YEAR] = yup.string().required();
+  additions[fieldConst.books.BOOKS_TYPE] = yup.string().required();
+  additions[fieldConst.books.BOOKS_YEAR] = yup.string().required();
   // サーバーでのバリデーション結果を反映する関数をセット
   addServerValidateFuncs(
     additions,
-    [FieldConst.Books.BOOKS_TYPE, FieldConst.Books.BOOKS_YEAR],
+    [fieldConst.books.BOOKS_TYPE, fieldConst.books.BOOKS_YEAR],
     errData,
     setErrData
   );
@@ -120,13 +121,8 @@ const InputForm = (props) => {
             values,
             touched,
             errors,
-            dirty,
-            isSubmitting,
             handleChange,
-            handleBlur,
             handleSubmit,
-            handleReset,
-            setFieldValue,
             validateForm,
           } = props;
           return (
@@ -135,7 +131,7 @@ const InputForm = (props) => {
                 <Col sm="12">
                   <SelectBoxOnValidate
                     title="収入or支出"
-                    name={FieldConst.Books.BOOKS_TYPE}
+                    name={fieldConst.books.BOOKS_TYPE}
                     value={values.booksType}
                     typeList={info.booksTypes}
                     error={errors.booksType}
@@ -148,7 +144,7 @@ const InputForm = (props) => {
                 <Col sm="12">
                   <SelectBoxOnValidate
                     title="出力年選択"
-                    name={FieldConst.Books.BOOKS_YEAR}
+                    name={fieldConst.books.BOOKS_YEAR}
                     value={values.booksYear}
                     typeList={info.booksYears}
                     error={errors.booksYear}
@@ -162,7 +158,7 @@ const InputForm = (props) => {
               <SubmitButton title="ダウンロード" isLoading={isResultLoading} />
               <Button
                 ref={buttonElement}
-                onClick={(event) => {
+                onClick={() => {
                   validateForm(values);
                 }}
                 hidden

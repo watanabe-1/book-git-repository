@@ -1,15 +1,16 @@
 import React, { useState, createContext } from 'react';
-import Basic from './Basic';
-import Confirm from './Confirm';
-import Result from './Result';
-import Stepper from '../../../components/Stepper';
-import BodysHead from '../../../components/BodysHead';
 import Col from 'react-bootstrap/Col';
+
 import {
   Category,
   CategoryUi,
   FormConfirmData,
 } from '../../../../@types/studyUtilType';
+import BodysHead from '../../../components/BodysHead';
+import Stepper from '../../../components/Stepper';
+import Basic from './Basic';
+import Confirm from './Confirm';
+import Result from './Result';
 
 type CategoryInput = {
   form: Category;

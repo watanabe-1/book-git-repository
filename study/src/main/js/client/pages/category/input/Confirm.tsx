@@ -1,15 +1,16 @@
 import React, { useContext } from 'react';
-import { Context } from './Content';
-import { fetchPost } from '../../../../study/util/studyUtil';
-import { UrlConst } from '../../../../constant/urlConstant';
-import ConfirmList from '../../../components/ConfirmList';
 import Button from 'react-bootstrap/Button';
-import { Flag, FormConfirmData, Type } from '../../../../@types/studyUtilType';
-import { TypeConst } from '../../../../constant/typeConstant';
-import { getConfirmMessage } from '../../../../study/util/studyMessageUtil';
-import { FieldConst } from '../../../../constant/fieldConstant';
 
-const Confirm = (props) => {
+import { Flag, FormConfirmData, Type } from '../../../../@types/studyUtilType';
+import { fieldConst } from '../../../../constant/fieldConstant';
+import { typeConst } from '../../../../constant/typeConstant';
+import { urlConst } from '../../../../constant/urlConstant';
+import { getConfirmMessage } from '../../../../study/util/studyMessageUtil';
+import { fetchPost } from '../../../../study/util/studyUtil';
+import ConfirmList from '../../../components/ConfirmList';
+import { Context } from './Content';
+
+const Confirm = (props: { handleNext: () => void; handleBack: () => void }) => {
   const { currentState } = useContext(Context);
   const form = currentState.form;
   const info = currentState.info;
@@ -24,51 +25,51 @@ const Confirm = (props) => {
   };
 
   const item = {} as Item;
-  item[FieldConst.Category.CAT_CODE] = {
+  item[fieldConst.category.CAT_CODE] = {
     name: 'カテゴリーコード',
-    type: TypeConst.Col.STRING,
+    type: typeConst.col.STRING,
     convert: null,
-    confirmType: TypeConst.Col.STRING,
+    confirmType: typeConst.col.STRING,
   };
-  item[FieldConst.Category.CAT_NAME] = {
+  item[fieldConst.category.CAT_NAME] = {
     name: 'カテゴリー名',
-    type: TypeConst.Col.STRING,
+    type: typeConst.col.STRING,
     convert: null,
-    confirmType: TypeConst.Col.STRING,
+    confirmType: typeConst.col.STRING,
   };
-  item[FieldConst.Category.NOTE] = {
+  item[fieldConst.category.NOTE] = {
     name: 'メモ',
-    type: TypeConst.Col.STRING,
+    type: typeConst.col.STRING,
     convert: null,
-    confirmType: TypeConst.Col.STRING,
+    confirmType: typeConst.col.STRING,
   };
-  item[FieldConst.Category.IMG_TYPE] = {
+  item[fieldConst.category.IMG_TYPE] = {
     name: '画像タイプ',
-    type: TypeConst.Col.SELECT,
+    type: typeConst.col.SELECT,
     convert: { typeList: info.imgTypes, flag: null },
-    confirmType: TypeConst.Col.STRING,
+    confirmType: typeConst.col.STRING,
   };
-  item[FieldConst.Category.CAT_TYPE] = {
+  item[fieldConst.category.CAT_TYPE] = {
     name: 'カテゴリータイプ',
-    type: TypeConst.Col.RADIO,
+    type: typeConst.col.RADIO,
     convert: { typeList: info.catTypes, flag: null },
-    confirmType: TypeConst.Col.STRING,
+    confirmType: typeConst.col.STRING,
   };
-  item[FieldConst.Category.ACTIVE] = {
+  item[fieldConst.category.ACTIVE] = {
     name: 'アクティブ',
-    type: TypeConst.Col.CHECK,
+    type: typeConst.col.CHECK,
     convert: { typeList: null, flag: info.active },
-    confirmType: TypeConst.Col.STRING,
+    confirmType: typeConst.col.STRING,
   };
-  item[FieldConst.Category.CAT_ICON] = {
+  item[fieldConst.category.CAT_ICON] = {
     name: 'アイコン',
-    type: TypeConst.Col.IMAGE,
+    type: typeConst.col.IMAGE,
     convert: null,
-    confirmType: TypeConst.Col.IMAGE,
+    confirmType: typeConst.col.IMAGE,
   };
 
   const inputDataLists = [] as FormConfirmData[];
-  var id = 0;
+  let id = 0;
   for (const key in form) {
     inputDataLists.push({
       id: String(id++),
@@ -81,7 +82,7 @@ const Confirm = (props) => {
 
   const onSubmit = async () => {
     //alert(JSON.stringify(currentState));
-    const res = await fetchPost(UrlConst.Category.RESULT, currentState.form);
+    const res = await fetchPost(urlConst.category.RESULT, currentState.form);
     if (res.ok) {
       // 確認画面へ
       props.handleNext();

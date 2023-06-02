@@ -1,28 +1,29 @@
 import React, { useEffect, useState } from 'react';
-import BodysHead from '../../../components/BodysHead';
-import Tab from 'react-bootstrap/Tab';
-import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
+import Row from 'react-bootstrap/Row';
+import Tab from 'react-bootstrap/Tab';
+import { useNavigate, useLocation, createSearchParams } from 'react-router-dom';
+
 import { Books } from '../../../../@types/studyUtilType';
-import { executeFuncIfNeeded, onServer } from '../../../on-server';
-import {
-  fetchGet,
-  getLocationHrefParm,
-  nullOrEmptyValueLogic,
-} from '../../../../study/util/studyUtil';
-import { UrlConst } from '../../../../constant/urlConstant';
-import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
+import { onServerConst } from '../../../../constant/on-serverConst';
+import { urlConst } from '../../../../constant/urlConstant';
 import {
   getNextMonthDate,
   getPreviousMonthDate,
   isInvalidDate,
 } from '../../../../study/util/studyDateUtil';
-import ListTable from './ListTable';
-import { useNavigate, useLocation, createSearchParams } from 'react-router-dom';
-import Chart from './Chart';
+import {
+  fetchGet,
+  getLocationHrefParm,
+  nullOrEmptyValueLogic,
+} from '../../../../study/util/studyUtil';
+import BodysHead from '../../../components/BodysHead';
+import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
+import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import Calendar from './Calendar';
-import { OnServerConst } from '../../../../constant/on-serverConst';
+import Chart from './Chart';
+import ListTable from './ListTable';
 
 /**
  * 家計簿確認用データ
@@ -49,7 +50,7 @@ const Content = () => {
   const [initialInfo, initScript] = onServer(
     (api, param) => api.getHouseholdInfo(param),
     [],
-    OnServerConst.Books.HOUSEHOLD_INFO
+    onServerConst.books.HOUSEHOLD_INFO
   ) as [HouseHoldData, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ const Content = () => {
     const params = {};
     if (paramTab) params['tab'] = paramTab;
     if (paramDate) params['date'] = paramDate;
-    const response = await fetchGet(UrlConst.Books.HOUSEHOLD_INFO, params);
+    const response = await fetchGet(urlConst.books.HOUSEHOLD_INFO, params);
     const info = (await response.json()) as HouseHoldData;
     setInfo(info);
   };
@@ -121,7 +122,7 @@ const Content = () => {
   useEffect(() => {
     // console.log('useEffect yobidasareta');
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(OnServerConst.Books.HOUSEHOLD_INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConst.books.HOUSEHOLD_INFO, fetchInfo);
   }, [location]);
 
   console.log(info);

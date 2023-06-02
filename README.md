@@ -15,6 +15,7 @@
 - 家計簿データの取り込み csv 形式も楽天家計簿で出力される形式に合わせている
 - SSR の実装方法に関しては右記サイトを参考に作成 →[Spring Boot で React を SSR したかった話](https://www.luku.work/spring-react-ssr)
 - ログの出力方法などは右記サイトを参考に作成 →[TERASOLUNA Server Framework for Java (5.x) Development Guideline](http://terasolunaorg.github.io/guideline/current/ja/)
+- ESLint の設定方法に関しては右記サイトを参考に作成 →[ESLint で import の整列・追加・削除を自動化する](https://qiita.com/yukiji/items/5ba9e065ac6ed57d05a4)
 
 本プロジェクトでは 主に下記内容を使用しています。
 

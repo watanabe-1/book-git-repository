@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+
 import { Type } from '../../@types/studyUtilType';
 
 /**
@@ -25,6 +26,7 @@ const RadioBtn = ({
       <br />
       {typeList.map((type, index) => (
         <Form.Check
+          key={`${name}-${index}`}
           type="radio"
           inline
           name={name}

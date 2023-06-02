@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import ReactDOMServer from 'react-dom/server';
 import { BrowserRouter } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
-import ReactDOMServer from 'react-dom/server';
 
-const anyWindow: any = window;
+const anyWindow = window;
 
 /**
  * 初期化

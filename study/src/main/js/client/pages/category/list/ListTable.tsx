@@ -1,5 +1,6 @@
 import { Field, FormikProps } from 'formik';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import {
   BuildListTableFormObjConfig,
   CategoryFormList,
@@ -7,16 +8,12 @@ import {
   ErrorResults,
   Image,
 } from '../../../../@types/studyUtilType';
-import { ClassConst } from '../../../../constant/classConstant';
-import { FieldConst } from '../../../../constant/fieldConstant';
-import { UrlConst } from '../../../../constant/urlConstant';
+import { classConst } from '../../../../constant/classConstant';
+import { fieldConst } from '../../../../constant/fieldConstant';
+import { onServerConst } from '../../../../constant/on-serverConst';
+import { urlConst } from '../../../../constant/urlConstant';
 import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
-import {
-  addContextPath,
-  fetchGet,
-  fetchPost,
-  keyJoin,
-} from '../../../../study/util/studyUtil';
+import { fetchGet, fetchPost, keyJoin } from '../../../../study/util/studyUtil';
 import {
   buildListTableFormObj,
   objArrayToObj,
@@ -24,21 +21,14 @@ import {
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import CheckBox from '../../../components/CheckBox';
 import FileBoxOnValidateAndImg from '../../../components/FileBoxOnValidateAndImg';
+import ModalSlider from '../../../components/ModalSlider';
 import RadioBtn from '../../../components/RadioBtn';
 import SelectBox from '../../../components/SelectBox';
 import SortAndFilterFormTable from '../../../components/SortAndFilterFormTable';
 import TextArea from '../../../components/TextArea';
-import TextBox from '../../../components/TextBox';
 import TextBoxOnValidate from '../../../components/TextBoxOnValidate';
-import {
-  executeFuncIfNeeded,
-  executeFuncsIfNeeded,
-  onServer,
-} from '../../../on-server';
+import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import yup from '../../../yup/message/ja';
-import Slider from '../../../components/Slider';
-import ModalSlider from '../../../components/ModalSlider';
-import { OnServerConst } from '../../../../constant/on-serverConst';
 
 /**
  * カテゴリー リスト形式確認画面
@@ -48,23 +38,23 @@ const ListTable = () => {
   const [initialInfo, initInfoScript] = onServer(
     (api) => api.getInfo(),
     [],
-    OnServerConst.Category.INFO
+    onServerConst.category.INFO
   ) as [CategoryUi, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const [initialList, initListScript] = onServer(
     (api) => api.getListData(),
     [],
-    OnServerConst.Category.LIST
+    onServerConst.category.LIST
   ) as [CategoryFormList, JSX.Element];
   const [list, setList] = useState(initialList);
   const [errData, setErrData] = useState() as [
     ErrorResults,
-    React.Dispatch<React.SetStateAction<{}>>
+    React.Dispatch<React.SetStateAction<unknown>>
   ];
   const [initialImageList, initlImageListScript] = onServer(
     (api) => api.getImageList(),
     [],
-    OnServerConst.Category.IMAGE_LIST
+    onServerConst.category.IMAGE_LIST
   ) as [Image[], JSX.Element];
   const [imageList, setImageList] = useState(initialImageList);
 
@@ -72,9 +62,9 @@ const ListTable = () => {
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form: {}) => {
+  const handleSubmit = async (form: unknown) => {
     const res = await fetchUpdListData(
-      objArrayToObj(form[ClassConst.CAT_DATA_LIST], ClassConst.CAT_DATA_LIST)
+      objArrayToObj(form[classConst.CAT_DATA_LIST], classConst.CAT_DATA_LIST)
     );
     const json = await res.json();
     console.log('sousinkekka');
@@ -90,7 +80,7 @@ const ListTable = () => {
    * 画面情報取得
    */
   const fetchInfo = async () => {
-    const response = await fetchGet(UrlConst.Category.INFO);
+    const response = await fetchGet(urlConst.category.INFO);
     setInfo(await response.json());
   };
 
@@ -98,7 +88,7 @@ const ListTable = () => {
    * 画面情報取得
    */
   const fetchListData = async () => {
-    const response = await fetchGet(UrlConst.Category.LISTDATA);
+    const response = await fetchGet(urlConst.category.LISTDATA);
     setList(await response.json());
   };
 
@@ -106,7 +96,7 @@ const ListTable = () => {
    * 画像リスト情報取得
    */
   const fetchImageListData = async () => {
-    const response = await fetchGet(UrlConst.Category.IMAGELISTDATA);
+    const response = await fetchGet(urlConst.category.IMAGELISTDATA);
     setImageList(await response.json());
   };
 
@@ -114,14 +104,14 @@ const ListTable = () => {
    * リストデータ更新
    */
   const fetchUpdListData = async (form) => {
-    return await fetchPost(UrlConst.Category.LISTDATAUPDATE, form);
+    return await fetchPost(urlConst.category.LISTDATAUPDATE, form);
   };
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(OnServerConst.Category.INFO, fetchInfo);
-    executeFuncIfNeeded(OnServerConst.Category.LIST, fetchListData);
-    executeFuncIfNeeded(OnServerConst.Category.IMAGE_LIST, fetchImageListData);
+    executeFuncIfNeeded(onServerConst.category.INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConst.category.LIST, fetchListData);
+    executeFuncIfNeeded(onServerConst.category.IMAGE_LIST, fetchImageListData);
   }, []);
 
   if (!info.catTypes || !list.catDataList) return <BodysLodingSpinner />;
@@ -131,17 +121,17 @@ const ListTable = () => {
 
   // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成するための設定
   const toObjConfig: BuildListTableFormObjConfig = {
-    className: ClassConst.CAT_DATA_LIST,
+    className: classConst.CAT_DATA_LIST,
     list: [
       {
-        name: FieldConst.Category.DELETE,
+        name: fieldConst.category.DELETE,
         table: {
           head: '削除',
-          getCell: (props: FormikProps<{}>, names: {}) => {
-            const name = names[FieldConst.Category.DELETE];
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.category.DELETE];
             return (
               <Field name={name}>
-                {({ field, form, meta }) => {
+                {({ field }) => {
                   // console.log('Field');
                   // console.log(field);
                   // console.log('form');
@@ -170,14 +160,14 @@ const ListTable = () => {
         addition: null,
       },
       {
-        name: FieldConst.Category.CAT_CODE,
+        name: fieldConst.category.CAT_CODE,
         table: {
           head: 'カテゴリーコード',
-          getCell: (props: FormikProps<{}>, names: {}) => {
-            const name = names[FieldConst.Category.CAT_CODE];
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.category.CAT_CODE];
             return (
               <Field name={name}>
-                {({ field, form, meta }) => {
+                {({ field, meta }) => {
                   return (
                     <TextBoxOnValidate
                       name={field.name}
@@ -201,14 +191,14 @@ const ListTable = () => {
         },
       },
       {
-        name: FieldConst.Category.CAT_NAME,
+        name: fieldConst.category.CAT_NAME,
         table: {
           head: 'カテゴリー名',
-          getCell: (props: FormikProps<{}>, names: {}) => {
-            const name = names[FieldConst.Category.CAT_NAME];
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.category.CAT_NAME];
             return (
               <Field name={name}>
-                {({ field, form, meta }) => {
+                {({ field, meta }) => {
                   return (
                     <TextBoxOnValidate
                       name={field.name}
@@ -232,14 +222,14 @@ const ListTable = () => {
         },
       },
       {
-        name: FieldConst.Category.CAT_TYPE,
+        name: fieldConst.category.CAT_TYPE,
         table: {
           head: 'カテゴリータイプ',
-          getCell: (props: FormikProps<{}>, names: {}) => {
-            const name = names[FieldConst.Category.CAT_TYPE];
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.category.CAT_TYPE];
             return (
               <Field name={name}>
-                {({ field, form, meta }) => {
+                {({ field }) => {
                   return (
                     <RadioBtn
                       name={field.name}
@@ -257,14 +247,14 @@ const ListTable = () => {
         addition: null,
       },
       {
-        name: FieldConst.Category.NOTE,
+        name: fieldConst.category.NOTE,
         table: {
           head: 'メモ',
-          getCell: (props: FormikProps<{}>, names: {}) => {
-            const name = names[FieldConst.Category.NOTE];
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.category.NOTE];
             return (
               <Field name={name}>
-                {({ field, form, meta }) => {
+                {({ field }) => {
                   return (
                     <TextArea
                       name={field.name}
@@ -281,14 +271,14 @@ const ListTable = () => {
         addition: null,
       },
       {
-        name: FieldConst.Category.IMG_TYPE,
+        name: fieldConst.category.IMG_TYPE,
         table: {
           head: '画像タイプ',
-          getCell: (props: FormikProps<{}>, names: {}) => {
-            const name = names[FieldConst.Category.IMG_TYPE];
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.category.IMG_TYPE];
             return (
               <Field name={name}>
-                {({ field, form, meta }) => {
+                {({ field }) => {
                   return (
                     <SelectBox
                       name={field.name}
@@ -306,13 +296,13 @@ const ListTable = () => {
         addition: null,
       },
       {
-        name: keyJoin(FieldConst.Category.IMG_IDS, FieldConst.Category.IMG_ID),
+        name: keyJoin(fieldConst.category.IMG_IDS, fieldConst.category.IMG_ID),
         table: {
           head: '画像ID',
-          getCell: (props: FormikProps<{}>, names: {}) => {
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name =
               names[
-                keyJoin(FieldConst.Category.IMG_IDS, FieldConst.Category.IMG_ID)
+                keyJoin(fieldConst.category.IMG_IDS, fieldConst.category.IMG_ID)
               ];
             return (
               <>
@@ -324,8 +314,8 @@ const ListTable = () => {
                     props.setFieldValue(
                       names[
                         keyJoin(
-                          FieldConst.Category.IMG_IDS,
-                          FieldConst.Image.IMG_PATH
+                          fieldConst.category.IMG_IDS,
+                          fieldConst.image.IMG_PATH
                         )
                       ],
                       image.imgPath
@@ -333,8 +323,8 @@ const ListTable = () => {
                     props.setFieldValue(
                       names[
                         keyJoin(
-                          FieldConst.Category.IMG_IDS,
-                          FieldConst.Image.IMG_NAME
+                          fieldConst.category.IMG_IDS,
+                          fieldConst.image.IMG_NAME
                         )
                       ],
                       image.imgName
@@ -349,14 +339,14 @@ const ListTable = () => {
         addition: null,
       },
       {
-        name: FieldConst.Category.ACTIVE,
+        name: fieldConst.category.ACTIVE,
         table: {
           head: 'アクティブフラグ',
-          getCell: (props: FormikProps<{}>, names: {}) => {
-            const name = names[FieldConst.Category.ACTIVE];
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.category.ACTIVE];
             return (
               <Field name={name}>
-                {({ field, form, meta }) => {
+                {({ field }) => {
                   return (
                     <CheckBox
                       name={field.name}
@@ -374,14 +364,14 @@ const ListTable = () => {
         addition: null,
       },
       {
-        name: FieldConst.Category.CAT_ICON,
+        name: fieldConst.category.CAT_ICON,
         table: {
           head: '画像',
-          getCell: (props: FormikProps<{}>, names: {}) => {
-            const name = names[FieldConst.Category.CAT_ICON];
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.category.CAT_ICON];
             return (
               <Field name={name}>
-                {({ field, form, meta }) => {
+                {({ field, meta }) => {
                   return (
                     <FileBoxOnValidateAndImg
                       name={field.name}
@@ -391,8 +381,8 @@ const ListTable = () => {
                         props.getFieldProps(
                           names[
                             keyJoin(
-                              FieldConst.Category.IMG_IDS,
-                              FieldConst.Image.IMG_PATH
+                              fieldConst.category.IMG_IDS,
+                              fieldConst.image.IMG_PATH
                             )
                           ]
                         ).value
@@ -401,8 +391,8 @@ const ListTable = () => {
                         props.getFieldProps(
                           names[
                             keyJoin(
-                              FieldConst.Category.IMG_IDS,
-                              FieldConst.Image.IMG_NAME
+                              fieldConst.category.IMG_IDS,
+                              fieldConst.image.IMG_NAME
                             )
                           ]
                         ).value
@@ -412,14 +402,14 @@ const ListTable = () => {
                         name,
                         names[
                           keyJoin(
-                            FieldConst.Category.IMG_IDS,
-                            FieldConst.Image.IMG_PATH
+                            fieldConst.category.IMG_IDS,
+                            fieldConst.image.IMG_PATH
                           )
                         ],
                         names[
                           keyJoin(
-                            FieldConst.Category.IMG_IDS,
-                            FieldConst.Image.IMG_NAME
+                            fieldConst.category.IMG_IDS,
+                            fieldConst.image.IMG_NAME
                           )
                         ]
                       )}

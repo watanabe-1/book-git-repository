@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
+import { Col } from 'react-bootstrap';
+
 import BodysHead from '../../../components/BodysHead';
+import Stepper from '../../../components/Stepper';
 import InputForm from './InputForm';
 import Result from './Result';
-import { Col } from 'react-bootstrap';
-import Stepper from '../../../components/Stepper';
 
 const steps = ['家計簿情報登録フォーム', '家計簿情報登録完了'];
 

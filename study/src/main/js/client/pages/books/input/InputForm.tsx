@@ -4,9 +4,11 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
+
 import { BooksUi, ErrorResults } from '../../../../@types/studyUtilType';
-import { FieldConst } from '../../../../constant/fieldConstant';
-import { UrlConst } from '../../../../constant/urlConstant';
+import { fieldConst } from '../../../../constant/fieldConstant';
+import { onServerConst } from '../../../../constant/on-serverConst';
+import { urlConst } from '../../../../constant/urlConstant';
 import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
 import { addServerValidateFuncs } from '../../../../study/util/studyYupUtil';
@@ -16,7 +18,6 @@ import SelectBoxOnValidate from '../../../components/SelectBoxOnValidate';
 import SubmitButton from '../../../components/SubmitButton';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import yup from '../../../yup/message/ja';
-import { OnServerConst } from '../../../../constant/on-serverConst';
 
 /**
  * 家計簿アップロードForm
@@ -26,16 +27,16 @@ export type BooksUplodeForm = {
   booksFile: File;
 };
 
-const InputForm = (props) => {
+const InputForm = (props: { handleNext: () => void }) => {
   const [initialInfo, initScript] = onServer(
     (api) => api.getUploadInfo(),
     [],
-    OnServerConst.Books.UPLOAD_INFO
+    onServerConst.books.UPLOAD_INFO
   ) as [BooksUi, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const [errData, setErrData] = useState() as [
     ErrorResults,
-    React.Dispatch<React.SetStateAction<{}>>
+    React.Dispatch<React.SetStateAction<unknown>>
   ];
   const [isResultLoading, setResultLoading] = useState(false);
   //const [validated, setValidated] = useState(false);
@@ -62,16 +63,19 @@ const InputForm = (props) => {
    * 画面情報取得
    */
   const fetchInfo = async () => {
-    const response = await fetchGet(UrlConst.Books.UPLOAD_INFO);
+    const response = await fetchGet(urlConst.books.UPLOAD_INFO);
     setInfo(await response.json());
   };
 
   /**
    * 登録
    */
-  const fetchResult = async (form) => {
+  const fetchResult = async (form: {
+    booksType?: string;
+    booksFile?: File;
+  }) => {
     setResultLoading(true);
-    const response = await fetchPost(UrlConst.Books.RESULT, form);
+    const response = await fetchPost(urlConst.books.RESULT, form);
     setResultLoading(false);
 
     return response;
@@ -79,7 +83,7 @@ const InputForm = (props) => {
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(OnServerConst.Books.UPLOAD_INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConst.books.UPLOAD_INFO, fetchInfo);
   }, []);
 
   console.log(info);
@@ -88,12 +92,12 @@ const InputForm = (props) => {
 
   //yupで使用するスキーマの設定
   const additions = {};
-  additions[FieldConst.Books.BOOKS_TYPE] = yup.string().required();
-  additions[FieldConst.Books.BOOKS_FILE] = yup.mixed();
+  additions[fieldConst.books.BOOKS_TYPE] = yup.string().required();
+  additions[fieldConst.books.BOOKS_FILE] = yup.mixed();
   // サーバーでのバリデーション結果を反映する関数をセット
   addServerValidateFuncs(
     additions,
-    [FieldConst.Books.BOOKS_TYPE, FieldConst.Books.BOOKS_FILE],
+    [fieldConst.books.BOOKS_TYPE, fieldConst.books.BOOKS_FILE],
     errData,
     setErrData
   );
@@ -117,13 +121,8 @@ const InputForm = (props) => {
             values,
             touched,
             errors,
-            dirty,
-            isSubmitting,
             handleChange,
-            handleBlur,
             handleSubmit,
-            handleReset,
-            setFieldValue,
             validateForm,
           } = props;
           return (
@@ -132,7 +131,7 @@ const InputForm = (props) => {
                 <Col sm="12">
                   <SelectBoxOnValidate
                     title="収入or支出"
-                    name={FieldConst.Books.BOOKS_TYPE}
+                    name={fieldConst.books.BOOKS_TYPE}
                     value={values.booksType}
                     typeList={info.booksTypes}
                     error={errors.booksType}
@@ -146,12 +145,12 @@ const InputForm = (props) => {
                 <Col sm="12">
                   <FileBoxOnValidate
                     title="家計簿情報のアップロード"
-                    name={FieldConst.Books.BOOKS_FILE}
+                    name={fieldConst.books.BOOKS_FILE}
                     error={errors.booksFile}
                     accept=".csv"
                     onChange={getSetInputFileFunc(
                       props.setFieldValue,
-                      FieldConst.Books.BOOKS_FILE
+                      fieldConst.books.BOOKS_FILE
                     )}
                   />
                 </Col>
@@ -160,7 +159,7 @@ const InputForm = (props) => {
               <SubmitButton title="確認" isLoading={isResultLoading} />
               <Button
                 ref={buttonElement}
-                onClick={(event) => {
+                onClick={() => {
                   validateForm(values);
                 }}
                 hidden

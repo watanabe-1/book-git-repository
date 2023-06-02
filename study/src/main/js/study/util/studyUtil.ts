@@ -1,5 +1,5 @@
 import { Type } from '../../@types/studyUtilType';
-import { CommonConst } from '../../constant/commonConstant';
+import { commonConst } from '../../constant/commonConstant';
 import { objToFormData } from './studyYupUtil';
 
 /**
@@ -57,12 +57,12 @@ export function setAtagHrefParm(
  * aタグにセットされているhref属性にパラメーターをセットする共通関数
  *
  * @param {string} aTagQualifiedName - aタグ一意に指定できるquerySelectorのelement
- * @param {Object} params - {パラメータ名: パラメーター値}
+ * @param {object} params - {パラメータ名: パラメーター値}
  * @return セットしたurl
  */
 export function setAtagHrefParms(
   aTagQualifiedName: string,
-  params: Object
+  params: object
 ): string {
   const target: Element = document.querySelector(aTagQualifiedName);
   const href: string = target.getAttribute('href');
@@ -90,10 +90,10 @@ export function setAtagHrefParms(
  * urlにパラメータを追加
  *
  * @param {string} targetUrl - url
- * @param {Object} params - {パラメータ名: パラメーター値}
+ * @param {object} params - {パラメータ名: パラメーター値}
  * @return セットしたurl
  */
-export function addUrlParms(targetUrl: string, params: Object): string {
+export function addUrlParms(targetUrl: string, params: object): string {
   const baseUrl: string = getBaseUrl();
   const url: URL = new URL(targetUrl, baseUrl);
   //const json = JSON.parse(params);
@@ -120,7 +120,7 @@ export function addUrlParms(targetUrl: string, params: Object): string {
  * @return エスケープ後の文字列
  */
 export function escapeRegExp(str: string): string {
-  return str.replace(/[.*+?^=!:${}()|[\]\/\\]/g, '\\$&'); // $&はマッチした部分文字列全体を意味します
+  return str.replace(/[.*+?^=!:${}()|[\]/\\]/g, '\\$&'); // $&はマッチした部分文字列全体を意味します
 }
 
 /**
@@ -216,7 +216,7 @@ export function JoinBase(base: string, add: string, separator: string): string {
  * @return urlのコンテキストパス
  */
 export function getContextPath(): string {
-  const anyWindow: any = window;
+  const anyWindow = window;
   return anyWindow.contextPath
     ? anyWindow.contextPath
     : document.querySelector<HTMLMetaElement>('meta[name="contextPath"]')
@@ -303,14 +303,14 @@ export function getNoImagePath(): string {
  *
  *  @type {string}
  */
-export const PARALLEL: string = 'parallel';
+export const PARALLEL = 'parallel';
 
 /**
  * ajax通信時のコールバックファンクション実行方法：直列
  *
  *  @type {string}
  */
-export const SERIES: string = 'series';
+export const SERIES = 'series';
 
 /**
  * ajaxで非同期通信を行う(Promiseでラップした通信結果を返却)
@@ -322,7 +322,7 @@ export const SERIES: string = 'series';
  * @param {Document | XMLHttpRequestBodyInit} body -送信時にセットするパラメーター 省略可能
  * @param {string} type -実行方法{並列 : 'parallel', 直列 : 'series'} 省略可能
  * @param {any} functions -実行したい引数に取得したjsonオブジェクトをとる関数たちを指定  省略可能
- * @param {Object[]} functionArgs -functionsに追加で渡す引数 functionsの配列の添え字に合わせることでfunctionsに渡される 省略可能
+ * @param {object[]} functionArgs -functionsに追加で渡す引数 functionsの配列の添え字に合わせることでfunctionsに渡される 省略可能
  * @return -結果が格納された「Promise」オブジェクト
  */
 export function ajax(
@@ -330,12 +330,12 @@ export function ajax(
   url: string,
   body: Document | XMLHttpRequestBodyInit = '',
   type: string = SERIES,
-  functions: any = [],
-  functionArgs: Object[] = []
+  functions = [],
+  functionArgs: unknown[] = []
 ): Promise<unknown> {
   //ajax送信を行い結果を配列に格納
   let ajaxPromise: Promise<unknown> = new Promise(function (resolve, reject) {
-    let httpRequest: XMLHttpRequest = new XMLHttpRequest(); // XMLHttpRequestのインスタンス作成
+    const httpRequest: XMLHttpRequest = new XMLHttpRequest(); // XMLHttpRequestのインスタンス作成
     //CSRFトークンをセットで送信
     // let csrfToken = {};
     // csrfToken[getCsrfTokenParmName()] = getCsrfToken();
@@ -364,7 +364,7 @@ export function ajax(
           resolve(JSON.parse(httpRequest.responseText));
         } else {
           // statusが200以外の場合はリクエストが適切でなかったとしてサーバーから帰ってきたエラー情報を取得し返却
-          let messages: string = '';
+          let messages = '';
           console.log(httpRequest.responseText);
           if (400 <= httpRequest.status && httpRequest.status <= 499) {
             // return 結果が json形式か判定
@@ -407,7 +407,7 @@ export function ajax(
           //Promise.allを使用して並列実行
           return Promise.all(
             functions.map(function (func, i) {
-              return new Promise(function (fulfilled, rejected) {
+              return new Promise(function (fulfilled) {
                 //追加の引数があるかどうかを判定(jsはnull判定をifの条件に指定するだけで勝手にやってくれる)
                 if (functionArgs[i]) {
                   //追加の引数指定があったとき
@@ -489,12 +489,12 @@ export function getCsrfTokenParmName(): string {
  *
  * @param {string} method -通信方法('GET' or 'POST')
  * @param {string} url -送信先url
- * @param {Object} params -送信時にセットするparam 省略可能
+ * @param {object} params -送信時にセットするparam 省略可能
  */
 export function submit(
   method: string,
   url: string,
-  params: Object = null
+  params: object = null
 ): void {
   const submitMe: HTMLFormElement = document.createElement('form');
   submitMe.action = url; // Remember to change me
@@ -541,7 +541,7 @@ export function getStudyDate(): Date {
  * @param {string} delim 区切り文字
  * @return yyyyMMdd形式に変換された日付け
  */
-export function formatDateBtYyyyMmDd(date: Date, delim: string = '/'): string {
+export function formatDateBtYyyyMmDd(date: Date, delim = '/'): string {
   const result: string =
     delim == null
       ? String(date.getFullYear()) +
@@ -616,8 +616,8 @@ export function swichClass(
  * @param obj
  * @returns 判定結果
  */
-export function isObjEmpty(obj: {}) {
-  for (let i in obj) {
+export function isObjEmpty(obj: object) {
+  for (const i in obj) {
     return false;
   }
   return true;
@@ -629,7 +629,10 @@ export function isObjEmpty(obj: {}) {
  * @param params パラメータ
  * @returns 通信結果
  */
-export async function fetchGet(baseurl: string, params: {} = {}) {
+export async function fetchGet(
+  baseurl: string,
+  params: Record<string, string> = {}
+) {
   const query = new URLSearchParams(params);
   const url = pathJoin(getContextPath(), baseurl);
   const res: Response = await window.fetch(
@@ -650,10 +653,10 @@ export async function fetchGet(baseurl: string, params: {} = {}) {
  */
 export async function fetchPost(
   baseurl: string,
-  params: {} = {}
+  params = {}
 ): Promise<Response> {
   const headers = () => {
-    const headers: {} = {};
+    const headers = {};
     //headers['Content-Type'] = 'application/json';
     headers[getCsrfTokenHeader()] = getCsrfToken();
     return headers;
@@ -687,7 +690,7 @@ export async function fetchPost(
  * @returns 返還後の値
  */
 export function format(format: string, args: string[]) {
-  const formatArray = format.split(CommonConst.FORMAT_SPECIFIER);
+  const formatArray = format.split(commonConst.FORMAT_SPECIFIER);
   let ret = '';
   if (formatArray.length > 1) {
     formatArray.forEach((str, index) => {
@@ -719,7 +722,7 @@ export function stringToType(str: string) {
  * @param str  対象
  * @returns type
  */
-export function ToTypeArrayIfIsStringArray(array: Type[] | String[]) {
+export function ToTypeArrayIfIsStringArray(array: Type[] | string[]) {
   return array.map((str) =>
     typeof str == 'string' ? stringToType(str) : (str as Type)
   );

@@ -15,7 +15,7 @@ type SortArrayRecode = {
  */
 export function addEventListenerOfSortAndFilterTable(
   targetId: string,
-  searchType: string = 'AND'
+  searchType = 'AND'
 ): void {
   addEventListenerOfSortTable(targetId);
   addEventListenerOfFilterTable(targetId, searchType);
@@ -31,10 +31,10 @@ export function addEventListenerOfSortAndFilterTable(
  * @param {string} targetId 対象テーブルID
  */
 function addEventListenerOfSortTable(targetId: string): void {
-  const ASC: string = 'bi-caret-up-fill';
-  const DESC: string = 'bi-caret-down-fill';
-  const NUMBER_SORT: number = 0;
-  const string_SORT: number = 1;
+  const ASC = 'bi-caret-up-fill';
+  const DESC = 'bi-caret-down-fill';
+  const NUMBER_SORT = 0;
+
   document
     .querySelectorAll<HTMLTableCellElement>('#' + targetId + ' th')
     .forEach((elm) => {
@@ -48,7 +48,7 @@ function addEventListenerOfSortTable(targetId: string): void {
             : table.querySelector('.' + DESC)
         ) as HTMLLIElement; // 前回付与されたソート順を示すアイコン
         let sortType = NUMBER_SORT; // 0:数値 1:文字
-        let sortArray: SortArrayRecode[] = new Array<SortArrayRecode>(); // クリックした列のデータを全て格納する配列
+        const sortArray: SortArrayRecode[] = new Array<SortArrayRecode>(); // クリックした列のデータを全て格納する配列
         // 次のソート順を決定
         const order: string =
           beforeiEl == null ||
@@ -67,7 +67,7 @@ function addEventListenerOfSortTable(targetId: string): void {
         this.prepend(iEl);
         for (let r = 1; r < table.rows.length; r++) {
           //行番号と値を配列に格納
-          let column: SortArrayRecode = new Object() as SortArrayRecode;
+          const column: SortArrayRecode = new Object() as SortArrayRecode;
           column.row = table.rows[r];
           column.value = table.rows[r].cells[columnNo].textContent;
           sortArray.push(column);
@@ -95,7 +95,7 @@ function addEventListenerOfSortTable(targetId: string): void {
         }
         // ソート後のTRオブジェクトをソート順にtbodyへ追加（移動）
         // let tbody = this.parentNode.parentNode;
-        let tbody = table.querySelector('tbody');
+        const tbody = table.querySelector('tbody');
         sortArray.forEach((column) => {
           tbody.appendChild(column.row);
         });
@@ -115,10 +115,10 @@ function addEventListenerOfSortTable(targetId: string): void {
  */
 function addEventListenerOfFilterTable(
   targetId: string,
-  searchType: string = 'AND'
+  searchType = 'AND'
 ): void {
-  const SEARCH_INPUT_CLASS_NAME: string = 'light-table-filter';
-  const AND: string = 'AND';
+  const SEARCH_INPUT_CLASS_NAME = 'light-table-filter';
+  const AND = 'AND';
   // inputボックスの追加
   const tableHeads: NodeListOf<HTMLTableCellElement> =
     document.querySelectorAll<HTMLTableCellElement>('#' + targetId + ' th');
@@ -160,7 +160,7 @@ function addEventListenerOfFilterTable(
          *
          * @param {Event} e イベント
          */
-        function _onInputEvent(e: Event) {
+        function _onInputEvent() {
           //_input = e.target;
           Arr.forEach.call(
             table.tBodies,
@@ -187,8 +187,8 @@ function addEventListenerOfFilterTable(
          * @param {HTMLTableRowElement} row テーブル1行
          */
         function _filter(row: HTMLTableRowElement) {
-          let isNone: boolean = false;
-          let isBreak: boolean = false;
+          let isNone = false;
+          let isBreak = false;
           Arr.forEach.call(inputs, function (input: HTMLInputElement) {
             if (!isBreak) {
               if (input.value) {

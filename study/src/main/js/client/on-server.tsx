@@ -1,18 +1,20 @@
 import React from 'react';
 
+import { OnServerApi } from '../@types/studyApi';
+
 /**
  * サーバー上で実行
- * @param {any} callback
- * @param {any} defaultValue
- * @param {string} valueIdentifier
- * @returns
+ * @param  callback
+ * @param  defaultValue
+ * @param  valueIdentifier
+ * @returnsz
  */
 export function onServer(
-  callback: (api: any, param?: any) => string,
+  callback: (api: OnServerApi, param?: object) => string,
   defaultValue,
   valueIdentifier: string
-): [any, JSX.Element] {
-  const anyWindow: any = window;
+): [unknown, JSX.Element] {
+  const anyWindow = window;
   if (anyWindow.isServer) {
     const jsonValue = callback(anyWindow.api, anyWindow.param);
     const sanitizedJson = jsonValue
@@ -46,11 +48,12 @@ export function onServer(
 
 /**
  * ssrflagの削除
+ *
  * @param valueIdentifier
  * @param isSSR
  */
 export function deleteSSR(valueIdentifier: string) {
-  const anyWindow: any = window;
+  const anyWindow = window;
   if (anyWindow.ssrFlags) {
     const isSSR = anyWindow.ssrFlags[valueIdentifier];
     if (typeof isSSR !== 'undefined') {
@@ -62,10 +65,11 @@ export function deleteSSR(valueIdentifier: string) {
 
 /**
  * ssrが行われていたか判定
+ *
  * @param valueIdentifier
  */
 export function isSSR(valueIdentifier: string): boolean {
-  const anyWindow: any = window;
+  const anyWindow = window;
   if (anyWindow.ssrFlags) {
     const isSSR = anyWindow.ssrFlags[valueIdentifier];
     console.log(`ssrFlag(${valueIdentifier}):${isSSR}`);
@@ -81,12 +85,13 @@ export function isSSR(valueIdentifier: string): boolean {
 /**
  * SSRがされてない場合は引数の関数を実行
  * SSRがされている場合は、SSRフラグをfalseに
+ *
  * @param valueIdentifiers
  * @param func SSRされていない時に実行するファンクション
  */
 export function executeFuncIfNeeded(
   valueIdentifier: string,
-  func: () => any = null
+  func: () => unknown = null
 ) {
   if (!isSSR(valueIdentifier)) {
     //ssrが行われなかった時
@@ -101,10 +106,11 @@ export function executeFuncIfNeeded(
 /**
  * SSRがされてない場合は引数の関数を実行
  * SSRがされている場合は、SSRフラグをfalseに
+ *
  * @param targets SSRされていない時に実行するファンクション達
  */
 export function executeFuncsIfNeeded(
-  targets: { valueIdentifier: string; func: () => any }[]
+  targets: { valueIdentifier: string; func: () => unknown }[]
 ) {
   targets.forEach((target) =>
     executeFuncIfNeeded(target.valueIdentifier, target.func)

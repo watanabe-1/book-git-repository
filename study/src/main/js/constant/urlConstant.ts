@@ -1,25 +1,25 @@
 /** URL */
-export namespace UrlConst {
+export const urlConst = {
   /** カテゴリー */
-  export namespace Category {
-    export const INFO = '/category/info';
-    export const CONFIRM = '/category/confirm';
-    export const RESULT = '/category/result';
-    export const LIST = '/category/list';
-    export const LISTDATA = '/category/listdata';
-    export const IMAGELISTDATA = '/category/imageList';
-    export const LISTDATAUPDATE = '/category/listdataUpdate';
-  }
+  category: {
+    INFO: '/category/info',
+    CONFIRM: '/category/confirm',
+    RESULT: '/category/result',
+    LIST: '/category/list',
+    LISTDATA: '/category/listdata',
+    IMAGELISTDATA: '/category/imageList',
+    LISTDATAUPDATE: '/category/listdataUpdate',
+  },
 
   /** 家計簿 */
-  export namespace Books {
-    export const UPLOAD_INFO = '/books/uploadInfo';
-    export const DOWNLOAD_INFO = '/books/downloadInfo';
-    export const HOUSEHOLD_INFO = '/books/householdInfo';
-    export const HOUSEHOLD_CHART_INFO = '/books/householdChartInfo';
-    export const HOUSEHOLD_CALENDAR_INFO = '/books/householdCalendarInfo';
-    export const RESULT = '/books/result';
-    export const DOWNLOAD = '/books/download';
-    export const HOUSEHOLD = '/books/household';
-  }
-}
+  books: {
+    UPLOAD_INFO: '/books/uploadInfo',
+    DOWNLOAD_INFO: '/books/downloadInfo',
+    HOUSEHOLD_INFO: '/books/householdInfo',
+    HOUSEHOLD_CHART_INFO: '/books/householdChartInfo',
+    HOUSEHOLD_CALENDAR_INFO: '/books/householdCalendarInfo',
+    RESULT: '/books/result',
+    DOWNLOAD: '/books/download',
+    HOUSEHOLD: '/books/household',
+  },
+};

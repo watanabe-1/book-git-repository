@@ -1,4 +1,4 @@
-import { CommonConst } from '../../constant/commonConstant';
+import { commonConst } from '../../constant/commonConstant';
 
 /**
  * サーバーで指定しているファイル名を取得
@@ -30,7 +30,7 @@ export function getFilenameFromContentDisposition(contentDisposition) {
     if (matches != null && matches.length > 2) {
       const encoding = matches[1]
         ? matches[1].replace("'", '').toUpperCase()
-        : CommonConst.StandardCharsets.UTF_8;
+        : commonConst.StandardCharsets.UTF_8;
       const encodedFilename = matches[2];
       // console.log(encoding);
       // console.log(encodedFilename);
@@ -40,7 +40,7 @@ export function getFilenameFromContentDisposition(contentDisposition) {
 
       // UTF-8以外の場合は再度デコードを行う
       // デコードが失敗した場合はdecodeURIComponentのデコード結果が採用される想定
-      if (encoding != CommonConst.StandardCharsets.UTF_8) {
+      if (encoding != commonConst.StandardCharsets.UTF_8) {
         try {
           filename = new TextDecoder(encoding).decode(
             new Uint8Array(Buffer.from(encodedFilename, encoding))

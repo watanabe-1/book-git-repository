@@ -1,5 +1,3 @@
-import React from 'react';
-import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -14,6 +12,9 @@ import {
   ChartData,
   ChartOptions,
 } from 'chart.js';
+import React from 'react';
+import { Bar } from 'react-chartjs-2';
+
 import { isObjEmpty } from '../../study/util/studyUtil';
 
 // チャート内で使用するものを登録
@@ -39,11 +40,9 @@ ChartJS.register(
  */
 const BarAndLineChart = ({
   data,
-  date,
   topTitle,
 }: {
   data: ChartData<'bar'>;
-  date: Date;
   topTitle: string;
 }) => {
   const title = isObjEmpty(data.datasets[0].data)

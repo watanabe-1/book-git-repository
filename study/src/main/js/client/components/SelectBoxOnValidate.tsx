@@ -1,8 +1,9 @@
+import { FormikErrors, FormikTouched } from 'formik';
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+
 import { Type } from '../../@types/studyUtilType';
 import { ToTypeArrayIfIsStringArray } from '../../study/util/studyUtil';
-import { FormikTouched } from 'formik';
 
 /**
  *
@@ -21,9 +22,9 @@ const SelectBoxOnValidate = ({
   title?: string;
   name: string;
   value: string;
-  typeList: Type[] | String[];
+  typeList: Type[] | string[];
   touched: FormikTouched<unknown>;
-  error: any;
+  error: FormikErrors<unknown>;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   isUnshiftEmpty?: boolean;
 }) => {
@@ -45,14 +46,23 @@ const SelectBoxOnValidate = ({
         isValid={touched && !error}
         isInvalid={!!error}
       >
-        {newTypeList.map((type) => (
-          <option selected={type.code == value} value={type.code}>
+        {newTypeList.map((type, i) => (
+          <option
+            key={`${type.code}-${i}`}
+            selected={type.code == value}
+            value={type.code}
+          >
             {type.name}
           </option>
         ))}
       </Form.Select>
       <Form.Control.Feedback>OK!</Form.Control.Feedback>
-      <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
+      <Form.Control.Feedback type="invalid">
+        {
+          // エラー回避 対応策わかり次第変更
+          error as unknown as string
+        }
+      </Form.Control.Feedback>
     </Form.Group>
   );
 };

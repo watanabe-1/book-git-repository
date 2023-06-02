@@ -1,12 +1,15 @@
 import React from 'react';
-import { addContextPath } from '../../../../study/util/studyUtil';
-import { UrlConst } from '../../../../constant/urlConstant';
 import Button from 'react-bootstrap/Button';
 
-const Result = (props) => {
+import { urlConst } from '../../../../constant/urlConstant';
+import { addContextPath } from '../../../../study/util/studyUtil';
+
+const Result = (props: {
+  handleBack: React.MouseEventHandler<HTMLButtonElement>;
+}) => {
   const handleClick = () => {
     // 同一タブ内で遷移
-    window.location.href = addContextPath(UrlConst.Category.LIST);
+    window.location.href = addContextPath(urlConst.category.LIST);
   };
 
   return (

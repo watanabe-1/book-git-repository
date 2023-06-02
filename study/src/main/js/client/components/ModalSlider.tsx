@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import Carousel from 'react-bootstrap/Carousel';
-import { Image } from '../../@types/studyUtilType';
-import { getContextPath, pathJoin } from '../../study/util/studyUtil';
-import Slider from './Slider';
 import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
+import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
+
+import { Image } from '../../@types/studyUtilType';
+import Slider from './Slider';
 
 /**
  * 画像表示用スライダーモーダル
@@ -31,7 +30,7 @@ const ModalSlider = ({
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const handleSelect = (e) => {
+  const handleSelect = () => {
     if (setImage) setImage(imageList[index]);
     handleClose();
   };

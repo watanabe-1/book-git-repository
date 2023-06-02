@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
+
 import { Type } from '../../@types/studyUtilType';
 import { ToTypeArrayIfIsStringArray } from '../../study/util/studyUtil';
 
@@ -18,7 +19,7 @@ const SelectBox = ({
   title?: string;
   name: string;
   value: string;
-  typeList: Type[] | String[];
+  typeList: Type[] | string[];
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   isUnshiftEmpty?: boolean;
 }) => {
@@ -35,8 +36,12 @@ const SelectBox = ({
     <Form.Group controlId={name}>
       {title && <Form.Label>{title}</Form.Label>}
       <Form.Select name={name} onChange={onChange}>
-        {newTypeList.map((type) => (
-          <option selected={type.code == value} value={type.code}>
+        {newTypeList.map((type, i) => (
+          <option
+            key={`${type.code}-${i}`}
+            selected={type.code == value}
+            value={type.code}
+          >
             {type.name}
           </option>
         ))}

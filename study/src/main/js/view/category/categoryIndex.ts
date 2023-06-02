@@ -1,9 +1,9 @@
 import './../../common/common';
+import * as bootstrap from 'bootstrap';
+
 import { Image } from './../../@types/studyUtilType';
 import * as studyListUtil from './../../study/list/studyListUtil';
 import * as studyUtil from './../../study/util/studyUtil';
-
-import * as bootstrap from 'bootstrap';
 
 //テーブルの内容を並び替えできるようにイベントを追加
 //カテゴリーリスト
@@ -13,7 +13,7 @@ const imgList: Image[] = JSON.parse(
   document.getElementById('imgListData').innerHTML
 ) as Image[];
 
-let imgNum: number = 0;
+let imgNum = 0;
 //クリックした時のボタン
 let imgConfirmButton: Element;
 
@@ -46,7 +46,7 @@ function createImgTag(imgJson: Image): void {
  * @param {String} selectedImgId 設定されている画像Id
  */
 function defaultImgtag(selectedImgId: string): void {
-  let num: number = 0;
+  let num = 0;
   imgList.forEach((value, index) => {
     //console.log(selectedImgId);
     //console.log(value.imgId);
@@ -91,8 +91,8 @@ const listModalEl: HTMLDivElement = document.getElementById(
 ) as HTMLDivElement;
 const listModalElObj: bootstrap.Modal = new bootstrap.Modal(listModalEl);
 
-document.querySelectorAll('.modalBtn').forEach((btn, index) => {
-  btn.addEventListener('click', (e) => {
+document.querySelectorAll('.modalBtn').forEach((btn) => {
+  btn.addEventListener('click', () => {
     //クリックした時のボタン
     imgConfirmButton = btn;
     //imgConfirmButtonから同じtdタグ内に存在するラベル、インプットタグを取得
@@ -106,14 +106,14 @@ document.querySelectorAll('.modalBtn').forEach((btn, index) => {
     const nextButton: HTMLButtonElement = listModalEl.querySelector(
       '#nextImg'
     ) as HTMLButtonElement;
-    nextButton.addEventListener('click', function (event) {
+    nextButton.addEventListener('click', function () {
       nextImgtag();
     });
     //前へボタン
     const backButton: HTMLButtonElement = listModalEl.querySelector(
       '#backImg'
     ) as HTMLButtonElement;
-    backButton.addEventListener('click', function (event) {
+    backButton.addEventListener('click', function () {
       backImgtag();
     });
     listModalElObj.show();
@@ -123,7 +123,7 @@ document.querySelectorAll('.modalBtn').forEach((btn, index) => {
 //model内のボタンにイベントの追加
 //confirm model-change-button
 const listModalSaveButton = listModalEl.querySelector('#saveListModal');
-listModalSaveButton.addEventListener('click', function (event) {
+listModalSaveButton.addEventListener('click', function () {
   const imgId: string = imgList[imgNum].imgId;
   //行を指定して取得
   const tds: NodeListOf<HTMLTableCellElement> =

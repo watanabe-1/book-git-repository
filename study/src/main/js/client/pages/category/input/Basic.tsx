@@ -1,45 +1,43 @@
+import { Formik, FormikProps } from 'formik';
 import React, { useState, useEffect, useRef, useContext } from 'react';
-import { Context } from './Content';
-import { onServer, executeFuncIfNeeded } from '../../../on-server';
-import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
-import {
-  getInputFile,
-  getSetInputFileFunc,
-} from '../../../../study/util/studyFormUtil';
-import { addServerValidateFuncs } from '../../../../study/util/studyYupUtil';
+import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+
 import {
   CategoryUi,
   Category,
   ErrorResults,
 } from '../../../../@types/studyUtilType';
-import { FieldConst } from '../../../../constant/fieldConstant';
-import { UrlConst } from '../../../../constant/urlConstant';
-import yup from '../../../yup/message/ja';
-import { Formik, FormikProps } from 'formik';
+import { fieldConst } from '../../../../constant/fieldConstant';
+import { onServerConst } from '../../../../constant/on-serverConst';
+import { urlConst } from '../../../../constant/urlConstant';
+import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
+import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
+import { addServerValidateFuncs } from '../../../../study/util/studyYupUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
-import TextBoxOnValidate from '../../../components/TextBoxOnValidate';
-import TextArea from '../../../components/TextArea';
-import SelectBox from '../../../components/SelectBox';
-import RadioBtn from '../../../components/RadioBtn';
 import CheckBox from '../../../components/CheckBox';
 import FileBoxOnValidate from '../../../components/FileBoxOnValidate';
+import RadioBtn from '../../../components/RadioBtn';
+import SelectBox from '../../../components/SelectBox';
 import SubmitButton from '../../../components/SubmitButton';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Row from 'react-bootstrap/Row';
-import { OnServerConst } from '../../../../constant/on-serverConst';
+import TextArea from '../../../components/TextArea';
+import TextBoxOnValidate from '../../../components/TextBoxOnValidate';
+import { onServer, executeFuncIfNeeded } from '../../../on-server';
+import yup from '../../../yup/message/ja';
+import { Context } from './Content';
 
-const Basic = (props) => {
+const Basic = (props: { handleNext: () => void }) => {
   const [initialInfo, initScript] = onServer(
     (api) => api.getInfo(),
     [],
-    OnServerConst.Category.INFO
+    onServerConst.category.INFO
   ) as [CategoryUi, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const [errData, setErrData] = useState() as [
     ErrorResults,
-    React.Dispatch<React.SetStateAction<{}>>
+    React.Dispatch<React.SetStateAction<unknown>>
   ];
   const [isConfirmLoading, setConfirmLoading] = useState(false);
   // コンテキストに保存しておきたいデータ
@@ -74,16 +72,16 @@ const Basic = (props) => {
    * 画面情報取得
    */
   const fetchInfo = async () => {
-    const response = await fetchGet(UrlConst.Category.INFO);
+    const response = await fetchGet(urlConst.category.INFO);
     setInfo(await response.json());
   };
 
   /**
    * 確認画面情報取得
    */
-  const fetchConfirm = async (form) => {
+  const fetchConfirm = async (form: Category) => {
     setConfirmLoading(true);
-    const response = await fetchPost(UrlConst.Category.CONFIRM, form);
+    const response = await fetchPost(urlConst.category.CONFIRM, form);
     setConfirmLoading(false);
 
     return response;
@@ -91,7 +89,7 @@ const Basic = (props) => {
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(OnServerConst.Category.INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConst.category.INFO, fetchInfo);
   }, []);
 
   console.log(info);
@@ -100,20 +98,20 @@ const Basic = (props) => {
 
   //yupで使用するスキーマの設定
   const additions = {};
-  additions[FieldConst.Category.CAT_CODE] = yup.string().required();
-  additions[FieldConst.Category.CAT_NAME] = yup.string().required();
-  additions[FieldConst.Category.NOTE] = yup.string();
-  additions[FieldConst.Category.IMG_TYPE] = yup.string();
-  additions[FieldConst.Category.CAT_TYPE] = yup.string();
-  additions[FieldConst.Category.ACTIVE] = yup.bool();
-  additions[FieldConst.Category.CAT_ICON] = yup.mixed();
+  additions[fieldConst.category.CAT_CODE] = yup.string().required();
+  additions[fieldConst.category.CAT_NAME] = yup.string().required();
+  additions[fieldConst.category.NOTE] = yup.string();
+  additions[fieldConst.category.IMG_TYPE] = yup.string();
+  additions[fieldConst.category.CAT_TYPE] = yup.string();
+  additions[fieldConst.category.ACTIVE] = yup.bool();
+  additions[fieldConst.category.CAT_ICON] = yup.mixed();
   // サーバーでのバリデーション結果を反映する関数をセット
   addServerValidateFuncs(
     additions,
     [
-      FieldConst.Category.CAT_CODE,
-      FieldConst.Category.CAT_NAME,
-      FieldConst.Category.CAT_ICON,
+      fieldConst.category.CAT_CODE,
+      fieldConst.category.CAT_NAME,
+      fieldConst.category.CAT_ICON,
     ],
     errData,
     setErrData
@@ -145,13 +143,8 @@ const Basic = (props) => {
             values,
             touched,
             errors,
-            dirty,
-            isSubmitting,
             handleChange,
-            handleBlur,
             handleSubmit,
-            handleReset,
-            setFieldValue,
             validateForm,
           } = props;
           return (
@@ -160,7 +153,7 @@ const Basic = (props) => {
                 <Col sm="6">
                   <TextBoxOnValidate
                     title="カテゴリーコード"
-                    name={FieldConst.Category.CAT_CODE}
+                    name={fieldConst.category.CAT_CODE}
                     value={values.catCode}
                     touched={touched.catCode}
                     error={errors.catCode}
@@ -170,7 +163,7 @@ const Basic = (props) => {
                 <Col sm="6">
                   <TextBoxOnValidate
                     title="カテゴリー名"
-                    name={FieldConst.Category.CAT_NAME}
+                    name={fieldConst.category.CAT_NAME}
                     value={values.catName}
                     touched={touched.catName}
                     error={errors.catName}
@@ -180,7 +173,7 @@ const Basic = (props) => {
                 <Col sm="12">
                   <TextArea
                     title="メモ"
-                    name={FieldConst.Category.NOTE}
+                    name={fieldConst.category.NOTE}
                     value={values.note}
                     onChange={handleChange}
                   />
@@ -188,7 +181,7 @@ const Basic = (props) => {
                 <Col sm="12">
                   <SelectBox
                     title="画像タイプ"
-                    name={FieldConst.Category.IMG_TYPE}
+                    name={fieldConst.category.IMG_TYPE}
                     value={values.imgType}
                     typeList={info.imgTypes}
                     onChange={handleChange}
@@ -200,7 +193,7 @@ const Basic = (props) => {
                 <Col sm="4">
                   <RadioBtn
                     title="カテゴリータイプ"
-                    name={FieldConst.Category.CAT_TYPE}
+                    name={fieldConst.category.CAT_TYPE}
                     value={values.catType}
                     typeList={info.catTypes}
                     onChange={handleChange}
@@ -208,7 +201,7 @@ const Basic = (props) => {
                 </Col>
                 <Col sm="4">
                   <CheckBox
-                    name={FieldConst.Category.ACTIVE}
+                    name={fieldConst.category.ACTIVE}
                     value={values.active}
                     flag={info.active}
                     onChange={handleChange}
@@ -220,12 +213,12 @@ const Basic = (props) => {
                 <Col sm="12">
                   <FileBoxOnValidate
                     title="アイコンのアップロード"
-                    name={FieldConst.Category.CAT_ICON}
+                    name={fieldConst.category.CAT_ICON}
                     error={errors.catIcon}
                     accept="image/*"
                     onChange={getSetInputFileFunc(
                       props.setFieldValue,
-                      FieldConst.Category.CAT_ICON
+                      fieldConst.category.CAT_ICON
                     )}
                   />
                 </Col>
@@ -234,7 +227,7 @@ const Basic = (props) => {
               <SubmitButton title="確認" isLoading={isConfirmLoading} />
               <Button
                 ref={buttonElement}
-                onClick={(event) => {
+                onClick={() => {
                   validateForm(values);
                 }}
                 hidden

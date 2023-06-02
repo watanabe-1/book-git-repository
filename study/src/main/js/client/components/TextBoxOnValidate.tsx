@@ -1,4 +1,4 @@
-import { FormikTouched } from 'formik/dist/types';
+import { FormikErrors, FormikTouched } from 'formik/dist/types';
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 
@@ -18,7 +18,7 @@ const TextBoxOnValidate = ({
   name: string;
   value: string | number | string[];
   touched: FormikTouched<unknown>;
-  error: any;
+  error: FormikErrors<unknown>;
   onChange;
 }) => {
   return (
@@ -33,7 +33,12 @@ const TextBoxOnValidate = ({
         isInvalid={!!error}
       />
       <Form.Control.Feedback>OK!</Form.Control.Feedback>
-      <Form.Control.Feedback type="invalid">{error}</Form.Control.Feedback>
+      <Form.Control.Feedback type="invalid">
+        {
+          // エラー回避 対応策わかり次第変更
+          error as unknown as string
+        }
+      </Form.Control.Feedback>
     </Form.Group>
   );
 };

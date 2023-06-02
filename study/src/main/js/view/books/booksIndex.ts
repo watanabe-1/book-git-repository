@@ -1,12 +1,12 @@
 import './../../common/common';
+import flatpickr from 'flatpickr';
+import flatpickr_ja from 'flatpickr/dist/l10n/ja';
+import monthSelectPlugin from 'flatpickr/dist/plugins/monthSelect/index';
+
 import * as studyCalendar from './../../study/calendar/studyCalendar';
 import * as studyChart from './../../study/chart/studyChart';
 import * as studyListUtil from './../../study/list/studyListUtil';
 import * as studyUtil from './../../study/util/studyUtil';
-
-import flatpickr from 'flatpickr';
-import monthSelectPlugin from 'flatpickr/dist/plugins/monthSelect/index';
-import flatpickr_ja from 'flatpickr/dist/l10n/ja';
 
 //flatpickr
 document.addEventListener('DOMContentLoaded', function () {
@@ -123,13 +123,13 @@ const restBarAndLineByYearUrl: string = studyUtil.setAtagHrefParm(
   'date',
   String(date)
 );
-const functionArgs: string[] = ['barAndLineByYear', '過去12ヶ月'];
+const functionArgs: string[][] = [['barAndLineByYear', '過去12ヶ月']];
 studyUtil.ajax(
   'POST',
   restBarAndLineByYearUrl,
   '',
   studyUtil.PARALLEL,
-  studyChart.barAndLineChart,
+  [studyChart.barAndLineChart],
   functionArgs
 );
 

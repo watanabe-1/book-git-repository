@@ -1,30 +1,30 @@
+import { Field, FormikProps } from 'formik';
 import React from 'react';
+import { Container } from 'react-bootstrap';
+
 import {
   Books,
   BuildListTableFormObjConfig,
 } from '../../../../@types/studyUtilType';
-import { Container } from 'react-bootstrap';
-import SimpleText from '../../../components/SimpleText';
-import { FieldConst } from '../../../../constant/fieldConstant';
-import { ClassConst } from '../../../../constant/classConstant';
-import { Field, FormikProps } from 'formik';
-import ImageIcon from '../../../components/ImageIcon';
+import { classConst } from '../../../../constant/classConstant';
+import { fieldConst } from '../../../../constant/fieldConstant';
 import { keyJoin, pathJoin } from '../../../../study/util/studyUtil';
 import { buildListTableFormObj } from '../../../../study/util/studyYupUtil';
+import ImageIcon from '../../../components/ImageIcon';
+import SimpleText from '../../../components/SimpleText';
 import SortAndFilterFormTable from '../../../components/SortAndFilterFormTable';
-import TextBoxOnValidate from '../../../components/TextBoxOnValidate';
 
 const ListTable = ({ booksList }: { booksList: Books[] }) => {
   //console.log(JSON.stringify(booksList));
   const toObjConfig: BuildListTableFormObjConfig = {
-    className: ClassConst.BOOKS_DATA_LIST,
+    className: classConst.BOOKS_DATA_LIST,
     list: [
       {
-        name: FieldConst.Books.BOOKS_DATE,
+        name: fieldConst.books.BOOKS_DATE,
         table: {
           head: '日付',
-          getCell: (props: FormikProps<{}>, names: {}) => {
-            const name = names[FieldConst.Books.BOOKS_DATE];
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.books.BOOKS_DATE];
             return (
               <Field name={name}>
                 {({ field }) => {
@@ -38,15 +38,15 @@ const ListTable = ({ booksList }: { booksList: Books[] }) => {
         addition: null,
       },
       {
-        name: FieldConst.Books.BOOKS_PLACE,
+        name: fieldConst.books.BOOKS_PLACE,
         table: {
           head: '名称',
-          getCell: (props: FormikProps<{}>, names: {}) => {
-            const name = names[FieldConst.Books.BOOKS_PLACE];
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.books.BOOKS_PLACE];
             // return <SimpleText name={name} value={props.values[name]} />;
             return (
               <Field name={name}>
-                {({ field, form, meta }) => {
+                {({ field }) => {
                   // console.log('Field');
                   // console.log(field);
                   // console.log('form');
@@ -69,15 +69,15 @@ const ListTable = ({ booksList }: { booksList: Books[] }) => {
       },
 
       {
-        name: keyJoin(FieldConst.Books.CAT_CODES, FieldConst.Category.CAT_NAME),
+        name: keyJoin(fieldConst.books.CAT_CODES, fieldConst.category.CAT_NAME),
         table: {
           head: 'カテゴリー',
-          getCell: (props: FormikProps<{}>, names: {}) => {
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name =
               names[
                 keyJoin(
-                  FieldConst.Books.CAT_CODES,
-                  FieldConst.Category.CAT_NAME
+                  fieldConst.books.CAT_CODES,
+                  fieldConst.category.CAT_NAME
                 )
               ];
             return (
@@ -92,18 +92,18 @@ const ListTable = ({ booksList }: { booksList: Books[] }) => {
                             form.getFieldProps(
                               names[
                                 keyJoin(
-                                  FieldConst.Books.CAT_CODES,
-                                  FieldConst.Category.IMG_IDS,
-                                  FieldConst.Image.IMG_PATH
+                                  fieldConst.books.CAT_CODES,
+                                  fieldConst.category.IMG_IDS,
+                                  fieldConst.image.IMG_PATH
                                 )
                               ]
                             ).value,
                             form.getFieldProps(
                               names[
                                 keyJoin(
-                                  FieldConst.Books.CAT_CODES,
-                                  FieldConst.Category.IMG_IDS,
-                                  FieldConst.Image.IMG_NAME
+                                  fieldConst.books.CAT_CODES,
+                                  fieldConst.category.IMG_IDS,
+                                  fieldConst.image.IMG_NAME
                                 )
                               ]
                             ).value
@@ -121,11 +121,11 @@ const ListTable = ({ booksList }: { booksList: Books[] }) => {
         addition: null,
       },
       {
-        name: FieldConst.Books.BOOKS_METHOD,
+        name: fieldConst.books.BOOKS_METHOD,
         table: {
           head: '決済方法',
-          getCell: (props: FormikProps<{}>, names: {}) => {
-            const name = names[FieldConst.Books.BOOKS_METHOD];
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.books.BOOKS_METHOD];
             return (
               <Field name={name}>
                 {({ field }) => {
@@ -139,11 +139,11 @@ const ListTable = ({ booksList }: { booksList: Books[] }) => {
         addition: null,
       },
       {
-        name: FieldConst.Books.BOOKS_AMMOUNT,
+        name: fieldConst.books.BOOKS_AMMOUNT,
         table: {
           head: '金額',
-          getCell: (props: FormikProps<{}>, names: {}) => {
-            const name = names[FieldConst.Books.BOOKS_AMMOUNT];
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.books.BOOKS_AMMOUNT];
             return (
               <Field name={name}>
                 {({ field }) => {
@@ -166,7 +166,7 @@ const ListTable = ({ booksList }: { booksList: Books[] }) => {
     <Container>
       <SortAndFilterFormTable
         tableFormConfig={listTableFormObj}
-        handleFormSubmit={() => {}}
+        handleFormSubmit={() => ''}
         hiddenSubmitButton
       />
     </Container>

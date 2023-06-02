@@ -26,6 +26,7 @@ const Stepper = ({
             <ul className="bootstrapStepper form-wizard">
               {steps.map((label, index) => (
                 <li
+                  key={`bootstrapStepper-${index}`}
                   className={
                     (activeStep == index ? 'active' : '') +
                     ' col-sm-' +

@@ -17,10 +17,10 @@ export type Image = {
   imgName: string;
   note: string;
   insDate: Date;
-  insUser: String;
+  insUser: string;
   updDate: Date;
-  updUser: String;
-  catIcon: any;
+  updUser: string;
+  catIcon: File;
   imgIds: Image;
 };
 
@@ -37,9 +37,9 @@ export type Category = {
   imgId: string;
   active: string;
   insDate: Date;
-  insUser: String;
+  insUser: string;
   updDate: Date;
-  updUser: String;
+  updUser: string;
   catIcon: File;
   imgIds: Image;
   delete: string;
@@ -66,9 +66,9 @@ export type Books = {
   booksMethod: string;
   booksAmmount: number;
   insDate: Date;
-  insUser: String;
+  insUser: string;
   updDate: Date;
-  updUser: String;
+  updUser: string;
   catCodes: Category;
   booksFile: File;
 };
@@ -145,14 +145,14 @@ export type BuildListTableFormObjConfig = {
     name: string;
     table: {
       head: string;
-      getCell: (props: FormikProps<?>, names: {}) => JSX.Element;
+      getCell: (props: FormikProps<?>, names: unknown) => JSX.Element;
       hidden: boolean;
     };
     addition: {
       yup: RequiredStringSchema<string, AnyObject>;
       isServerValidation: boolean;
       errData: ErrorResults;
-      setErrData: (value: React.SetStateAction<{}>) => void;
+      setErrData: (value: React.SetStateAction<unknown>) => void;
     };
   }[];
 };
@@ -161,13 +161,13 @@ export type BuildListTableFormObjConfig = {
  * ListTableForm作成時使用object作成メソッドで作成obj
  */
 export type TableFormObjConfig = {
-  additions: {};
-  initialValues: {};
+  additions: Record<string, Reference<unknown>>;
+  initialValues: unknown;
   rowName: config.className;
   getRows: (props: FormikProps<unknown>) => {
     cells: {
       name: string;
-      value: any;
+      value: string;
       element: JSX.Element;
       hidden: boolean;
     }[];

@@ -1,13 +1,13 @@
+import { FormikProps } from 'formik/dist/types';
 import { Schema, array, object } from 'yup/index';
-import { AnyObject, ObjectShape } from 'yup/index';
-import { CommonConst } from '../../constant/commonConstant';
+import { AnyObject } from 'yup/index';
+
 import {
   ErrorResults,
   BuildListTableFormObjConfig,
 } from '../../@types/studyUtilType';
-import { format, keyJoin } from './studyUtil';
-import { Table } from 'react-bootstrap';
-import { FormikProps } from 'formik/dist/types';
+import { commonConst } from '../../constant/commonConstant';
+import { keyJoin } from './studyUtil';
 
 /**
  * サーバーでバリデーションを行った結果を反映するようの関数をyupにセット
@@ -21,7 +21,7 @@ export function addServerValidateFunc(
   yup: Schema<string, AnyObject, string>,
   target: string,
   errData: ErrorResults,
-  setErrData: (value: React.SetStateAction<{}>) => void
+  setErrData: (value: React.SetStateAction<unknown>) => void
 ) {
   // let path = null;
   //  yup.test(
@@ -43,7 +43,7 @@ export function addServerValidateFunc(
   // );
 
   return yup.test(
-    CommonConst.SERVER_TEST_NAME,
+    commonConst.SERVER_TEST_NAME,
     (value, { createError, path }) => {
       if (isServerErr(errData, path))
         return createError({
@@ -67,7 +67,7 @@ export function addServerValidateFuncs(
   additions: { [x: string]: Schema<string, AnyObject, string> },
   targets: string[],
   errData: ErrorResults,
-  setErrData: (value: React.SetStateAction<{}>) => void
+  setErrData: (value: React.SetStateAction<unknown>) => void
 ) {
   targets.forEach((target) => {
     additions[target] = addServerValidateFunc(
@@ -89,7 +89,7 @@ export function addServerValidateFuncs(
 export function extractAndDeleteServerErrMsg(
   errData: ErrorResults,
   key: string,
-  setErrData: (value: React.SetStateAction<{}>) => void
+  setErrData: (value: React.SetStateAction<unknown>) => void
 ) {
   console.log('extractAndDeleteServerErrMsgエラーメッセージ');
   console.log(errData);
@@ -182,9 +182,9 @@ export function isServerErr(errData: ErrorResults, key: string) {
  * @param obj 対象
  * @return FormData
  */
-export function objToFormData(obj: {}) {
+export function objToFormData(obj: object) {
   const data = new FormData();
-  let stack = [];
+  const stack = [];
 
   const test = {};
 
@@ -232,11 +232,11 @@ export function objToFormData(obj: {}) {
  * @param arrayName 配列名
  * @return {}
  */
-export function objArrayToObj(objArray: {}[], arrayName: string) {
+export function objArrayToObj(objArray: object[], arrayName: string) {
   const data = {};
 
   objArray.forEach((obj, index) => {
-    let stack = [];
+    const stack = [];
 
     stack.push(obj);
 
@@ -441,7 +441,7 @@ export function objArrayToObj(objArray: {}[], arrayName: string) {
  * @returns ビルドしたオブジェクト
  */
 export function buildListTableFormObj(
-  objArray: {}[],
+  objArray: object[],
   config: BuildListTableFormObjConfig
 ) {
   // //yupで使用するスキーマの設定
@@ -468,10 +468,10 @@ export function buildListTableFormObj(
   initialValues[config.className] = objArray;
 
   // リスト表示用一意の識別名称
-  const nameList: {}[] = [];
+  const nameList: object[] = [];
   objArray.forEach((obj, index) => {
     const names = {};
-    let stack = [];
+    const stack = [];
 
     stack.push(obj);
 

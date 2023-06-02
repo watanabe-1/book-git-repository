@@ -1,6 +1,6 @@
 import { Books, Syukujits } from './../../@types/studyUtilType';
-import * as studyUtil from './../util/studyUtil';
 import * as studyListUtil from './../list/studyListUtil';
+import * as studyUtil from './../util/studyUtil';
 
 /**
  * 日付けに対しての判定結果格納定義
@@ -17,7 +17,7 @@ type CheckedDate = {
 
 // let selectDayByCalendar = new Date();
 //studyUtil.getStudyDate()の呼び出し
-let selectDayByCalendar: Date = studyUtil.getStudyDate();
+const selectDayByCalendar: Date = studyUtil.getStudyDate();
 // 祝日一覧 初期化時に設定
 let syukujitsuList: Syukujits[];
 // 日にちごとのお金のリスト
@@ -60,7 +60,7 @@ export function initStudyCalendar(
       )
       .then(
         //前の処理が成功した時
-        function (response) {
+        function () {
           // 日にちごとのお金のリスト
           let result: Promise<Books>;
           if (!amountByDayList) {
@@ -86,7 +86,7 @@ export function initStudyCalendar(
       )
       .then(
         //前の処理が成功した時
-        function (response) {
+        function () {
           // 初期表示
           showCalendarProcess(date, targetId, targetBooksID);
         },
@@ -157,7 +157,7 @@ function showCalendarProcess(
       tabCalendarTableBody[index].querySelectorAll('.cell-hover');
     //console.log(hoverTds);
     //イベントの追加
-    hoverTds.forEach((value, index) => {
+    hoverTds.forEach((value) => {
       //ボタンへのイベントの追加
       value.addEventListener('click', function (event) {
         //クリックした時のボタン
@@ -197,7 +197,7 @@ function showCalendarProcess(
  */
 function addCalendarStyle(): void {
   // styleタグを作成
-  let styleTag: HTMLStyleElement = document.createElement('style');
+  const styleTag: HTMLStyleElement = document.createElement('style');
 
   // styleタグに記載するcssを記入
   styleTag.innerText = `/* カレンダーホバー用 */ .cell-hover:hover { background-color: #bbd1ca; cursor: pointer;}`;
@@ -219,14 +219,13 @@ function createCalendarProcess(year: number, month: number): string {
   //週の定義
   const weekByCalendar: string[] = ['日', '月', '火', '水', '木', '金', '土'];
   // 曜日
-  let calendar: string =
-    "<table class='table table-bordered'><tr class='dayOfWeek'>";
+  let calendar = "<table class='table table-bordered'><tr class='dayOfWeek'>";
   weekByCalendar.forEach((dayOfWeek) => {
     calendar += '<th class = "text-start">' + dayOfWeek + '</th > ';
   });
   calendar += '</tr>';
 
-  let count: number = 0;
+  let count = 0;
   const startDayOfWeek: number = new Date(year, month, 1).getDay();
   const endDate: number = new Date(year, month + 1, 0).getDate();
   const lastMonthEndDate: number = new Date(year, month, 0).getDate();
@@ -255,7 +254,7 @@ function createCalendarProcess(year: number, month: number): string {
       } else {
         // 当月の日付を曜日に照らし合わせて設定
         count++;
-        let dateInfo: CheckedDate = checkDate(year, month, j, count);
+        const dateInfo: CheckedDate = checkDate(year, month, j, count);
         calendar += '<td class="cell-hover ';
         if (dateInfo.isSelectdayByCalendar) {
           calendar += 'selected bg-danger text-white';
@@ -335,7 +334,7 @@ function createBooksListByCalendarProcess(
   // すべてのセルを作成
   for (let i = 0; i < booksList.length; i++) {
     // 表の行を作成
-    let bodyRow: HTMLTableRowElement = document.createElement('tr');
+    const bodyRow: HTMLTableRowElement = document.createElement('tr');
 
     for (let j = 0; j < booksListHeadByCalendar.length; j++) {
       // <td> 要素とテキストノードを作成し、テキストノードを
@@ -517,7 +516,7 @@ function isAmountDay(
   month: number,
   day: number
 ): (boolean | number[])[] {
-  let flag: boolean = false;
+  let flag = false;
   const booksAmmountList: number[] = [];
   amountByDayList.forEach((books) => {
     const amountday: Date = new Date(books.booksDate);

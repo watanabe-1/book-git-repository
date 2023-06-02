@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
+import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Table from 'react-bootstrap/table';
-import { executeFuncIfNeeded, onServer } from '../../../on-server';
-import { fetchGet, isObjEmpty } from '../../../../study/util/studyUtil';
-import { UrlConst } from '../../../../constant/urlConstant';
-import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
-import { isInvalidDate } from '../../../../study/util/studyDateUtil';
+
 import { Books, Syukujits } from '../../../../@types/studyUtilType';
+import { onServerConst } from '../../../../constant/on-serverConst';
+import { urlConst } from '../../../../constant/urlConstant';
+import { isInvalidDate } from '../../../../study/util/studyDateUtil';
+import { fetchGet, isObjEmpty } from '../../../../study/util/studyUtil';
+import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
+import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import '../../../../../css/view/calendar/calendar.css';
 import ListTable from './ListTable';
-import { OnServerConst } from '../../../../constant/on-serverConst';
 
 /**
  * 家計簿カレンダー用データ
@@ -37,7 +38,7 @@ const Calendar = ({
   const [initiaCalendarData, initScript] = onServer(
     (api, param) => api.getHouseholdCalendarInfo(param),
     [],
-    OnServerConst.Books.HOUSEHOLD_CALENDAR_INFO
+    onServerConst.books.HOUSEHOLD_CALENDAR_INFO
   ) as [HouseholdCalendarData, JSX.Element];
   const [calendarData, setCalendarData] = useState(initiaCalendarData);
   const { syukujitsuList, amountList } = calendarData;
@@ -53,7 +54,7 @@ const Calendar = ({
     const params = {};
     if (date) params['date'] = date;
     const response = await fetchGet(
-      UrlConst.Books.HOUSEHOLD_CALENDAR_INFO,
+      urlConst.books.HOUSEHOLD_CALENDAR_INFO,
       params
     );
     const data = (await response.json()) as HouseholdCalendarData;
@@ -65,7 +66,7 @@ const Calendar = ({
   // 例 : タブを切り替えるたびに親の再レンダリングが動くが、その時は日付けは変わっていない しかし親から渡された日付けをそのままuseEffectの条件(第二引数)にした場合、親側ではレンダリングのたびに「new」で作り直しているため参照先が変わり毎回useEffectが実行される
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(OnServerConst.Books.HOUSEHOLD_CALENDAR_INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConst.books.HOUSEHOLD_CALENDAR_INFO, fetchInfo);
   }, [month]);
 
   /**
@@ -207,7 +208,7 @@ const Calendar = ({
 
   //週の定義
   const weekByCalendar: string[] = ['日', '月', '火', '水', '木', '金', '土'];
-  let dayCount: number = 0;
+  let dayCount = 0;
   const startDayOfWeek: number = new Date(year, month - 1, 1).getDay();
   const endDate: number = new Date(year, month, 0).getDate();
   const lastMonthEndDate: number = new Date(year, month - 1, 0).getDate();
@@ -228,8 +229,12 @@ const Calendar = ({
             <Table bordered>
               <tbody>
                 <tr className="dayOfWeek">
-                  {weekByCalendar.map((dayOfWeek) => {
-                    return <th className="text-start">{dayOfWeek}</th>;
+                  {weekByCalendar.map((dayOfWeek, i) => {
+                    return (
+                      <th key={`dayOfWeek-${i}`} className="text-start">
+                        {dayOfWeek}
+                      </th>
+                    );
                   })}
                 </tr>
                 {Array.from({ length: row }).map((_, rowIndex) => (

@@ -1,6 +1,7 @@
 import React from 'react';
-import ListTable from './ListTable';
+
 import BodysHead from '../../../components/BodysHead';
+import ListTable from './ListTable';
 
 const Content = () => {
   return (

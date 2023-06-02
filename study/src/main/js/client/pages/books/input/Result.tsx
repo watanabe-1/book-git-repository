@@ -1,11 +1,14 @@
 import React from 'react';
-import { addContextPath } from '../../../../study/util/studyUtil';
-import { UrlConst } from '../../../../constant/urlConstant';
 import Button from 'react-bootstrap/Button';
 
-const Result = (props) => {
+import { urlConst } from '../../../../constant/urlConstant';
+import { addContextPath } from '../../../../study/util/studyUtil';
+
+const Result = (props: {
+  handleBack: React.MouseEventHandler<HTMLButtonElement>;
+}) => {
   const handleClick = () => {
-    window.location.href = addContextPath(UrlConst.Books.HOUSEHOLD);
+    window.location.href = addContextPath(urlConst.books.HOUSEHOLD);
   };
 
   return (

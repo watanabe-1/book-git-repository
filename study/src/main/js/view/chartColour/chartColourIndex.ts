@@ -1,9 +1,9 @@
 import './../../common/common';
+import * as bootstrap from 'bootstrap';
+
 import * as studyChart from './../../study/chart/studyChart';
 import * as studyListUtil from './../../study/list/studyListUtil';
 import * as studyUtil from './../../study/util/studyUtil';
-
-import * as bootstrap from 'bootstrap';
 
 /**
  * ChartColourPrams画面で使用するパラメータの定義
@@ -54,9 +54,9 @@ const paaramQty: string = studyUtil.getLocationHrefParm('qty');
 //qty java側で0の時は置換
 const qty: string = paaramQty == null ? '0' : paaramQty;
 //ドーナツ
-const DOUGHNUT: string = 'ドーナッツ';
+const DOUGHNUT = 'ドーナッツ';
 //ホライゾンバー
-const HORIZONTAL_BAR: string = 'ホライゾンバー';
+const HORIZONTAL_BAR = 'ホライゾンバー';
 //表示するchart
 const functions = [studyChart.doughnutChart, studyChart.barChart];
 
@@ -214,10 +214,10 @@ const confirmModalEl: HTMLDivElement = document.getElementById(
 ) as HTMLDivElement;
 const confirmModalElObj: bootstrap.Modal = new bootstrap.Modal(confirmModalEl);
 
-document.querySelectorAll('.confirmModalBtn').forEach((button, index) => {
-  button.addEventListener('click', async (e) => {
+document.querySelectorAll('.confirmModalBtn').forEach((button) => {
+  button.addEventListener('click', async () => {
     //エラー判定用
-    let isModalErr: boolean = false;
+    let isModalErr = false;
 
     //model内に入力したテンプレート名の値を挿入
     document.getElementById('templateNameConfirm').innerHTML =
@@ -277,7 +277,7 @@ document.querySelectorAll('.confirmModalBtn').forEach((button, index) => {
 //const confirmModalSaveButton = document.getElementById('saveConfirmModal');
 const confirmModalSaveButton: HTMLDivElement =
   confirmModalEl.querySelector('#saveConfirmModal');
-confirmModalSaveButton.addEventListener('click', function (event) {
+confirmModalSaveButton.addEventListener('click', function () {
   //入力パラム
   const confirmParams: ChartColourPrams = {
     qty: qty,
@@ -327,10 +327,10 @@ const listModalDeleteElObj: bootstrap.Modal = new bootstrap.Modal(
   listModalDeleteEl
 );
 
-document.querySelectorAll('.listModalBtn').forEach((button, index) => {
-  button.addEventListener('click', async (e) => {
+document.querySelectorAll('.listModalBtn').forEach((button) => {
+  button.addEventListener('click', async () => {
     //エラー判定用
-    let isModalErr: boolean = false;
+    let isModalErr = false;
     //buttonからその行を特定しそれぞれの<td>タグの内容を取得
     const tdValues: string[] = Array.prototype.map.call(
       button.parentNode.parentNode.querySelectorAll('td'),
@@ -397,14 +397,14 @@ document.querySelectorAll('.listModalBtn').forEach((button, index) => {
 const listModalDeleteButton: HTMLButtonElement = listModalEl.querySelector(
   '#toggleToDeleteListModalBtn'
 ) as HTMLButtonElement;
-listModalDeleteButton.addEventListener('click', function (event) {
+listModalDeleteButton.addEventListener('click', function () {
   listModalElObj.toggle();
   listModalDeleteElObj.toggle();
 });
 const listModalButton: HTMLButtonElement = listModalDeleteEl.querySelector(
   '#toggleToListModalBtn'
 ) as HTMLButtonElement;
-listModalButton.addEventListener('click', function (event) {
+listModalButton.addEventListener('click', function () {
   listModalElObj.toggle();
   listModalDeleteElObj.toggle();
 });
@@ -413,7 +413,7 @@ listModalButton.addEventListener('click', function (event) {
 const listModalSaveButton: HTMLButtonElement = listModalEl.querySelector(
   '#saveListModal'
 ) as HTMLButtonElement;
-listModalSaveButton.addEventListener('click', function (event) {
+listModalSaveButton.addEventListener('click', function () {
   //入力パラム
   const listParams: ChartColourPrams = {
     qty: qty,
@@ -439,7 +439,7 @@ listModalSaveButton.addEventListener('click', function (event) {
 const listModaldeleteButton: HTMLDivElement = listModalDeleteEl.querySelector(
   '#deleteListModal'
 ) as HTMLDivElement;
-listModaldeleteButton.addEventListener('click', function (event) {
+listModaldeleteButton.addEventListener('click', function () {
   //入力パラム
   const listDeleteParams: ChartColourPrams = {
     qty: qty,

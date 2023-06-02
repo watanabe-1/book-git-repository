@@ -1,5 +1,3 @@
-import React from 'react';
-import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,6 +11,9 @@ import {
   ChartOptions,
 } from 'chart.js';
 import { fontString } from 'chart.js/helpers';
+import React from 'react';
+import { Bar } from 'react-chartjs-2';
+
 import { isObjEmpty } from '../../study/util/studyUtil';
 
 // チャート内で使用するものを登録
@@ -100,7 +101,7 @@ const BarChart = ({
             const data: number[] = context.dataset.data as number[];
             const index: number = context.dataIndex;
             //金額(dataに定義した)の合計
-            let dataSum: number = 0;
+            let dataSum = 0;
             data.forEach(function (element) {
               dataSum += element;
             });
@@ -124,7 +125,7 @@ const BarChart = ({
     {
       id: 'studyBarChart',
       //棒の頭にラベルをつける
-      afterDatasetsDraw: function (chart, easing) {
+      afterDatasetsDraw: function (chart) {
         const ctx: CanvasRenderingContext2D = chart.ctx;
         //console.log(ctx);
         chart.data.datasets.forEach(function (dataset, i) {
@@ -134,9 +135,9 @@ const BarChart = ({
               //文字の色
               ctx.fillStyle = 'rgb(0, 0, 0)';
 
-              const fontSize: number = 10;
-              const fontStyle: string = 'normal';
-              const fontFamily: string = 'Helvetica Neue';
+              const fontSize = 10;
+              const fontStyle = 'normal';
+              const fontFamily = 'Helvetica Neue';
               ctx.font = fontString(fontSize, fontStyle, fontFamily);
 
               const dataString: string =

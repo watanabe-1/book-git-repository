@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import Table from 'react-bootstrap/Table';
-import { TableColumn, TableRow } from '../../@types/studyUtilType';
-import { IconConst } from '../../constant/iconConst';
-import Icon from './Icon';
 
+import { TableColumn, TableRow } from '../../@types/studyUtilType';
+import { iconConst } from '../../constant/iconConst';
+import Icon from './Icon';
 import TextBoxExclusionForm from './TextBoxExclusionForm';
 
 /**
@@ -43,6 +43,12 @@ const SortAndFilterTable = ({
   // console.log('pRows');
   // console.log(pRows);
 
+  /**
+   * 並び替えの条件のセット
+   * セットを行うとレンダリングが行われセットした値によって並び替えが実施される想定
+   *
+   * @param column TableColumn
+   */
   const handleSort = (column: TableColumn) => {
     if (isSort) {
       const { sortColumn, sortDirection } = tableData;
@@ -67,6 +73,14 @@ const SortAndFilterTable = ({
   };
 
   const { columns, sortColumn, sortDirection } = tableData;
+
+  /**
+   * 絞り込みを行うフィルター条件のセット
+   * セットを行うとレンダリングが行われセットした値によって絞り込みが実施される想定
+   *
+   * @param column TableColumn
+   * @param value 値
+   */
   const handleFilterChange = (column: TableColumn, value: string) => {
     if (isFilter) {
       const newColumns = columns.map((c) => {
@@ -140,9 +154,9 @@ const SortAndFilterTable = ({
               {isSort && sortColumn === column.name && (
                 <span>
                   {sortDirection === ASCENDING ? (
-                    <Icon icon={IconConst.BootStrap.BI_CARET_UP_FILL} />
+                    <Icon icon={iconConst.bootStrap.BI_CARET_UP_FILL} />
                   ) : (
-                    <Icon icon={IconConst.BootStrap.BI_CARET_DOWN_FILL} />
+                    <Icon icon={iconConst.bootStrap.BI_CARET_DOWN_FILL} />
                   )}
                 </span>
               )}
@@ -159,11 +173,15 @@ const SortAndFilterTable = ({
         </tr>
       </thead>
       <tbody>
-        {filteredAndSortedRows.map((row, index) => {
+        {filteredAndSortedRows.map((row, rowIndex) => {
           return (
-            <tr key={index}>
-              {row.cells.map((cell) => {
-                return <td hidden={cell.hidden}>{cell.element}</td>;
+            <tr key={rowIndex}>
+              {row.cells.map((cell, cellIndex) => {
+                return (
+                  <td key={`${rowIndex}-${cellIndex}`} hidden={cell.hidden}>
+                    {cell.element}
+                  </td>
+                );
               })}
             </tr>
           );

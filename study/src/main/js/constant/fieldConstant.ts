@@ -1,59 +1,59 @@
 /** フィールド */
-export namespace FieldConst {
+export const fieldConst = {
   /** カテゴリー */
-  export namespace Category {
-    export const SERIAL_KEY = 'serialKey';
-    export const CAT_CODE = 'catCode';
-    export const CAT_NAME = 'catName';
-    export const CAT_TYPE = 'catType';
-    export const NOTE = 'note';
-    export const IMG_TYPE = 'imgType';
-    export const IMG_ID = 'imgId';
-    export const ACTIVE = 'active';
-    export const INS_DATE = 'insDate';
-    export const INS_USER = 'insUser';
-    export const UPD_DATE = 'updDate';
-    export const UPD_USER = 'updUser';
-    export const CAT_ICON = 'catIcon';
-    export const IMG_IDS = 'imgIds';
-    export const DELETE = 'delete';
-  }
+  category: {
+    SERIAL_KEY: 'serialKey',
+    CAT_CODE: 'catCode',
+    CAT_NAME: 'catName',
+    CAT_TYPE: 'catType',
+    NOTE: 'note',
+    IMG_TYPE: 'imgType',
+    IMG_ID: 'imgId',
+    ACTIVE: 'active',
+    INS_DATE: 'insDate',
+    INS_USER: 'insUser',
+    UPD_DATE: 'updDate',
+    UPD_USER: 'updUser',
+    CAT_ICON: 'catIcon',
+    IMG_IDS: 'imgIds',
+    DELETE: 'delete',
+  },
 
   /**
    * 画像パス
    */
-  export namespace Image {
-    export const SERIAL_KEY = 'serialKey';
-    export const IMG_ID = 'imgId';
-    export const IMG_TYPE = 'imgType';
-    export const IMG_PATH = 'imgPath';
-    export const IMG_NAME = 'imgName';
-    export const NOTE = 'note';
-    export const INS_DATE = 'insDate';
-    export const INS_USER = 'insUser';
-    export const UPD_DATE = 'updDate';
-    export const UPD_USER = 'updUser';
-  }
+  image: {
+    SERIAL_KEY: 'serialKey',
+    IMG_ID: 'imgId',
+    IMG_TYPE: 'imgType',
+    IMG_PATH: 'imgPath',
+    IMG_NAME: 'imgName',
+    NOTE: 'note',
+    INS_DATE: 'insDate',
+    INS_USER: 'insUser',
+    UPD_DATE: 'updDate',
+    UPD_USER: 'updUser',
+  },
 
   /**
    * 家計簿
    */
-  export namespace Books {
-    export const SERIAL_KEY = 'serialKey';
-    export const BOOKS_ID = 'booksId';
-    export const USER_ID = 'userId';
-    export const BOOKS_TYPE = 'booksType';
-    export const BOOKS_DATE = 'booksDate';
-    export const BOOKS_PLACE = 'booksPlace';
-    export const CAT_CODE = 'catCode';
-    export const CAT_CODES = 'catCodes';
-    export const BOOKS_METHOD = 'booksMethod';
-    export const BOOKS_AMMOUNT = 'booksAmmount';
-    export const INS_DATE = 'insDate';
-    export const INS_USER = 'insUser';
-    export const UPD_DATE = 'updDate';
-    export const UPD_USER = 'updUser';
-    export const BOOKS_FILE = 'booksFile';
-    export const BOOKS_YEAR = 'booksYear';
-  }
-}
+  books: {
+    SERIAL_KEY: 'serialKey',
+    BOOKS_ID: 'booksId',
+    USER_ID: 'userId',
+    BOOKS_TYPE: 'booksType',
+    BOOKS_DATE: 'booksDate',
+    BOOKS_PLACE: 'booksPlace',
+    CAT_CODE: 'catCode',
+    CAT_CODES: 'catCodes',
+    BOOKS_METHOD: 'booksMethod',
+    BOOKS_AMMOUNT: 'booksAmmount',
+    INS_DATE: 'insDate',
+    INS_USER: 'insUser',
+    UPD_DATE: 'updDate',
+    UPD_USER: 'updUser',
+    BOOKS_FILE: 'booksFile',
+    BOOKS_YEAR: 'booksYear',
+  },
+};

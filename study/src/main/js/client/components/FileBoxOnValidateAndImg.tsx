@@ -1,4 +1,6 @@
+import { FormikErrors } from 'formik';
 import React from 'react';
+
 import { addContextPath, pathJoin } from '../../study/util/studyUtil';
 import FileBoxOnValidate from './FileBoxOnValidate';
 import ImageIcon from './ImageIcon';
@@ -18,7 +20,7 @@ const FileBoxOnValidateAndImg = ({
 }: {
   title?: string;
   name: string;
-  error: any;
+  error: FormikErrors<unknown>;
   accept: string;
   path: string;
   fileName?: string;

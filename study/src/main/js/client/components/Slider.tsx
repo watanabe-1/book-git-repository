@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
+
 import { Image } from '../../@types/studyUtilType';
 import { getContextPath, pathJoin } from '../../study/util/studyUtil';
 
@@ -37,9 +38,9 @@ const Slider = ({
       variant="dark"
       indicators={indicators}
     >
-      {imageList.map((image) => {
+      {imageList.map((image, i) => {
         return (
-          <Carousel.Item>
+          <Carousel.Item key={`${image.imgId}-${i}`}>
             <img
               className="mh-100 mw-100"
               src={pathJoin(getContextPath(), image.imgPath, image.imgName)}

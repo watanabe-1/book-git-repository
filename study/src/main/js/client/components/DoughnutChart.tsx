@@ -1,5 +1,3 @@
-import React from 'react';
-import { Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -13,6 +11,9 @@ import {
   ChartOptions,
 } from 'chart.js';
 import { fontString } from 'chart.js/helpers';
+import React from 'react';
+import { Doughnut } from 'react-chartjs-2';
+
 import { isObjEmpty } from '../../study/util/studyUtil';
 
 // チャート内で使用するものを登録
@@ -59,7 +60,7 @@ const DoughnutChart = ({
       tooltip: {
         usePointStyle: true,
         callbacks: {
-          label: function (context): string {
+          label: function (): string {
             return date.getFullYear() + '/' + date.getMonth();
           },
           //bodyの方が見栄えが良さそうなのでafterLabelから変更
@@ -68,7 +69,7 @@ const DoughnutChart = ({
             const index: number = context[0].dataIndex;
             const label: string = context[0].label;
             //金額(dataに定義した)の合計
-            let dataSum: number = 0;
+            let dataSum = 0;
             data.forEach(function (element) {
               dataSum += element;
             });
@@ -91,10 +92,10 @@ const DoughnutChart = ({
     {
       id: 'doughnutChart',
       // 真ん中に表示する
-      beforeDraw(chart, argsAny, options) {
+      beforeDraw(chart, options) {
         const {
           ctx,
-          chartArea: { top, right, bottom, left, width, height },
+          chartArea: { top, width, height },
         } = chart;
         ctx.save();
         ctx.fillStyle = 'black';
@@ -105,7 +106,7 @@ const DoughnutChart = ({
         ctx.fillText(options.title, width / 2, top + height / 2);
       },
       //ラベルをつける
-      afterDatasetsDraw: function (chart, easing) {
+      afterDatasetsDraw: function (chart) {
         const ctx: CanvasRenderingContext2D = chart.ctx;
         chart.data.datasets.forEach(function (dataset, i) {
           const meta = chart.getDatasetMeta(i);
@@ -114,9 +115,9 @@ const DoughnutChart = ({
               //文字の色
               ctx.fillStyle = 'rgb(255, 255, 255)';
 
-              const fontSize: number = 16;
-              const fontStyle: string = 'normal';
-              const fontFamily: string = 'Helvetica Neue';
+              const fontSize = 16;
+              const fontStyle = 'normal';
+              const fontFamily = 'Helvetica Neue';
               ctx.font = fontString(fontSize, fontStyle, fontFamily);
 
               const dataString: string = chart.data.labels[index] as string; //+ ' : ' + dataset.data[index].toString();
@@ -124,7 +125,7 @@ const DoughnutChart = ({
               ctx.textAlign = 'center';
               ctx.textBaseline = 'middle';
 
-              const padding: number = 5;
+              const padding = 5;
               const position = element.tooltipPosition(true);
               ctx.fillText(
                 dataString,

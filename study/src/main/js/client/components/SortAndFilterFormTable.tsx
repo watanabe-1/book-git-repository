@@ -1,11 +1,11 @@
-import { FieldArray, FormikProps, FormikProvider, useFormik } from 'formik';
+import { FieldArray, FormikProvider, useFormik } from 'formik';
 import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+
 import { TableFormObjConfig } from '../../@types/studyUtilType';
+import yup from '../yup/message/ja';
 import SortAndFilterTable from './SortAndFilterTable';
 import SubmitButton from './SubmitButton';
-import yup from '../yup/message/ja';
 
 /**
  * ソート、フィルター可能なフォームテーブル
@@ -47,7 +47,7 @@ const SortAndFilterFormTable = ({
     setSubmitLoading(false);
   };
 
-  const formik = useFormik<{}>({
+  const formik = useFormik<unknown>({
     validationSchema: schema,
     onSubmit: handleSubmit,
     initialValues: initialValues,
@@ -83,7 +83,7 @@ const SortAndFilterFormTable = ({
           />
         </div>
         <FieldArray name={rowName}>
-          {(fieldArrayProps) => {
+          {() => {
             // const { push, remove, form } = fieldArrayProps;
             // // const {
             // //   values: { valuesの値を取り出すよう },

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import BodysLodingSpinner from './BodysLodingSpinner';
+
 import { addContextPath, getNoImagePath } from '../../study/util/studyUtil';
+import BodysLodingSpinner from './BodysLodingSpinner';
 
 /**
  *

@@ -1,14 +1,14 @@
 /** 共通 */
-export namespace TypeConst {
+export const typeConst = {
   /**
    * formの項目の種類
    */
-  export namespace Col {
-    export const STRING = 'STRING';
-    export const IMAGE = 'IMAGE';
-    export const INPUT = 'INPUT';
-    export const CHECK = 'CHECK';
-    export const SELECT = 'SELECT';
-    export const RADIO = 'RADIO';
-  }
-}
+  col: {
+    STRING: 'STRING',
+    IMAGE: 'IMAGE',
+    INPUT: 'INPUT',
+    CHECK: 'CHECK',
+    SELECT: 'SELECT',
+    RADIO: 'RADIO',
+  },
+};

@@ -1,13 +1,12 @@
-import * as studyUtil from './../util/studyUtil';
 import Chart, {
   BubbleDataPoint,
   ChartData,
   ChartTypeRegistry,
   Point,
-  ScatterDataPoint,
 } from 'chart.js/auto';
-
 import { fontString } from 'chart.js/helpers';
+
+import * as studyUtil from './../util/studyUtil';
 
 /**
  * ドーナツチャート
@@ -78,7 +77,7 @@ export function doughnutChart(jsonData: ChartData, args: string[]): Chart {
         tooltip: {
           usePointStyle: true,
           callbacks: {
-            label: function (context): string {
+            label: function (): string {
               //dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
               //studyUtil.getStudyDate()の呼び出し
               const date: Date = studyUtil.getStudyDate();
@@ -110,7 +109,7 @@ export function doughnutChart(jsonData: ChartData, args: string[]): Chart {
               const index: number = context[0].dataIndex;
               const label: string = context[0].label;
               //金額(dataに定義した)の合計
-              let dataSum: number = 0;
+              let dataSum = 0;
               data.forEach(function (element) {
                 dataSum += element;
               });
@@ -130,10 +129,10 @@ export function doughnutChart(jsonData: ChartData, args: string[]): Chart {
       {
         id: 'doughnutChart',
         // 真ん中に表示する
-        beforeDraw(chart, argsAny, options) {
+        beforeDraw(chart) {
           const {
             ctx,
-            chartArea: { top, right, bottom, left, width, height },
+            chartArea: { top, width, height },
           } = chart;
           ctx.save();
           ctx.fillStyle = 'black';
@@ -151,7 +150,7 @@ export function doughnutChart(jsonData: ChartData, args: string[]): Chart {
           ctx.fillText(args[1], width / 2, top + height / 2);
         },
         //ラベルをつける
-        afterDatasetsDraw: function (chart, easing) {
+        afterDatasetsDraw: function (chart) {
           const ctx: CanvasRenderingContext2D = chart.ctx;
           chart.data.datasets.forEach(function (dataset, i) {
             const meta = chart.getDatasetMeta(i);
@@ -160,9 +159,9 @@ export function doughnutChart(jsonData: ChartData, args: string[]): Chart {
                 //文字の色
                 ctx.fillStyle = 'rgb(255, 255, 255)';
 
-                const fontSize: number = 16;
-                const fontStyle: string = 'normal';
-                const fontFamily: string = 'Helvetica Neue';
+                const fontSize = 16;
+                const fontStyle = 'normal';
+                const fontFamily = 'Helvetica Neue';
                 ctx.font = fontString(fontSize, fontStyle, fontFamily);
 
                 const dataString: string = chart.data.labels[index] as string; //+ ' : ' + dataset.data[index].toString();
@@ -170,7 +169,7 @@ export function doughnutChart(jsonData: ChartData, args: string[]): Chart {
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
 
-                const padding: number = 5;
+                const padding = 5;
                 const position = element.tooltipPosition(true);
                 ctx.fillText(
                   dataString,
@@ -265,7 +264,7 @@ export function barChart(jsonData: ChartData, args: string[]): Chart {
               const data: number[] = context.dataset.data as number[];
               const index: number = context.dataIndex;
               //金額(dataに定義した)の合計
-              let dataSum: number = 0;
+              let dataSum = 0;
               data.forEach(function (element) {
                 dataSum += element;
               });
@@ -289,7 +288,7 @@ export function barChart(jsonData: ChartData, args: string[]): Chart {
       {
         id: 'studyBarChart',
         //棒の頭にラベルをつける
-        afterDatasetsDraw: function (chart, easing) {
+        afterDatasetsDraw: function (chart) {
           const ctx: CanvasRenderingContext2D = chart.ctx;
           //console.log(ctx);
           chart.data.datasets.forEach(function (dataset, i) {
@@ -299,9 +298,9 @@ export function barChart(jsonData: ChartData, args: string[]): Chart {
                 //文字の色
                 ctx.fillStyle = 'rgb(0, 0, 0)';
 
-                const fontSize: number = 10;
-                const fontStyle: string = 'normal';
-                const fontFamily: string = 'Helvetica Neue';
+                const fontSize = 10;
+                const fontStyle = 'normal';
+                const fontFamily = 'Helvetica Neue';
                 ctx.font = fontString(fontSize, fontStyle, fontFamily);
 
                 const dataString: string =
@@ -418,27 +417,27 @@ export function updateDataBar(
  * @param {string} label 追加するラベル
  * @param {number | ScatterDataPoint | BubbleDataPoint} data 追加するデータ
  */
-function addData(
-  chart: Chart,
-  label: string,
-  data: number | ScatterDataPoint | BubbleDataPoint
-) {
-  chart.data.labels.push(label);
-  chart.data.datasets.forEach((dataset) => {
-    dataset.data.push(data);
-  });
-  chart.update();
-}
+// function addData(
+//   chart: Chart,
+//   label: string,
+//   data: number | ScatterDataPoint | BubbleDataPoint
+// ) {
+//   chart.data.labels.push(label);
+//   chart.data.datasets.forEach((dataset) => {
+//     dataset.data.push(data);
+//   });
+//   chart.update();
+// }
 
 /**
  * 図のデータを削除する kari
  *
  * @param {Chart} chart 更新対象
  */
-function removeData(chart: Chart) {
-  chart.data.labels.pop();
-  chart.data.datasets.forEach((dataset) => {
-    dataset.data.pop();
-  });
-  chart.update();
-}
+// function removeData(chart: Chart) {
+//   chart.data.labels.pop();
+//   chart.data.datasets.forEach((dataset) => {
+//     dataset.data.pop();
+//   });
+//   chart.update();
+// }

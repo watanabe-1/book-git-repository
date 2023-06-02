@@ -1,5 +1,5 @@
 import { Type, Flag } from '../../@types/studyUtilType';
-import { TypeConst } from '../../constant/typeConstant';
+import { typeConst } from '../../constant/typeConstant';
 
 /**
  * 確認画面用のメッセージを返却
@@ -15,13 +15,13 @@ export function getConfirmMessage(
   convert: { typeList: Type[]; flag: Flag }
 ) {
   // select or radio
-  if (type == TypeConst.Col.SELECT || type == TypeConst.Col.RADIO) {
+  if (type == typeConst.col.SELECT || type == typeConst.col.RADIO) {
     return value
       ? convert.typeList.find((type) => type.code == value).name
       : '選択してません';
   }
   // checkBox
-  if (type == TypeConst.Col.CHECK) {
+  if (type == typeConst.col.CHECK) {
     return value == convert.flag.value
       ? convert.flag.name
       : 'チェックしてません';

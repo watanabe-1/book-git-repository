@@ -1,17 +1,18 @@
+import { ChartData } from 'chart.js';
 import React, { useEffect, useState } from 'react';
+import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+
+import { onServerConst } from '../../../../constant/on-serverConst';
+import { urlConst } from '../../../../constant/urlConstant';
+import { isInvalidDate } from '../../../../study/util/studyDateUtil';
+import { fetchGet, isObjEmpty } from '../../../../study/util/studyUtil';
+import BarAndLineChart from '../../../components/BarAndLineChart';
+import BarChart from '../../../components/BarChart';
+import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import DoughnutChart from '../../../components/DoughnutChart';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
-import { ChartData } from 'chart.js';
-import { fetchGet, isObjEmpty } from '../../../../study/util/studyUtil';
-import { UrlConst } from '../../../../constant/urlConstant';
-import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
-import { isInvalidDate } from '../../../../study/util/studyDateUtil';
-import BarChart from '../../../components/BarChart';
-import BarAndLineChart from '../../../components/BarAndLineChart';
-import { OnServerConst } from '../../../../constant/on-serverConst';
 
 /**
  * 家計簿図用データ
@@ -26,7 +27,7 @@ const Chart = ({ year, month }: { year: number; month: number }) => {
   const [initiaChartData, initScript] = onServer(
     (api, param) => api.getHouseholdChartInfo(param),
     [],
-    OnServerConst.Books.HOUSEHOLDCHART_INFO
+    onServerConst.books.HOUSEHOLDCHART_INFO
   ) as [HouseholdChartData, JSX.Element];
   const [chartData, setChartData] = useState(initiaChartData);
   const { monthCategory, monthMethod, yearAll } = chartData;
@@ -45,7 +46,7 @@ const Chart = ({ year, month }: { year: number; month: number }) => {
     const params = {};
     if (date) params['date'] = date;
     const response = await fetchGet(
-      UrlConst.Books.HOUSEHOLD_CHART_INFO,
+      urlConst.books.HOUSEHOLD_CHART_INFO,
       params
     );
     const data = (await response.json()) as HouseholdChartData;
@@ -57,7 +58,7 @@ const Chart = ({ year, month }: { year: number; month: number }) => {
   // 例 : タブを切り替えるたびに親の再レンダリングが動くが、その時は日付けは変わっていない しかし親から渡された日付けをそのままuseEffectの条件(第二引数)にした場合、親側ではレンダリングのたびに「new」で作り直しているため参照先が変わり毎回useEffectが実行される
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(OnServerConst.Books.HOUSEHOLDCHART_INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConst.books.HOUSEHOLDCHART_INFO, fetchInfo);
   }, [month]);
 
   return (
@@ -66,11 +67,7 @@ const Chart = ({ year, month }: { year: number; month: number }) => {
         <Row>
           <Col sm="12">
             {!isObjEmpty(yearAll) && (
-              <BarAndLineChart
-                data={yearAll}
-                date={date}
-                topTitle="過去12ヶ月"
-              />
+              <BarAndLineChart data={yearAll} topTitle="過去12ヶ月" />
             )}
           </Col>
         </Row>
