@@ -5,7 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/table';
 
 import { Books, Syukujits } from '../../../../@types/studyUtilType';
-import { onServerConstant } from '../../../../constant/on-serverConstant';
+import { onServerConst } from '../../../../constant/on-serverConstant';
 import { urlConst } from '../../../../constant/urlConstant';
 import { isInvalidDate } from '../../../../study/util/studyDateUtil';
 import { fetchGet, isObjEmpty } from '../../../../study/util/studyUtil';
@@ -38,7 +38,7 @@ const Calendar = ({
   const [initiaCalendarData, initScript] = onServer(
     (api, param) => api.getHouseholdCalendarInfo(param),
     [],
-    onServerConstant.books.HOUSEHOLD_CALENDAR_INFO
+    onServerConst.books.HOUSEHOLD_CALENDAR_INFO
   ) as [HouseholdCalendarData, JSX.Element];
   const [calendarData, setCalendarData] = useState(initiaCalendarData);
   const { syukujitsuList, amountList } = calendarData;
@@ -66,10 +66,7 @@ const Calendar = ({
   // 例 : タブを切り替えるたびに親の再レンダリングが動くが、その時は日付けは変わっていない しかし親から渡された日付けをそのままuseEffectの条件(第二引数)にした場合、親側ではレンダリングのたびに「new」で作り直しているため参照先が変わり毎回useEffectが実行される
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(
-      onServerConstant.books.HOUSEHOLD_CALENDAR_INFO,
-      fetchInfo
-    );
+    executeFuncIfNeeded(onServerConst.books.HOUSEHOLD_CALENDAR_INFO, fetchInfo);
   }, [month]);
 
   /**

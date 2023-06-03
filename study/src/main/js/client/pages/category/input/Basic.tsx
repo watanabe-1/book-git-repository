@@ -11,7 +11,7 @@ import {
   ErrorResults,
 } from '../../../../@types/studyUtilType';
 import { fieldConst } from '../../../../constant/fieldConstant';
-import { onServerConstant } from '../../../../constant/on-serverConstant';
+import { onServerConst } from '../../../../constant/on-serverConstant';
 import { urlConst } from '../../../../constant/urlConstant';
 import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
@@ -31,7 +31,7 @@ const Basic = (props: { handleNext: () => void }) => {
   const [initialInfo, initScript] = onServer(
     (api) => api.getInfo(),
     [],
-    onServerConstant.category.INFO
+    onServerConst.category.INFO
   ) as [CategoryUi, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const [errData, setErrData] = useState() as [
@@ -88,7 +88,7 @@ const Basic = (props: { handleNext: () => void }) => {
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(onServerConstant.category.INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConst.category.INFO, fetchInfo);
   }, []);
 
   console.log(info);

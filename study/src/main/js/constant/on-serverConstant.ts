@@ -1,5 +1,5 @@
 /** onServer */
-export const onServerConstant = {
+export const onServerConst = {
   /** books */
   books: {
     DOWNLOAD_INFO: 'books.downloadInfo',

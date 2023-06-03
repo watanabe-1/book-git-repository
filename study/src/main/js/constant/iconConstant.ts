@@ -1,5 +1,5 @@
 /** icon */
-export const iconConstant = {
+export const iconConst = {
   /** bootStrap */
   bootStrap: {
     BI_CARET_UP_FILL: 'bi-caret-up-fill',

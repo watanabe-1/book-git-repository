@@ -10,7 +10,7 @@ import {
 } from '../../../../@types/studyUtilType';
 import { classConst } from '../../../../constant/classConstant';
 import { fieldConst } from '../../../../constant/fieldConstant';
-import { onServerConstant } from '../../../../constant/on-serverConstant';
+import { onServerConst } from '../../../../constant/on-serverConstant';
 import { urlConst } from '../../../../constant/urlConstant';
 import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
 import { fetchGet, fetchPost, keyJoin } from '../../../../study/util/studyUtil';
@@ -38,13 +38,13 @@ const ListTable = () => {
   const [initialInfo, initInfoScript] = onServer(
     (api) => api.getInfo(),
     [],
-    onServerConstant.category.INFO
+    onServerConst.category.INFO
   ) as [CategoryUi, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const [initialList, initListScript] = onServer(
     (api) => api.getListData(),
     [],
-    onServerConstant.category.LIST
+    onServerConst.category.LIST
   ) as [CategoryFormList, JSX.Element];
   const [list, setList] = useState(initialList);
   const [errData, setErrData] = useState() as [
@@ -54,7 +54,7 @@ const ListTable = () => {
   const [initialImageList, initlImageListScript] = onServer(
     (api) => api.getImageList(),
     [],
-    onServerConstant.category.IMAGE_LIST
+    onServerConst.category.IMAGE_LIST
   ) as [Image[], JSX.Element];
   const [imageList, setImageList] = useState(initialImageList);
 
@@ -109,12 +109,9 @@ const ListTable = () => {
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(onServerConstant.category.INFO, fetchInfo);
-    executeFuncIfNeeded(onServerConstant.category.LIST, fetchListData);
-    executeFuncIfNeeded(
-      onServerConstant.category.IMAGE_LIST,
-      fetchImageListData
-    );
+    executeFuncIfNeeded(onServerConst.category.INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConst.category.LIST, fetchListData);
+    executeFuncIfNeeded(onServerConst.category.IMAGE_LIST, fetchImageListData);
   }, []);
 
   if (!info.catTypes || !list.catDataList) return <BodysLodingSpinner />;

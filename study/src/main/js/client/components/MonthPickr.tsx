@@ -3,7 +3,7 @@ import { CustomLocale } from 'flatpickr/dist/types/locale';
 import React, { useEffect, useState } from 'react';
 import Flatpickr from 'react-flatpickr';
 
-import { iconConstant } from '../../constant/iconConstant';
+import { iconConst } from '../../constant/iconConstant';
 import Icon from './Icon';
 
 /**
@@ -30,7 +30,7 @@ const MonthPickr = ({
 
   return (
     <>
-      <Icon icon={iconConstant.bootStrap.BI_CALENDAR} />
+      <Icon icon={iconConst.bootStrap.BI_CALENDAR} />
       <Flatpickr
         key={`flatpickrKey-monthSelectPlugin-${flatpickrKey}`}
         options={{
