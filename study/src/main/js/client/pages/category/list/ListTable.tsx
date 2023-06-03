@@ -184,10 +184,7 @@ const ListTable = () => {
           hidden: true,
         },
         addition: {
-          yup: yup.string().required(),
-          isServerValidation: true,
-          errData: errData,
-          setErrData: setErrData,
+          yup: yup.string().required().server(errData),
         },
       },
       {
@@ -215,10 +212,7 @@ const ListTable = () => {
           hidden: false,
         },
         addition: {
-          yup: yup.string().required(),
-          isServerValidation: true,
-          errData: errData,
-          setErrData: setErrData,
+          yup: yup.string().required().server(errData),
         },
       },
       {
@@ -422,10 +416,7 @@ const ListTable = () => {
           hidden: false,
         },
         addition: {
-          yup: yup.mixed().nullable(),
-          isServerValidation: true,
-          errData: errData,
-          setErrData: setErrData,
+          yup: yup.mixed().nullable().server(errData),
         },
       },
     ],

@@ -15,7 +15,6 @@ import { onServerConst } from '../../../../constant/on-serverConst';
 import { urlConst } from '../../../../constant/urlConstant';
 import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
-import { addServerValidateFuncs } from '../../../../study/util/studyYupUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import CheckBox from '../../../components/CheckBox';
 import FileBoxOnValidate from '../../../components/FileBoxOnValidate';
@@ -98,25 +97,19 @@ const Basic = (props: { handleNext: () => void }) => {
 
   //yupで使用するスキーマの設定
   const additions = {};
-  additions[fieldConst.category.CAT_CODE] = yup.string().required();
-  additions[fieldConst.category.CAT_NAME] = yup.string().required();
+  additions[fieldConst.category.CAT_CODE] = yup
+    .string()
+    .required()
+    .server(errData);
+  additions[fieldConst.category.CAT_NAME] = yup
+    .string()
+    .required()
+    .server(errData);
   additions[fieldConst.category.NOTE] = yup.string();
   additions[fieldConst.category.IMG_TYPE] = yup.string();
   additions[fieldConst.category.CAT_TYPE] = yup.string();
   additions[fieldConst.category.ACTIVE] = yup.bool();
-  additions[fieldConst.category.CAT_ICON] = yup.mixed();
-  // サーバーでのバリデーション結果を反映する関数をセット
-  addServerValidateFuncs(
-    additions,
-    [
-      fieldConst.category.CAT_CODE,
-      fieldConst.category.CAT_NAME,
-      fieldConst.category.CAT_ICON,
-    ],
-    errData,
-    setErrData
-  );
-  // スキーマにセット
+  additions[fieldConst.category.CAT_ICON] = yup.mixed().server(errData);
   const schema = yup.object().shape(additions);
 
   return (

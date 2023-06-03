@@ -14,7 +14,6 @@ import {
   getFilenameFromResponse,
 } from '../../../../study/util/studyFileUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
-import { addServerValidateFuncs } from '../../../../study/util/studyYupUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import SelectBoxOnValidate from '../../../components/SelectBoxOnValidate';
 import SubmitButton from '../../../components/SubmitButton';
@@ -92,15 +91,14 @@ const InputForm = () => {
 
   //yupで使用するスキーマの設定
   const additions = {};
-  additions[fieldConst.books.BOOKS_TYPE] = yup.string().required();
-  additions[fieldConst.books.BOOKS_YEAR] = yup.string().required();
-  // サーバーでのバリデーション結果を反映する関数をセット
-  addServerValidateFuncs(
-    additions,
-    [fieldConst.books.BOOKS_TYPE, fieldConst.books.BOOKS_YEAR],
-    errData,
-    setErrData
-  );
+  additions[fieldConst.books.BOOKS_TYPE] = yup
+    .string()
+    .required()
+    .server(errData);
+  additions[fieldConst.books.BOOKS_YEAR] = yup
+    .string()
+    .required()
+    .server(errData);
   // スキーマにセット
   const schema = yup.object().shape(additions);
 

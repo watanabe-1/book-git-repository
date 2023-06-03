@@ -1,138 +1,145 @@
 import { FormikProps } from 'formik/dist/types';
-import { Schema, array, object } from 'yup/index';
-import { AnyObject } from 'yup/index';
+import { array, object } from 'yup/index';
 
 import {
   ErrorResults,
   BuildListTableFormObjConfig,
+  ErrorResult,
 } from '../../@types/studyUtilType';
-import { commonConst } from '../../constant/commonConstant';
 import { keyJoin } from './studyUtil';
 
-/**
- * サーバーでバリデーションを行った結果を反映するようの関数をyupにセット
- *
- * @param yup yup
- * @param target 対象変数名
- * @param errData エラー結果格納変数
- * @param setErrData エラー結果格納変数更新メソッド
- */
-export function addServerValidateFunc(
-  yup: Schema<string, AnyObject, string>,
-  target: string,
-  errData: ErrorResults,
-  setErrData: (value: React.SetStateAction<unknown>) => void
-) {
-  // let path = null;
-  //  yup.test(
-  //   CommonConst.SERVER_TEST_NAME,
-  //   function () {
-  //     console.log(`path:${path}`);
-  //     console.log(path);
-  //     // pathの値は第三引数のファンクションが実行されたときにセットされる
-  //     return getServerErrMsg(errData, path, setErrData);
-  //   },
-  //   // testのコールバック関数としてarrow functionを使うとthisが束縛されてしまうので、function()の形で記載
-  //   function (value) {
-  //     // console.log(`this:${this}`);
-  //     // console.log(this);
-  //     // ここでkey(this.path)の値をgetServerErrMsgで取得できるようにセット
-  //     path = this.path;
-  //     return !isServerErr(errData, path);
-  //   }
-  // );
+// /**
+//  * サーバーでバリデーションを行った結果を反映するようの関数をyupにセット
+//  *
+//  * @param yup yup
+//  * @param target 対象変数名
+//  * @param errData エラー結果格納変数
+//  * @param setErrData エラー結果格納変数更新メソッド
+//  */
+// export function addServerValidateFunc(
+//   yup: Schema<string, AnyObject, string>,
+//   target: string,
+//   errData: ErrorResults
+// ) {
+//   // let path = null;
+//   //  yup.test(
+//   //   CommonConst.SERVER_TEST_NAME,
+//   //   function () {
+//   //     console.log(`path:${path}`);
+//   //     console.log(path);
+//   //     // pathの値は第三引数のファンクションが実行されたときにセットされる
+//   //     return getServerErrMsg(errData, path, setErrData);
+//   //   },
+//   //   // testのコールバック関数としてarrow functionを使うとthisが束縛されてしまうので、function()の形で記載
+//   //   function (value) {
+//   //     // console.log(`this:${this}`);
+//   //     // console.log(this);
+//   //     // ここでkey(this.path)の値をgetServerErrMsgで取得できるようにセット
+//   //     path = this.path;
+//   //     return !isServerErr(errData, path);
+//   //   }
+//   // );
 
-  return yup.test(
-    commonConst.SERVER_TEST_NAME,
-    (value, { createError, path }) => {
-      if (isServerErr(errData, path))
-        return createError({
-          path,
-          message: extractAndDeleteServerErrMsg(errData, path, setErrData),
-        });
-      else return true;
-    }
-  );
-}
+//   return yup.test(
+//     commonConst.SERVER_TEST_NAME,
+//     (value, { createError, path }) => {
+//       const error = getServerErr(errData, path);
+//       if (error)
+//         return createError({
+//           path,
+//           message: extractAndDeleteServerErrMsg(error),
+//         });
+//       else return true;
+//     }
+//   );
+// }
+
+// /**
+//  * サーバーでバリデーションを行った結果を反映するようの関数をyupにセット
+//  *
+//  * @param additions yupが定義されているオブジェクト
+//  * @param targets 対象変数名達
+//  * @param errData エラー結果格納変数
+//  * @param setErrData エラー結果格納変数更新メソッド
+//  */
+// export function addServerValidateFuncs(
+//   additions: { [x: string]: Schema<string, AnyObject, string> },
+//   targets: string[],
+//   errData: ErrorResults
+// ) {
+//   targets.forEach((target) => {
+//     additions[target] = addServerValidateFunc(
+//       additions[target],
+//       target,
+//       errData
+//     );
+//   });
+// }
 
 /**
- * サーバーでバリデーションを行った結果を反映するようの関数をyupにセット
+ * サーバーでエラーがあった場合のエラーメッセージを取得
  *
- * @param additions yupが定義されているオブジェクト
- * @param targets 対象変数名達
  * @param errData エラー結果格納変数
+ * @param key エラー対象判別用key
  * @param setErrData エラー結果格納変数更新メソッド
+ * @returns サーバーエラー格納object
  */
-export function addServerValidateFuncs(
-  additions: { [x: string]: Schema<string, AnyObject, string> },
-  targets: string[],
-  errData: ErrorResults,
-  setErrData: (value: React.SetStateAction<unknown>) => void
-) {
-  targets.forEach((target) => {
-    additions[target] = addServerValidateFunc(
-      additions[target],
-      target,
-      errData,
-      setErrData
-    );
-  });
+export function getServerErr(errData: ErrorResults, key: string) {
+  if (errData) {
+    const errors = errData.errorResults;
+    return errors.find((error) => {
+      // console.log(`getServerErr`);
+      // console.log(`key:${key}`);
+      // console.log(`error.itemPath:${error.itemPath}`);
+      return error.itemPath == key;
+    });
+  }
+  return undefined;
 }
 
 /**
  * サーバーでエラーがあった場合のエラーメッセージを取得
+ *
  * @param errData エラー結果格納変数
  * @param key エラー対象判別用key
  * @param setErrData エラー結果格納変数更新メソッド
  * @returns エラーメッセージ
  */
-export function extractAndDeleteServerErrMsg(
-  errData: ErrorResults,
-  key: string,
-  setErrData: (value: React.SetStateAction<unknown>) => void
-) {
-  console.log('extractAndDeleteServerErrMsgエラーメッセージ');
-  console.log(errData);
-  console.log('key：' + key);
+export function extractAndDeleteServerErrMsg(errData: ErrorResult) {
+  // console.log('extractAndDeleteServerErrMsgエラーメッセージ');
+  // console.log(errData);
   if (errData) {
-    const errors = errData.errorResults;
-    for (let i = 0; i < errors.length; ++i) {
-      const fieldName = errors[i].itemPath;
-      if (fieldName == key) {
-        const cloneErrData = errData;
-        // エラー配列から対象の初期化
-        cloneErrData.errorResults[i].itemPath = '';
-        setErrData(cloneErrData);
-        return errors[i].message;
-      }
-    }
+    // 次回検索時に取得対象にならないようにキーを削除
+    errData.itemPath = '';
+    return errData.message;
   }
   return 'エラーです';
 }
 
-/**
- * サーバーでエラーがあったかの判定を行う
- * @param errData エラー結果格納変数
- * @param key エラー対象判別用key
- * @returns 判定結果
- */
-export function isServerErr(errData: ErrorResults, key: string) {
-  console.log(errData);
-  if (errData) {
-    const errors = errData.errorResults;
-    console.log('isServerErrエラー：' + errors);
-    for (let i = 0; i < errors.length; ++i) {
-      const fieldName = errors[i].itemPath;
-      // console.log(`key:${key}`);
-      // console.log(`itemPath:${fieldName}`);
-      if (fieldName == key) {
-        return true;
-      }
-    }
-  }
+// /**
+//  * サーバーでエラーがあったかの判定を行う
+//  *
+//  * @param errData エラー結果格納変数
+//  * @param key エラー対象判別用key
+//  * @returns 判定結果
+//  */
+// export function isServerErr(errData: ErrorResults, key: string) {
+//   console.log(errData);
+//   if (errData) {
+//     const errors = errData.errorResults;
+//     console.log('isServerErrエラー：' + errors);
+//     for (let i = 0; i < errors.length; ++i) {
+//       const fieldName = errors[i].itemPath;
+//       // console.log(`key:${key}`);
+//       // console.log(`itemPath:${fieldName}`);
+//       if (fieldName == key) {
+//         return true;
+//       }
+//     }
+//   }
 
-  return false;
-}
+//   return false;
+// }
 
 // /**
 //  * リスト表示用のエスケープ済みの一意の名称の取得
@@ -179,6 +186,7 @@ export function isServerErr(errData: ErrorResults, key: string) {
 
 /**
  * オブジェクトの並列探索を行いFormDataに変換
+ *
  * @param obj 対象
  * @return FormData
  */
@@ -228,6 +236,7 @@ export function objToFormData(obj: object) {
 
 /**
  * オブジェクトの配列を並列探索を行いオジェクトに変換
+ *
  * @param objArray 対象
  * @param arrayName 配列名
  * @return {}
@@ -449,15 +458,6 @@ export function buildListTableFormObj(
   config.list.forEach((v) => {
     if (v.addition) {
       arrayadditions[v.name] = v.addition.yup;
-      // サーバーでのバリデーション結果を反映する関数をセット
-      if (v.addition.isServerValidation) {
-        addServerValidateFuncs(
-          arrayadditions,
-          [v.name],
-          v.addition.errData,
-          v.addition.setErrData
-        );
-      }
     }
   });
   const additions = {};

@@ -11,7 +11,6 @@ import { onServerConst } from '../../../../constant/on-serverConst';
 import { urlConst } from '../../../../constant/urlConstant';
 import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
-import { addServerValidateFuncs } from '../../../../study/util/studyYupUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import FileBoxOnValidate from '../../../components/FileBoxOnValidate';
 import SelectBoxOnValidate from '../../../components/SelectBoxOnValidate';
@@ -92,15 +91,11 @@ const InputForm = (props: { handleNext: () => void }) => {
 
   //yupで使用するスキーマの設定
   const additions = {};
-  additions[fieldConst.books.BOOKS_TYPE] = yup.string().required();
-  additions[fieldConst.books.BOOKS_FILE] = yup.mixed();
-  // サーバーでのバリデーション結果を反映する関数をセット
-  addServerValidateFuncs(
-    additions,
-    [fieldConst.books.BOOKS_TYPE, fieldConst.books.BOOKS_FILE],
-    errData,
-    setErrData
-  );
+  additions[fieldConst.books.BOOKS_TYPE] = yup
+    .string()
+    .required()
+    .server(errData);
+  additions[fieldConst.books.BOOKS_FILE] = yup.mixed().server(errData);
   // スキーマにセット
   const schema = yup.object().shape(additions);
 

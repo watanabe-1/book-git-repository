@@ -1,5 +1,6 @@
-import * as yup from 'yup';
 import { suggestive } from 'yup-locale-ja';
+
+import yup from '../yup.custom';
 // import { MessageParams } from 'yup/index';
 
 // const labelText = (prm: MessageParams) => {

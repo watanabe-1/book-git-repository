@@ -150,9 +150,6 @@ export type BuildListTableFormObjConfig = {
     };
     addition: {
       yup: RequiredStringSchema<string, AnyObject>;
-      isServerValidation: boolean;
-      errData: ErrorResults;
-      setErrData: (value: React.SetStateAction<unknown>) => void;
     };
   }[];
 };

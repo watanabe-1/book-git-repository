@@ -1,5 +1,6 @@
 import { FieldArray, FormikProvider, useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
+import { Button } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 
 import { TableFormObjConfig } from '../../@types/studyUtilType';
@@ -21,6 +22,7 @@ const SortAndFilterFormTable = ({
   validateButton?: React.MutableRefObject<HTMLButtonElement>;
   hiddenSubmitButton?: boolean;
 }) => {
+  const validetaButton = useRef<HTMLButtonElement>(null);
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   // yupで使用するスキーマの設定
   const additions = tableFormConfig.additions;
@@ -43,8 +45,10 @@ const SortAndFilterFormTable = ({
    */
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setSubmitLoading(true);
-    handleFormSubmit(event);
+    await handleFormSubmit(event);
     setSubmitLoading(false);
+    //console.log('handleSubmit が完了しました');
+    validetaButton.current.click();
   };
 
   const formik = useFormik<unknown>({
@@ -72,7 +76,6 @@ const SortAndFilterFormTable = ({
         noValidate
         onSubmit={(event) => {
           formik.handleSubmit(event);
-          formik.validateForm(formik.values);
         }}
       >
         <div className="text-end">
@@ -100,6 +103,15 @@ const SortAndFilterFormTable = ({
             );
           }}
         </FieldArray>
+        <Button
+          ref={validetaButton}
+          onClick={() => {
+            formik.validateForm(formik.values);
+          }}
+          hidden
+        >
+          バリデーション実施
+        </Button>
       </Form>
     </FormikProvider>
   );
