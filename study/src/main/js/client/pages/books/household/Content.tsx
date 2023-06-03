@@ -1,3 +1,4 @@
+import { Japanese } from 'flatpickr/dist/l10n/ja.js';
 import React, { useEffect, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
@@ -20,11 +21,11 @@ import {
 } from '../../../../study/util/studyUtil';
 import BodysHead from '../../../components/BodysHead';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
+import MonthPickr from '../../../components/MonthPickr';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import Calendar from './Calendar';
 import Chart from './Chart';
 import ListTable from './ListTable';
-
 /**
  * 家計簿確認用データ
  */
@@ -103,6 +104,15 @@ const Content = () => {
   };
 
   /**
+   * 指定の日付のページに繊維
+   *
+   * @param date
+   */
+  const pushJumpHistory = async (date: Date) => {
+    pushHistory(date, tab);
+  };
+
+  /**
    * uelの書き換えを行い、ページ遷移する
    *
    * @param date 日付け
@@ -171,6 +181,11 @@ const Content = () => {
             <a className="btn btn-link" onClick={() => pushNextHistory()}>
               <span>次月</span>
             </a>
+            <MonthPickr
+              value={date}
+              locale={Japanese}
+              onChange={pushJumpHistory}
+            />
           </Col>
           <Col md={2}>
             <span>{`総支出:${sumAmountByExpenses}`}</span>

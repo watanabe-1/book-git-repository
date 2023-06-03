@@ -254,8 +254,11 @@ public class StudyJsUtil {
     // .option("js.nashorn-compat", "true")
     );
     try {
+      // window、navigator、selfをそのままだと解決できないため、グルーバルオブジェクトとして定義
+      engine.eval("navigator = { userAgent: 'server'}");
+      engine.eval("self = {}");
       engine.eval(String.format(
-          "window = { location: { hostname: 'localhost' }, isServer: true, requestUrl: \"%s\", contextPath: \"%s\" }",
+          "window = { location: { hostname: 'localhost' }, navigator: navigator, isServer: true, requestUrl: \"%s\", contextPath: \"%s\" }",
           request.getRequestURI(), request.getContextPath()));
 
       // api
@@ -269,9 +272,6 @@ public class StudyJsUtil {
         engine.eval("window.param = param");
       }
 
-      // navigator、selfをそのままだと解決できないため、グルーバルオブジェクトとして定義
-      engine.eval("navigator = {}");
-      engine.eval("self = {}");
       engine.eval(readJsFile("/static/js/depens.bundle.js"));
       // TextEncoderがwebapi(ブラウザで用意されているapi)のため別で読み込みしなおす
       // text-encoding-polyfill
