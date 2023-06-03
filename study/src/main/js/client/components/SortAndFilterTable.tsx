@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Table from 'react-bootstrap/Table';
 
 import { TableColumn, TableRow } from '../../@types/studyUtilType';
-import { iconConst } from '../../constant/iconConst';
+import { iconConstant } from '../../constant/iconConstant';
 import Icon from './Icon';
 import TextBoxExclusionForm from './TextBoxExclusionForm';
 
@@ -154,9 +154,9 @@ const SortAndFilterTable = ({
               {isSort && sortColumn === column.name && (
                 <span>
                   {sortDirection === ASCENDING ? (
-                    <Icon icon={iconConst.bootStrap.BI_CARET_UP_FILL} />
+                    <Icon icon={iconConstant.bootStrap.BI_CARET_UP_FILL} />
                   ) : (
-                    <Icon icon={iconConst.bootStrap.BI_CARET_DOWN_FILL} />
+                    <Icon icon={iconConstant.bootStrap.BI_CARET_DOWN_FILL} />
                   )}
                 </span>
               )}

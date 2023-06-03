@@ -6,7 +6,7 @@ import Tab from 'react-bootstrap/Tab';
 import { useNavigate, useLocation, createSearchParams } from 'react-router-dom';
 
 import { Books } from '../../../../@types/studyUtilType';
-import { onServerConst } from '../../../../constant/on-serverConst';
+import { onServerConstant } from '../../../../constant/on-serverConstant';
 import { urlConst } from '../../../../constant/urlConstant';
 import {
   getNextMonthDate,
@@ -50,7 +50,7 @@ const Content = () => {
   const [initialInfo, initScript] = onServer(
     (api, param) => api.getHouseholdInfo(param),
     [],
-    onServerConst.books.HOUSEHOLD_INFO
+    onServerConstant.books.HOUSEHOLD_INFO
   ) as [HouseHoldData, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const navigate = useNavigate();
@@ -122,7 +122,7 @@ const Content = () => {
   useEffect(() => {
     // console.log('useEffect yobidasareta');
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(onServerConst.books.HOUSEHOLD_INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConstant.books.HOUSEHOLD_INFO, fetchInfo);
   }, [location]);
 
   console.log(info);

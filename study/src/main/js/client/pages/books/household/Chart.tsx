@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 
-import { onServerConst } from '../../../../constant/on-serverConst';
+import { onServerConstant } from '../../../../constant/on-serverConstant';
 import { urlConst } from '../../../../constant/urlConstant';
 import { isInvalidDate } from '../../../../study/util/studyDateUtil';
 import { fetchGet, isObjEmpty } from '../../../../study/util/studyUtil';
@@ -27,7 +27,7 @@ const Chart = ({ year, month }: { year: number; month: number }) => {
   const [initiaChartData, initScript] = onServer(
     (api, param) => api.getHouseholdChartInfo(param),
     [],
-    onServerConst.books.HOUSEHOLDCHART_INFO
+    onServerConstant.books.HOUSEHOLDCHART_INFO
   ) as [HouseholdChartData, JSX.Element];
   const [chartData, setChartData] = useState(initiaChartData);
   const { monthCategory, monthMethod, yearAll } = chartData;
@@ -58,7 +58,7 @@ const Chart = ({ year, month }: { year: number; month: number }) => {
   // 例 : タブを切り替えるたびに親の再レンダリングが動くが、その時は日付けは変わっていない しかし親から渡された日付けをそのままuseEffectの条件(第二引数)にした場合、親側ではレンダリングのたびに「new」で作り直しているため参照先が変わり毎回useEffectが実行される
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(onServerConst.books.HOUSEHOLDCHART_INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConstant.books.HOUSEHOLDCHART_INFO, fetchInfo);
   }, [month]);
 
   return (

@@ -7,7 +7,7 @@ import Row from 'react-bootstrap/Row';
 
 import { BooksUi, ErrorResults } from '../../../../@types/studyUtilType';
 import { fieldConst } from '../../../../constant/fieldConstant';
-import { onServerConst } from '../../../../constant/on-serverConst';
+import { onServerConstant } from '../../../../constant/on-serverConstant';
 import { urlConst } from '../../../../constant/urlConstant';
 import {
   downloadFile,
@@ -32,7 +32,7 @@ const InputForm = () => {
   const [initialInfo, initScript] = onServer(
     (api) => api.getDownloadInfo(),
     [],
-    onServerConst.books.DOWNLOAD_INFO
+    onServerConstant.books.DOWNLOAD_INFO
   ) as [BooksUi, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const [errData, setErrData] = useState() as [
@@ -82,7 +82,7 @@ const InputForm = () => {
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(onServerConst.books.DOWNLOAD_INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConstant.books.DOWNLOAD_INFO, fetchInfo);
   }, []);
 
   console.log(info);
