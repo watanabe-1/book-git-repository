@@ -85,7 +85,7 @@ const ListTable = () => {
   };
 
   /**
-   * 画面情報取得
+   * 画面リスト情報取得
    */
   const fetchListData = async () => {
     const response = await fetchGet(urlConst.category.LISTDATA);

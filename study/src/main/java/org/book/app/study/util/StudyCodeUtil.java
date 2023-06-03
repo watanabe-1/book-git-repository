@@ -22,7 +22,7 @@ public class StudyCodeUtil {
    * @param codelkupService コード情報 Service
    */
   @Autowired
-  public void setCodelkupService(CodelkupService codelkupService) {
+  private void setCodelkupService(CodelkupService codelkupService) {
     StudyCodeUtil.codelkupService = codelkupService;
   }
 

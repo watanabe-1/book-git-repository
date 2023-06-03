@@ -32,7 +32,7 @@ public class StudyStringUtil {
    * @return String nullもしくは空文字の時にtrue それ以外はfalse
    */
   public static boolean isNullOrEmpty(String value) {
-    return value == null || value.isEmpty() ? true : false;
+    return value == null || value.isEmpty();
   }
 
   /**
@@ -213,8 +213,8 @@ public class StudyStringUtil {
       mapper.configure(CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS, true);
     }
 
-    // ヘッダーをつける
     if (isHeadder) {
+      // ヘッダーをつける
       schema = schema.withHeader();
     }
 
@@ -236,6 +236,7 @@ public class StudyStringUtil {
   public static String upperCaseFirst(String val) {
     char[] arr = val.toCharArray();
     arr[0] = Character.toUpperCase(arr[0]);
+
     return new String(arr);
   }
 
@@ -248,6 +249,7 @@ public class StudyStringUtil {
   public static String lowerCaseFirst(String val) {
     char[] arr = val.toCharArray();
     arr[0] = Character.toLowerCase(arr[0]);
+
     return new String(arr);
   }
 

@@ -1,7 +1,9 @@
-const webpack = require('webpack');
 const path = require('path');
+
 const glob = require('glob');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// eslint-disable-next-line no-unused-vars
+const webpack = require('webpack');
 
 /**
  * @type {import('webpack').Configuration}
