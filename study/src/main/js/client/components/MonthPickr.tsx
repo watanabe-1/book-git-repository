@@ -1,8 +1,10 @@
 import monthSelectPlugin from 'flatpickr/dist/plugins/monthSelect';
 import { CustomLocale } from 'flatpickr/dist/types/locale';
 import React, { useEffect, useState } from 'react';
-import { Calendar } from 'react-bootstrap-icons';
 import Flatpickr from 'react-flatpickr';
+
+import { iconConst } from '../../constant/iconConstant';
+import Icon from './Icon';
 
 /**
  *
@@ -32,7 +34,7 @@ const MonthPickr = ({
 
   return (
     <>
-      <Calendar />
+      <Icon icon={iconConst.bootStrap.BI_CALENDAR} />
       <Flatpickr
         key={`flatpickrKey-monthSelectPlugin-${flatpickrKey}`}
         options={{
