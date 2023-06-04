@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
 
 import BodysHead from '../../../components/BodysHead';
 import Stepper from '../../../components/Stepper';

@@ -1,6 +1,6 @@
 import { Field, FormikProps } from 'formik';
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import Container from 'react-bootstrap/Container';
 
 import {
   Books,

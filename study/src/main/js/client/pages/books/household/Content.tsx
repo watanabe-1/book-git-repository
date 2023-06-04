@@ -26,6 +26,7 @@ import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import Calendar from './Calendar';
 import Chart from './Chart';
 import ListTable from './ListTable';
+
 /**
  * 家計簿確認用データ
  */

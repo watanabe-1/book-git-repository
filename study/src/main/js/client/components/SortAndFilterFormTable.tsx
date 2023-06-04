@@ -1,6 +1,6 @@
 import { FieldArray, FormikProvider, useFormik } from 'formik';
 import React, { useRef, useState } from 'react';
-import { Button } from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 import { TableFormObjConfig } from '../../@types/studyUtilType';
