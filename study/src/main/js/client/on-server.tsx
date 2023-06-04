@@ -50,7 +50,6 @@ export function onServer(
  * ssrflagの削除
  *
  * @param valueIdentifier
- * @param isSSR
  */
 export function deleteSSR(valueIdentifier: string) {
   const anyWindow = window;
@@ -84,9 +83,9 @@ export function isSSR(valueIdentifier: string): boolean {
 
 /**
  * SSRがされてない場合は引数の関数を実行
- * SSRがされている場合は、SSRフラグをfalseに
+ * SSRがされている場合は、SSRフラグを削除
  *
- * @param valueIdentifiers
+ * @param valueIdentifier
  * @param func SSRされていない時に実行するファンクション
  */
 export function executeFuncIfNeeded(

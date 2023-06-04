@@ -77,7 +77,6 @@ const Confirm = (props: { handleNext: () => void; handleBack: () => void }) => {
       value: getConfirmMessage(form[key], item[key].type, item[key].convert),
       type: item[key].confirmType,
     });
-    id++;
   }
 
   const onSubmit = async () => {

@@ -59,7 +59,7 @@ const Chart = ({ year, month }: { year: number; month: number }) => {
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
     executeFuncIfNeeded(onServerConst.books.HOUSEHOLDCHART_INFO, fetchInfo);
-  }, [month]);
+  }, [year, month]);
 
   return (
     <>

@@ -182,7 +182,8 @@ const Content = () => {
               <span>次月</span>
             </a>
             <MonthPickr
-              value={date}
+              year={parseInt(info.year)}
+              month={parseInt(info.month)}
               locale={Japanese}
               onChange={pushJumpHistory}
             />

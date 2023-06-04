@@ -24,19 +24,23 @@ const RadioBtn = ({
     <Form.Group controlId={name}>
       {title && <span>{title}</span>}
       <br />
-      {typeList.map((type, index) => (
-        <Form.Check
-          key={`${name}-${index}`}
-          type="radio"
-          inline
-          name={name}
-          id={`${name}-${index}`}
-          value={type.code}
-          label={type.name}
-          checked={type.code == value}
-          onChange={onChange}
-        />
-      ))}
+      {typeList.map((type, index) => {
+        const id = `${name}-${index}`;
+
+        return (
+          <Form.Check
+            key={id}
+            type="radio"
+            inline
+            name={name}
+            id={id}
+            value={type.code}
+            label={type.name}
+            checked={type.code == value}
+            onChange={onChange}
+          />
+        );
+      })}
     </Form.Group>
   );
 };
