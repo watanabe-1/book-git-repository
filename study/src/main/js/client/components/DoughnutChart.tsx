@@ -9,10 +9,12 @@ import {
   Legend,
   ChartData,
   ChartOptions,
+  Plugin,
 } from 'chart.js';
 import { fontString } from 'chart.js/helpers';
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
+import { AnyObject } from 'yup';
 
 import { isObjEmpty } from '../../study/util/studyUtil';
 
@@ -88,11 +90,11 @@ const DoughnutChart = ({
       },
     },
   };
-  const plugins = [
+  const plugins: Plugin<'doughnut', AnyObject>[] = [
     {
       id: 'doughnutChart',
       // 真ん中に表示する
-      beforeDraw(chart, options) {
+      beforeDraw(chart, args, options) {
         const {
           ctx,
           chartArea: { top, width, height },
