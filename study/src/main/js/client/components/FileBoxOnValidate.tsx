@@ -1,4 +1,3 @@
-import { FormikErrors } from 'formik/dist/types';
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 
@@ -15,7 +14,7 @@ const FileBoxOnValidate = ({
 }: {
   title?: string;
   name: string;
-  error: FormikErrors<unknown>;
+  error: unknown;
   accept: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
@@ -31,7 +30,7 @@ const FileBoxOnValidate = ({
       <Form.Control.Feedback type="invalid">
         {
           // エラー回避 対応策わかり次第変更
-          error as unknown as string
+          error as string
         }
       </Form.Control.Feedback>
     </Form.Group>

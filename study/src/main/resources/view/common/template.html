@@ -12,10 +12,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- コンテキストパス -->
-    <meta
-      name="contextPath"
-      th:content="${#httpServletRequest.getContextPath()}"
-    />
+    <meta name="contextPath" th:content="${contextPath}" />
     <!-- CSRF対策用トークン jsで使用-->
     <meta name="_csrf" th:content="${_csrf.token}" />
     <meta name="_csrf_header" th:content="${_csrf.headerName}" />
@@ -34,11 +31,11 @@
 
   <body>
     <!--共通ヘッダーの読み込み -->
-    <div th:replace="common/header :: header_fragment"></div>
+    <div th:replace="~{common/header :: header_fragment}"></div>
     <div class="container-fluid">
       <div class="row">
         <!--共通サイドバーの読み込み -->
-        <div th:replace="common/sidebar :: sidebar_fragment"></div>
+        <div th:replace="~{common/sidebar :: sidebar_fragment}"></div>
         <!--bodyの読み込み -->
         <main class="my-container col-md-9 col-lg-10 px-md-4">
           <div id="body" th:replace="${body}"></div>

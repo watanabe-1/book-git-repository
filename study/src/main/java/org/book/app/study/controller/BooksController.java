@@ -1,6 +1,5 @@
 package org.book.app.study.controller;
 
-import javax.servlet.http.HttpServletRequest;
 import org.book.app.study.api.js.BooksApi;
 import org.book.app.study.form.BooksForm;
 import org.book.app.study.util.StudyJsUtil;
@@ -9,6 +8,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 /**

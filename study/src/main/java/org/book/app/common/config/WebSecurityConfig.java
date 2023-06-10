@@ -1,18 +1,20 @@
 package org.book.app.common.config;
 
+import org.book.app.study.enums.type.AccountType;
+import org.book.app.study.service.AppUserDetailsService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.book.app.study.enums.type.AccountType;
-import org.book.app.study.service.AppUserDetailsService;
 
 /**
  * スプリングセキュリティ設定クラス
  */
 @EnableWebSecurity
+@Configuration
 public class WebSecurityConfig {
 
   /**
@@ -64,15 +66,15 @@ public class WebSecurityConfig {
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
             // すべてのユーザーがアクセスできる権限を付与する
             // noneでの除外はセキュリティ敵に非推奨らしいので、すべてpermitAllで管理
-            .mvcMatchers("/login/**").permitAll()
-            .mvcMatchers("/js/*.*").permitAll()
-            .mvcMatchers("/css/*.*").permitAll()
-            .mvcMatchers("/res/*.*").permitAll()
-            .mvcMatchers("/images/*.*").permitAll()
+            .requestMatchers("/login/**").permitAll()
+            .requestMatchers("/js/*.*").permitAll()
+            .requestMatchers("/css/*.*").permitAll()
+            .requestMatchers("/res/*.*").permitAll()
+            .requestMatchers("/images/*.*").permitAll()
             // システム管理者のみ
-            .mvcMatchers("/system/**").hasRole(AccountType.SYSTEM.getBaseRole())
+            .requestMatchers("/system/**").hasRole(AccountType.SYSTEM.getBaseRole())
             // システム管理者および管理者のみ
-            .mvcMatchers("/admin/**")
+            .requestMatchers("/admin/**")
             .hasAnyRole(AccountType.SYSTEM.getBaseRole(), AccountType.ADMIN.getBaseRole())
             .anyRequest().authenticated());
     return http.build();

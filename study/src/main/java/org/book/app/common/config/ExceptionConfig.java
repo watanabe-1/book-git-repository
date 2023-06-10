@@ -7,13 +7,13 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.web.util.NestedServletException;
 import org.terasoluna.gfw.common.exception.ExceptionLogger;
 import org.terasoluna.gfw.common.exception.ResultMessagesLoggingInterceptor;
 import org.terasoluna.gfw.common.exception.SimpleMappingExceptionCodeResolver;
 import org.terasoluna.gfw.web.exception.ExceptionLoggingFilter;
 import org.terasoluna.gfw.web.exception.HandlerExceptionResolverLoggingInterceptor;
 import org.terasoluna.gfw.web.exception.SystemExceptionResolver;
+import jakarta.servlet.ServletException;
 
 /**
  * エラー関係設定クラス<br/>
@@ -126,9 +126,9 @@ public class ExceptionConfig {
     systemExceptionResolver.setStatusCodes(statusCodes);
 
     // ハンドリング対象外とする例外クラスを指定する。 SystemExceptionResolverで致命的なエラーをハンドリングせず、
-    // サーブレットコンテナに通知するため、org.springframework.web.util.NestedServletExceptionを
+    // サーブレットコンテナに通知するため、jakarta.servlet.ServletExceptionを
     // ハンドリング対象外とする。
-    systemExceptionResolver.setExcludedExceptions(NestedServletException.class);
+    systemExceptionResolver.setExcludedExceptions(ServletException.class);
 
     // 遷移するデフォルトのView名を、指定する。
     // 設定では、例外クラスに”ResourceNotFoundException”、”BusinessException”、
@@ -175,7 +175,8 @@ public class ExceptionConfig {
   @Bean
   @Pointcut("execution(* org.springframework.web.servlet.HandlerExceptionResolver.resolveException(..))")
   HandlerExceptionResolverLoggingInterceptor handlerExceptionResolverLoggingInterceptor() {
-    HandlerExceptionResolverLoggingInterceptor hdExRoInter = new HandlerExceptionResolverLoggingInterceptor();
+    HandlerExceptionResolverLoggingInterceptor hdExRoInter =
+        new HandlerExceptionResolverLoggingInterceptor();
     hdExRoInter.setExceptionLogger(exceptionLogger());
 
     return hdExRoInter;

@@ -1,4 +1,3 @@
-import { FormikErrors, FormikTouched } from 'formik';
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 
@@ -23,8 +22,8 @@ const SelectBoxOnValidate = ({
   name: string;
   value: string;
   typeList: Type[] | string[];
-  touched: FormikTouched<unknown>;
-  error: FormikErrors<unknown>;
+  touched: unknown;
+  error: unknown;
   onChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   isUnshiftEmpty?: boolean;
 }) => {
@@ -60,7 +59,7 @@ const SelectBoxOnValidate = ({
       <Form.Control.Feedback type="invalid">
         {
           // エラー回避 対応策わかり次第変更
-          error as unknown as string
+          error as string
         }
       </Form.Control.Feedback>
     </Form.Group>

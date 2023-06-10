@@ -2,7 +2,7 @@ package org.book.app.study.form;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotBlank;
 import org.book.app.common.validation.UploadFileMaxSize;
 import org.book.app.common.validation.UploadFileMediaType;
 import org.book.app.common.validation.UploadFileNotEmpty;

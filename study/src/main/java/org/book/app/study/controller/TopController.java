@@ -1,6 +1,6 @@
 package org.book.app.study.controller;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import org.book.app.study.form.Form;
 import org.book.app.study.util.StudyJsUtil;
 import org.springframework.stereotype.Controller;

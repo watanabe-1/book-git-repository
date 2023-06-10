@@ -2,8 +2,8 @@ package org.book.app.study.form;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 import org.book.app.common.validation.UploadFileMaxSize;
 import org.book.app.common.validation.UploadFileMediaType;

@@ -2,8 +2,8 @@ package org.book.app.study.form;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 /**

@@ -63,7 +63,7 @@ module.exports = {
   optimization: {
     splitChunks: {
       cacheGroups: {
-        //  共通で使用するベンダーモジュール(リアクト以外) outputに定義した[name = depens].bundle.jsに出力
+        //  共通で使用するベンダーモジュール outputに定義した[name = depens].bundle.jsに出力
         vender: {
           // test: /[\\/]node_modules[\\/](axios|popper.js|chart.js|flatpickr|bootstrap)[\\/]/,
           name: 'depens',

@@ -12,7 +12,7 @@
       <ul class="list-group list-group-horizontal">
         <li class="list-group-item-dark.active">
           <!--共通サイドバーボタンの読み込み -->
-          <div th:replace="common/sidebar :: sidebar_btn_fragment"></div>
+          <div th:replace="~{common/sidebar :: sidebar_btn_fragment}"></div>
         </li>
         <li class="list-group-item-dark.active">
           <a class="navbar-brand" th:href="@{/}" style="font-size: 1.5rem"

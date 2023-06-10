@@ -9,7 +9,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.script.ScriptException;
-import javax.servlet.http.HttpServletRequest;
 import org.book.app.study.api.js.ServerApi;
 import org.book.app.study.form.Form;
 import org.graalvm.polyglot.Context;
@@ -18,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.XSlf4j;
 
 /**
@@ -165,11 +165,10 @@ public class StudyJsUtil {
   }
 
   /**
-   * ソースパス格納スクリプトタグ作成
+   * reactのレンダリング処理実行スクリプトタグ作成
    * 
-   * @param scriptPath ファイルパス
-   * @param contextPath コンテキストパス
-   * @return ソースパス格納スクリプトタグ
+   * @param renderName 実行関数名
+   * @return レンダリング処理実行スクリプトタグ
    */
   private static String createRenderWhenAvailableScript(String renderName) {
     String base = "<script type=\"module\">function renderWhenAvailable() {window.%s?window.%s()"
