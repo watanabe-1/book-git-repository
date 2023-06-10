@@ -90,7 +90,7 @@ public class UploadHelper {
    */
   public void saveIconFile(CategoryForm form) {
     // ファイルを本保存
-    saveImageFile(uploadIconDirPath, form.getCatCode(), form.getImgId(), form.getImgExt(),
+    saveImageFile(uploadIconDirPath, "category", form.getImgId(), form.getImgExt(),
         form.getImgType());
   }
 
