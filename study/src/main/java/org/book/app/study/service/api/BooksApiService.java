@@ -76,7 +76,7 @@ public class BooksApiService {
    */
   public HouseholdUi getHouseholdInfo(BooksForm form) {
     HouseholdUi ui = new HouseholdUi();
-    Date date = form.getDate() == null ? StudyUtil.getNowDate() : form.getDate();
+    Date date = booksHelper.getDate(form);
     String tab =
         StudyStringUtil.isNullOrEmpty(form.getTab()) ? booksHelper.getDefaltTab() : form.getTab();
     List<Books> booksByExpenses =
@@ -100,7 +100,7 @@ public class BooksApiService {
    */
   public HouseholdChartUi getHouseholdChartInfo(BooksForm form) {
     HouseholdChartUi ui = new HouseholdChartUi();
-    Date date = form.getDate() == null ? StudyUtil.getNowDate() : form.getDate();
+    Date date = booksHelper.getDate(form);
     ui.setMonthCategory(booksHelper
         .getChartDataByMonthCategory(date));
     ui.setMonthMethod(booksHelper
@@ -119,7 +119,7 @@ public class BooksApiService {
    */
   public HouseholdCalendarUi getHouseholdCalendarInfo(BooksForm form) {
     HouseholdCalendarUi ui = new HouseholdCalendarUi();
-    Date date = form.getDate() == null ? StudyUtil.getNowDate() : form.getDate();
+    Date date = booksHelper.getDate(form);
     // 祝日定義ファイルの取得
     ClassPathResource syukujitsuFile = new ClassPathResource("csv/syukujitsu.csv");
     List<SyukujitsuColumn> syukujitsuList =

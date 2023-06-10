@@ -19,6 +19,7 @@ import org.book.app.study.dto.file.BooksColumn;
 import org.book.app.study.entity.Books;
 import org.book.app.study.enums.dbcode.BooksTab;
 import org.book.app.study.enums.type.BooksType;
+import org.book.app.study.form.BooksForm;
 import org.book.app.study.service.BooksService;
 import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyCodeUtil;
@@ -500,6 +501,16 @@ public class BooksHelper {
         .stream().map(e -> new BooksColumn(e.getBooksDate(), e.getBooksPlace(),
             e.getCatCodes().getCatName(), e.getBooksMethod(), e.getBooksAmmount()))
         .collect(Collectors.toList());
+  }
+
+  /**
+   * 日付を取得
+   * 
+   * @param form BooksForm
+   * @return 日付
+   */
+  public Date getDate(BooksForm form) {
+    return form.getDate() == null ? StudyUtil.getNowDate() : form.getDate();
   }
 
 }
