@@ -66,38 +66,6 @@
                 class="btn btn-toggle d-inline-flex align-items-center rounded border-0"
                 type="button"
                 data-bs-toggle="collapse"
-                data-bs-target="#collapseTwo"
-                aria-expanded="false"
-                aria-controls="collapseTwo"
-              >
-                課題
-              </button>
-              <div
-                id="collapseTwo"
-                class="collapse"
-                aria-labelledby="headingOne"
-                data-bs-parent="#accordionExample"
-              >
-                <div>
-                  <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                    <li class="nav-item">
-                      <a
-                        class="link-dark d-inline-flex text-decoration-none rounded"
-                        th:href="@{/hoge/input}"
-                      >
-                        <span data-feather="package"></span>
-                        課題1(hoge)
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </li>
-            <li class="nav-item">
-              <button
-                class="btn btn-toggle d-inline-flex align-items-center rounded border-0"
-                type="button"
-                data-bs-toggle="collapse"
                 data-bs-target="#collapseThree"
                 aria-expanded="false"
                 aria-controls="collapseThree"
@@ -367,6 +335,40 @@
                               >
                                 <span data-feather="package"></span>
                                 家計簿_一覧
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="nav-item">
+                      <button
+                        class="btn btn-toggle d-inline-flex align-items-center rounded border-0"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#collapseTwoOne"
+                        aria-expanded="false"
+                        aria-controls="collapseTwo"
+                      >
+                        課題
+                      </button>
+                      <div
+                        id="collapseTwoOne"
+                        class="collapse"
+                        aria-labelledby="headingOne"
+                        data-bs-parent="#accordionExample"
+                      >
+                        <div>
+                          <ul
+                            class="btn-toggle-nav list-unstyled fw-normal pb-1 small"
+                          >
+                            <li class="nav-item">
+                              <a
+                                class="link-dark d-inline-flex text-decoration-none rounded"
+                                th:href="@{/hoge/input}"
+                              >
+                                <span data-feather="package"></span>
+                                課題1(hoge)
                               </a>
                             </li>
                           </ul>
