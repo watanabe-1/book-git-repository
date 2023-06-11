@@ -6,7 +6,6 @@ import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
@@ -173,11 +172,11 @@ public class StudyStringUtil {
    * 
    * @param target 変換対象
    * @param pojoType カラム情報が記載されているクラス
-   * @param isHeadder ヘッダーをつけるか
+   * @param isHeader ヘッダーをつけるか
    * @return String csv文字列
    */
-  public static String objectToCsvStr(Object target, Class<?> pojoType, boolean isHeadder) {
-    return objectToStrByCsvMapper(target, pojoType, SEPARATOR_BY_CSV, isHeadder, true);
+  public static String objectToCsvStr(Object target, Class<?> pojoType, boolean isHeader) {
+    return objectToStrByCsvMapper(target, pojoType, SEPARATOR_BY_CSV, isHeader, true);
   }
 
   /**
@@ -185,11 +184,11 @@ public class StudyStringUtil {
    * 
    * @param target 変換対象
    * @param pojoType カラム情報が記載されているクラス
-   * @param isHeadder ヘッダーをつけるか
+   * @param isHeader ヘッダーをつけるか
    * @return String tsv文字列
    */
-  public static String objectToTsvStr(Object target, Class<?> pojoType, boolean isHeadder) {
-    return objectToStrByCsvMapper(target, pojoType, SEPARATOR_BY_TSV, isHeadder, false);
+  public static String objectToTsvStr(Object target, Class<?> pojoType, boolean isHeader) {
+    return objectToStrByCsvMapper(target, pojoType, SEPARATOR_BY_TSV, isHeader, false);
   }
 
   /**
@@ -198,25 +197,15 @@ public class StudyStringUtil {
    * @param target 変換対象
    * @param pojoType カラム情報が記載されているクラス
    * @param sep 区切り文字
-   * @param isHeadder ヘッダーをつけるか
+   * @param isHeader ヘッダーをつけるか
    * @param isQuote 文字列にダブルクオートをつけるか
    * @return String 文字列
    */
   public static String objectToStrByCsvMapper(Object target, Class<?> pojoType, char sep,
-      boolean isHeadder, boolean isQuote) {
+      boolean isHeader, boolean isQuote) {
     String result = null;
-    CsvMapper mapper = new CsvMapper();
-    CsvSchema schema = mapper.schemaFor(pojoType).withColumnSeparator(sep);
-
-    if (isQuote) {
-      // 文字列にダブルクオートをつける
-      mapper.configure(CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS, true);
-    }
-
-    if (isHeadder) {
-      // ヘッダーをつける
-      schema = schema.withHeader();
-    }
+    CsvMapper mapper = StudyJacksonUtil.createCsvMapper(isQuote);
+    CsvSchema schema = StudyJacksonUtil.createCsvSchema(mapper, pojoType, sep, isHeader);
 
     try {
       result = mapper.writer(schema).writeValueAsString(target);
@@ -225,6 +214,24 @@ public class StudyStringUtil {
     }
 
     return result;
+  }
+
+  /**
+   * 文字列からList形式に変換
+   * 
+   * @param str 文字列
+   * @param charsetName 文字コード
+   * @param pojoType カラム情報が記載されているクラス
+   * @param sep 区切り文字
+   * @param isHeader ヘッダーをつけるか
+   * @param isQuote 文字列にダブルクオートをつけるか
+   * @return List
+   */
+
+  public static <T> List<T> strToListByCsvMapper(String str, String charsetName,
+      Class<T> pojoType, char sep, boolean isHeader, boolean isQuote) {
+    return StudyJacksonUtil.objectToListByCsvMapper(str, charsetName, pojoType, sep, isHeader,
+        isQuote);
   }
 
   /**

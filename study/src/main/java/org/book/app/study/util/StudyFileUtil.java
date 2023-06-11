@@ -16,10 +16,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
-import com.fasterxml.jackson.databind.MappingIterator;
-import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
-import com.fasterxml.jackson.dataformat.csv.CsvMapper;
-import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import lombok.extern.slf4j.XSlf4j;
 
 /**
@@ -71,13 +67,13 @@ public class StudyFileUtil {
    * 
    * @param inSoursc InputStreamSource
    * @param pojoType カラム情報が記載されているクラス
-   * @param isHeadder ヘッダーをつけるか
+   * @param isHeader ヘッダーをつけるか
    * @return List
    */
   public static <T> List<T> csvFileToList(InputStreamSource inSoursc, Class<T> pojoType,
-      boolean isHeadder) {
+      boolean isHeader) {
     return fileToListByCsvMapper(inSoursc, detectFileEncoding(inSoursc), pojoType,
-        StudyStringUtil.SEPARATOR_BY_CSV, isHeadder, true);
+        StudyStringUtil.SEPARATOR_BY_CSV, isHeader, true);
   }
 
   /**
@@ -85,13 +81,13 @@ public class StudyFileUtil {
    * 
    * @param inSoursc InputStreamSource
    * @param pojoType カラム情報が記載されているクラス
-   * @param isHeadder ヘッダーをつけるか
+   * @param isHeader ヘッダーをつけるか
    * @return List
    */
   public static <T> List<T> tsvFileToList(InputStreamSource inSoursc, Class<T> pojoType,
-      boolean isHeadder) {
+      boolean isHeader) {
     return fileToListByCsvMapper(inSoursc, detectFileEncoding(inSoursc), pojoType,
-        StudyStringUtil.SEPARATOR_BY_TSV, isHeadder, false);
+        StudyStringUtil.SEPARATOR_BY_TSV, isHeader, false);
   }
 
   /**
@@ -101,34 +97,18 @@ public class StudyFileUtil {
    * @param charsetName 文字コード
    * @param pojoType カラム情報が記載されているクラス
    * @param sep 区切り文字
-   * @param isHeadder ヘッダーをつけるか
+   * @param isHeader ヘッダーをつけるか
    * @param isQuote 文字列にダブルクオートをつけるか
    * @return List
    */
   public static <T> List<T> fileToListByCsvMapper(InputStreamSource inSoursc, String charsetName,
-      Class<T> pojoType, char sep, boolean isHeadder, boolean isQuote) {
-    CsvMapper mapper = new CsvMapper();
-    CsvSchema schema = mapper.schemaFor(pojoType).withColumnSeparator(sep);
+      Class<T> pojoType, char sep, boolean isHeader, boolean isQuote) {
     List<T> result = new ArrayList<>();
-
-    // ダブルクオートあり
-    if (isQuote) {
-      mapper.configure(CsvGenerator.Feature.ALWAYS_QUOTE_STRINGS, true);
-    }
-
-    // ヘッダーあり
-    if (isHeadder) {
-      schema = schema.withHeader();
-    }
 
     try (InputStream in = inSoursc.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(in, charsetName))) {
-      MappingIterator<T> objectMappingIterator =
-          mapper.readerFor(pojoType).with(schema).readValues(br);
-
-      while (objectMappingIterator.hasNext()) {
-        result.add(objectMappingIterator.next());
-      }
+      result = StudyJacksonUtil.objectToListByCsvMapper(br, charsetName, pojoType, sep, isHeader,
+          isQuote);
     } catch (IOException e) {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
@@ -229,6 +209,17 @@ public class StudyFileUtil {
     }
 
     return ret;
+  }
+
+  /**
+   * ファイルを削除
+   * 
+   * @param file 削除対象ファイル
+   */
+  public static void deleteFile(File file) {
+    if (file != null && file.exists()) {
+      file.delete();
+    }
   }
 
 }

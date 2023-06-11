@@ -65,9 +65,9 @@ public class UploadHelper {
    * ファイルを一時ファイルとして保存
    * 
    * @param MultipartFile アップロードされたデータ
-   * @return String 発番した画像ID
+   * @return 一時ファイル
    */
-  public String saveTemporaryFile(MultipartFile multipartFile) {
+  public File saveTemporaryFile(MultipartFile multipartFile) {
     // 画像IDの発番
     String uploadTmpFileId = UUID.randomUUID().toString();
     File uploadTemporaryFile = getFileDir(uploadTmpDir, uploadTmpFileId);
@@ -79,7 +79,7 @@ public class UploadHelper {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
 
-    return uploadTmpFileId;
+    return uploadTemporaryFile;
   }
 
   /**

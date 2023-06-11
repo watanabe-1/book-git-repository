@@ -1,8 +1,8 @@
 package org.book.app.study.controller.thymeleaf;
 
+import java.io.File;
 import java.util.List;
 import java.util.Objects;
-import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.io.FilenameUtils;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.entity.Category;
@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
 
@@ -109,8 +110,9 @@ public class CategoryThymeleafController {
       String imgExt = FilenameUtils.getExtension(catIcon.getOriginalFilename());
 
       // アップロードファイルを一時保存するためのHelperメソッドを呼び出す
-      // 一時保存したファイルの識別するためのIDがHelperメソッドの返り値として返却される
-      String uploadTemporaryFileId = uploadHelper.saveTemporaryFile(catIcon);
+      // 一時保存したファイルがHelperメソッドの返り値として返却される
+      File uploadTemporaryFile = uploadHelper.saveTemporaryFile(catIcon);
+      String uploadTemporaryFileId = uploadTemporaryFile.getName();
 
       // アップロードしたファイルのメタ情報（ファイルを識別するためのID、拡張子など）をフォームオブジェクトに格納する
       // アップロードファイルのファイルの拡張子と一時保存したファイルを識別するためのIDをフォームオブジェクトに格納

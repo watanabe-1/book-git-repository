@@ -95,10 +95,7 @@ const InputForm = () => {
     .string()
     .required()
     .server(errData);
-  additions[fieldConst.books.BOOKS_YEAR] = yup
-    .string()
-    .required()
-    .server(errData);
+  additions[fieldConst.books.BOOKS_YEAR] = yup.string().server(errData);
   // スキーマにセット
   const schema = yup.object().shape(additions);
 

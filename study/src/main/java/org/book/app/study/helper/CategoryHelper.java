@@ -1,5 +1,6 @@
 package org.book.app.study.helper;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -60,8 +61,10 @@ public class CategoryHelper {
         // 画像をアップロードしたとき
         if (!Objects.isNull(catIcon) && !catIcon.isEmpty()) {
           // アップロードファイルを一時保存するためのHelperメソッドを呼び出す
-          // 一時保存したファイルの識別するためのIDがHelperメソッドの返り値として返却される
-          String imgId = uploadHelper.saveTemporaryFile(catIcon);
+          // 一時保存したファイルがHelperメソッドの返り値として返却される
+          File uploadTemporaryFile = uploadHelper.saveTemporaryFile(catIcon);
+          String imgId = uploadTemporaryFile.getName();
+
           catForm.setImgId(imgId);
           catForm.setImgExt(FilenameUtils.getExtension(catIcon.getOriginalFilename()));
 
