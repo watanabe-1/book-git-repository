@@ -34,7 +34,6 @@ public class BooksConvertHelper {
    * @return PDFから抽出したテキストを
    */
   public List<SuicaColumn> suicaPdfToList(MultipartFile pdf) {
-
     // PDFからテキストを抽出。
     StringBuffer result = new StringBuffer();
     try (InputStream in = pdf.getInputStream();
@@ -183,6 +182,7 @@ public class BooksConvertHelper {
         })
         .map(suica -> {
           BooksColumn col = new BooksColumn();
+          // マイナス、プラスの区別はしない
           col.setBooksAmmount(Integer.parseInt(suica.getAmount().replaceAll(",", "").substring(1)));
           col.setBooksDate(
               StudyDateUtil.LocalDateToDate(
@@ -190,6 +190,7 @@ public class BooksConvertHelper {
           col.setBooksMethod("Suica");
           col.setBooksPlace(new StringBuffer().append(suica.getStation()).append("→")
               .append(suica.getStation2()).toString());
+          // とりあえずカテゴリーは固定で記載
           col.setCatName(Objects.equals(suica.getType(), "物販") ? suica.getType() : "交通");
           return col;
         })
