@@ -17,7 +17,6 @@ import org.book.app.study.service.api.BooksApiService;
 import org.book.app.study.util.StudyFileUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
-import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -171,9 +170,7 @@ public class BooksApiController extends ApiController {
         .contentType(MediaType.APPLICATION_OCTET_STREAM)
         .header(
             HttpHeaders.CONTENT_DISPOSITION,
-            ContentDisposition.attachment()
-                .filename(fileName, StandardCharsets.UTF_8)
-                .build().toString())
+            downloadHelper.buildContentDisposition(fileName, StandardCharsets.UTF_8))
         .body(os -> {
           downloadHelper.setFileData(os, StudyStringUtil
               .objectToCsvStr(columnList,
