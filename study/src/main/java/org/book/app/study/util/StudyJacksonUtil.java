@@ -95,7 +95,7 @@ public class StudyJacksonUtil {
   /**
    * objctからList形式に変換
    * 
-   * @param obj 変換対象
+   * @param obj 変換対象(InputStream、Reader、String型のみ)
    * @param charsetName 文字コード
    * @param pojoType カラム情報が記載されているクラス
    * @param sep 区切り文字

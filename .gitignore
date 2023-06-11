@@ -4,6 +4,7 @@ test.html
 
 #db
 database.properties
+db_config.txt
 
 # Java
 *.class

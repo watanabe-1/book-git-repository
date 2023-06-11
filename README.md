@@ -30,16 +30,34 @@
 1. db 環境の作成
 
    - PostgreSQL をインストール → [PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
-   - スキーマの作成
-   - 作成したスキーマで book-git-repository\db\sql\DDL\ALL\CREATE_ALL.sql の実行
-   - 作成したスキーマで book-git-repository\db\sql\DML\INSERT 内の sql の実行
+   - 詳しいインストール方法は右記サイトなどを参考に → [PostgreSQL を Windows にインストールするには](https://qiita.com/tom-sato/items/037b8f8cb4b326710f71)
+   - インストール後は下記流れで ユーザー、スキーマなどを作成
+     - スーパーユーザーでログイン
+       - `psql -U user_name`
+     - ユーザーの作成
+       - `create user user_name with password 'password' createdb`;
+     - スキーマの作成
+       - `create database db_name with owner user_name;`
+   - book-git-repository\bat\sql\config\db_config.txt を環境に合わせて作成(下記例参照)
+
+     ```txt:db_config.txt
+      PGUSER=user_name
+      PGPASSWORD=password
+      PGDATABASE=db_name
+      PGPORT=5432
+      PGHOST=localhost
+     ```
+
+   - book-git-repository\bat\sql\execute_sql.bat を実行すると下記 sql ファイルが実行される
+     - book-git-repository\db\sql\DDL\ALL\CREATE_ALL.sql
+     - book-git-repository\db\sql\DML\INSERT 内の sql
    - book-git-repository\study\src\main\resources\config\properties\database.properties を環境に合わせて作成(下記例参照)
 
      ```properties:database.properties
      jdbc.driverClassName=org.postgresql.Driver
-     jdbc.url=jdbc:postgresql://localhost:5432/studydb
-     jdbc.username=xxxx
-     jdbc.password=xxxx
+     jdbc.url=jdbc:postgresql://localhost:5432/db_name
+     jdbc.username=user_name
+     jdbc.password=password
      jdbc.maxTotal=10
      ```
 
@@ -90,4 +108,4 @@
   - Google スプレッドシートに取り込み、book-git-repository\spreadsheet\gas 配下のマクロファイルを設定すれば create 文生成などのマクロが使用可能
 - 家計簿データの例は book-git-repository\example 配下に
   - 家計簿登録画面からそのまま登録可能
-- 一度ビルドからサーバー起動まで完了している場合は、book-git-repository\bat\bootrunAndDaemonwatch.bat からサーバーの起動、js ファイル監視の起動をまとめて実行可能
+- 一度ビルドからサーバー起動まで完了している場合は、book-git-repository\bat\bootrun_and_daemonwatch.bat からサーバーの起動、js ファイル監視の起動をまとめて実行可能
