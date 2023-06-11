@@ -7,7 +7,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
 import jakarta.servlet.http.HttpServletResponse;
@@ -80,6 +83,30 @@ public class DownloadHelper {
                         .toString()));
       }
     }
+  }
+
+  /**
+   * 
+   * ファイルダウンロード用レスポンスを作成
+   * 
+   * @param fileName ファイル名
+   * @param charset 文字コード
+   * @param body ファイル元データ
+   * @param pojoType カラム情報が記載されているクラス
+   * @return
+   */
+  public ResponseEntity<StreamingResponseBody> buildStreamingResponse(String fileName,
+      Charset charset, String data) {
+    return ResponseEntity.ok()
+        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+        .header(
+            HttpHeaders.CONTENT_DISPOSITION,
+            buildContentDisposition(fileName, charset))
+        .body(os -> {
+          setFileData(os,
+              data
+                  .getBytes());
+        });
   }
 
 }

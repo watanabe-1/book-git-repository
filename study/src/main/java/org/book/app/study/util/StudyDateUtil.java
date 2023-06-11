@@ -4,6 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -297,6 +298,35 @@ public class StudyDateUtil {
   }
 
   /**
+   * 基準となる日付から指定された週数だけさかのぼった範囲に含まれる月の年を取得
+   *
+   * @param baseDate 基準となる日付
+   * @param weeksToGoBack さかのぼる週数
+   * @param targetMonth 検索する対象の月
+   * @return 指定された週数だけさかのぼった範囲に含まれる対象の月の年 見つからなかった場合は-1。
+   */
+  public static int getYearOfMonthInPreviousWeeks(LocalDate baseDate, int weeksToGoBack,
+      int targetMonth) {
+    LocalDate startDate = baseDate.minusWeeks(weeksToGoBack);
+    LocalDate endDate = baseDate;
+
+    int year = startDate.getYear();
+    int month = startDate.getMonthValue();
+
+    while (startDate.isBefore(endDate) || startDate.isEqual(endDate)) {
+      if (month == targetMonth) {
+        return year;
+      }
+
+      startDate = startDate.plusDays(1);
+      year = startDate.getYear();
+      month = startDate.getMonthValue();
+    }
+
+    return -1; // マッチする月が見つからなかった場合は-1を返す
+  }
+
+  /**
    * DateからLocalDateに変換
    * 
    * @param date 変換対象
@@ -306,6 +336,17 @@ public class StudyDateUtil {
     ZoneId timeZone = ZoneId.systemDefault();
 
     return date.toInstant().atZone(timeZone).toLocalDate();
+  }
+
+
+  /**
+   * LocalDateからDateに変換
+   * 
+   * @param localDate 変換対象
+   * @return Date
+   */
+  public static Date LocalDateToDate(LocalDate localDate) {
+    return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
   }
 
   /**
@@ -340,6 +381,17 @@ public class StudyDateUtil {
     }
 
     return date;
+  }
+
+  /**
+   * StringからDateに変換
+   * 
+   * @param str 変換対象
+   * @param fmtPattern 変換パターン
+   * @return Date
+   */
+  public static LocalDate strToDLocalate(String str, String fmtPattern) {
+    return LocalDate.parse(str, DateTimeFormatter.ofPattern(fmtPattern));
   }
 
   /**

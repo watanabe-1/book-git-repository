@@ -56,4 +56,12 @@ export const fieldConst = {
     BOOKS_FILE: 'booksFile',
     BOOKS_YEAR: 'booksYear',
   },
+
+  /**
+   * 変換データ
+   */
+  booksConvert: {
+    FILE_TYPE: 'fileType',
+    FILE: 'file',
+  },
 };

@@ -2,14 +2,20 @@ package org.book.app.study.api;
 
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+import java.util.Objects;
 import org.book.app.study.dto.file.BooksColumn;
+import org.book.app.study.dto.file.SuicaColumn;
+import org.book.app.study.dto.ui.books.BooksConvertUi;
 import org.book.app.study.dto.ui.books.BooksUi;
 import org.book.app.study.dto.ui.books.HouseholdCalendarUi;
 import org.book.app.study.dto.ui.books.HouseholdChartUi;
 import org.book.app.study.dto.ui.books.HouseholdUi;
 import org.book.app.study.entity.Books;
 import org.book.app.study.enums.type.BooksType;
+import org.book.app.study.enums.type.FileType;
+import org.book.app.study.form.BooksConvertForm;
 import org.book.app.study.form.BooksForm;
+import org.book.app.study.helper.BooksConvertHelper;
 import org.book.app.study.helper.BooksHelper;
 import org.book.app.study.helper.DownloadHelper;
 import org.book.app.study.service.BooksService;
@@ -17,8 +23,6 @@ import org.book.app.study.service.api.BooksApiService;
 import org.book.app.study.util.StudyFileUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
@@ -61,7 +65,10 @@ public class BooksApiController extends ApiController {
    */
   private final DownloadHelper downloadHelper;
 
-
+  /**
+   * コンバート Helper
+   */
+  private final BooksConvertHelper booksConvertHelper;
 
   /**
    * アップロード画面情報取得
@@ -83,6 +90,17 @@ public class BooksApiController extends ApiController {
   @ResponseBody
   public BooksUi getDownloadInfo() {
     return booksApiService.getDownloadInfo();
+  }
+
+  /**
+   * 変換画面情報取得
+   * 
+   * @return json(変換画面情報)
+   */
+  @RequestMapping(value = "/books/convertInfo", method = RequestMethod.GET)
+  @ResponseBody
+  public BooksConvertUi getConvertInfo() {
+    return booksApiService.getConvertInfo();
   }
 
   /**
@@ -165,17 +183,36 @@ public class BooksApiController extends ApiController {
     String fileName = StudyFileUtil.addExtension(fileNameBase,
         StudyFileUtil.EXTENSION_BY_CSV);
 
-    return ResponseEntity.ok()
-        .contentType(MediaType.APPLICATION_OCTET_STREAM)
-        .header(
-            HttpHeaders.CONTENT_DISPOSITION,
-            downloadHelper.buildContentDisposition(fileName, StandardCharsets.UTF_8))
-        .body(os -> {
-          downloadHelper.setFileData(os, StudyStringUtil
-              .objectToCsvStr(columnList,
-                  BooksColumn.class, true)
-              .getBytes());
-        });
+    return downloadHelper.buildStreamingResponse(
+        fileName, StandardCharsets.UTF_8,
+        StudyStringUtil.objectToCsvStr(columnList, BooksColumn.class, true));
+  }
+
+  /**
+   * 家計簿ダウンロード
+   * 
+   * @param form 送信されたデータ
+   * @param model モデル
+   * @return beenView名(viewパッケージ配下に定義)
+   */
+  @RequestMapping(value = "/books/convertFile", method = RequestMethod.POST)
+  public ResponseEntity<StreamingResponseBody> convertFile(@ModelAttribute BooksConvertForm form) {
+    String fileNameBase = String.format("家計簿_%s_%s",
+        FileType.codeOf(form.getFileType()).getName(), BooksType.EXPENSES.getName());
+    String fileName = StudyFileUtil.addExtension(fileNameBase,
+        StudyFileUtil.EXTENSION_BY_CSV);
+    ResponseEntity<StreamingResponseBody> ret = null;
+
+    // Suicaが選択されたとき
+    if (Objects.equals(FileType.SUICA.getCode(), form.getFileType())) {
+      List<SuicaColumn> suciaList = booksConvertHelper.suicaPdfToList(form.getFile());
+      List<BooksColumn> columnList = booksConvertHelper.suicaListToBooksList(suciaList);
+      ret = downloadHelper.buildStreamingResponse(
+          fileName, StandardCharsets.UTF_8,
+          StudyStringUtil.objectToCsvStr(columnList, BooksColumn.class, true));
+    }
+
+    return ret;
   }
 
 }

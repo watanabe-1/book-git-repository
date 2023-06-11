@@ -1,5 +1,7 @@
 package org.book.app.study.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import org.terasoluna.gfw.common.exception.BusinessException;
@@ -220,7 +222,34 @@ public class StudyStringUtil {
    * 文字列からList形式に変換
    * 
    * @param str 文字列
-   * @param charsetName 文字コード
+   * @param pojoType カラム情報が記載されているクラス
+   * @param isHeader ヘッダーをつけるか
+   * @return List
+   */
+  public static <T> List<T> csvStrToList(String str, Class<T> pojoType,
+      boolean isHeader) {
+    return strToListByCsvMapper(str, pojoType,
+        StudyStringUtil.SEPARATOR_BY_CSV, isHeader, true);
+  }
+
+  /**
+   * tsvファイル文字列からList形式に変換
+   * 
+   * @param str 文字列
+   * @param pojoType カラム情報が記載されているクラス
+   * @param isHeader ヘッダーをつけるか
+   * @return List
+   */
+  public static <T> List<T> tsvStrToList(String str, Class<T> pojoType,
+      boolean isHeader) {
+    return strToListByCsvMapper(str, pojoType,
+        StudyStringUtil.SEPARATOR_BY_TSV, isHeader, false);
+  }
+
+  /**
+   * 文字列からList形式に変換
+   * 
+   * @param str 文字列
    * @param pojoType カラム情報が記載されているクラス
    * @param sep 区切り文字
    * @param isHeader ヘッダーをつけるか
@@ -228,8 +257,16 @@ public class StudyStringUtil {
    * @return List
    */
 
-  public static <T> List<T> strToListByCsvMapper(String str, String charsetName,
+  public static <T> List<T> strToListByCsvMapper(String str,
       Class<T> pojoType, char sep, boolean isHeader, boolean isQuote) {
+    String charsetName = "";
+
+    try (ByteArrayInputStream in = new ByteArrayInputStream(str.getBytes());) {
+      charsetName = StudyFileUtil.detectFileEncoding(in);
+    } catch (IOException e) {
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+    }
+
     return StudyJacksonUtil.objectToListByCsvMapper(str, charsetName, pojoType, sep, isHeader,
         isQuote);
   }

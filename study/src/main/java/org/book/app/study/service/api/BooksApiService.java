@@ -4,12 +4,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import org.book.app.study.dto.file.SyukujitsuColumn;
+import org.book.app.study.dto.ui.books.BooksConvertUi;
 import org.book.app.study.dto.ui.books.BooksUi;
 import org.book.app.study.dto.ui.books.HouseholdCalendarUi;
 import org.book.app.study.dto.ui.books.HouseholdChartUi;
 import org.book.app.study.dto.ui.books.HouseholdUi;
 import org.book.app.study.entity.Books;
 import org.book.app.study.enums.type.BooksType;
+import org.book.app.study.enums.type.FileType;
 import org.book.app.study.form.BooksForm;
 import org.book.app.study.helper.BooksHelper;
 import org.book.app.study.service.BooksService;
@@ -64,6 +66,18 @@ public class BooksApiService {
     ui.setBooksYears(StudyDateUtil.getbetweenYears(
         booksHelper.getMinBooksDate(booksList),
         booksHelper.getMaxBooksDate(booksList)));
+
+    return ui;
+  }
+
+  /**
+   * 変換画面情報取得
+   * 
+   * @return 画面情報
+   */
+  public BooksConvertUi getConvertInfo() {
+    BooksConvertUi ui = new BooksConvertUi();
+    ui.setFileTypes(FileType.values());
 
     return ui;
   }

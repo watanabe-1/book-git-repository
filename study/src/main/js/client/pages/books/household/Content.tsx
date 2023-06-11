@@ -30,7 +30,7 @@ import ListTable from './ListTable';
 /**
  * 家計簿確認用データ
  */
-export type HouseHoldData = {
+export type HouseholdUi = {
   expensesList: Books[];
   incomeList: Books[];
   year: string;
@@ -40,12 +40,12 @@ export type HouseHoldData = {
 };
 
 /**
- * HouseHoldDataからDateを取得
+ * HouseholdUiからDateを取得
  *
- * @param data HouseHoldData
+ * @param data HouseholdUi
  * @return Date
  */
-const infoToDate = (data: HouseHoldData) =>
+const infoToDate = (data: HouseholdUi) =>
   new Date(parseInt(data.year), parseInt(data.month) - 1, parseInt(data.day));
 
 const Content = () => {
@@ -53,7 +53,7 @@ const Content = () => {
     (api, param) => api.getHouseholdInfo(param),
     [],
     onServerConst.books.HOUSEHOLD_INFO
-  ) as [HouseHoldData, JSX.Element];
+  ) as [HouseholdUi, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const navigate = useNavigate();
   const location = useLocation();
@@ -86,7 +86,7 @@ const Content = () => {
     if (paramTab) params['tab'] = paramTab;
     if (paramDate) params['date'] = paramDate;
     const response = await fetchGet(urlConst.books.HOUSEHOLD_INFO, params);
-    const info = (await response.json()) as HouseHoldData;
+    const info = (await response.json()) as HouseholdUi;
     setInfo(info);
   };
 

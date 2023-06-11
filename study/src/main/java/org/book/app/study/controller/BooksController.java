@@ -1,6 +1,7 @@
 package org.book.app.study.controller;
 
 import org.book.app.study.api.js.BooksApi;
+import org.book.app.study.form.BooksConvertForm;
 import org.book.app.study.form.BooksForm;
 import org.book.app.study.util.StudyJsUtil;
 import org.springframework.stereotype.Controller;
@@ -71,6 +72,23 @@ public class BooksController {
       ModelAndView model) {
     StudyJsUtil.setJsTemplate(model, "家計簿確認画面", request,
         "/static/js/pages/books/household/household.bundle.js", booksApi, form);
+
+    return model;
+  }
+
+  /**
+   * 家計簿データ変換画面
+   * 
+   * @param request リクエスト
+   * @param form 送信されたデータ
+   * @param model モデル
+   * @return 画面表示用モデル
+   */
+  @RequestMapping(value = "/books/convert", method = RequestMethod.GET)
+  public ModelAndView convert(HttpServletRequest request, @ModelAttribute BooksConvertForm form,
+      ModelAndView model) {
+    StudyJsUtil.setJsTemplate(model, "家計簿変換画面", request,
+        "/static/js/pages/books/convert/convert.bundle.js", booksApi, form);
 
     return model;
   }
