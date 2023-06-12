@@ -109,7 +109,7 @@ public class StudyStringUtil {
    * @return 置換結果
    */
   public static String replaceLast(String str, String regex, String replacement) {
-    if (str == null || str.isEmpty()) {
+    if (isNullOrEmpty(str)) {
       return str;
     }
 

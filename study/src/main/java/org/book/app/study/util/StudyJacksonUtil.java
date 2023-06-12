@@ -106,10 +106,10 @@ public class StudyJacksonUtil {
 
   public static <T> List<T> objectToListByCsvMapper(Object obj, String charsetName,
       Class<T> pojoType, char sep, boolean isHeader, boolean isQuote) {
-    CsvMapper mapper = StudyJacksonUtil.createCsvMapper(isQuote);
-    CsvSchema schema = StudyJacksonUtil.createCsvSchema(mapper, pojoType, sep, isHeader);
+    CsvMapper mapper = createCsvMapper(isQuote);
+    CsvSchema schema = createCsvSchema(mapper, pojoType, sep, isHeader);
 
-    return StudyJacksonUtil.readValues(obj, mapper, schema, pojoType);
+    return readValues(obj, mapper, schema, pojoType);
   }
 
 }
