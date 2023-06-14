@@ -19,7 +19,7 @@ public class GlobalController {
    * ${#httpServletRequest.getContextPath()}<br/>
    * が使用できなくなった<br/>
    * そこでThymeleaf公式が紹介していた方法である<br/>
-   * *コントローラー レベルで必要な情報をモデルに追加<br/>
+   * コントローラー レベルで必要な情報をモデルに追加<br/>
    * を行い、コンテキストパスをThymeleafから参照できるようにする
    * 
    * @see https://www.thymeleaf.org/doc/articles/thymeleaf31whatsnew.html

@@ -17,7 +17,6 @@ public class StudyCodeUtil {
 
   /**
    * コード情報 Serviceのセッター<br>
-   * 右記@AutowiredはeclipsだとUnnecesaryの注意が出るが必要
    * 
    * @param codelkupService コード情報 Service
    */
