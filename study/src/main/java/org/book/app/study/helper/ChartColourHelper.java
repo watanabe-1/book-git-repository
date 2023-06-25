@@ -23,6 +23,8 @@ import org.book.app.study.util.StudyCodeUtil;
 import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyUtil;
 import org.springframework.stereotype.Component;
+import org.terasoluna.gfw.common.exception.BusinessException;
+import org.terasoluna.gfw.common.message.ResultMessages;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -85,8 +87,9 @@ public class ChartColourHelper {
    */
   public BooksChartData getChartDataByCoeff(Integer qty, int coeffR, int coeffG, int coeffB) {
     BooksChartData bdd = new BooksChartData();
-    setDummyChartDatat(bdd, qty, getRgbaList(qty, (float) 0.5, coeffR, coeffG, coeffB),
-        getRgbaList(qty, (float) 1, coeffR, coeffG, coeffB));
+    setDummyChartDatat(bdd, qty,
+        getRgbaListWithTransparency(qty, (float) 0.5, coeffR, coeffG, coeffB),
+        getRgbaListWithTransparency(qty, (float) 1, coeffR, coeffG, coeffB));
 
     return bdd;
   }
@@ -233,36 +236,51 @@ public class ChartColourHelper {
     // ユーザーごとに作成し設定しているテンプレートを取得
     Templatechartcolour activeTempColour = getActiveChartColorTemp();
 
-    return getRgbaList(standard, transparency, activeTempColour.getSeedCoeffR(),
+    return getRgbaListWithTransparency(standard, transparency, activeTempColour.getSeedCoeffR(),
         activeTempColour.getSeedCoeffG(), activeTempColour.getSeedCoeffB());
   }
 
   /**
-   * rgb形式で色を作成し返却
+   * RGBA形式の色を作成し、指定された透明度を持つ色のリストを返します。
    * 
-   * @param standard 作成する色の個数
-   * @param transparency 透明度 (0～1の間)
-   * @param coeffR シード値作成のための係数R
-   * @param coeffG シード値作成のための係数G
-   * @param coeffB シード値作成のための係数B
-   * @return List<String> 作成した色のリスト
+   * @param count 作成する色の個数
+   * @param transparency 透明度 (0～1の範囲内)
+   * @param seedCoeffR シード値作成のための係数R
+   * @param seedCoeffG シード値作成のための係数G
+   * @param seedCoeffB シード値作成のための係数B
+   * @return RGBA形式の色のリスト
    */
-  public List<String> getRgbaList(int standard, float transparency, int coeffR, int coeffG,
-      int coeffB) {
+  public List<String> getRgbaListWithTransparency(int count, float transparency, int seedCoeffR,
+      int seedCoeffG, int seedCoeffB) {
     List<String> result = new ArrayList<>();
+    Random rand = new Random();
 
-    for (int i = 1; i < standard + 1; i++) {
-      // シード値を固定にすることによりこのメソッドの返す結果を固定にしている
-      Random rand = new Random(i * coeffR);
-      int r = rand.nextInt(255);
-      Random rand2 = new Random(i * coeffG);
-      int g = rand2.nextInt(255);
-      Random rand3 = new Random(i * coeffB);
-      int b = rand3.nextInt(255);
+    if (transparency < 0 || transparency > 1) {
+      throw new BusinessException(ResultMessages.error().add("1.01.01.1002",
+          "透明度は0から1の範囲内で指定してください。"));
+    }
+
+    // シード値を固定にすることによりこのメソッドの返す結果を固定にしている
+    for (int i = 1; i < count + 1; i++) {
+      int r = generateRandomWithSeed(i * seedCoeffR, rand);
+      int g = generateRandomWithSeed(i * seedCoeffG, rand);
+      int b = generateRandomWithSeed(i * seedCoeffB, rand);
       result.add(String.format("rgba(%s,%s,%s,%s)", r, g, b, transparency));
     }
 
     return result;
+  }
+
+  /**
+   * 指定されたシード値を使用してランダムな値を生成する
+   * 
+   * @param seed シード値
+   * @param rand ランダム生成用
+   * @return 生成値
+   */
+  private int generateRandomWithSeed(long seed, Random rand) {
+    rand.setSeed(seed);
+    return rand.nextInt(255);
   }
 
   /**
@@ -273,13 +291,14 @@ public class ChartColourHelper {
    */
   public List<Templatechartcolour> getRandomColourSeedCoef(int maxCnt) {
     List<Templatechartcolour> ret = new ArrayList<>();
+    Random rand = new Random();
+    final int MAX_BOUND = 999999999;
 
     for (int i = 0; i < maxCnt; i++) {
       Templatechartcolour tc = new Templatechartcolour();
-      Random rand = new Random();
-      tc.setSeedCoeffR(rand.nextInt(999999999));
-      tc.setSeedCoeffG(rand.nextInt(999999999));
-      tc.setSeedCoeffB(rand.nextInt(999999999));
+      tc.setSeedCoeffR(rand.nextInt(MAX_BOUND));
+      tc.setSeedCoeffG(rand.nextInt(MAX_BOUND));
+      tc.setSeedCoeffB(rand.nextInt(MAX_BOUND));
       ret.add(tc);
     }
 
