@@ -67,10 +67,10 @@ const BarAndLineChart = ({
             return context[0].label;
           },
           label: function (context) {
-            const data: number[] = context.dataset.data as number[];
-            const index: number = context.dataIndex;
+            const data = context.dataset.data as number[];
+            const index = context.dataIndex;
             //\xA5は円マークのこと
-            const text: string = context.dataset.label + '：\xA5' + data[index];
+            const text = `${context.dataset.label}：\xA5${data[index]}`;
             return [text];
           },
         },

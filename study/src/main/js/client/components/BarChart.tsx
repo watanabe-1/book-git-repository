@@ -91,26 +91,19 @@ const BarChart = ({
         usePointStyle: true,
         callbacks: {
           title: function (context): string {
-            //console.log(context);
-            const label: string = context[0].label;
-            return (
-              label + '(' + date.getFullYear() + '/' + date.getMonth() + ')'
-            );
+            return `${
+              context[0].label
+            }(${date.getFullYear()}/${date.getMonth()})`;
           },
           label: function (context): string[] {
-            const data: number[] = context.dataset.data as number[];
-            const index: number = context.dataIndex;
+            const data = context.dataset.data as number[];
+            const index = context.dataIndex;
             //金額(dataに定義した)の合計
-            let dataSum = 0;
-            data.forEach(function (element) {
-              dataSum += element;
-            });
+            const dataSum = data.reduce((sum, num) => sum + num);
             //割合(小数点なし)*1/1の値を両方10倍すると小数点の桁数が一つ増える
-            const ratio: string =
-              (Math.round((data[index] / dataSum) * 100 * 1) / 1).toString() +
-              '%';
+            const ratio = Math.round((data[index] / dataSum) * 100 * 1) / 1;
             //\xA5は円マークのこと
-            const text: string = ratio + '  \xA5' + data[index];
+            const text = `${ratio}%  \xA5${data[index]}`;
             return [text];
           },
         },

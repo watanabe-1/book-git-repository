@@ -24,19 +24,22 @@ const Stepper = ({
         <Col sm="12">
           <div className="form-bootstrapStepper">
             <ul className="bootstrapStepper form-wizard">
-              {steps.map((label, index) => (
-                <li
-                  key={`bootstrapStepper-${index}`}
-                  className={
-                    (activeStep == index ? 'active' : '') +
-                    ' col-sm-' +
-                    Math.round(12 / steps.length)
-                  }
-                >
-                  <span className="step">{index + 1}</span>
-                  {!noLable && <span className="title">{label}</span>}
-                </li>
-              ))}
+              {steps.map((label, index) => {
+                const classNames = [];
+                if (activeStep == index) {
+                  classNames.push('active');
+                }
+                classNames.push(`col-sm-${Math.round(12 / steps.length)}`);
+                return (
+                  <li
+                    key={`bootstrapStepper-${index}`}
+                    className={classNames.join(' ')}
+                  >
+                    <span className="step">{index + 1}</span>
+                    {!noLable && <span className="title">{label}</span>}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         </Col>
