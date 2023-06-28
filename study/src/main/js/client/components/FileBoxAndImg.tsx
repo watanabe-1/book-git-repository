@@ -1,16 +1,17 @@
 import React from 'react';
 
 import { addContextPath, pathJoin } from '../../study/util/studyUtil';
-import FileBoxOnValidate from './FileBoxOnValidate';
+import FileBox from './FileBox';
 import ImageIcon from './ImageIcon';
 
 /**
  *
  * @returns form内のファイル用インプットボックス
  */
-const FileBoxOnValidateAndImg = ({
+const FileBoxAndImg = ({
   title = null,
   name,
+  validate = false,
   error,
   accept,
   path,
@@ -19,6 +20,7 @@ const FileBoxOnValidateAndImg = ({
 }: {
   title?: string;
   name: string;
+  validate?: boolean;
   error: unknown;
   accept: string;
   path: string;
@@ -33,9 +35,10 @@ const FileBoxOnValidateAndImg = ({
         path={path.startsWith('data:') ? newPath : addContextPath(newPath)}
         isAddContextPath={false}
       />
-      <FileBoxOnValidate
+      <FileBox
         title={title}
         name={name}
+        validate={validate}
         error={error}
         accept={accept}
         onChange={onChange}
@@ -44,4 +47,4 @@ const FileBoxOnValidateAndImg = ({
   );
 };
 
-export default FileBoxOnValidateAndImg;
+export default FileBoxAndImg;

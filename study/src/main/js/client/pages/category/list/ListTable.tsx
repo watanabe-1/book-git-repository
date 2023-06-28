@@ -20,13 +20,13 @@ import {
 } from '../../../../study/util/studyYupUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import CheckBox from '../../../components/CheckBox';
-import FileBoxOnValidateAndImg from '../../../components/FileBoxOnValidateAndImg';
+import FileBoxAndImg from '../../../components/FileBoxAndImg';
 import ModalSlider from '../../../components/ModalSlider';
 import RadioBtn from '../../../components/RadioBtn';
 import SelectBox from '../../../components/SelectBox';
 import SortAndFilterFormTable from '../../../components/SortAndFilterFormTable';
 import TextArea from '../../../components/TextArea';
-import TextBoxOnValidate from '../../../components/TextBoxOnValidate';
+import TextBox from '../../../components/TextBox';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import yup from '../../../yup/message/ja';
 
@@ -169,9 +169,10 @@ const ListTable = () => {
               <Field name={name}>
                 {({ field, meta }) => {
                   return (
-                    <TextBoxOnValidate
+                    <TextBox
                       name={field.name}
                       value={field.value}
+                      validate
                       touched={meta.touched}
                       error={meta.error}
                       onChange={field.onChange}
@@ -197,9 +198,10 @@ const ListTable = () => {
               <Field name={name}>
                 {({ field, meta }) => {
                   return (
-                    <TextBoxOnValidate
+                    <TextBox
                       name={field.name}
                       value={field.value}
+                      validate
                       touched={meta.touched}
                       error={meta.error}
                       onChange={field.onChange}
@@ -367,8 +369,9 @@ const ListTable = () => {
               <Field name={name}>
                 {({ field, meta }) => {
                   return (
-                    <FileBoxOnValidateAndImg
+                    <FileBoxAndImg
                       name={field.name}
+                      validate
                       error={meta.error}
                       accept="image/*"
                       path={

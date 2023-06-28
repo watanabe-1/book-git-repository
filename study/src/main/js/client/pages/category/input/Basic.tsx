@@ -17,12 +17,12 @@ import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import CheckBox from '../../../components/CheckBox';
-import FileBoxOnValidate from '../../../components/FileBoxOnValidate';
+import FileBox from '../../../components/FileBox';
 import RadioBtn from '../../../components/RadioBtn';
 import SelectBox from '../../../components/SelectBox';
 import SubmitButton from '../../../components/SubmitButton';
 import TextArea from '../../../components/TextArea';
-import TextBoxOnValidate from '../../../components/TextBoxOnValidate';
+import TextBox from '../../../components/TextBox';
 import { onServer, executeFuncIfNeeded } from '../../../on-server';
 import yup from '../../../yup/message/ja';
 import { Context } from './Content';
@@ -144,20 +144,22 @@ const Basic = (props: { handleNext: () => void }) => {
             <Form noValidate onSubmit={handleSubmit}>
               <Row g="3">
                 <Col sm="6">
-                  <TextBoxOnValidate
+                  <TextBox
                     title="カテゴリーコード"
                     name={fieldConst.category.CAT_CODE}
                     value={values.catCode}
+                    validate
                     touched={touched.catCode}
                     error={errors.catCode}
                     onChange={handleChange}
                   />
                 </Col>
                 <Col sm="6">
-                  <TextBoxOnValidate
+                  <TextBox
                     title="カテゴリー名"
                     name={fieldConst.category.CAT_NAME}
                     value={values.catName}
+                    validate
                     touched={touched.catName}
                     error={errors.catName}
                     onChange={handleChange}
@@ -204,9 +206,10 @@ const Basic = (props: { handleNext: () => void }) => {
               <hr className="my-4" />
               <Row g="3">
                 <Col sm="12">
-                  <FileBoxOnValidate
+                  <FileBox
                     title="アイコンのアップロード"
                     name={fieldConst.category.CAT_ICON}
+                    validate
                     error={errors.catIcon}
                     accept="image/*"
                     onChange={getSetInputFileFunc(

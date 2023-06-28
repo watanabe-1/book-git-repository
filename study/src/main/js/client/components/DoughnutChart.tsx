@@ -135,6 +135,7 @@ const DoughnutChart = ({
       },
     },
   ];
+
   return <Doughnut data={data} options={options} plugins={plugins} />;
 };
 

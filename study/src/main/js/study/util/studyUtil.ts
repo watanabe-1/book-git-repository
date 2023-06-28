@@ -149,7 +149,7 @@ export function addContextPath(url: string): string {
  * @return 結合したパス
  */
 export function pathJoin(base: string, ...adds: string[]): string {
-  return JoinBases(base, adds, '/');
+  return joinBases(base, adds, '/');
 }
 
 /**
@@ -160,7 +160,7 @@ export function pathJoin(base: string, ...adds: string[]): string {
  * @return 結合したパス
  */
 export function keyJoin(base: string, ...adds: string[]): string {
-  return JoinBases(base, adds, '.');
+  return joinBases(base, adds, '.');
 }
 
 /**
@@ -171,17 +171,12 @@ export function keyJoin(base: string, ...adds: string[]): string {
  * @param separator 区切り文字1文字
  * @return 結合したもの
  */
-export function JoinBases(
+export function joinBases(
   base: string,
   adds: string[],
   separator: string
 ): string {
-  let ret = base;
-  adds.forEach((add) => {
-    ret = JoinBase(ret, add, separator);
-  });
-
-  return ret;
+  return adds.reduce((result, add) => joinBase(result, add, separator), base);
 }
 
 /**
@@ -192,21 +187,21 @@ export function JoinBases(
  * @param separator 区切り文字1文字
  * @return 結合したもの
  */
-export function JoinBase(base: string, add: string, separator: string): string {
+export function joinBase(base: string, add: string, separator: string): string {
   const len = separator.length;
   // 先頭
-  const addHead = add ? add.slice(0, len) : null;
+  const addHead = add ? add.slice(0, len) : '';
   // 末尾
-  const baseFoot = base ? base.slice(-len) : null;
+  const baseFoot = base ? base.slice(-len) : '';
 
-  if (addHead == null) return baseFoot;
+  if (!addHead) return baseFoot;
 
-  if (baseFoot == null) return addHead;
+  if (!baseFoot) return addHead;
 
-  if (baseFoot == separator) {
-    return addHead == separator ? base.slice(0, -len) + add : base + add;
+  if (baseFoot === separator) {
+    return addHead === separator ? base.slice(0, -len) + add : base + add;
   } else {
-    return addHead == separator ? base + add : base + separator + add;
+    return addHead === separator ? base + add : base + separator + add;
   }
 }
 

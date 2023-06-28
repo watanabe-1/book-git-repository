@@ -12,8 +12,8 @@ import { urlConst } from '../../../../constant/urlConstant';
 import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
-import FileBoxOnValidate from '../../../components/FileBoxOnValidate';
-import SelectBoxOnValidate from '../../../components/SelectBoxOnValidate';
+import FileBox from '../../../components/FileBox';
+import SelectBox from '../../../components/SelectBox';
 import SubmitButton from '../../../components/SubmitButton';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import yup from '../../../yup/message/ja';
@@ -95,7 +95,10 @@ const InputForm = (props: { handleNext: () => void }) => {
     .string()
     .required()
     .server(errData);
-  additions[fieldConst.books.BOOKS_FILE] = yup.mixed().server(errData);
+  additions[fieldConst.books.BOOKS_FILE] = yup
+    .mixed()
+    .required()
+    .server(errData);
   // スキーマにセット
   const schema = yup.object().shape(additions);
 
@@ -124,11 +127,12 @@ const InputForm = (props: { handleNext: () => void }) => {
             <Form noValidate onSubmit={handleSubmit}>
               <Row g="3">
                 <Col sm="12">
-                  <SelectBoxOnValidate
+                  <SelectBox
                     title="収入or支出"
                     name={fieldConst.books.BOOKS_TYPE}
                     value={values.booksType}
                     typeList={info.booksTypes}
+                    validate
                     error={errors.booksType}
                     touched={touched.booksType}
                     onChange={handleChange}
@@ -138,9 +142,10 @@ const InputForm = (props: { handleNext: () => void }) => {
               <hr className="my-4" />
               <Row g="3">
                 <Col sm="12">
-                  <FileBoxOnValidate
+                  <FileBox
                     title="家計簿情報のアップロード"
                     name={fieldConst.books.BOOKS_FILE}
+                    validate
                     error={errors.booksFile}
                     accept=".csv"
                     onChange={getSetInputFileFunc(

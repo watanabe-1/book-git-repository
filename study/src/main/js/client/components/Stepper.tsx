@@ -6,17 +6,17 @@ import '../../../css/view/stepper/stepper.css';
 /**
  * stepsに渡した配列の要素分だけ作成
  * activeStepが現在のstep
- * noLable はラベルを出すかどうか
+ * noLabel はラベルを出すかどうか
  * @returns stepper
  */
 const Stepper = ({
   steps,
   activeStep,
-  noLable = false,
+  noLabel = false,
 }: {
   steps: string[];
   activeStep: number;
-  noLable?: boolean;
+  noLabel?: boolean;
 }) => {
   return (
     <div className="pb-2 mb-5">
@@ -26,7 +26,7 @@ const Stepper = ({
             <ul className="bootstrapStepper form-wizard">
               {steps.map((label, index) => {
                 const classNames = [];
-                if (activeStep == index) {
+                if (activeStep === index) {
                   classNames.push('active');
                 }
                 classNames.push(`col-sm-${Math.round(12 / steps.length)}`);
@@ -36,7 +36,7 @@ const Stepper = ({
                     className={classNames.join(' ')}
                   >
                     <span className="step">{index + 1}</span>
-                    {!noLable && <span className="title">{label}</span>}
+                    {!noLabel && <span className="title">{label}</span>}
                   </li>
                 );
               })}

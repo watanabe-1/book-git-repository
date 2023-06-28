@@ -16,8 +16,8 @@ import {
 import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
-import FileBoxOnValidate from '../../../components/FileBoxOnValidate';
-import SelectBoxOnValidate from '../../../components/SelectBoxOnValidate';
+import FileBox from '../../../components/FileBox';
+import SelectBox from '../../../components/SelectBox';
 import SubmitButton from '../../../components/SubmitButton';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import yup from '../../../yup/message/ja';
@@ -136,11 +136,12 @@ const ConvertForm = () => {
             <Form noValidate onSubmit={handleSubmit}>
               <Row g="3">
                 <Col sm="12">
-                  <SelectBoxOnValidate
+                  <SelectBox
                     title="変換するファイルの種類を選択"
                     name={fieldConst.booksConvert.FILE_TYPE}
                     value={values.fileType}
                     typeList={info.fileTypes}
+                    validate
                     error={errors.fileType}
                     touched={touched.fileType}
                     onChange={handleChange}
@@ -150,9 +151,10 @@ const ConvertForm = () => {
               <hr className="my-4" />
               <Row g="3">
                 <Col sm="12">
-                  <FileBoxOnValidate
+                  <FileBox
                     title="変換ファイルのアップロード"
                     name={fieldConst.booksConvert.FILE}
+                    validate
                     error={errors.file}
                     accept="*.*"
                     onChange={getSetInputFileFunc(

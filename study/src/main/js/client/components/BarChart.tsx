@@ -9,10 +9,12 @@ import {
   Legend,
   ChartData,
   ChartOptions,
+  Plugin,
 } from 'chart.js';
 import { fontString } from 'chart.js/helpers';
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
+import { AnyObject } from 'yup';
 
 import { isObjEmpty } from '../../study/util/studyUtil';
 
@@ -114,7 +116,7 @@ const BarChart = ({
       },
     },
   };
-  const plugins = [
+  const plugins: Plugin<'bar', AnyObject>[] = [
     {
       id: 'studyBarChart',
       //棒の頭にラベルをつける
@@ -149,6 +151,7 @@ const BarChart = ({
       },
     },
   ];
+
   return <Bar data={data} options={options} plugins={plugins} />;
 };
 

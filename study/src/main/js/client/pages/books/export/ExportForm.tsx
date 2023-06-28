@@ -15,7 +15,7 @@ import {
 } from '../../../../study/util/studyFileUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
-import SelectBoxOnValidate from '../../../components/SelectBoxOnValidate';
+import SelectBox from '../../../components/SelectBox';
 import SubmitButton from '../../../components/SubmitButton';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import yup from '../../../yup/message/ja';
@@ -124,11 +124,12 @@ const InputForm = () => {
             <Form noValidate onSubmit={handleSubmit}>
               <Row g="3">
                 <Col sm="12">
-                  <SelectBoxOnValidate
+                  <SelectBox
                     title="収入or支出"
                     name={fieldConst.books.BOOKS_TYPE}
                     value={values.booksType}
                     typeList={info.booksTypes}
+                    validate
                     error={errors.booksType}
                     touched={touched.booksType}
                     onChange={handleChange}
@@ -137,11 +138,12 @@ const InputForm = () => {
               </Row>
               <Row g="3">
                 <Col sm="12">
-                  <SelectBoxOnValidate
+                  <SelectBox
                     title="出力年選択"
                     name={fieldConst.books.BOOKS_YEAR}
                     value={values.booksYear}
                     typeList={info.booksYears}
+                    validate
                     error={errors.booksYear}
                     touched={touched.booksYear}
                     onChange={handleChange}
