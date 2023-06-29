@@ -1,4 +1,4 @@
-import { Field, FormikProps } from 'formik';
+import { Field, FieldProps, FormikProps } from 'formik';
 import React, { useEffect, useState } from 'react';
 
 import {
@@ -74,6 +74,8 @@ const ListTable = () => {
     } else {
       setErrData(json);
     }
+
+    return res;
   };
 
   /**
@@ -122,6 +124,7 @@ const ListTable = () => {
   // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成するための設定
   const toObjConfig: BuildListTableFormObjConfig = {
     className: classConst.CAT_DATA_LIST,
+    primaryKey: fieldConst.category.CAT_CODE,
     list: [
       {
         name: fieldConst.category.DELETE,
@@ -131,7 +134,7 @@ const ListTable = () => {
             const name = names[fieldConst.category.DELETE];
             return (
               <Field name={name}>
-                {({ field }) => {
+                {({ field }: FieldProps<string>) => {
                   // console.log('Field');
                   // console.log(field);
                   // console.log('form');
@@ -167,7 +170,7 @@ const ListTable = () => {
             const name = names[fieldConst.category.CAT_CODE];
             return (
               <Field name={name}>
-                {({ field, meta }) => {
+                {({ field, meta }: FieldProps<string>) => {
                   return (
                     <TextBox
                       name={field.name}
@@ -196,7 +199,7 @@ const ListTable = () => {
             const name = names[fieldConst.category.CAT_NAME];
             return (
               <Field name={name}>
-                {({ field, meta }) => {
+                {({ field, meta }: FieldProps<string>) => {
                   return (
                     <TextBox
                       name={field.name}
@@ -204,7 +207,10 @@ const ListTable = () => {
                       validate
                       touched={meta.touched}
                       error={meta.error}
-                      onChange={field.onChange}
+                      dirty={props.dirty}
+                      // onChangeにセットすると入力するたびにソートが走るので、画面が動きすぎて見づらいため、onBlurに設定
+                      onBlur={field.onChange}
+                      IsOnClickEditable
                     />
                   );
                 }}
@@ -225,7 +231,7 @@ const ListTable = () => {
             const name = names[fieldConst.category.CAT_TYPE];
             return (
               <Field name={name}>
-                {({ field }) => {
+                {({ field }: FieldProps<string>) => {
                   return (
                     <RadioBtn
                       name={field.name}
@@ -250,7 +256,7 @@ const ListTable = () => {
             const name = names[fieldConst.category.NOTE];
             return (
               <Field name={name}>
-                {({ field }) => {
+                {({ field }: FieldProps<string>) => {
                   return (
                     <TextArea
                       name={field.name}
@@ -274,7 +280,7 @@ const ListTable = () => {
             const name = names[fieldConst.category.IMG_TYPE];
             return (
               <Field name={name}>
-                {({ field }) => {
+                {({ field }: FieldProps<string>) => {
                   return (
                     <SelectBox
                       name={field.name}
@@ -342,7 +348,7 @@ const ListTable = () => {
             const name = names[fieldConst.category.ACTIVE];
             return (
               <Field name={name}>
-                {({ field }) => {
+                {({ field }: FieldProps<string>) => {
                   return (
                     <CheckBox
                       name={field.name}
@@ -367,7 +373,7 @@ const ListTable = () => {
             const name = names[fieldConst.category.CAT_ICON];
             return (
               <Field name={name}>
-                {({ field, meta }) => {
+                {({ field, meta }: FieldProps<string>) => {
                   return (
                     <FileBoxAndImg
                       name={field.name}

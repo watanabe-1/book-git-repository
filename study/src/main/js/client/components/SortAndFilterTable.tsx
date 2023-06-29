@@ -6,20 +6,22 @@ import { iconConst } from '../../constant/iconConstant';
 import Icon from './Icon';
 import TextBoxExclusionForm from './TextBoxExclusionForm';
 
-/**
- * ソート、フィルター可能なテーブル
- * @returns テーブル
- */
-const SortAndFilterTable = ({
-  pColumns,
-  pRows,
-  isSort = true,
-  isFilter = true,
-}: {
+type SortAndFilterTableProps = {
   pColumns: TableColumn[];
   pRows: TableRow[];
   isSort?: boolean;
   isFilter?: boolean;
+};
+
+/**
+ * ソート、フィルター可能なテーブル
+ * @returns テーブル
+ */
+const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
+  pColumns,
+  pRows,
+  isSort = true,
+  isFilter = true,
 }) => {
   const ASCENDING = 'ASC';
   const DESCENDING = 'DESC';
@@ -173,12 +175,15 @@ const SortAndFilterTable = ({
         </tr>
       </thead>
       <tbody>
-        {filteredAndSortedRows.map((row, rowIndex) => {
+        {filteredAndSortedRows.map((row) => {
           return (
-            <tr key={rowIndex}>
+            <tr key={row.primaryKey}>
               {row.cells.map((cell, cellIndex) => {
                 return (
-                  <td key={`${rowIndex}-${cellIndex}`} hidden={cell.hidden}>
+                  <td
+                    key={`${row.primaryKey}-${cellIndex}`}
+                    hidden={cell.hidden}
+                  >
                     {cell.element}
                   </td>
                 );

@@ -8,21 +8,26 @@ import yup from '../yup/message/ja';
 import SortAndFilterTable from './SortAndFilterTable';
 import SubmitButton from './SubmitButton';
 
+type SortAndFilterFormTableProps = {
+  tableFormConfig: TableFormObjConfig;
+  handleFormSubmit: (
+    event: React.FormEvent<HTMLFormElement>
+  ) => Promise<Response>;
+  validateButton?: React.MutableRefObject<HTMLButtonElement>;
+  hiddenSubmitButton?: boolean;
+};
+
 /**
  * ソート、フィルター可能なフォームテーブル
  * @returns フォームテーブル
  */
-const SortAndFilterFormTable = ({
+const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   tableFormConfig,
   handleFormSubmit,
   hiddenSubmitButton = false,
-}: {
-  tableFormConfig: TableFormObjConfig;
-  handleFormSubmit: (event: React.FormEvent<HTMLFormElement>) => void;
-  validateButton?: React.MutableRefObject<HTMLButtonElement>;
-  hiddenSubmitButton?: boolean;
 }) => {
   const validetaButton = useRef<HTMLButtonElement>(null);
+  const resetButton = useRef<HTMLButtonElement>(null);
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   // yupで使用するスキーマの設定
   const additions = tableFormConfig.additions;
@@ -45,10 +50,18 @@ const SortAndFilterFormTable = ({
    */
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     setSubmitLoading(true);
-    await handleFormSubmit(event);
+    const res = await handleFormSubmit(event);
     setSubmitLoading(false);
     //console.log('handleSubmit が完了しました');
-    validetaButton.current.click();
+    if (res) {
+      if (res.ok) {
+        // formのリセット(dirty→false)
+        resetButton.current.click();
+      } else {
+        // バリデーション実施
+        validetaButton.current.click();
+      }
+    }
   };
 
   const formik = useFormik<unknown>({
@@ -111,6 +124,16 @@ const SortAndFilterFormTable = ({
           hidden
         >
           バリデーション実施
+        </Button>
+        <Button
+          ref={resetButton}
+          onClick={() => {
+            // formを現在のvalueでリセット実施することでdirty（formのどこかの値を編集したかどうか）のフラグがfalseに設定される
+            formik.resetForm({ values: formik.values });
+          }}
+          hidden
+        >
+          formのリセット実施
         </Button>
       </Form>
     </FormikProvider>

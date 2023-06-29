@@ -512,6 +512,7 @@ export function buildListTableFormObj(
     getRows: (props: FormikProps<unknown>) => {
       return nameList.map((names) => {
         return {
+          primaryKey: props.getFieldProps(names[config.primaryKey]).value,
           cells: config.list.map((v) => {
             // console.log('cells');
             // console.log(v.name);

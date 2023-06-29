@@ -1,4 +1,4 @@
-import { Field, FormikProps } from 'formik';
+import { Field, FieldProps, FormikProps } from 'formik';
 import React from 'react';
 import Container from 'react-bootstrap/Container';
 
@@ -14,10 +14,15 @@ import ImageIcon from '../../../components/ImageIcon';
 import SimpleText from '../../../components/SimpleText';
 import SortAndFilterFormTable from '../../../components/SortAndFilterFormTable';
 
-const ListTable = ({ booksList }: { booksList: Books[] }) => {
+type ListTableProps = {
+  booksList: Books[];
+};
+
+const ListTable: React.FC<ListTableProps> = ({ booksList }) => {
   //console.log(JSON.stringify(booksList));
   const toObjConfig: BuildListTableFormObjConfig = {
     className: classConst.BOOKS_DATA_LIST,
+    primaryKey: fieldConst.books.BOOKS_ID,
     list: [
       {
         name: fieldConst.books.BOOKS_DATE,
@@ -27,7 +32,7 @@ const ListTable = ({ booksList }: { booksList: Books[] }) => {
             const name = names[fieldConst.books.BOOKS_DATE];
             return (
               <Field name={name}>
-                {({ field }) => {
+                {({ field }: FieldProps<string>) => {
                   return <SimpleText name={field.name} value={field.value} />;
                 }}
               </Field>
@@ -46,7 +51,7 @@ const ListTable = ({ booksList }: { booksList: Books[] }) => {
             // return <SimpleText name={name} value={props.values[name]} />;
             return (
               <Field name={name}>
-                {({ field }) => {
+                {({ field }: FieldProps<string>) => {
                   // console.log('Field');
                   // console.log(field);
                   // console.log('form');
@@ -83,7 +88,7 @@ const ListTable = ({ booksList }: { booksList: Books[] }) => {
             return (
               <div>
                 <Field name={name}>
-                  {({ field, form }) => {
+                  {({ field, form }: FieldProps<string>) => {
                     return (
                       <div>
                         <SimpleText name={field.name} value={field.value} />
@@ -128,7 +133,7 @@ const ListTable = ({ booksList }: { booksList: Books[] }) => {
             const name = names[fieldConst.books.BOOKS_METHOD];
             return (
               <Field name={name}>
-                {({ field }) => {
+                {({ field }: FieldProps<string>) => {
                   return <SimpleText name={field.name} value={field.value} />;
                 }}
               </Field>
@@ -146,7 +151,7 @@ const ListTable = ({ booksList }: { booksList: Books[] }) => {
             const name = names[fieldConst.books.BOOKS_AMMOUNT];
             return (
               <Field name={name}>
-                {({ field }) => {
+                {({ field }: FieldProps<string>) => {
                   return <SimpleText name={field.name} value={field.value} />;
                 }}
               </Field>
@@ -166,7 +171,7 @@ const ListTable = ({ booksList }: { booksList: Books[] }) => {
     <Container>
       <SortAndFilterFormTable
         tableFormConfig={listTableFormObj}
-        handleFormSubmit={() => ''}
+        handleFormSubmit={() => null}
         hiddenSubmitButton
       />
     </Container>

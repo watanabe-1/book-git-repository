@@ -141,6 +141,7 @@ export type FormConfirmData = {
  */
 export type BuildListTableFormObjConfig = {
   className: string;
+  primaryKey: string;
   list: {
     name: string;
     table: {
@@ -161,20 +162,8 @@ export type TableFormObjConfig = {
   additions: Record<string, Reference<unknown>>;
   initialValues: unknown;
   rowName: config.className;
-  getRows: (props: FormikProps<unknown>) => {
-    cells: {
-      name: string;
-      value: string;
-      element: JSX.Element;
-      hidden: boolean;
-    }[];
-  }[];
-  columns: {
-    name: string;
-    value: string;
-    filterValue: string;
-    hidden: boolean;
-  }[];
+  getRows: (props: FormikProps<unknown>) => TableRow[];
+  columns: TableColumn[];
 };
 
 /**
@@ -201,5 +190,6 @@ export type TableCell = {
  * table行用
  */
 export type TableRow = {
+  primaryKey: string;
   cells: TableCell[];
 };
