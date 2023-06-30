@@ -12,7 +12,7 @@ type SelectBoxProps = {
   typeList: Type[] | string[];
   isUnshiftEmpty?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLSelectElement>) => void;
   hidden?: boolean;
   validate?: boolean;
   touched?: unknown;
@@ -58,7 +58,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
   const [hasChanges, setHasChanges] = useState(false);
   const selectBoxRef = useRef(null);
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     // valueが変更されたとき
     // 編集済み判定フラグを編集済みに
     setHasChanges(true);
@@ -68,7 +68,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
     }
   };
 
-  const handleBlur = (event) => {
+  const handleBlur = (event: React.FocusEvent<HTMLSelectElement, Element>) => {
     if (IsOnClickEditable) {
       setIsEditing(false);
     }

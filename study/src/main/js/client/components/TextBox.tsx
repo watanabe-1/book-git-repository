@@ -50,7 +50,7 @@ const TextBox: React.FC<TextBoxProps> = ({
   const [hasChanges, setHasChanges] = useState(false);
   const textBoxRef = useRef(null);
 
-  const handleChange = (event) => {
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     // valueが変更されたとき
     // 編集済み判定フラグを編集済みに
     setHasChanges(true);
@@ -60,7 +60,7 @@ const TextBox: React.FC<TextBoxProps> = ({
     }
   };
 
-  const handleBlur = (event) => {
+  const handleBlur = (event: React.FocusEvent<HTMLInputElement, Element>) => {
     if (IsOnClickEditable) {
       setIsEditing(false);
     }
