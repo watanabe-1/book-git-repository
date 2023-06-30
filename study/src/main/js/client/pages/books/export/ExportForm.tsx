@@ -1,6 +1,5 @@
-import { Formik, FormikProps } from 'formik';
-import React, { useEffect, useRef, useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
+import React, { useEffect, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -40,14 +39,15 @@ const InputForm = () => {
     React.Dispatch<React.SetStateAction<unknown>>
   ];
   const [isResultLoading, setResultLoading] = useState(false);
-  //const [validated, setValidated] = useState(false);
-  const buttonElement = useRef<HTMLButtonElement>(null);
 
   /**
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form: BooksDownloadForm) => {
+  const handleSubmit = async (
+    form: BooksDownloadForm,
+    formikHelpers: FormikHelpers<BooksDownloadForm>
+  ) => {
     const res = await fetchResult(form);
 
     if (res.ok) {
@@ -57,7 +57,7 @@ const InputForm = () => {
     } else {
       setErrData(await res.json());
       // 再バリデーション実施
-      buttonElement.current.click();
+      formikHelpers.validateForm(form);
     }
   };
 
@@ -112,14 +112,7 @@ const InputForm = () => {
         }
       >
         {(props: FormikProps<BooksDownloadForm>) => {
-          const {
-            values,
-            touched,
-            errors,
-            handleChange,
-            handleSubmit,
-            validateForm,
-          } = props;
+          const { values, touched, errors, handleChange, handleSubmit } = props;
           return (
             <Form noValidate onSubmit={handleSubmit}>
               <Row g="3">
@@ -153,15 +146,6 @@ const InputForm = () => {
               </Row>
               <hr className="my-4" />
               <SubmitButton title="ダウンロード" isLoading={isResultLoading} />
-              <Button
-                ref={buttonElement}
-                onClick={() => {
-                  validateForm(values);
-                }}
-                hidden
-              >
-                バリデーション実施
-              </Button>
             </Form>
           );
         }}

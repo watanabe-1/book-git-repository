@@ -45,6 +45,7 @@ const TextBox: React.FC<TextBoxProps> = ({
   IsOnClickEditable = false,
 }) => {
   const [text, setText] = useState(value);
+  const [initialValue, setInitialValue] = useState(value);
   const [isEditing, setIsEditing] = useState(!IsOnClickEditable);
   const [hasChanges, setHasChanges] = useState(false);
   const textBoxRef = useRef(null);
@@ -66,6 +67,12 @@ const TextBox: React.FC<TextBoxProps> = ({
     if (onBlur) {
       onBlur(event);
     }
+    // 初期値から変更されたか判定
+    if (text === initialValue) {
+      setHasChanges(false);
+    } else {
+      setHasChanges(true);
+    }
   };
 
   const handleTextClick = () => {
@@ -81,9 +88,11 @@ const TextBox: React.FC<TextBoxProps> = ({
 
   useEffect(() => {
     // dirtyがtrue→falseに変更されたときは送信ボタンが押されたとき(dirtyがfalseの時)
-    // 編集済み判定フラグをリセット
     if (!dirty) {
+      // 編集済み判定フラグをリセット
       setHasChanges(false);
+      // 初期値を更新
+      setInitialValue(value);
     }
   }, [dirty]);
 

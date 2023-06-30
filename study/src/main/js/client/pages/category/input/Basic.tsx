@@ -1,6 +1,5 @@
-import { Formik, FormikProps } from 'formik';
-import React, { useState, useEffect, useRef, useContext } from 'react';
-import Button from 'react-bootstrap/Button';
+import { Formik, FormikHelpers, FormikProps } from 'formik';
+import React, { useState, useEffect, useContext } from 'react';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -41,14 +40,15 @@ const Basic = (props: { handleNext: () => void }) => {
   const [isConfirmLoading, setConfirmLoading] = useState(false);
   // コンテキストに保存しておきたいデータ
   const { currentState, setCurrentState } = useContext(Context);
-  //const [validated, setValidated] = useState(false);
-  const buttonElement = useRef<HTMLButtonElement>(null);
 
   /**
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form: Category) => {
+  const handleSubmit = async (
+    form: Category,
+    formikHelpers: FormikHelpers<Category>
+  ) => {
     const res = await fetchConfirm(form);
 
     if (res.ok) {
@@ -63,7 +63,7 @@ const Basic = (props: { handleNext: () => void }) => {
     } else {
       setErrData(await res.json());
       // 再バリデーション実施
-      buttonElement.current.click();
+      formikHelpers.validateForm(form);
     }
   };
 
@@ -132,14 +132,7 @@ const Basic = (props: { handleNext: () => void }) => {
         }
       >
         {(props: FormikProps<Category>) => {
-          const {
-            values,
-            touched,
-            errors,
-            handleChange,
-            handleSubmit,
-            validateForm,
-          } = props;
+          const { values, touched, errors, handleChange, handleSubmit } = props;
           return (
             <Form noValidate onSubmit={handleSubmit}>
               <Row g="3">
@@ -221,15 +214,6 @@ const Basic = (props: { handleNext: () => void }) => {
               </Row>
               <hr className="my-4" />
               <SubmitButton title="確認" isLoading={isConfirmLoading} />
-              <Button
-                ref={buttonElement}
-                onClick={() => {
-                  validateForm(values);
-                }}
-                hidden
-              >
-                バリデーション実施
-              </Button>
             </Form>
           );
         }}

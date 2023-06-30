@@ -67,7 +67,7 @@ const ListTable = () => {
       objArrayToObj(form[classConst.CAT_DATA_LIST], classConst.CAT_DATA_LIST)
     );
     const json = await res.json();
-    console.log('sousinkekka');
+    console.log('soushinkekka');
     console.log(json);
     if (res.ok) {
       setList(json);
@@ -286,7 +286,10 @@ const ListTable = () => {
                       name={field.name}
                       value={field.value}
                       typeList={info.imgTypes}
-                      onChange={field.onChange}
+                      dirty={props.dirty}
+                      // onChangeにセットすると入力するたびにソートが走るので、画面が動きすぎて見づらいため、onBlurに設定
+                      onBlur={field.onChange}
+                      IsOnClickEditable
                     />
                   );
                 }}

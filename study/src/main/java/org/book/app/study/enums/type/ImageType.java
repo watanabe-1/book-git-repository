@@ -15,7 +15,7 @@ import lombok.ToString;
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum ImageType implements Type {
 
-  CATEGORY_ICON("CATEGORY_ICON", "カテゴリーアイコン");
+  CATEGORY_ICON("CATEGORY_ICON", "カテゴリーアイコン"), COMMON_ICON("COMMON_ICON", "共通アイコン");
 
   /**
    * コード

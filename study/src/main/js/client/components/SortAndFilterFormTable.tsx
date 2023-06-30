@@ -1,6 +1,5 @@
-import { FieldArray, FormikProvider, useFormik } from 'formik';
-import React, { useRef, useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import { FieldArray, FormikHelpers, FormikProvider, useFormik } from 'formik';
+import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 
 import { TableFormObjConfig } from '../../@types/studyUtilType';
@@ -10,11 +9,10 @@ import SubmitButton from './SubmitButton';
 
 type SortAndFilterFormTableProps = {
   tableFormConfig: TableFormObjConfig;
-  handleFormSubmit: (
-    event: React.FormEvent<HTMLFormElement>
-  ) => Promise<Response>;
+  handleFormSubmit: (values: unknown) => Promise<Response>;
   validateButton?: React.MutableRefObject<HTMLButtonElement>;
   hiddenSubmitButton?: boolean;
+  onEnterSubmit?: boolean;
 };
 
 /**
@@ -25,9 +23,8 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   tableFormConfig,
   handleFormSubmit,
   hiddenSubmitButton = false,
+  onEnterSubmit = false,
 }) => {
-  const validetaButton = useRef<HTMLButtonElement>(null);
-  const resetButton = useRef<HTMLButtonElement>(null);
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   // yupで使用するスキーマの設定
   const additions = tableFormConfig.additions;
@@ -45,21 +42,36 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   const schema = yup.object().shape(additions);
 
   /**
+   * key押下時のイベント制御
+   * @param event
+   */
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+    // ENTERでのform送信を行うかどうか
+    if (!onEnterSubmit && event.key === 'Enter') {
+      // デフォルトのEnterキーの動作を無効化
+      event.preventDefault();
+    }
+  };
+
+  /**
    * 送信
    * @param event formイベント
    */
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    values: unknown,
+    formikHelpers: FormikHelpers<unknown>
+  ) => {
     setSubmitLoading(true);
-    const res = await handleFormSubmit(event);
+    const res = await handleFormSubmit(values);
     setSubmitLoading(false);
     //console.log('handleSubmit が完了しました');
     if (res) {
       if (res.ok) {
-        // formのリセット(dirty→false)
-        resetButton.current.click();
+        // formを現在のvalueでリセット実施することでdirty（formのどこかの値を編集したかどうか）のフラグがfalseに設定される
+        formikHelpers.resetForm({ values: values });
       } else {
         // バリデーション実施
-        validetaButton.current.click();
+        formikHelpers.validateForm(values);
       }
     }
   };
@@ -71,18 +83,6 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
     enableReinitialize: true,
   });
 
-  // useEffect(() => {
-  //   // マウント時に初期値を設定
-  //   console.log('mount');
-  //   formik.setValues(initialValues);
-  //   return () => {
-  //     // アンマウント時にフォームをリセット
-  //     console.log('unmount');
-  //     // formik.setValues(initialValues);
-  //     //formik.resetForm();
-  //   };
-  // }, [initialValues]);
-
   return (
     <FormikProvider value={formik}>
       <Form
@@ -90,6 +90,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
         onSubmit={(event) => {
           formik.handleSubmit(event);
         }}
+        onKeyDown={handleKeyDown}
       >
         <div className="text-end">
           <SubmitButton
@@ -116,25 +117,6 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
             );
           }}
         </FieldArray>
-        <Button
-          ref={validetaButton}
-          onClick={() => {
-            formik.validateForm(formik.values);
-          }}
-          hidden
-        >
-          バリデーション実施
-        </Button>
-        <Button
-          ref={resetButton}
-          onClick={() => {
-            // formを現在のvalueでリセット実施することでdirty（formのどこかの値を編集したかどうか）のフラグがfalseに設定される
-            formik.resetForm({ values: formik.values });
-          }}
-          hidden
-        >
-          formのリセット実施
-        </Button>
       </Form>
     </FormikProvider>
   );
