@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { TextColor } from '../../@types/studyBootStrap';
+import { TextColor } from '../../@types/studyBootstrap';
 
 type SimpleTextProps = {
   title?: string;

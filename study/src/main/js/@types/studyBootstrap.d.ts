@@ -11,7 +11,9 @@ export type Color =
   | 'light'
   | 'dark'
   | 'body'
-  | 'muted';
+  | 'muted'
+  | 'white'
+  | 'black';
 
 /**
  * テキスト指定可能色
