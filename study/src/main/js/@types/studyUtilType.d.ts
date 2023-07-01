@@ -1,7 +1,7 @@
 /**
  * 祝日一覧用
  */
-type Syukujits = {
+export type Syukujits = {
   date: Date;
   name: string;
 };

@@ -20,7 +20,7 @@ const DayPickr = ({
 }) => {
   return (
     <>
-      <Icon icon={iconConst.bootStrap.BI_CALENDAR} />
+      <Icon icon={iconConst.bootstrap.BI_CALENDAR} />
       <Flatpickr
         className="bg-white border border-gray-300 block w-full p-2.5 shadow;"
         options={{

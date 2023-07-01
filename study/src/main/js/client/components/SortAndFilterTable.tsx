@@ -156,9 +156,9 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
               {isSort && sortColumn === column.name && (
                 <span>
                   {sortDirection === ASCENDING ? (
-                    <Icon icon={iconConst.bootStrap.BI_CARET_UP_FILL} />
+                    <Icon icon={iconConst.bootstrap.BI_CARET_UP_FILL} />
                   ) : (
-                    <Icon icon={iconConst.bootStrap.BI_CARET_DOWN_FILL} />
+                    <Icon icon={iconConst.bootstrap.BI_CARET_DOWN_FILL} />
                   )}
                 </span>
               )}

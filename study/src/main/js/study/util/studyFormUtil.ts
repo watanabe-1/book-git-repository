@@ -32,6 +32,7 @@ export function getSetInputFileFunc(
     // 以下画像置き換え処理
     if (imgPathKey && imgNameKey) {
       const file = event.target.files[0];
+
       // fileの存在チェック
       if (!file) {
         return;
@@ -41,6 +42,7 @@ export function getSetInputFileFunc(
       if (!file.type.startsWith('image/')) {
         return;
       }
+
       const reader = new FileReader();
       reader.onload = () => {
         setFieldValue(imgPathKey, reader.result);

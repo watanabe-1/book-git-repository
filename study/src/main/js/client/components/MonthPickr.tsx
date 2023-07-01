@@ -34,7 +34,7 @@ const MonthPickr = ({
 
   return (
     <>
-      <Icon icon={iconConst.bootStrap.BI_CALENDAR} />
+      <Icon icon={iconConst.bootstrap.BI_CALENDAR} />
       <Flatpickr
         key={`flatpickrKey-monthSelectPlugin-${flatpickrKey}`}
         options={{

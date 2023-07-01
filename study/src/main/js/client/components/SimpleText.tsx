@@ -1,23 +1,6 @@
 import React from 'react';
 
-/**
- * boot strap用テキスト指定タイプ
- */
-type TextColorClass =
-  | 'text-primary'
-  | 'text-secondary'
-  | 'text-success'
-  | 'text-danger'
-  | 'text-warning'
-  | 'text-info'
-  | 'text-light'
-  | 'text-dark'
-  | 'text-body'
-  | 'text-muted'
-  | 'text-white'
-  | 'text-black'
-  | `text-black-${number}`
-  | `text-white-${number}`;
+import { TextColor } from '../../@types/studyBootStrap';
 
 type SimpleTextProps = {
   title?: string;
@@ -25,7 +8,7 @@ type SimpleTextProps = {
   value: string | number | string[];
   hidden?: boolean;
   onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  textColorClass?: TextColorClass;
+  textColorClass?: TextColor;
 };
 
 /**
