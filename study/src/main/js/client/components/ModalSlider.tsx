@@ -5,8 +5,8 @@ import Container from 'react-bootstrap/Container';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 
-import { Image } from '../../@types/studyUtilType';
 import Slider from './Slider';
+import { Image } from '../../@types/studyUtilType';
 
 /**
  * 画像表示用スライダーモーダル

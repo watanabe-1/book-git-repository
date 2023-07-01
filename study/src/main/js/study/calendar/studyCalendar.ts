@@ -168,7 +168,7 @@ function showCalendarProcess(
         if (
           (target.parentNode as HTMLTableCellElement).className.indexOf(
             'cell-hover'
-          ) == 0
+          ) === 0
         ) {
           //cellの中をクリックしたとき
           //   console.log(target.parentNode.firstElementChild.innerHTML);
@@ -238,7 +238,7 @@ function createCalendarProcess(year: number, month: number): string {
     calendar += '<tr>';
     // 1colum単位で設定
     for (let j = 0; j < weekByCalendar.length; j++) {
-      if (i == 0 && j < startDayOfWeek) {
+      if (i === 0 && j < startDayOfWeek) {
         // 1行目で1日まで先月の日付を設定
         calendar +=
           "<td class='text-dark text-start text-opacity-25'>" +
@@ -341,7 +341,7 @@ function createBooksListByCalendarProcess(
       // <td> の内容として、その <td> を表の行の末尾に追加
       const bodyCell: HTMLTableCellElement = document.createElement('td');
       const bodyCellContent: Node[] = [];
-      if (j == 0) {
+      if (j === 0) {
         bodyCellContent.push(
           document.createTextNode(
             //studyUtilのformatDateBtYyyyMmDd
@@ -351,9 +351,9 @@ function createBooksListByCalendarProcess(
             )
           )
         );
-      } else if (j == 1) {
+      } else if (j === 1) {
         bodyCellContent.push(document.createTextNode(booksList[i].booksPlace));
-      } else if (j == 2) {
+      } else if (j === 2) {
         bodyCellContent.push(
           document.createTextNode(booksList[i].catCodes.catName)
         );
@@ -369,9 +369,9 @@ function createBooksListByCalendarProcess(
         imgElement.height = 30; // 縦サイズ（px）
         imgElement.className = 'mh-100 mw-100';
         bodyCellContent.push(imgElement);
-      } else if (j == 3) {
+      } else if (j === 3) {
         bodyCellContent.push(document.createTextNode(booksList[i].booksMethod));
-      } else if (j == 4) {
+      } else if (j === 4) {
         bodyCellContent.push(
           document.createTextNode(String(booksList[i].booksAmmount))
         );
@@ -450,9 +450,9 @@ function isSelectdayByCalendar(
   day: number
 ): boolean {
   return (
-    year == selectDayByCalendar.getFullYear() &&
-    month == selectDayByCalendar.getMonth() &&
-    day == selectDayByCalendar.getDate()
+    year === selectDayByCalendar.getFullYear() &&
+    month === selectDayByCalendar.getMonth() &&
+    day === selectDayByCalendar.getDate()
   );
 }
 
@@ -463,7 +463,7 @@ function isSelectdayByCalendar(
  * @return {boolean} 判定結果
  */
 function isSaturday(weekCnt: number): boolean {
-  return weekCnt == 6;
+  return weekCnt === 6;
 }
 
 /**
@@ -473,7 +473,7 @@ function isSaturday(weekCnt: number): boolean {
  * @return {boolean} 判定結果
  */
 function isSunday(weekCnt): boolean {
-  return weekCnt == 0;
+  return weekCnt === 0;
 }
 
 /**
@@ -492,9 +492,9 @@ function isHoliday(
   for (let i = 0; i < syukujitsuList.length; i++) {
     const holiday: Date = new Date(syukujitsuList[i].date);
     if (
-      year == holiday.getFullYear() &&
-      month == holiday.getMonth() &&
-      day == holiday.getDate()
+      year === holiday.getFullYear() &&
+      month === holiday.getMonth() &&
+      day === holiday.getDate()
     ) {
       return [true, syukujitsuList[i].name];
     }
@@ -521,9 +521,9 @@ function isAmountDay(
   amountByDayList.forEach((books) => {
     const amountday: Date = new Date(books.booksDate);
     if (
-      year == amountday.getFullYear() &&
-      month == amountday.getMonth() &&
-      day == amountday.getDate()
+      year === amountday.getFullYear() &&
+      month === amountday.getMonth() &&
+      day === amountday.getDate()
     ) {
       flag = true;
       booksAmmountList.push(Number(books.booksAmmount));

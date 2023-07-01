@@ -15,13 +15,14 @@ export function getConfirmMessage(
   convert: { typeList: Type[]; flag: Flag }
 ) {
   // select or radio
-  if (type == typeConst.col.SELECT || type == typeConst.col.RADIO) {
+  if (type === typeConst.col.SELECT || type === typeConst.col.RADIO) {
     return value
-      ? convert.typeList.find((type) => type.code == value).name
+      ? convert.typeList.find((type) => type.code === value).name
       : '選択してません';
   }
   // checkBox
-  if (type == typeConst.col.CHECK) {
+  if (type === typeConst.col.CHECK) {
+    // flagに入る値(1,true)などどちらも対応できるように===は使用しない
     return value == convert.flag.value
       ? convert.flag.name
       : 'チェックしてません';

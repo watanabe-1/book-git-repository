@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { initialize } from '../../../init';
 import Content from './Content';
+import { initialize } from '../../../init';
 
 const Export = () => {
   return <Content />;

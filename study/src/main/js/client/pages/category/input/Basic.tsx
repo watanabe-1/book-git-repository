@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 
+import { Context } from './Content';
 import {
   CategoryUi,
   Category,
@@ -24,7 +25,6 @@ import TextArea from '../../../components/TextArea';
 import TextBox from '../../../components/TextBox';
 import { onServer, executeFuncIfNeeded } from '../../../on-server';
 import yup from '../../../yup/message/ja';
-import { Context } from './Content';
 
 const Basic = (props: { handleNext: () => void }) => {
   const [initialInfo, initScript] = onServer(

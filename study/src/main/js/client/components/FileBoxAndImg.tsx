@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { addContextPath, pathJoin } from '../../study/util/studyUtil';
 import FileBox from './FileBox';
 import ImageIcon from './ImageIcon';
+import { addContextPath, pathJoin } from '../../study/util/studyUtil';
 
 type FileBoxAndImgProps = {
   /** テキストボックスのタイトル */

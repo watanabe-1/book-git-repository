@@ -3,8 +3,8 @@ import { CustomLocale } from 'flatpickr/dist/types/locale';
 import React, { useEffect, useState } from 'react';
 import Flatpickr from 'react-flatpickr';
 
-import { iconConst } from '../../constant/iconConstant';
 import Icon from './Icon';
+import { iconConst } from '../../constant/iconConstant';
 
 /**
  *

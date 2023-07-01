@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Table from 'react-bootstrap/Table';
 
-import { TableColumn, TableRow } from '../../@types/studyUtilType';
-import { iconConst } from '../../constant/iconConstant';
 import Icon from './Icon';
 import TextBoxExclusionForm from './TextBoxExclusionForm';
+import { TableColumn, TableRow } from '../../@types/studyUtilType';
+import { iconConst } from '../../constant/iconConstant';
 
 type SortAndFilterTableProps = {
   pColumns: TableColumn[];
@@ -105,7 +105,7 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
         if (column.filterValue === '') {
           return true;
         }
-        const cell = row.cells.find((cell) => cell.name == column.name);
+        const cell = row.cells.find((cell) => cell.name === column.name);
         const rowValue = String(cell.value).toLowerCase();
         return rowValue.includes(column.filterValue.toLowerCase());
       });
@@ -120,7 +120,7 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
      * @returns cell
      */
     const findCell = (row: TableRow) =>
-      row.cells.find((cell) => cell.name == sortColumn);
+      row.cells.find((cell) => cell.name === sortColumn);
 
     filteredAndSortedRows = filteredAndSortedRows.sort((aRow, bRow) => {
       const aCell = findCell(aRow);

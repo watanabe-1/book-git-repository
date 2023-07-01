@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 
+import { Context } from './Content';
 import { Flag, FormConfirmData, Type } from '../../../../@types/studyUtilType';
 import { fieldConst } from '../../../../constant/fieldConstant';
 import { typeConst } from '../../../../constant/typeConstant';
@@ -8,7 +9,6 @@ import { urlConst } from '../../../../constant/urlConstant';
 import { getConfirmMessage } from '../../../../study/util/studyMessageUtil';
 import { fetchPost } from '../../../../study/util/studyUtil';
 import ConfirmList from '../../../components/ConfirmList';
-import { Context } from './Content';
 
 const Confirm = (props: { handleNext: () => void; handleBack: () => void }) => {
   const { currentState } = useContext(Context);

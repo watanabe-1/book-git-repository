@@ -24,6 +24,7 @@ const CheckBox = ({
         type="checkbox"
         value={flag.value}
         label={flag.name}
+        // flagに入る値(1,true)などどちらも対応できるように===は使用しない
         checked={flag.value == value}
         onChange={onChange}
       />

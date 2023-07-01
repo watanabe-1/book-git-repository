@@ -1,6 +1,6 @@
+import { objToFormData } from './studyYupUtil';
 import { Type } from '../../@types/studyUtilType';
 import { commonConst } from '../../constant/commonConstant';
-import { objToFormData } from './studyYupUtil';
 
 /**
  * aタグにセットされているhref属性にパラメーターをセットする共通関数
@@ -35,7 +35,7 @@ export function setAtagHrefParm(
       `${escapeRegExp(paramName + '=')}(.*)${escapeRegExp('&')}`
     );
     let newParam = paramName + '=' + param + '&';
-    if (href.match(re) == null) {
+    if (href.match(re) === null) {
       //「パラム + =」 から 以降を抜き出す用の正規表現
       re = new RegExp(`${escapeRegExp(paramName + '=')}(.*)`);
       newParam = paramName + '=' + param;
@@ -524,7 +524,7 @@ export function getStudyDate(): Date {
   // urlからパラメーターを取得
   const paaramDate: string = getLocationHrefParm('date');
   //dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
-  const date: Date = paaramDate == null ? new Date() : new Date(paaramDate);
+  const date: Date = paaramDate === null ? new Date() : new Date(paaramDate);
 
   return date;
 }
@@ -538,7 +538,7 @@ export function getStudyDate(): Date {
  */
 export function formatDateBtYyyyMmDd(date: Date, delim = '/'): string {
   const result: string =
-    delim == null
+    delim === null
       ? String(date.getFullYear()) +
         String(date.getMonth() + 1) +
         String(date.getDate())
@@ -719,7 +719,7 @@ export function stringToType(str: string) {
  */
 export function ToTypeArrayIfIsStringArray(array: Type[] | string[]) {
   return array.map((str) =>
-    typeof str == 'string' ? stringToType(str) : (str as Type)
+    typeof str === 'string' ? stringToType(str) : (str as Type)
   );
 }
 

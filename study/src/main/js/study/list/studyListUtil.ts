@@ -51,7 +51,7 @@ function addEventListenerOfSortTable(targetId: string): void {
         const sortArray: SortArrayRecode[] = new Array<SortArrayRecode>(); // クリックした列のデータを全て格納する配列
         // 次のソート順を決定
         const order: string =
-          beforeiEl == null ||
+          beforeiEl === null ||
           columnNo !=
             (beforeiEl.parentNode as HTMLTableCellElement).cellIndex ||
           beforeiEl.className != ASC
@@ -76,9 +76,9 @@ function addEventListenerOfSortTable(targetId: string): void {
             sortType = 1; //値が数値変換できなかった場合は文字列ソート
           }
         }
-        if (sortType == NUMBER_SORT) {
+        if (sortType === NUMBER_SORT) {
           // 数値ソート
-          if (order == DESC) {
+          if (order === DESC) {
             // 同じ列が2回クリックされた場合は降順ソート
             sortArray.sort(compareNumberDesc);
           } else {
@@ -86,7 +86,7 @@ function addEventListenerOfSortTable(targetId: string): void {
           }
         } else {
           // 文字列ソート
-          if (order == DESC) {
+          if (order === DESC) {
             // 同じ列が2回クリックされた場合は降順ソート
             sortArray.sort(comparestringDesc);
           } else {
@@ -127,7 +127,7 @@ function addEventListenerOfFilterTable(
     tableHeads[0] != null &&
     tableHeads[0].querySelectorAll<HTMLInputElement>(
       '.' + SEARCH_INPUT_CLASS_NAME
-    ).length == 0
+    ).length === 0
   ) {
     tableHeads.forEach((elm) => {
       const csrfOutPut: HTMLInputElement = document.createElement('input');

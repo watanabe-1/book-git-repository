@@ -1,6 +1,9 @@
 import React, { useState, createContext } from 'react';
 import Col from 'react-bootstrap/Col';
 
+import Basic from './Basic';
+import Confirm from './Confirm';
+import Result from './Result';
 import {
   Category,
   CategoryUi,
@@ -8,9 +11,6 @@ import {
 } from '../../../../@types/studyUtilType';
 import BodysHead from '../../../components/BodysHead';
 import Stepper from '../../../components/Stepper';
-import Basic from './Basic';
-import Confirm from './Confirm';
-import Result from './Result';
 
 type CategoryInput = {
   form: Category;

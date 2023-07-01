@@ -1,9 +1,9 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 
+import FormControl from './FormControl';
 import { Type } from '../../@types/studyUtilType';
 import { ToTypeArrayIfIsStringArray } from '../../study/util/studyUtil';
-import FormControl from './FormControl';
 
 type SelectBoxProps = {
   /** テキストボックスのタイトル */
@@ -61,7 +61,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
       name: '選択してください',
     });
   }
-  const selectedType = newTypeList.find((type) => type.code == value);
+  const selectedType = newTypeList.find((type) => type.code === value);
 
   return (
     <FormControl

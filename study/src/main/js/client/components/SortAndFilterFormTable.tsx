@@ -2,10 +2,10 @@ import { FieldArray, FormikHelpers, FormikProvider, useFormik } from 'formik';
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 
-import { TableFormObjConfig } from '../../@types/studyUtilType';
-import yup from '../yup/message/ja';
 import SortAndFilterTable from './SortAndFilterTable';
 import SubmitButton from './SubmitButton';
+import { TableFormObjConfig } from '../../@types/studyUtilType';
+import yup from '../yup/message/ja';
 
 type SortAndFilterFormTableProps = {
   tableFormConfig: TableFormObjConfig;

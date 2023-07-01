@@ -4,6 +4,7 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/table';
 
+import ListTable from './ListTable';
 import { Books, Syukujits } from '../../../../@types/studyUtilType';
 import { onServerConst } from '../../../../constant/on-serverConstant';
 import { urlConst } from '../../../../constant/urlConstant';
@@ -12,7 +13,6 @@ import { fetchGet, isObjEmpty } from '../../../../study/util/studyUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
 import '../../../../../css/view/calendar/calendar.css';
-import ListTable from './ListTable';
 
 /**
  * 家計簿カレンダー用データ
@@ -89,9 +89,9 @@ const Calendar = ({
     // console.log(`date:${date}`);
 
     return (
-      year == date.getFullYear() &&
-      month == date.getMonth() + 1 &&
-      day == date.getDate()
+      year === date.getFullYear() &&
+      month === date.getMonth() + 1 &&
+      day === date.getDate()
     );
   };
 
@@ -118,7 +118,7 @@ const Calendar = ({
    * @return {boolean} 判定結果
    */
   const isSaturday = (weekCnt: number) => {
-    return weekCnt == 6;
+    return weekCnt === 6;
   };
 
   /**
@@ -128,7 +128,7 @@ const Calendar = ({
    * @return {boolean} 判定結果
    */
   const isSunday = (weekCnt: number) => {
-    return weekCnt == 0;
+    return weekCnt === 0;
   };
 
   /**
@@ -215,6 +215,7 @@ const Calendar = ({
   const row: number = Math.ceil(
     (startDayOfWeek + endDate) / weekByCalendar.length
   );
+  let cellCount = 0;
 
   return (
     <>
@@ -241,10 +242,13 @@ const Calendar = ({
                   <tr key={rowIndex}>
                     {Array.from({ length: weekByCalendar.length }).map(
                       (_, colIndex) => {
-                        if (rowIndex == 0 && colIndex < startDayOfWeek) {
+                        if (rowIndex === 0 && colIndex < startDayOfWeek) {
                           // 1行目で1日まで先月の日付を設定
                           return (
-                            <td className="text-dark text-start text-opacity-25">
+                            <td
+                              key={cellCount++}
+                              className="text-dark text-start text-opacity-25"
+                            >
                               {lastMonthEndDate - startDayOfWeek + colIndex + 1}
                             </td>
                           );
@@ -252,7 +256,10 @@ const Calendar = ({
                           // 最終行で最終日以降、翌月の日付を設定
                           dayCount++;
                           return (
-                            <td className="text-dark text-start text-opacity-25">
+                            <td
+                              key={cellCount++}
+                              className="text-dark text-start text-opacity-25"
+                            >
                               {dayCount - endDate}
                             </td>
                           );
@@ -285,6 +292,7 @@ const Calendar = ({
                           }
                           return (
                             <td
+                              key={cellCount++}
                               className={classNames.join(' ')}
                               title={isHoliday(holiday) ? holiday.name : null}
                               data-value={dayCount}

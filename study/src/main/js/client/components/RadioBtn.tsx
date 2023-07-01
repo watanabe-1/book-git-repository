@@ -36,7 +36,7 @@ const RadioBtn = ({
             id={id}
             value={type.code}
             label={type.name}
-            checked={type.code == value}
+            checked={type.code === value}
             onChange={onChange}
           />
         );

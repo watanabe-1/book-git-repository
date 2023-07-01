@@ -1,12 +1,12 @@
 import { FormikProps } from 'formik/dist/types';
 import { array, object } from 'yup/index';
 
+import { keyJoin } from './studyUtil';
 import {
   ErrorResults,
   BuildListTableFormObjConfig,
   ErrorResult,
 } from '../../@types/studyUtilType';
-import { keyJoin } from './studyUtil';
 
 // /**
 //  * サーバーでバリデーションを行った結果を反映するようの関数をyupにセット
@@ -91,7 +91,7 @@ export function getServerErr(errData: ErrorResults, key: string) {
       // console.log(`getServerErr`);
       // console.log(`key:${key}`);
       // console.log(`error.itemPath:${error.itemPath}`);
-      return error.itemPath == key;
+      return error.itemPath === key;
     });
   }
   return undefined;
@@ -132,7 +132,7 @@ export function extractAndDeleteServerErrMsg(errData: ErrorResult) {
 //       const fieldName = errors[i].itemPath;
 //       // console.log(`key:${key}`);
 //       // console.log(`itemPath:${fieldName}`);
-//       if (fieldName == key) {
+//       if (fieldName === key) {
 //         return true;
 //       }
 //     }
@@ -172,9 +172,9 @@ export function extractAndDeleteServerErrMsg(errData: ErrorResult) {
 //   const args = escapeListItemId
 //     .split(CommonConst.FORMAT_SPECIFIER)
 //     .map((target, index) => {
-//       if (index == 0) {
+//       if (index === 0) {
 //         return '[';
-//       } else if (index == 1) {
+//       } else if (index === 1) {
 //         return '].';
 //       } else {
 //         return '.';
@@ -299,7 +299,7 @@ export function objArrayToObj(objArray: object[], arrayName: string) {
 //       let newObj = {};
 //       // console.log(keyArray);
 //       keyArray.forEach((value, index) => {
-//         if (index == 1) {
+//         if (index === 1) {
 //           // console.log(value);
 //           if (objArray[value]) {
 //             newObj = objArray[value];
@@ -315,7 +315,7 @@ export function objArrayToObj(objArray: object[], arrayName: string) {
 //             newObj[value] = {};
 //           }
 //           // 最終周の時
-//           if (keyArray.length - 1 == index) {
+//           if (keyArray.length - 1 === index) {
 //             // 他の項目とかぶりが生じた場合はそれはオブジェクトではなくなっているので
 //             //判定を行うが基本的にかぶりが起きないように修正済みのためかぶりない想定
 //             // またかぶりがあった場合は上書き
@@ -362,7 +362,7 @@ export function objArrayToObj(objArray: object[], arrayName: string) {
 //     while (stack.length) {
 //       for (const j in stack[0]) {
 //         // 設定を取得
-//         const mutchconfig = config.list.find((v) => v.name == j);
+//         const mutchconfig = config.list.find((v) => v.name === j);
 //         if (
 //           stack[0][j] &&
 //           stack[0][j].constructor === Object &&
@@ -478,7 +478,7 @@ export function buildListTableFormObj(
     while (stack.length) {
       for (const j in stack[0]) {
         // 設定を取得
-        //const mutchconfig = config.list.find((v) => v.name == j);
+        //const mutchconfig = config.list.find((v) => v.name === j);
         if (
           stack[0][j] &&
           stack[0][j].constructor === Object &&

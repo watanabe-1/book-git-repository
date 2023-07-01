@@ -50,7 +50,7 @@ function defaultImgtag(selectedImgId: string): void {
   imgList.forEach((value, index) => {
     //console.log(selectedImgId);
     //console.log(value.imgId);
-    if (value.imgId == selectedImgId) {
+    if (value.imgId === selectedImgId) {
       //console.log(num);
       num = index;
     }

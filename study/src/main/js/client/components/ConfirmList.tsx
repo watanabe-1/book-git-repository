@@ -1,9 +1,9 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
 
+import ImageIcon from './ImageIcon';
 import { FormConfirmData } from '../../@types/studyUtilType';
 import { typeConst } from '../../constant/typeConstant';
-import ImageIcon from './ImageIcon';
 
 /**
  *
@@ -20,18 +20,18 @@ const ConfirmList = (props: { listData: FormConfirmData[] }) => {
       </thead>
       <tbody>
         {props.listData.map((elem) => {
-          if (elem.type == typeConst.col.STRING) {
+          if (elem.type === typeConst.col.STRING) {
             return (
               <tr key={elem.id}>
                 <td>{elem.name}</td>
-                {elem.value && typeof elem.value == 'string' ? (
+                {elem.value && typeof elem.value === 'string' ? (
                   <td>{elem.value}</td>
                 ) : (
                   <td>None</td>
                 )}
               </tr>
             );
-          } else if (elem.type == typeConst.col.IMAGE) {
+          } else if (elem.type === typeConst.col.IMAGE) {
             return (
               <tr key={elem.id}>
                 <td>{elem.name}</td>

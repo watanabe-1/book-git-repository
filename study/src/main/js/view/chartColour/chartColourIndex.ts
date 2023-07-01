@@ -52,7 +52,7 @@ studyListUtil.addEventListenerOfSortAndFilterTable(
 // urlからパラメーターを取得
 const paaramQty: string = studyUtil.getLocationHrefParm('qty');
 //qty java側で0の時は置換
-const qty: string = paaramQty == null ? '0' : paaramQty;
+const qty: string = paaramQty === null ? '0' : paaramQty;
 //ドーナツ
 const DOUGHNUT = 'ドーナッツ';
 //ホライゾンバー
@@ -338,7 +338,7 @@ document.querySelectorAll('.listModalBtn').forEach((button) => {
         return value.textContent;
       }
     ); //.filter(function (v) {
-    //	return v !== "";
+    //	return v !=== "";
     //});
     //console.log(tdValues);
     //model内に入力したテンプレート名の値を挿入
