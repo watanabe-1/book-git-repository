@@ -38,9 +38,9 @@ export type BooksConvertForm = {
 
 const ConvertForm = () => {
   const [initialInfo, initScript] = onServer(
-    (api) => api.getUploadInfo(),
+    (api) => api.getConvertInfo(),
     [],
-    onServerConst.books.UPLOAD_INFO
+    onServerConst.books.CONVERT_INFO
   ) as [BooksConvertUi, JSX.Element];
   const [info, setInfo] = useState(initialInfo);
   const [errData, setErrData] = useState() as [
@@ -92,7 +92,7 @@ const ConvertForm = () => {
 
   useEffect(() => {
     // SSRが実行されたかされていないかで処理が変わる
-    executeFuncIfNeeded(onServerConst.books.UPLOAD_INFO, fetchInfo);
+    executeFuncIfNeeded(onServerConst.books.CONVERT_INFO, fetchInfo);
   }, []);
 
   console.log(info);

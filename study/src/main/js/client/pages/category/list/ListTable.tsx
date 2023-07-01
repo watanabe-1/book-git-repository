@@ -210,7 +210,7 @@ const ListTable = () => {
                       dirty={props.dirty}
                       // onChangeにセットすると入力するたびにソートが走るので、画面が動きすぎて見づらいため、onBlurに設定
                       onBlur={field.onChange}
-                      IsOnClickEditable
+                      isOnClickEditable
                     />
                   );
                 }}
@@ -289,7 +289,7 @@ const ListTable = () => {
                       dirty={props.dirty}
                       // onChangeにセットすると入力するたびにソートが走るので、画面が動きすぎて見づらいため、onBlurに設定
                       onBlur={field.onChange}
-                      IsOnClickEditable
+                      isOnClickEditable
                     />
                   );
                 }}

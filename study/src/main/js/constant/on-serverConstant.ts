@@ -7,6 +7,7 @@ export const onServerConst = {
     HOUSEHOLDCHART_INFO: 'books.householdchartInfo',
     HOUSEHOLD_INFO: 'books.householdInfo',
     UPLOAD_INFO: 'books.uploadInfo',
+    CONVERT_INFO: 'books.convertInfo',
   },
   /** category */
   category: {

@@ -38,6 +38,15 @@ public class BooksApi implements ServerApi {
   }
 
   /**
+   * 変換画面情報取得
+   * 
+   * @return 画面情報
+   */
+  public String getConvertInfo() {
+    return StudyStringUtil.objectToJsonStr(booksApiController.getConvertInfo());
+  }
+
+  /**
    * 家計簿確認画面情報取得
    * 
    * @param form booksForm

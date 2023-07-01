@@ -38,9 +38,9 @@ const Slider = ({
       variant="dark"
       indicators={indicators}
     >
-      {imageList.map((image, i) => {
+      {imageList.map((image) => {
         return (
-          <Carousel.Item key={`${image.imgId}-${i}`}>
+          <Carousel.Item key={image.imgId}>
             <img
               className="mh-100 mw-100"
               src={pathJoin(getContextPath(), image.imgPath, image.imgName)}

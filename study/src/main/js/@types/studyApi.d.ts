@@ -10,4 +10,5 @@ export type OnServerApi = {
   getHouseholdChartInfo: (param: object) => string;
   getDownloadInfo: () => string;
   getUploadInfo: () => string;
+  getConvertInfo: () => string;
 };
