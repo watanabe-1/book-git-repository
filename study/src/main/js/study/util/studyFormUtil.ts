@@ -32,6 +32,11 @@ export function getSetInputFileFunc(
     // 以下画像置き換え処理
     if (imgPathKey && imgNameKey) {
       const file = event.target.files[0];
+      // fileの存在チェック
+      if (!file) {
+        return;
+      }
+
       // ファイルタイプのチェック
       if (!file.type.startsWith('image/')) {
         return;

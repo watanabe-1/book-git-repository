@@ -6,35 +6,36 @@ import { ToTypeArrayIfIsStringArray } from '../../study/util/studyUtil';
 import FormControl from './FormControl';
 
 type SelectBoxProps = {
+  /** テキストボックスのタイトル */
   title?: string;
+  /** テキストボックスの名前 */
   name: string;
+  /** テキストボックスの値 */
   value: string;
+  /** 選択肢のリスト */
   typeList: Type[] | string[];
+  /** 選択肢の先頭に空の選択肢を追加するかどうか */
   isUnshiftEmpty?: boolean;
+  /** テキストボックスの値が変更されたときのハンドラ関数 */
   onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
   onBlur?: (event: React.FocusEvent<HTMLSelectElement>) => void;
+  /** テキストボックスを非表示にするかどうか */
   hidden?: boolean;
+  /** バリデーションを行うかどうかを示すフラグ */
   validate?: boolean;
+  /** バリデーションが実行されたかどうかを示すフラグ */
   touched?: unknown;
+  /** エラーメッセージ */
   error?: unknown;
+  /** formが変更されたかどうか */
   dirty?: boolean;
+  /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
 };
 
 /**
- * @param title - テキストボックスのタイトル
- * @param name - テキストボックスの名前
- * @param value - テキストボックスの値
- * @param typeList - 選択しのリスト
- * @param isUnshiftEmpty - 選択しの先頭に空の選択しを追加するか
- * @param onChange - テキストボックスの値が変更されたときのハンドラ関数
- * @param onBlur - テキストボックスからフォーカスが外れた時のハンドラ関数
- * @param hidden - テキストボックスを非表示にするかどうか
- * @param validate - バリデーションを行うかどうかを示すフラグ
- * @param touched - バリデーションが実行されたかどうかを示すフラグ
- * @param error - エラーメッセージ
- * @param dirty - formが変更されたかどうか
- * @param isOnClickEditable - 通常は文字のみでクリックしたときに入力できるようにする
+ *
  * @returns form内のセレクトボックス(バリデーションあり)
  */
 const SelectBox: React.FC<SelectBoxProps> = ({

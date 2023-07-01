@@ -4,31 +4,31 @@ import Form from 'react-bootstrap/Form';
 import FormControl from './FormControl';
 
 type TextBoxProps = {
+  /** テキストボックスのタイトル */
   title?: string;
+  /** テキストボックスの名前 */
   name: string;
+  /** テキストボックスの値 */
   value: string | number | string[];
+  /** テキストボックスの値が変更されたときのハンドラ関数 */
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  /** テキストボックスを非表示にするかどうか */
   hidden?: boolean;
+  /** バリデーションを行うかどうかを示すフラグ */
   validate?: boolean;
+  /** バリデーションが実行されたかどうかを示すフラグ */
   touched?: unknown;
+  /** エラーメッセージ */
   error?: unknown;
+  /** formが変更されたかどうか */
   dirty?: boolean;
+  /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
 };
 
 /**
- * @param title - テキストボックスのタイトル
- * @param name - テキストボックスの名前
- * @param value - テキストボックスの値
- * @param onChange - テキストボックスの値が変更されたときのハンドラ関数
- * @param onBlur - テキストボックスからフォーカスが外れた時のハンドラ関数
- * @param hidden - テキストボックスを非表示にするかどうか
- * @param validate - バリデーションを行うかどうかを示すフラグ
- * @param touched - バリデーションが実行されたかどうかを示すフラグ
- * @param error - エラーメッセージ
- * @param dirty - formが変更されたかどうか
- * @param isOnClickEditable - 通常は文字のみでクリックしたときに入力できるようにする
  * @returns form内のテキストボックス
  */
 const TextBox: React.FC<TextBoxProps> = ({

@@ -382,6 +382,7 @@ const ListTable = () => {
                       name={field.name}
                       validate
                       error={meta.error}
+                      dirty={props.dirty}
                       accept="image/*"
                       path={
                         props.getFieldProps(
@@ -419,6 +420,7 @@ const ListTable = () => {
                           )
                         ]
                       )}
+                      isOnClickEditable
                     />
                   );
                 }}

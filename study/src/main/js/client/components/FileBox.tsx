@@ -1,62 +1,75 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 
+import FormControl from './FormControl';
+
+type FileBoxProps = {
+  /** テキストボックスのタイトル */
+  title?: string;
+  /** テキストボックスの名前 */
+  name: string;
+  /** テキストボックスの値 */
+  value?: string | number | string[];
+  /** テキストとして表示する値 */
+  textValue?: string;
+  /** 選択できるデフォルトファイルタイプ */
+  accept: string;
+  /** テキストボックスの値が変更されたときのハンドラ関数 */
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  /** テキストボックスを非表示にするかどうか */
+  hidden?: boolean;
+  /** バリデーションを行うかどうかを示すフラグ */
+  validate?: boolean;
+  /** バリデーションが実行されたかどうかを示すフラグ */
+  touched?: unknown;
+  /** エラーメッセージ */
+  error?: unknown;
+  /** formが変更されたかどうか */
+  dirty?: boolean;
+  /** 通常は文字のみでクリックしたときに入力できるようにする */
+  isOnClickEditable?: boolean;
+};
+
 /**
  *
  * @returns form内のファイル用インプットボックス
  */
-/**
- * @param title - テキストボックスのタイトル
- * @param name - テキストボックスの名前
- * @param accept - ファイルタイプ
- * @param onChange - テキストボックスの値が変更されたときのハンドラ関数
- * @param hidden - テキストボックスを非表示にするかどうか
- * @param validate - バリデーションを行うかどうかを示すフラグ
- * @param touched - バリデーションが実行されたかどうかを示すフラグ
- * @param error - エラーメッセージ
- * @returns form内のファイル用インプットボックス
- */
-const FileBox = ({
+const FileBox: React.FC<FileBoxProps> = ({
   title = null,
   name,
   accept,
+  value = null,
+  textValue,
   onChange,
+  onBlur,
   hidden = false,
   validate = false,
   touched = false,
   error = '',
-}: {
-  title?: string;
-  name: string;
-  accept: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  hidden?: boolean;
-  validate?: boolean;
-  touched?: unknown;
-  error?: unknown;
+  dirty = false,
+  isOnClickEditable = false,
 }) => {
   const type = hidden ? 'hidden' : 'file';
-  const isValid = validate && touched && !error;
-  const isInvalid = validate && !!error;
 
   return (
-    <Form.Group controlId={name}>
-      {title && <Form.Label>{title}</Form.Label>}
-      <Form.Control
-        type={type}
-        name={name}
-        accept={accept}
-        onChange={onChange}
-        isValid={isValid}
-        isInvalid={isInvalid}
-      />
-      {validate && <Form.Control.Feedback>OK!</Form.Control.Feedback>}
-      {validate && (
-        <Form.Control.Feedback type="invalid">
-          {error as string}
-        </Form.Control.Feedback>
-      )}
-    </Form.Group>
+    <FormControl
+      title={title}
+      name={name}
+      value={value}
+      textValue={textValue ? textValue : String(value)}
+      onChange={onChange}
+      onBlur={onBlur}
+      hidden={hidden}
+      validate={validate}
+      touched={touched}
+      error={error}
+      dirty={dirty}
+      isOnClickEditable={isOnClickEditable}
+    >
+      <Form.Control type={type} accept={accept} />
+    </FormControl>
   );
 };
 
