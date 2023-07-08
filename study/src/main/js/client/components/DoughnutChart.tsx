@@ -65,7 +65,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
         usePointStyle: true,
         callbacks: {
           label: function (): string {
-            return `${date.getFullYear()}/${date.getMonth()}`;
+            return `${date.getFullYear()}/${date.getMonth() + 1}`;
           },
           //bodyの方が見栄えが良さそうなのでafterLabelから変更
           afterBody: function (context): string[] {

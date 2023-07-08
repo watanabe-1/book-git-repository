@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import ReactDOMServer from 'react-dom/server';
 import { BrowserRouter } from 'react-router-dom';
 import { StaticRouter } from 'react-router-dom/server';
@@ -27,14 +27,16 @@ export const initialize = (Root: {
    * jsのイベントリスナーのみ付与する
    */
   anyWindow.hydrateApp = () => {
-    ReactDOM.hydrate(<StudyRoot />, document.getElementById('root'));
+    ReactDOM.hydrateRoot(document.getElementById('root'), <StudyRoot />);
   };
+
   /**
    * 画面の再描画
    */
   anyWindow.renderApp = () => {
-    ReactDOM.render(<StudyRoot />, document.getElementById('root'));
+    ReactDOM.createRoot(document.getElementById('root')).render(<StudyRoot />);
   };
+
   /**
    * サーバーで実行
    * htmlを文字列で返却

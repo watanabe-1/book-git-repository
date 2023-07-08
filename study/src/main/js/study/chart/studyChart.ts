@@ -81,7 +81,7 @@ export function doughnutChart(jsonData: ChartData, args: string[]): Chart {
               //dateパラメーターが設定されていたらそれを、設定されていなかったら本日の日付を設定
               //studyUtil.getStudyDate()の呼び出し
               const date: Date = studyUtil.getStudyDate();
-              return date.getFullYear() + '/' + date.getMonth();
+              return date.getFullYear() + '/' + (date.getMonth() + 1);
             },
             /*
             afterLabel: function (context) {
@@ -257,7 +257,12 @@ export function barChart(jsonData: ChartData, args: string[]): Chart {
               //studyUtil.getStudyDate()の呼び出し
               const date: Date = studyUtil.getStudyDate();
               return (
-                label + '(' + date.getFullYear() + '/' + date.getMonth() + ')'
+                label +
+                '(' +
+                date.getFullYear() +
+                '/' +
+                (date.getMonth() + 1) +
+                ')'
               );
             },
             label: function (context): string[] {

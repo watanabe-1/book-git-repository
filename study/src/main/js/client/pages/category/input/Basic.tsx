@@ -15,6 +15,7 @@ import { onServerConst } from '../../../../constant/on-serverConstant';
 import { urlConst } from '../../../../constant/urlConstant';
 import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
+import AutoValidateToken from '../../../components/AutoValidateToken';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import CheckBox from '../../../components/CheckBox';
 import FileBox from '../../../components/FileBox';
@@ -67,8 +68,6 @@ const Basic: React.FC<BasicProps> = (props) => {
       props.handleNext();
     } else {
       setErrData(await res.json());
-      // 再バリデーション実施
-      formikHelpers.validateForm(form);
     }
   };
 
@@ -219,6 +218,7 @@ const Basic: React.FC<BasicProps> = (props) => {
               </Row>
               <hr className="my-4" />
               <SubmitButton title="確認" isLoading={isConfirmLoading} />
+              <AutoValidateToken errData={errData} />
             </Form>
           );
         }}

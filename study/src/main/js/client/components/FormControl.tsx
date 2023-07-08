@@ -89,12 +89,11 @@ const FormControl: React.FC<FormControlProps> = ({
     }
   };
 
-  const handleTextMouseDown = () => {
-    //console.log('call handleTextMouseDown');
+  const handleTextClick = () => {
+    //console.log('call handleTextClick');
     if (!isEditing && isOnClickEditable) {
       setIsEditing(isOnClickEditable);
     }
-    console.log(isEditing);
   };
 
   useEffect(() => {
@@ -123,9 +122,7 @@ const FormControl: React.FC<FormControlProps> = ({
 
   return (
     <Form.Group controlId={name} hidden={hidden}>
-      {title && (
-        <Form.Label onMouseDown={handleTextMouseDown}>{title}</Form.Label>
-      )}
+      {title && <Form.Label onClick={handleTextClick}>{title}</Form.Label>}
       {React.cloneElement(children, {
         name,
         value: text,
@@ -142,15 +139,15 @@ const FormControl: React.FC<FormControlProps> = ({
         hidden={isEditing}
         textColorClass={simpleTextColor}
         textMaxLength={textMaxLength}
-        onMouseDown={handleTextMouseDown}
+        onClick={handleTextClick}
       />
       {validate && (
-        <Form.Control.Feedback onMouseDown={handleTextMouseDown}>
+        <Form.Control.Feedback onClick={handleTextClick}>
           OK!
         </Form.Control.Feedback>
       )}
       {validate && (
-        <Form.Control.Feedback type="invalid" onMouseDown={handleTextMouseDown}>
+        <Form.Control.Feedback type="invalid" onClick={handleTextClick}>
           {error as string}
         </Form.Control.Feedback>
       )}

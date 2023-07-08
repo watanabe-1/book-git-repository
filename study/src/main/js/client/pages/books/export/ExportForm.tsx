@@ -13,6 +13,7 @@ import {
   getFilenameFromResponse,
 } from '../../../../study/util/studyFileUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
+import AutoValidateToken from '../../../components/AutoValidateToken';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import SelectBox from '../../../components/SelectBox';
 import SubmitButton from '../../../components/SubmitButton';
@@ -56,8 +57,6 @@ const InputForm = () => {
       downloadFile(blob, getFilenameFromResponse(res));
     } else {
       setErrData(await res.json());
-      // 再バリデーション実施
-      formikHelpers.validateForm(form);
     }
   };
 
@@ -146,6 +145,7 @@ const InputForm = () => {
               </Row>
               <hr className="my-4" />
               <SubmitButton title="ダウンロード" isLoading={isResultLoading} />
+              <AutoValidateToken errData={errData} />
             </Form>
           );
         }}

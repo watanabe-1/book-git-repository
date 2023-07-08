@@ -443,6 +443,7 @@ const ListTable = () => {
       <SortAndFilterFormTable
         tableFormConfig={listTableFormObj}
         handleFormSubmit={handleSubmit}
+        errData={errData}
       />
       {initInfoScript}
       {initListScript}

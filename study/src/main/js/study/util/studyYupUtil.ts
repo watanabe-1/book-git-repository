@@ -85,6 +85,7 @@ import {
  * @returns サーバーエラー格納object
  */
 export function getServerErr(errData: ErrorResults, key: string) {
+  //console.log('call getServerErr');
   if (errData) {
     const errors = errData.errorResults;
     return errors.find((error) => {
@@ -106,7 +107,7 @@ export function getServerErr(errData: ErrorResults, key: string) {
  * @returns エラーメッセージ
  */
 export function extractAndDeleteServerErrMsg(errData: ErrorResult) {
-  // console.log('extractAndDeleteServerErrMsgエラーメッセージ');
+  //console.log('call extractAndDeleteServerErrMsg');
   // console.log(errData);
   if (errData) {
     // 次回検索時に取得対象にならないようにキーを削除

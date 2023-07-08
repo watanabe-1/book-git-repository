@@ -91,9 +91,9 @@ const BarChart: React.FC<BarChartProps> = ({ data, date, topTitle }) => {
         usePointStyle: true,
         callbacks: {
           title: function (context): string {
-            return `${
-              context[0].label
-            }(${date.getFullYear()}/${date.getMonth()})`;
+            return `${context[0].label}(${date.getFullYear()}/${
+              date.getMonth() + 1
+            })`;
           },
           label: function (context): string[] {
             const data = context.dataset.data as number[];

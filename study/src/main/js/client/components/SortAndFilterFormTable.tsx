@@ -2,9 +2,10 @@ import { FieldArray, FormikHelpers, FormikProvider, useFormik } from 'formik';
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 
+import AutoValidateToken from './AutoValidateToken';
 import SortAndFilterTable from './SortAndFilterTable';
 import SubmitButton from './SubmitButton';
-import { TableFormObjConfig } from '../../@types/studyUtilType';
+import { ErrorResults, TableFormObjConfig } from '../../@types/studyUtilType';
 import yup from '../yup/message/ja';
 
 type SortAndFilterFormTableProps = {
@@ -13,6 +14,7 @@ type SortAndFilterFormTableProps = {
   validateButton?: React.MutableRefObject<HTMLButtonElement>;
   hiddenSubmitButton?: boolean;
   onEnterSubmit?: boolean;
+  errData?: ErrorResults;
 };
 
 /**
@@ -24,6 +26,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   handleFormSubmit,
   hiddenSubmitButton = false,
   onEnterSubmit = false,
+  errData = null,
 }) => {
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   // yupで使用するスキーマの設定
@@ -65,14 +68,9 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
     const res = await handleFormSubmit(values);
     setSubmitLoading(false);
     //console.log('handleSubmit が完了しました');
-    if (res) {
-      if (res.ok) {
-        // formを現在のvalueでリセット実施することでdirty（formのどこかの値を編集したかどうか）のフラグがfalseに設定される
-        formikHelpers.resetForm({ values: values });
-      } else {
-        // バリデーション実施
-        formikHelpers.validateForm(values);
-      }
+    if (res && res.ok) {
+      // formを現在のvalueでリセット実施することでdirty（formのどこかの値を編集したかどうか）のフラグがfalseに設定される
+      formikHelpers.resetForm({ values: values });
     }
   };
 
@@ -117,6 +115,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
             );
           }}
         </FieldArray>
+        <AutoValidateToken errData={errData} />
       </Form>
     </FormikProvider>
   );

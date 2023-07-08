@@ -11,6 +11,7 @@ import { onServerConst } from '../../../../constant/on-serverConstant';
 import { urlConst } from '../../../../constant/urlConstant';
 import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
+import AutoValidateToken from '../../../components/AutoValidateToken';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import FileBox from '../../../components/FileBox';
 import SelectBox from '../../../components/SelectBox';
@@ -53,8 +54,6 @@ const InputForm = (props: { handleNext: () => void }) => {
       props.handleNext();
     } else {
       setErrData(await res.json());
-      // 再バリデーション実施
-      buttonElement.current.click();
     }
   };
 
@@ -166,6 +165,7 @@ const InputForm = (props: { handleNext: () => void }) => {
               >
                 バリデーション実施
               </Button>
+              <AutoValidateToken errData={errData} />
             </Form>
           );
         }}

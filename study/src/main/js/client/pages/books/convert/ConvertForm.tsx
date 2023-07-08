@@ -14,6 +14,7 @@ import {
 } from '../../../../study/util/studyFileUtil';
 import { getSetInputFileFunc } from '../../../../study/util/studyFormUtil';
 import { fetchGet, fetchPost } from '../../../../study/util/studyUtil';
+import AutoValidateToken from '../../../components/AutoValidateToken';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import FileBox from '../../../components/FileBox';
 import SelectBox from '../../../components/SelectBox';
@@ -66,8 +67,6 @@ const ConvertForm = () => {
       downloadFile(blob, getFilenameFromResponse(res));
     } else {
       setErrData(await res.json());
-      // 再バリデーション実施
-      formikHelpers.validateForm(form);
     }
   };
 
@@ -160,6 +159,7 @@ const ConvertForm = () => {
               </Row>
               <hr className="my-4" />
               <SubmitButton title="確認" isLoading={isResultLoading} />
+              <AutoValidateToken errData={errData} />
             </Form>
           );
         }}
