@@ -4,22 +4,27 @@ import Carousel from 'react-bootstrap/Carousel';
 import { Image } from '../../@types/studyUtilType';
 import { getContextPath, pathJoin } from '../../study/util/studyUtil';
 
+type SliderProps = {
+  /** 画像リスト */
+  imageList: Image[];
+  /** 自動スライド間隔 null だと自動スライドしない */
+  interval?: number;
+  /** 選択対象セット用ハンドラー関数 */
+  onSelect?: (eventKey: number, event: Record<string, unknown>) => void;
+  /** インジケーターを追加するかどうか */
+  indicators?: boolean;
+};
+
 /**
  * 画像表示用スライダー
- * intervalは自動スライド間隔 null だと自動スライドしない
  *
  * @returns slider
  */
-const Slider = ({
+const Slider: React.FC<SliderProps> = ({
   imageList,
   interval = null,
   onSelect = null,
   indicators = true,
-}: {
-  imageList: Image[];
-  interval?: number;
-  onSelect?: (eventKey: number, event: Record<string, unknown>) => void;
-  indicators?: boolean;
 }) => {
   const [index, setIndex] = useState(0);
 

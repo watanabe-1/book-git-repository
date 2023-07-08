@@ -3,19 +3,24 @@ import Button from 'react-bootstrap/Button';
 
 import BodysLodingSpinner from './BodysLodingSpinner';
 
+type SubmitButtonProps = {
+  /** ボタン表示 */
+  title?: string;
+  /** ローディング中かどうか */
+  isLoading?: boolean;
+  /** ローディング中かどうか */
+  hidden?: boolean;
+};
+
 /**
- * title ボタン表示
- * isLoading ローディング中かどうか
+ * 送信用ボタン
+ *
  * @returns 送信用ボタン
  */
-const SubmitButton = ({
+const SubmitButton: React.FC<SubmitButtonProps> = ({
   title,
   isLoading = false,
   hidden = false,
-}: {
-  title?: string;
-  isLoading?: boolean;
-  hidden?: boolean;
 }) => {
   return isLoading ? (
     <Button variant="outline-primary" disabled hidden={hidden}>

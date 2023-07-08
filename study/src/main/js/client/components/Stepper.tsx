@@ -3,20 +3,24 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import '../../../css/view/stepper/stepper.css';
 
+type StepperProps = {
+  /** ラベル 配列の要素分だけステップを作成 */
+  steps: string[];
+  /** 現在のstep */
+  activeStep: number;
+  /** ラベルを出すかどうか */
+  noLabel?: boolean;
+};
+
 /**
- * stepsに渡した配列の要素分だけ作成
- * activeStepが現在のstep
- * noLabel はラベルを出すかどうか
+ * ステッパー
+ *
  * @returns stepper
  */
-const Stepper = ({
+const Stepper: React.FC<StepperProps> = ({
   steps,
   activeStep,
   noLabel = false,
-}: {
-  steps: string[];
-  activeStep: number;
-  noLabel?: boolean;
 }) => {
   return (
     <div className="pb-2 mb-5">

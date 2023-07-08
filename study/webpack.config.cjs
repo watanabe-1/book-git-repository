@@ -115,6 +115,7 @@ module.exports = {
             options: {
               presets: ['@babel/preset-env', '@babel/preset-react'],
               plugins: ['@babel/plugin-transform-runtime'],
+              cacheDirectory: true,
             },
           },
         ],
@@ -180,4 +181,6 @@ module.exports = {
     maxAssetSize: 3000000,
     maxEntrypointSize: 3000000,
   },
+  // キャッシュを有効にすることで変更したファイルのみトランスパイル
+  cache: true,
 };

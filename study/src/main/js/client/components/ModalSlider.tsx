@@ -8,20 +8,25 @@ import Row from 'react-bootstrap/Row';
 import Slider from './Slider';
 import { Image } from '../../@types/studyUtilType';
 
+type ModalSliderChartProps = {
+  /** タイトル */
+  title?: string;
+  /** 画像リスト */
+  imageList: Image[];
+  /** 選択したimageをセットするよう関数 */
+  setImage?: (value: Image) => void;
+};
+
 /**
  * 画像表示用スライダーモーダル
  * intervalは自動スライド間隔 null だと自動スライドしない
  *
  * @returns modalSlider
  */
-const ModalSlider = ({
+const ModalSlider: React.FC<ModalSliderChartProps> = ({
   title = null,
   imageList,
   setImage = null,
-}: {
-  title?: string;
-  imageList: Image[];
-  setImage?: (value: Image) => void;
 }) => {
   const [index, setIndex] = useState(0);
 
@@ -43,7 +48,7 @@ const ModalSlider = ({
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          {title && <Modal.Title>Modal title</Modal.Title>}
+          {title && <Modal.Title>{title}</Modal.Title>}
         </Modal.Header>
         <Modal.Body>
           <Container>

@@ -23,7 +23,17 @@ export type HouseholdChartData = {
   yearAll: ChartData<'bar'>;
 };
 
-const Chart = ({ year, month }: { year: number; month: number }) => {
+/**
+ * プロップス
+ */
+type ChartProps = {
+  /** 年 */
+  year: number;
+  /** 月 */
+  month: number;
+};
+
+const Chart: React.FC<ChartProps> = ({ year, month }) => {
   const [initiaChartData, initScript] = onServer(
     (api, param) => api.getHouseholdChartInfo(param),
     [],

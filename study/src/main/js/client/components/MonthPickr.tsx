@@ -6,20 +6,26 @@ import Flatpickr from 'react-flatpickr';
 import Icon from './Icon';
 import { iconConst } from '../../constant/iconConstant';
 
+type MonthPickrProps = {
+  /** 年 */
+  year: number;
+  /** 月 */
+  month: number;
+  /** ロケール */
+  locale: CustomLocale;
+  /** 値が変更されたときのハンドラ関数 */
+  onChange: (date: Date) => void;
+};
+
 /**
  *
  * @returns 月を選択できるinputボックス
  */
-const MonthPickr = ({
+const MonthPickr: React.FC<MonthPickrProps> = ({
   year,
   month,
   locale,
   onChange,
-}: {
-  year: number;
-  month: number;
-  locale: CustomLocale;
-  onChange: (date: Date) => void;
 }) => {
   //console.log(value);
   const [flatpickrKey, setFlatpickrKey] = useState(0);

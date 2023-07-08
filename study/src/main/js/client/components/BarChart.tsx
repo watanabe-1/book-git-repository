@@ -29,23 +29,21 @@ ChartJS.register(
   Legend
 );
 
+type BarChartProps = {
+  /** データ */
+  data: ChartData<'bar'>;
+  /** 日付 */
+  date: Date;
+  /** 上に出す文字 */
+  topTitle: string;
+};
+
 /**
  * 棒グラフ
  *
- * @param data データ
- * @param date 日付け
- * @param middleTitle 真ん中に出す文字
  * @returns
  */
-const BarChart = ({
-  data,
-  date,
-  topTitle,
-}: {
-  data: ChartData<'bar'>;
-  date: Date;
-  topTitle: string;
-}) => {
+const BarChart: React.FC<BarChartProps> = ({ data, date, topTitle }) => {
   const title = isObjEmpty(data.datasets[0].data)
     ? 'データがありません'
     : topTitle;

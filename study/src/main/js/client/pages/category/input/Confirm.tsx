@@ -10,7 +10,14 @@ import { getConfirmMessage } from '../../../../study/util/studyMessageUtil';
 import { fetchPost } from '../../../../study/util/studyUtil';
 import ConfirmList from '../../../components/ConfirmList';
 
-const Confirm = (props: { handleNext: () => void; handleBack: () => void }) => {
+type ConfirmProps = {
+  /** 次画面へ */
+  handleNext: () => void;
+  /** 前画面へ */
+  handleBack: () => void;
+};
+
+const Confirm: React.FC<ConfirmProps> = (props) => {
   const { currentState } = useContext(Context);
   const form = currentState.form;
   const info = currentState.info;

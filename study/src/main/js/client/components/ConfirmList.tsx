@@ -5,11 +5,16 @@ import ImageIcon from './ImageIcon';
 import { FormConfirmData } from '../../@types/studyUtilType';
 import { typeConst } from '../../constant/typeConstant';
 
+type ConfirmListProps = {
+  /** データ */
+  listData: FormConfirmData[];
+};
+
 /**
  *
  * @returns form確認画面リスト表示用
  */
-const ConfirmList = (props: { listData: FormConfirmData[] }) => {
+const ConfirmList: React.FC<ConfirmListProps> = (props: { listData }) => {
   return (
     <Table bordered>
       <thead>

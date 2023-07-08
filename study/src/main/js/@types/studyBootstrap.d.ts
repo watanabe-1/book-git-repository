@@ -18,4 +18,4 @@ export type Color =
 /**
  * テキスト指定可能色
  */
-export type TextColor = `text-${Color}${'' | `-${number}`}`;
+export type TextColor = `text-${Color}${'' | `-50`}`;

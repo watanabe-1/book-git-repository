@@ -15,6 +15,7 @@ import SimpleText from '../../../components/SimpleText';
 import SortAndFilterFormTable from '../../../components/SortAndFilterFormTable';
 
 type ListTableProps = {
+  /** 家計簿データリスト */
   booksList: Books[];
 };
 

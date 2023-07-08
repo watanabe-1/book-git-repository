@@ -22,15 +22,19 @@ export type HouseholdCalendarData = {
   amountList: Books[];
 };
 
-const Calendar = ({
-  year,
-  month,
-  day,
-}: {
+/**
+ * プロップス
+ */
+type CalendarProps = {
+  /** 年 */
   year: number;
+  /** 月 */
   month: number;
+  /** 日 */
   day: number;
-}) => {
+};
+
+const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
   const date = new Date(year, month - 1, day);
   // 日付けが正しく設定されるまで
   if (isInvalidDate(date)) return <BodysLodingSpinner />;

@@ -26,7 +26,12 @@ import TextBox from '../../../components/TextBox';
 import { onServer, executeFuncIfNeeded } from '../../../on-server';
 import yup from '../../../yup/message/ja';
 
-const Basic = (props: { handleNext: () => void }) => {
+type BasicProps = {
+  /** 次画面へ */
+  handleNext: () => void;
+};
+
+const Basic: React.FC<BasicProps> = (props) => {
   const [initialInfo, initScript] = onServer(
     (api) => api.getInfo(),
     [],

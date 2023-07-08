@@ -4,9 +4,12 @@ import Button from 'react-bootstrap/Button';
 import { urlConst } from '../../../../constant/urlConstant';
 import { addContextPath } from '../../../../study/util/studyUtil';
 
-const Result = (props: {
+type ResultProps = {
+  /** 前画面へ */
   handleBack: React.MouseEventHandler<HTMLButtonElement>;
-}) => {
+};
+
+const Result: React.FC<ResultProps> = (props) => {
   const handleClick = () => {
     // 同一タブ内で遷移
     window.location.href = addContextPath(urlConst.category.LIST);

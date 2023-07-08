@@ -29,22 +29,24 @@ ChartJS.register(
   Legend
 );
 
+type DoughnutChartProps = {
+  /** データ */
+  data: ChartData<'doughnut'>;
+  /** 日付 */
+  date: Date;
+  /** 真ん中に出す文字 */
+  middleTitle: string;
+};
+
 /**
  * ドーナツ図
  *
- * @param data データ
- * @param date 日付け
- * @param middleTitle 真ん中に出す文字
  * @returns
  */
-const DoughnutChart = ({
+const DoughnutChart: React.FC<DoughnutChartProps> = ({
   data,
   date,
   middleTitle,
-}: {
-  data: ChartData<'doughnut'>;
-  date: Date;
-  middleTitle: string;
 }) => {
   const title = isObjEmpty(data.datasets[0].data)
     ? 'データがありません'

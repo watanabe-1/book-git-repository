@@ -12,6 +12,8 @@ type FormControlProps = {
   value: string | number | string[];
   /** テキストとして表示する値 */
   textValue?: string;
+  /** テキストの最大桁数 */
+  textMaxLength?: number;
   /** テキストボックスの値が変更されたときのハンドラ関数 */
   onChange?: (event: React.ChangeEvent<FormControlHTMLElement>) => void;
   /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
@@ -42,7 +44,8 @@ const FormControl: React.FC<FormControlProps> = ({
   title = null,
   name,
   value,
-  textValue,
+  textValue = null,
+  textMaxLength = null,
   onChange,
   onBlur,
   hidden = false,
@@ -57,7 +60,7 @@ const FormControl: React.FC<FormControlProps> = ({
   const [initialValue, setInitialValue] = useState(value);
   const [isEditing, setIsEditing] = useState(!isOnClickEditable);
   const [hasChanges, setHasChanges] = useState(false);
-  const inputRef = useRef(null);
+  const formElementRef = useRef(null);
 
   const handleChange = (event: React.ChangeEvent<FormControlHTMLElement>) => {
     // valueが変更されたとき
@@ -86,14 +89,18 @@ const FormControl: React.FC<FormControlProps> = ({
     }
   };
 
-  const handleTextClick = () => {
-    setIsEditing(true);
+  const handleTextMouseDown = () => {
+    //console.log('call handleTextMouseDown');
+    if (!isEditing && isOnClickEditable) {
+      setIsEditing(isOnClickEditable);
+    }
+    console.log(isEditing);
   };
 
   useEffect(() => {
     // 編集可能になった場合にフォーカスが当たっているようにする
     if (isEditing && isOnClickEditable) {
-      inputRef.current.focus();
+      formElementRef.current.focus();
     }
   }, [isEditing]);
 
@@ -109,12 +116,16 @@ const FormControl: React.FC<FormControlProps> = ({
 
   const isValid = validate && touched && !error;
   const isInvalid = validate && !!error;
-  const simpleTextColor = hasChanges ? 'text-warning' : 'text-black';
-  const simpleTextValue = textValue ? textValue : value;
+  const textBase = textValue ? textValue : value;
+  const simpleTextValue = textBase ? textBase : '値がありません';
+  const textColorBase = textBase ? 'text-black' : 'text-black-50';
+  const simpleTextColor = hasChanges ? 'text-warning' : textColorBase;
 
   return (
     <Form.Group controlId={name} hidden={hidden}>
-      {title && <Form.Label>{title}</Form.Label>}
+      {title && (
+        <Form.Label onMouseDown={handleTextMouseDown}>{title}</Form.Label>
+      )}
       {React.cloneElement(children, {
         name,
         value: text,
@@ -122,19 +133,24 @@ const FormControl: React.FC<FormControlProps> = ({
         onBlur: handleBlur,
         isValid,
         isInvalid,
-        ref: inputRef,
+        ref: formElementRef,
         hidden: !isEditing,
       })}
       <SimpleText
         name={name}
         value={simpleTextValue}
-        onClick={handleTextClick}
         hidden={isEditing}
         textColorClass={simpleTextColor}
+        textMaxLength={textMaxLength}
+        onMouseDown={handleTextMouseDown}
       />
-      {validate && <Form.Control.Feedback>OK!</Form.Control.Feedback>}
       {validate && (
-        <Form.Control.Feedback type="invalid">
+        <Form.Control.Feedback onMouseDown={handleTextMouseDown}>
+          OK!
+        </Form.Control.Feedback>
+      )}
+      {validate && (
+        <Form.Control.Feedback type="invalid" onMouseDown={handleTextMouseDown}>
           {error as string}
         </Form.Control.Feedback>
       )}

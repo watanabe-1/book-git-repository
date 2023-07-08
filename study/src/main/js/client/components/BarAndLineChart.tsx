@@ -30,20 +30,21 @@ ChartJS.register(
   Legend
 );
 
+type BarAndLineChartProps = {
+  /** データ */
+  data: ChartData<'bar'>;
+  /** 上に出す文字 */
+  topTitle: string;
+};
+
 /**
  * ホライゾンバーとラインチャート
  *
- * @param data データ
- * @param date 日付け
- * @param middleTitle 真ん中に出す文字
  * @returns
  */
-const BarAndLineChart = ({
+const BarAndLineChart: React.FC<BarAndLineChartProps> = ({
   data,
   topTitle,
-}: {
-  data: ChartData<'bar'>;
-  topTitle: string;
 }) => {
   const title = isObjEmpty(data.datasets[0].data)
     ? 'データがありません'

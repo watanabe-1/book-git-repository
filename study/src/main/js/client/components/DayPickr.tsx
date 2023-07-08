@@ -5,19 +5,20 @@ import Flatpickr from 'react-flatpickr';
 import Icon from './Icon';
 import { iconConst } from '../../constant/iconConstant';
 
+type DayPickrProps = {
+  /** 日付 */
+  value: Date;
+  /** ロケール */
+  locale: CustomLocale;
+  /** 値が変更されたときのハンドラ関数 */
+  onChange: (date: Date) => void;
+};
+
 /**
  *
  * @returns 日を選択できるinputボックス
  */
-const DayPickr = ({
-  value,
-  locale,
-  onChange,
-}: {
-  value: Date;
-  locale: CustomLocale;
-  onChange: (date: Date) => void;
-}) => {
+const DayPickr: React.FC<DayPickrProps> = ({ value, locale, onChange }) => {
   return (
     <>
       <Icon icon={iconConst.bootstrap.BI_CALENDAR} />
