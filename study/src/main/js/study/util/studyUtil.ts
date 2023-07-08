@@ -732,3 +732,12 @@ export function ToTypeArrayIfIsStringArray(array: Type[] | string[]) {
 export function nullOrEmptyValueLogic(target: unknown, value: unknown) {
   return target ? target : value;
 }
+
+/**
+ * 数値か判定
+ * @param value 判定対象
+ * @returns
+ */
+export function isNumber(value: string) {
+  return isNaN(Number(value));
+}

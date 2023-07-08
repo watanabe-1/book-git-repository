@@ -30,7 +30,7 @@ type FormControlProps = {
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
-  /** 子コンポーネント */
+  /** 子コンポーネント react bootstrap form elementを想定 */
   children: React.ReactElement;
 };
 

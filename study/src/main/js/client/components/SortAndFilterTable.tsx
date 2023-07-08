@@ -1,3 +1,4 @@
+import { isNumber } from 'chart.js/helpers';
 import React, { useState } from 'react';
 import Table from 'react-bootstrap/Table';
 
@@ -55,10 +56,10 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
     if (isSort) {
       const { sortColumn, sortDirection } = tableData;
 
-      let newDirection = ASCENDING;
-      if (sortColumn === column.name && sortDirection === ASCENDING) {
-        newDirection = DESCENDING;
-      }
+      const newDirection =
+        sortColumn === column.name && sortDirection === ASCENDING
+          ? DESCENDING
+          : ASCENDING;
 
       // setTableData({
       //   ...tableData,
@@ -125,9 +126,13 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
     filteredAndSortedRows = filteredAndSortedRows.sort((aRow, bRow) => {
       const aCell = findCell(aRow);
       const bCell = findCell(bRow);
-      let aValue = aCell.value;
-      let bValue = bCell.value;
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
+      let aValue: string | number = aCell.value;
+      let bValue: string | number = bCell.value;
+
+      if (isNumber(aValue) && isNumber(bValue)) {
+        aValue = Number(aValue);
+        bValue = Number(bValue);
+      } else if (typeof aValue === 'string' && typeof bValue === 'string') {
         aValue = aValue.toLowerCase();
         bValue = bValue.toLowerCase();
       }
@@ -178,10 +183,10 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
         {filteredAndSortedRows.map((row) => {
           return (
             <tr key={row.primaryKey}>
-              {row.cells.map((cell, cellIndex) => {
+              {row.cells.map((cell) => {
                 return (
                   <td
-                    key={`${row.primaryKey}-${cellIndex}`}
+                    key={`${row.primaryKey}-${cell.name}`}
                     hidden={cell.hidden}
                   >
                     {cell.element}

@@ -1,8 +1,10 @@
 import React from 'react';
 
+import { IconClass } from '../../@types/studyBootstrap';
+
 type IconProps = {
   /** icon対象 */
-  icon: string;
+  icon: IconClass;
   /** スタイル */
   style?: React.CSSProperties;
   /** 非表示にするかどうか */

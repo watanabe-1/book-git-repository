@@ -1,5 +1,13 @@
+import { IconClass } from '../@types/studyBootstrap';
+
+type IconConst = {
+  bootstrap: {
+    [key: string]: IconClass;
+  };
+};
+
 /** icon */
-export const iconConst = {
+export const iconConst: IconConst = {
   /** bootstrap */
   bootstrap: {
     BI_CARET_UP_FILL: 'bi-caret-up-fill',
