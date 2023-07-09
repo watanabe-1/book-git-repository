@@ -1,4 +1,4 @@
-import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import React, { useState, useEffect, useContext } from 'react';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -51,10 +51,7 @@ const Basic: React.FC<BasicProps> = (props) => {
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (
-    form: Category,
-    formikHelpers: FormikHelpers<Category>
-  ) => {
+  const handleSubmit = async (form: Category) => {
     const res = await fetchConfirm(form);
 
     if (res.ok) {
@@ -109,10 +106,16 @@ const Basic: React.FC<BasicProps> = (props) => {
     .string()
     .required()
     .server(errData);
-  additions[fieldConst.category.NOTE] = yup.string();
-  additions[fieldConst.category.IMG_TYPE] = yup.string();
-  additions[fieldConst.category.CAT_TYPE] = yup.string();
-  additions[fieldConst.category.ACTIVE] = yup.bool();
+  additions[fieldConst.category.NOTE] = yup.string().notRequired().nullable();
+  additions[fieldConst.category.IMG_TYPE] = yup
+    .string()
+    .notRequired()
+    .nullable();
+  additions[fieldConst.category.CAT_TYPE] = yup
+    .string()
+    .notRequired()
+    .nullable();
+  additions[fieldConst.category.ACTIVE] = yup.array().notRequired().nullable();
   additions[fieldConst.category.CAT_ICON] = yup.mixed().server(errData);
   const schema = yup.object().shape(additions);
 
@@ -130,7 +133,7 @@ const Basic: React.FC<BasicProps> = (props) => {
               ? currentState.form.imgType
               : info.imgTypes[0].code,
             catType: currentState.form ? currentState.form.catType : '',
-            active: currentState.form ? currentState.form.active : '0',
+            active: currentState.form ? currentState.form.active : [],
             catIcon: currentState.form ? currentState.form.catIcon : '',
           } as Category
         }

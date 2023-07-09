@@ -237,7 +237,9 @@ const ListTable = () => {
                       name={field.name}
                       value={field.value}
                       typeList={info.catTypes}
+                      dirty={props.dirty}
                       onChange={field.onChange}
+                      isOnClickEditable
                     />
                   );
                 }}
@@ -261,7 +263,9 @@ const ListTable = () => {
                     <TextArea
                       name={field.name}
                       value={field.value}
-                      onChange={field.onChange}
+                      dirty={props.dirty}
+                      onBlur={field.onChange}
+                      isOnClickEditable
                     />
                   );
                 }}
@@ -357,7 +361,10 @@ const ListTable = () => {
                       name={field.name}
                       value={field.value}
                       flag={info.active}
+                      dirty={props.dirty}
                       onChange={field.onChange}
+                      isOnClickEditable
+                      noLabel
                     />
                   );
                 }}

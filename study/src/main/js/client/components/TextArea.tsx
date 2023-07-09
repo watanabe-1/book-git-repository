@@ -1,30 +1,66 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 
+import FormControl from './FormControl';
+
+type TextAreaProps = {
+  /** テキストボックスのタイトル */
+  title?: string;
+  /** テキストボックスの名前 */
+  name: string;
+  /** テキストボックスの値 */
+  value: string | number | string[];
+  /** テキストボックスの値が変更されたときのハンドラ関数 */
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  /** テキストボックスを非表示にするかどうか */
+  hidden?: boolean;
+  /** バリデーションを行うかどうかを示すフラグ */
+  validate?: boolean;
+  /** バリデーションが実行されたかどうかを示すフラグ */
+  touched?: unknown;
+  /** エラーメッセージ */
+  error?: unknown;
+  /** formが変更されたかどうか */
+  dirty?: boolean;
+  /** 通常は文字のみでクリックしたときに入力できるようにする */
+  isOnClickEditable?: boolean;
+};
+
 /**
  *
  * @returns form内のテキストエリア
  */
-const TextArea = ({
+const TextArea: React.FC<TextAreaProps> = ({
   title = null,
   name,
   value,
   onChange,
-}: {
-  title?: string;
-  name: string;
-  value: string | number | string[];
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur,
+  hidden = false,
+  validate = false,
+  touched = false,
+  error = '',
+  dirty = false,
+  isOnClickEditable = false,
 }) => {
   return (
-    <Form.Group controlId={name}>
-      {title && <Form.Label>{title}</Form.Label>}
-      <Form.Control
-        as="textarea"
-        value={value ? value : ''}
-        onChange={onChange}
-      />
-    </Form.Group>
+    <FormControl
+      title={title}
+      name={name}
+      value={value}
+      onChange={onChange}
+      onBlur={onBlur}
+      hidden={hidden}
+      validate={validate}
+      touched={touched}
+      error={error}
+      dirty={dirty}
+      isOnClickEditable={isOnClickEditable}
+    >
+      <Form.Control as="textarea" />
+    </FormControl>
   );
 };
 

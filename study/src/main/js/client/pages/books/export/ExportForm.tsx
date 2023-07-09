@@ -1,4 +1,4 @@
-import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import React, { useEffect, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -45,10 +45,7 @@ const InputForm = () => {
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (
-    form: BooksDownloadForm,
-    formikHelpers: FormikHelpers<BooksDownloadForm>
-  ) => {
+  const handleSubmit = async (form: BooksDownloadForm) => {
     const res = await fetchResult(form);
 
     if (res.ok) {

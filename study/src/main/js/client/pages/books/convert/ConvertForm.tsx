@@ -1,4 +1,4 @@
-import { Formik, FormikHelpers, FormikProps } from 'formik';
+import { Formik, FormikProps } from 'formik';
 import React, { useEffect, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -55,10 +55,7 @@ const ConvertForm = () => {
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (
-    form: BooksConvertForm,
-    formikHelpers: FormikHelpers<BooksConvertForm>
-  ) => {
+  const handleSubmit = async (form: BooksConvertForm) => {
     const res = await fetchConvertFile(form);
 
     if (res.ok) {

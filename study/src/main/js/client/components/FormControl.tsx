@@ -6,6 +6,8 @@ import SimpleText from './SimpleText';
 type FormControlProps = {
   /** テキストボックスのタイトル */
   title?: string;
+  /** ラベルの後にbrタグを入れるかどうか */
+  titleBr?: boolean;
   /** テキストボックスの名前 */
   name: string;
   /** テキストボックスの値 */
@@ -31,7 +33,7 @@ type FormControlProps = {
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
   /** 子コンポーネント react bootstrap form elementを想定 */
-  children: React.ReactElement;
+  children: React.ReactElement | React.ReactElement[];
 };
 
 type FormControlHTMLElement = HTMLInputElement | HTMLSelectElement;
@@ -42,6 +44,7 @@ type FormControlHTMLElement = HTMLInputElement | HTMLSelectElement;
  */
 const FormControl: React.FC<FormControlProps> = ({
   title = null,
+  titleBr = false,
   name,
   value,
   textValue = null,
@@ -61,6 +64,7 @@ const FormControl: React.FC<FormControlProps> = ({
   const [isEditing, setIsEditing] = useState(!isOnClickEditable);
   const [hasChanges, setHasChanges] = useState(false);
   const formElementRef = useRef(null);
+  const blurTimeoutRef = useRef(null);
 
   const handleChange = (event: React.ChangeEvent<FormControlHTMLElement>) => {
     // valueが変更されたとき
@@ -72,11 +76,37 @@ const FormControl: React.FC<FormControlProps> = ({
     }
   };
 
+  const handleFocus = () => {
+    // handleFocus関数が猶予時間内に呼ばれた場合
+    // (猶予時間内にchildrenからchildrenに
+    // フォーカスが移った時)
+    // は設定されているイベントを破棄
+    if (isOnClickEditable) {
+      clearTimeout(blurTimeoutRef.current);
+    }
+    //console.log('call handleFocus');
+  };
+
   const handleBlur = (
     event: React.FocusEvent<FormControlHTMLElement, Element>
   ) => {
     if (isOnClickEditable) {
-      setIsEditing(false);
+      // razioボタンのようなchildrenが複数存在
+      // するときに、childrenからchildrenに
+      // フォーカスを移したとき
+      // (片側のchildrenにフォーカスが当たっている
+      // ときに、もう片側のchildrenにフォーカスを
+      // クリックなどで移したとき)
+      // はisEditing→falseにしたくないため
+      // 猶予時間を設ける
+      // handleFocus関数が猶予時間内に呼ばれた場合
+      // (猶予時間内にchildrenからchildrenに
+      // フォーカスが移った時)
+      // はisEditing→falseに更新しない
+      blurTimeoutRef.current = setTimeout(() => {
+        //console.log('call blurTimeoutRef.current');
+        setIsEditing(false);
+      }, 100);
     }
     if (onBlur) {
       onBlur(event);
@@ -113,6 +143,7 @@ const FormControl: React.FC<FormControlProps> = ({
     }
   }, [dirty]);
 
+  const isArrayChildren = Array.isArray(children);
   const isValid = validate && touched && !error;
   const isInvalid = validate && !!error;
   const textBase = textValue ? textValue : value;
@@ -120,19 +151,34 @@ const FormControl: React.FC<FormControlProps> = ({
   const textColorBase = textBase ? 'text-black' : 'text-black-50';
   const simpleTextColor = hasChanges ? 'text-warning' : textColorBase;
 
+  const childrenProps = {
+    name,
+    onChange: handleChange,
+    onBlur: handleBlur,
+    onFocus: handleFocus,
+    isValid,
+    isInvalid,
+    ref: formElementRef,
+  };
+
   return (
     <Form.Group controlId={name} hidden={hidden}>
       {title && <Form.Label onClick={handleTextClick}>{title}</Form.Label>}
-      {React.cloneElement(children, {
-        name,
-        value: text,
-        onChange: handleChange,
-        onBlur: handleBlur,
-        isValid,
-        isInvalid,
-        ref: formElementRef,
-        hidden: !isEditing,
-      })}
+      {titleBr && <br />}
+      {isArrayChildren
+        ? children.map((child, index) =>
+            React.cloneElement(child, {
+              key: index,
+              // hidden属性だとうまくいかないためstyleから直接非表示に
+              style: { display: isEditing ? '' : 'none' },
+              ...childrenProps,
+            })
+          )
+        : React.cloneElement(children, {
+            value: text,
+            hidden: !isEditing,
+            ...childrenProps,
+          })}
       <SimpleText
         name={name}
         value={simpleTextValue}
