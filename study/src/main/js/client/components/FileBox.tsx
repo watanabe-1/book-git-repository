@@ -28,6 +28,8 @@ type FileBoxProps = {
   error?: unknown;
   /** formが変更されたかどうか */
   dirty?: boolean;
+  /** 読み取り専用にするか */
+  readonly?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
 };
@@ -50,6 +52,7 @@ const FileBox: React.FC<FileBoxProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
+  readonly = false,
 }) => {
   const type = hidden ? 'hidden' : 'file';
 
@@ -67,6 +70,7 @@ const FileBox: React.FC<FileBoxProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
+      readonly={readonly}
     >
       <Form.Control type={type} accept={accept} />
     </FormControl>

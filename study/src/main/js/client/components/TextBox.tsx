@@ -26,6 +26,8 @@ type TextBoxProps = {
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
+  /** 読み取り専用にするか */
+  readonly?: boolean;
 };
 
 /**
@@ -43,6 +45,7 @@ const TextBox: React.FC<TextBoxProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
+  readonly = false,
 }) => {
   const type = hidden ? 'hidden' : 'text';
 
@@ -59,6 +62,7 @@ const TextBox: React.FC<TextBoxProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
+      readonly={readonly}
     >
       <Form.Control type={type} />
     </FormControl>

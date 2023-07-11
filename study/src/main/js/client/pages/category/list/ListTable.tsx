@@ -315,31 +315,48 @@ const ListTable = () => {
               ];
             return (
               <>
-                <label>{props.getFieldProps(name).value}</label>
-                <ModalSlider
-                  imageList={imageList}
-                  setImage={(image) => {
-                    props.setFieldValue(name, image.imgId);
-                    props.setFieldValue(
-                      names[
-                        keyJoin(
-                          fieldConst.category.IMG_IDS,
-                          fieldConst.image.IMG_PATH
-                        )
-                      ],
-                      image.imgPath
+                <Field name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    const startIndex = imageList.findIndex(
+                      (image) => image.imgId === field.value
                     );
-                    props.setFieldValue(
-                      names[
-                        keyJoin(
-                          fieldConst.category.IMG_IDS,
-                          fieldConst.image.IMG_NAME
-                        )
-                      ],
-                      image.imgName
+                    return (
+                      <>
+                        <TextBox
+                          name={field.name}
+                          value={field.value}
+                          dirty={props.dirty}
+                          readonly
+                        />
+                        <ModalSlider
+                          imageList={imageList}
+                          startIndex={startIndex}
+                          setImage={(image) => {
+                            props.setFieldValue(name, image.imgId);
+                            props.setFieldValue(
+                              names[
+                                keyJoin(
+                                  fieldConst.category.IMG_IDS,
+                                  fieldConst.image.IMG_PATH
+                                )
+                              ],
+                              image.imgPath
+                            );
+                            props.setFieldValue(
+                              names[
+                                keyJoin(
+                                  fieldConst.category.IMG_IDS,
+                                  fieldConst.image.IMG_NAME
+                                )
+                              ],
+                              image.imgName
+                            );
+                          }}
+                        />
+                      </>
                     );
                   }}
-                />
+                </Field>
               </>
             );
           },

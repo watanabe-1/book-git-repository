@@ -13,6 +13,8 @@ type SliderProps = {
   onSelect?: (eventKey: number, event: Record<string, unknown>) => void;
   /** インジケーターを追加するかどうか */
   indicators?: boolean;
+  /** 開始index */
+  startIndex?: number;
 };
 
 /**
@@ -25,13 +27,17 @@ const Slider: React.FC<SliderProps> = ({
   interval = null,
   onSelect = null,
   indicators = true,
+  startIndex = 0,
 }) => {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(startIndex);
 
-  const handleSelect = (selectedIndex, e) => {
+  const handleSelect = (
+    selectedIndex: number,
+    event: Record<string, unknown>
+  ) => {
     setIndex(selectedIndex);
     if (onSelect) {
-      onSelect(selectedIndex, e);
+      onSelect(selectedIndex, event);
     }
   };
 

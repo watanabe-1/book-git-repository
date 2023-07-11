@@ -29,6 +29,8 @@ type CheckBoxProps = {
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
+  /** 読み取り専用にするか */
+  readonly?: boolean;
   /** ラベルを表示しない */
   noLabel?: boolean;
 };
@@ -49,6 +51,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
+  readonly = false,
   noLabel = false,
 }) => {
   const text = getConfirmMessage(value, typeConst.col.CHECK, {
@@ -71,6 +74,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
+      readonly={readonly}
     >
       {
         // チェックボックスは1つのみで使用する想定のため長さ1の配列でループ

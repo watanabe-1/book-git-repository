@@ -15,6 +15,8 @@ type ModalSliderChartProps = {
   imageList: Image[];
   /** 選択したimageをセットするよう関数 */
   setImage?: (value: Image) => void;
+  /** 開始index */
+  startIndex?: number;
 };
 
 /**
@@ -27,8 +29,9 @@ const ModalSlider: React.FC<ModalSliderChartProps> = ({
   title = null,
   imageList,
   setImage = null,
+  startIndex = 0,
 }) => {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(startIndex);
 
   const [show, setShow] = useState(false);
 
@@ -59,6 +62,7 @@ const ModalSlider: React.FC<ModalSliderChartProps> = ({
                   imageList={imageList}
                   onSelect={setIndex}
                   indicators={false}
+                  startIndex={index}
                 />
               </Col>
               <Col md={2}></Col>

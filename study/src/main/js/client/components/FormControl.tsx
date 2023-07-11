@@ -32,6 +32,8 @@ type FormControlProps = {
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
+  /** 読み取り専用にするか */
+  readonly?: boolean;
   /** 子コンポーネント react bootstrap form elementを想定 */
   children: React.ReactElement | React.ReactElement[];
 };
@@ -48,7 +50,7 @@ const FormControl: React.FC<FormControlProps> = ({
   name,
   value,
   textValue = null,
-  textMaxLength = null,
+  textMaxLength = 15,
   onChange,
   onBlur,
   hidden = false,
@@ -57,11 +59,12 @@ const FormControl: React.FC<FormControlProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
+  readonly = false,
   children,
 }) => {
   const [text, setText] = useState(value);
   const [initialValue, setInitialValue] = useState(value);
-  const [isEditing, setIsEditing] = useState(!isOnClickEditable);
+  const [isEditing, setIsEditing] = useState(!readonly && !isOnClickEditable);
   const [hasChanges, setHasChanges] = useState(false);
   const formElementRef = useRef(null);
   const blurTimeoutRef = useRef(null);
@@ -121,10 +124,22 @@ const FormControl: React.FC<FormControlProps> = ({
 
   const handleTextClick = () => {
     //console.log('call handleTextClick');
-    if (!isEditing && isOnClickEditable) {
+    if (!isEditing && isOnClickEditable && !readonly) {
       setIsEditing(isOnClickEditable);
     }
   };
+
+  useEffect(() => {
+    // readonlyの時は連携された値が変更されているかどうかで判定を行う
+    if (readonly) {
+      // 初期値から変更されたか判定
+      if (value === initialValue) {
+        setHasChanges(false);
+      } else {
+        setHasChanges(true);
+      }
+    }
+  }, [value]);
 
   useEffect(() => {
     // 編集可能になった場合にフォーカスが当たっているようにする

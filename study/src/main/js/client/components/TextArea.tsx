@@ -26,6 +26,8 @@ type TextAreaProps = {
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
+  /** 読み取り専用にするか */
+  readonly?: boolean;
 };
 
 /**
@@ -44,6 +46,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
+  readonly = false,
 }) => {
   return (
     <FormControl
@@ -58,6 +61,7 @@ const TextArea: React.FC<TextAreaProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
+      readonly={readonly}
     >
       <Form.Control as="textarea" />
     </FormControl>

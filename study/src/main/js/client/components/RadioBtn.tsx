@@ -30,6 +30,8 @@ type RadioBtnProps = {
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
+  /** 読み取り専用にするか */
+  readonly?: boolean;
 };
 
 /**
@@ -49,6 +51,7 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
+  readonly = false,
 }) => {
   const newTypeList = ToTypeArrayIfIsStringArray(typeList);
   const selectedType = newTypeList.find((type) => type.code === value);
@@ -69,6 +72,7 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
+      readonly={readonly}
     >
       {newTypeList.map((type, index) => {
         const id = `${name}-${index}`;

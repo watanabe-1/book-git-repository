@@ -25,18 +25,19 @@ const SimpleText: React.FC<SimpleTextProps> = ({
   onClick = () => null,
   onMouseDown = () => null,
   textColorClass = null,
-  textMaxLength = null,
+  textMaxLength = 15,
 }) => {
   const str = String(value);
   const text =
     textMaxLength && value && str.length > textMaxLength
       ? str.substring(0, textMaxLength) + '…'
       : value;
+  const divClass = `text-wrap ${textColorClass}`;
 
   return (
     <div onClick={onClick} onMouseDown={onMouseDown}>
       {title && <label>{title}</label>}
-      <div hidden={hidden} id={name} className={textColorClass}>
+      <div hidden={hidden} id={name} className={divClass}>
         {text}
       </div>
     </div>

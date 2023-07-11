@@ -32,6 +32,8 @@ type SelectBoxProps = {
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
+  /** 読み取り専用にするか */
+  readonly?: boolean;
 };
 
 /**
@@ -52,6 +54,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
+  readonly = false,
 }) => {
   const newTypeList = ToTypeArrayIfIsStringArray(typeList);
   //先頭に空要素を追加
@@ -77,6 +80,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
+      readonly={readonly}
     >
       <Form.Select>
         {newTypeList.map((type) => (

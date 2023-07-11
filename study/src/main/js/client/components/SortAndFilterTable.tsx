@@ -188,6 +188,7 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
                   <td
                     key={`${row.primaryKey}-${cell.name}`}
                     hidden={cell.hidden}
+                    className="text-nowrap"
                   >
                     {cell.element}
                   </td>
