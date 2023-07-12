@@ -1,6 +1,5 @@
 import { objToFormData } from './studyYupUtil';
 import { Type } from '../../@types/studyUtilType';
-import { commonConst } from '../../constant/commonConstant';
 
 /**
  * aタグにセットされているhref属性にパラメーターをセットする共通関数
@@ -678,27 +677,27 @@ export async function fetchPost(
   return res;
 }
 
-/**
- * 簡易的なformat用関数
- * @param format  対象
- * @param args 変換用引数
- * @returns 返還後の値
- */
-export function format(format: string, args: string[]) {
-  const formatArray = format.split(commonConst.FORMAT_SPECIFIER);
-  let ret = '';
-  if (formatArray.length > 1) {
-    formatArray.forEach((str, index) => {
-      ret = ret + str;
-      if (args[index] && formatArray.length != index + 1) {
-        ret = ret + args[index];
-      }
-    });
-  } else {
-    ret = format;
-  }
-  return ret;
-}
+// /**
+//  * 簡易的なformat用関数
+//  * @param format  対象
+//  * @param args 変換用引数
+//  * @returns 返還後の値
+//  */
+// export function format(format: string, args: string[]) {
+//   const formatArray = format.split(commonConst.FORMAT_SPECIFIER);
+//   let ret = '';
+//   if (formatArray.length > 1) {
+//     formatArray.forEach((str, index) => {
+//       ret = ret + str;
+//       if (args[index] && formatArray.length != index + 1) {
+//         ret = ret + args[index];
+//       }
+//     });
+//   } else {
+//     ret = format;
+//   }
+//   return ret;
+// }
 
 /**
  * String型をtype型に変換

@@ -1,4 +1,12 @@
 import cn from 'classnames';
+import eachDayOfInterval from 'date-fns/eachDayOfInterval';
+import eachWeekOfInterval from 'date-fns/eachWeekOfInterval';
+import endOfMonth from 'date-fns/endOfMonth';
+import endOfWeek from 'date-fns/endOfWeek';
+import getDate from 'date-fns/getDate';
+import getDay from 'date-fns/getDay';
+import getMonth from 'date-fns/getMonth';
+import startOfMonth from 'date-fns/startOfMonth';
 import React, { useEffect, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -13,6 +21,7 @@ import { isInvalidDate } from '../../../../study/util/studyDateUtil';
 import { fetchGet, isObjEmpty } from '../../../../study/util/studyUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
+
 import '../../../../../css/view/calendar/calendar.css';
 
 /**
@@ -211,16 +220,25 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
     });
   };
 
+  /**
+   * カレンダー用の配列作成
+   * @param date
+   * @returns
+   */
+  const getCalendarArray = (date) => {
+    const sundays = eachWeekOfInterval({
+      start: startOfMonth(date),
+      end: endOfMonth(date),
+    });
+    return sundays.map((sunday) =>
+      eachDayOfInterval({ start: sunday, end: endOfWeek(sunday) })
+    );
+  };
+
   //週の定義
   const weekByCalendar: string[] = ['日', '月', '火', '水', '木', '金', '土'];
-  let dayCount = 0;
-  const startDayOfWeek: number = new Date(year, month - 1, 1).getDay();
-  const endDate: number = new Date(year, month, 0).getDate();
-  const lastMonthEndDate: number = new Date(year, month - 1, 0).getDate();
-  const row: number = Math.ceil(
-    (startDayOfWeek + endDate) / weekByCalendar.length
-  );
-  let cellCount = 0;
+  const calendar = getCalendarArray(date);
+  const dateOfMonth = getMonth(date);
 
   return (
     <>
@@ -233,7 +251,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
         <Row>
           <Col sm="12">
             <Table bordered>
-              <tbody>
+              <thead>
                 <tr className="dayOfWeek">
                   {weekByCalendar.map((dayOfWeek, i) => {
                     return (
@@ -243,100 +261,98 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
                     );
                   })}
                 </tr>
-                {Array.from({ length: row }).map((_, rowIndex) => (
+              </thead>
+              <tbody>
+                {calendar.map((weekRow, rowIndex) => (
                   <tr key={rowIndex}>
-                    {Array.from({ length: weekByCalendar.length }).map(
-                      (_, colIndex) => {
-                        if (rowIndex === 0 && colIndex < startDayOfWeek) {
-                          // 1行目で1日まで先月の日付を設定
-                          return (
-                            <td
-                              key={cellCount++}
-                              className="text-dark text-start text-opacity-25"
-                            >
-                              {lastMonthEndDate - startDayOfWeek + colIndex + 1}
-                            </td>
-                          );
-                        } else if (dayCount >= endDate) {
-                          // 最終行で最終日以降、翌月の日付を設定
-                          dayCount++;
-                          return (
-                            <td
-                              key={cellCount++}
-                              className="text-dark text-start text-opacity-25"
-                            >
-                              {dayCount - endDate}
-                            </td>
-                          );
-                        } else {
-                          // 当月の日付を曜日に照らし合わせて設定
-                          dayCount++;
-                          const classNames = [];
-                          classNames.push('bootstrap-calendar-cell-hover');
-                          const holiday = getHoliday(year, month, dayCount);
-                          const amountListByDay = getAmountDayList(
-                            year,
-                            month,
-                            dayCount
-                          );
-                          // console.log(`day:${dayCount}`);
-                          // console.log('holiday');
-                          // console.log(holiday);
-                          // console.log('amountListByDay');
-                          // console.log(amountListByDay);
-                          if (isSelectday(year, month, dayCount)) {
-                            classNames.push('selected');
-                            classNames.push('bg-danger');
-                            classNames.push('text-white');
-                          } else if (isHoliday(holiday)) {
-                            classNames.push('text-success');
-                          } else if (isSaturday(colIndex)) {
-                            classNames.push('text-primary');
-                          } else if (isSunday(colIndex)) {
-                            classNames.push('text-danger');
-                          }
-                          return (
-                            <td
-                              key={cellCount++}
-                              className={cn(classNames)}
-                              title={isHoliday(holiday) ? holiday.name : null}
-                              data-value={dayCount}
-                              onClick={(event) => {
-                                // console.log(`year:${year}`);
-                                // console.log(`month:${month}`);
-                                // console.log(`day:${dayCount}`);
-
-                                // イベントハンドラを登録した要素がcurrentTarget
-                                // イベントが発生した要素がtarget
-                                // 今回は必ずtdタグを取得したいのでcurrentTarget
-                                const target =
-                                  event.currentTarget as HTMLElement;
-                                const clickDay = Number(
-                                  target.getAttribute('data-value')
-                                );
-                                // console.log(`day:${clickDay}`);
-                                setSelectDay(
-                                  new Date(year, month - 1, clickDay)
-                                );
-                              }}
-                            >
-                              <div className="text-start">{dayCount}</div>
-                              <div className="text-center">
-                                {isAmountDay(amountListByDay) &&
-                                  `${amountListByDay.length}件`}
-                              </div>
-                              <div className="text-center">
-                                {isAmountDay(amountListByDay) &&
-                                  amountListByDay.reduce(
-                                    (sum, element) => sum + element,
-                                    0
-                                  )}
-                              </div>
-                            </td>
-                          );
+                    {weekRow.map((weekDate, colIndex) => {
+                      const weekDateOfDay = getDay(weekDate);
+                      const weekDateOfDate = getDate(weekDate);
+                      const weekDateOfMonth = getMonth(weekDate);
+                      // console.log(
+                      //   `weekDate:${weekDate} month:${getMonth(weekDate)}`
+                      // );
+                      // console.log(`date:${date} month:${getMonth(date)}`);
+                      if (
+                        // 前月の日付
+                        weekDateOfMonth < dateOfMonth ||
+                        // 翌月の日付
+                        weekDateOfMonth > dateOfMonth
+                      ) {
+                        // 1行目で1日まで先月の日付を設定
+                        // 最終行で最終日以降、翌月の日付を設定
+                        return (
+                          <td
+                            key={weekDateOfDay}
+                            className="text-dark text-start text-opacity-25"
+                          >
+                            {weekDateOfDate}
+                          </td>
+                        );
+                      } else {
+                        // 当月の日付を曜日に照らし合わせて設定
+                        const classNames = [];
+                        classNames.push('bootstrap-calendar-cell-hover');
+                        const holiday = getHoliday(year, month, weekDateOfDate);
+                        const amountListByDay = getAmountDayList(
+                          year,
+                          month,
+                          weekDateOfDate
+                        );
+                        // console.log(`day:${weekDateOfDate}`);
+                        // console.log('holiday');
+                        // console.log(holiday);
+                        // console.log('amountListByDay');
+                        // console.log(amountListByDay);
+                        if (isSelectday(year, month, weekDateOfDate)) {
+                          classNames.push('selected');
+                          classNames.push('bg-danger');
+                          classNames.push('text-white');
+                        } else if (isHoliday(holiday)) {
+                          classNames.push('text-success');
+                        } else if (isSaturday(colIndex)) {
+                          classNames.push('text-primary');
+                        } else if (isSunday(colIndex)) {
+                          classNames.push('text-danger');
                         }
+                        return (
+                          <td
+                            key={weekDateOfDay}
+                            className={cn(classNames)}
+                            title={isHoliday(holiday) ? holiday.name : null}
+                            data-value={weekDateOfDate}
+                            onClick={(event) => {
+                              // console.log(`year:${year}`);
+                              // console.log(`month:${month}`);
+                              // console.log(`day:${weekDateOfDate}`);
+
+                              // イベントハンドラを登録した要素がcurrentTarget
+                              // イベントが発生した要素がtarget
+                              // 今回は必ずtdタグを取得したいのでcurrentTarget
+                              const target = event.currentTarget as HTMLElement;
+                              const clickDay = Number(
+                                target.getAttribute('data-value')
+                              );
+                              // console.log(`day:${clickDay}`);
+                              setSelectDay(new Date(year, month - 1, clickDay));
+                            }}
+                          >
+                            <div className="text-start">{weekDateOfDate}</div>
+                            <div className="text-center">
+                              {isAmountDay(amountListByDay) &&
+                                `${amountListByDay.length}件`}
+                            </div>
+                            <div className="text-center">
+                              {isAmountDay(amountListByDay) &&
+                                amountListByDay.reduce(
+                                  (sum, element) => sum + element,
+                                  0
+                                )}
+                            </div>
+                          </td>
+                        );
                       }
-                    )}
+                    })}
                   </tr>
                 ))}
               </tbody>

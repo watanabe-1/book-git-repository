@@ -12,6 +12,7 @@ import {
   Plugin,
 } from 'chart.js';
 import { fontString } from 'chart.js/helpers';
+import format from 'date-fns/format';
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { AnyObject } from 'yup';
@@ -91,9 +92,7 @@ const BarChart: React.FC<BarChartProps> = ({ data, date, topTitle }) => {
         usePointStyle: true,
         callbacks: {
           title: function (context): string {
-            return `${context[0].label}(${date.getFullYear()}/${
-              date.getMonth() + 1
-            })`;
+            return `${context[0].label}(${format(date, 'yyyy/MM')})`;
           },
           label: function (context): string[] {
             const data = context.dataset.data as number[];

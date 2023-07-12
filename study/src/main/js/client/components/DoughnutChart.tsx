@@ -12,6 +12,7 @@ import {
   Plugin,
 } from 'chart.js';
 import { fontString } from 'chart.js/helpers';
+import format from 'date-fns/format';
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { AnyObject } from 'yup';
@@ -65,7 +66,7 @@ const DoughnutChart: React.FC<DoughnutChartProps> = ({
         usePointStyle: true,
         callbacks: {
           label: function (): string {
-            return `${date.getFullYear()}/${date.getMonth() + 1}`;
+            return format(date, 'yyyy/MM');
           },
           //bodyの方が見栄えが良さそうなのでafterLabelから変更
           afterBody: function (context): string[] {

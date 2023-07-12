@@ -1,14 +1,18 @@
+import addMonths from 'date-fns/addMonths';
+import startOfMonth from 'date-fns/startOfMonth';
+import subMonths from 'date-fns/subMonths';
+
 /**
  * 次月を取得
  * @param date 日付け
  * @returns 次月
  */
 export function getNextMonthDate(date: Date) {
-  // 2ヶ月後の1日目に
-  const nextMonthDate = new Date(date.getFullYear(), date.getMonth() + 2, 1);
-  // 日付を1日戻して、次月の最終日に設定
-  nextMonthDate.setDate(nextMonthDate.getDate() - 1);
-  return nextMonthDate;
+  // 次月の日付
+  const nextMonth = addMonths(date, 1);
+  // 最初の日にちを取得
+  const firstDayOfNextMonth = startOfMonth(nextMonth);
+  return firstDayOfNextMonth;
 }
 
 /**
@@ -17,11 +21,11 @@ export function getNextMonthDate(date: Date) {
  * @returns 前月
  */
 export function getPreviousMonthDate(date: Date) {
-  // 月は変わらず1日目に
-  const previousMonthDate = new Date(date.getFullYear(), date.getMonth(), 1);
-  // 日付を1日戻して、先月の最終日に設定
-  previousMonthDate.setDate(previousMonthDate.getDate() - 1);
-  return previousMonthDate;
+  // 先月の日付
+  const previousMonth = subMonths(date, 1);
+  // 最初の日にちを取得
+  const firstDayOfPreviousMonth = startOfMonth(previousMonth);
+  return firstDayOfPreviousMonth;
 }
 
 /**
