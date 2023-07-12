@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import React, { useEffect, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -297,7 +298,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
                           return (
                             <td
                               key={cellCount++}
-                              className={classNames.join(' ')}
+                              className={cn(classNames)}
                               title={isHoliday(holiday) ? holiday.name : null}
                               data-value={dayCount}
                               onClick={(event) => {

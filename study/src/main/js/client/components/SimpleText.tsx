@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import React from 'react';
 
 import { TextColor } from '../../@types/studyBootstrap';
@@ -32,7 +33,7 @@ const SimpleText: React.FC<SimpleTextProps> = ({
     textMaxLength && value && str.length > textMaxLength
       ? str.substring(0, textMaxLength) + '…'
       : value;
-  const divClass = `text-wrap ${textColorClass}`;
+  const divClass = cn('text-wrap', textColorClass);
 
   return (
     <div onClick={onClick} onMouseDown={onMouseDown}>

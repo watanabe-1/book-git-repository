@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { cloneElement, useState, useEffect, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 
 import SimpleText from './SimpleText';
@@ -182,14 +182,14 @@ const FormControl: React.FC<FormControlProps> = ({
       {titleBr && <br />}
       {isArrayChildren
         ? children.map((child, index) =>
-            React.cloneElement(child, {
+            cloneElement(child, {
               key: index,
               // hidden属性だとうまくいかないためstyleから直接非表示に
               style: { display: isEditing ? '' : 'none' },
               ...childrenProps,
             })
           )
-        : React.cloneElement(children, {
+        : cloneElement(children, {
             value: text,
             hidden: !isEditing,
             ...childrenProps,

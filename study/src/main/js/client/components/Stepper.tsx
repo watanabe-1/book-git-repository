@@ -1,3 +1,4 @@
+import cn from 'classnames';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -29,16 +30,12 @@ const Stepper: React.FC<StepperProps> = ({
           <div className="form-bootstrapStepper">
             <ul className="bootstrapStepper form-wizard">
               {steps.map((label, index) => {
-                const classNames = [];
-                if (activeStep === index) {
-                  classNames.push('active');
-                }
-                classNames.push(`col-sm-${Math.round(12 / steps.length)}`);
+                const liClass = cn(
+                  activeStep === index && 'active',
+                  `col-sm-${Math.round(12 / steps.length)}`
+                );
                 return (
-                  <li
-                    key={`bootstrapStepper-${index}`}
-                    className={classNames.join(' ')}
-                  >
+                  <li key={`bootstrapStepper-${index}`} className={liClass}>
                     <span className="step">{index + 1}</span>
                     {!noLabel && <span className="title">{label}</span>}
                   </li>
