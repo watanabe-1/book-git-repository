@@ -1,9 +1,9 @@
 import './../../common/common';
 import * as bootstrap from 'bootstrap';
 
-import * as studyChart from './../../study/chart/studyChart';
-import * as studyListUtil from './../../study/list/studyListUtil';
-import * as studyUtil from './../../study/util/studyUtil';
+import * as studyChart from './../study/chart/studyChart';
+import * as studyListUtil from './../study/list/studyListUtil';
+import * as studyUtil from './../util/studyUtil';
 
 /**
  * ChartColourPrams画面で使用するパラメータの定義
@@ -60,7 +60,7 @@ const HORIZONTAL_BAR = 'ホライゾンバー';
 //表示するchart
 const functions = [studyChart.doughnutChart, studyChart.barChart];
 
-//tab1
+//tab1chartColourIndex
 //テンプレートチャート
 //chartを表示するときの引数、1行で配列の中に配列を記載しようとthymeleafの変数参照の書き方とかぶってしまうため改行をはさんでいる
 let functionArgs: string[][] = [

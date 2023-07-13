@@ -1,6 +1,6 @@
-import { Books, Syukujits } from './../../@types/studyUtilType';
 import * as studyListUtil from './../list/studyListUtil';
-import * as studyUtil from './../util/studyUtil';
+import { Books, Syukujits } from '../../../@types/studyUtilType';
+import * as studyUtil from '../../util/studyUtil';
 
 /**
  * 日付けに対しての判定結果格納定義

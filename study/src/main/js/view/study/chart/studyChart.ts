@@ -6,7 +6,7 @@ import Chart, {
 } from 'chart.js/auto';
 import { fontString } from 'chart.js/helpers';
 
-import * as studyUtil from './../util/studyUtil';
+import * as studyUtil from '../../util/studyUtil';
 
 /**
  * ドーナツチャート

@@ -3,10 +3,10 @@ import flatpickr from 'flatpickr';
 import flatpickr_ja from 'flatpickr/dist/l10n/ja';
 import monthSelectPlugin from 'flatpickr/dist/plugins/monthSelect/index';
 
-import * as studyCalendar from './../../study/calendar/studyCalendar';
-import * as studyChart from './../../study/chart/studyChart';
-import * as studyListUtil from './../../study/list/studyListUtil';
-import * as studyUtil from './../../study/util/studyUtil';
+import * as studyChart from './../study/chart/studyChart';
+import * as studyListUtil from './../study/list/studyListUtil';
+import * as studyUtil from './../util/studyUtil';
+import * as studyCalendar from '../study/calendar/studyCalendar';
 
 //flatpickr
 document.addEventListener('DOMContentLoaded', function () {

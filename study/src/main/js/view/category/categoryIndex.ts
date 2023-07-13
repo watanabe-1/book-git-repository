@@ -2,8 +2,8 @@ import './../../common/common';
 import * as bootstrap from 'bootstrap';
 
 import { Image } from './../../@types/studyUtilType';
-import * as studyListUtil from './../../study/list/studyListUtil';
-import * as studyUtil from './../../study/util/studyUtil';
+import * as studyListUtil from './../study/list/studyListUtil';
+import * as studyUtil from './../util/studyUtil';
 
 //テーブルの内容を並び替えできるようにイベントを追加
 //カテゴリーリスト
