@@ -178,7 +178,12 @@ const FormControl: React.FC<FormControlProps> = ({
 
   return (
     <Form.Group controlId={name} hidden={hidden}>
-      {title && <Form.Label onClick={handleTextClick}>{title}</Form.Label>}
+      {title &&
+        (isArrayChildren ? (
+          <span> {title}</span>
+        ) : (
+          <Form.Label onClick={handleTextClick}>{title}</Form.Label>
+        ))}
       {titleBr && <br />}
       {isArrayChildren
         ? children.map((child, index) =>

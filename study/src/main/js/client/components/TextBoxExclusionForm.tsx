@@ -1,23 +1,29 @@
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
 
+type TextBoxExclusionFormProps = {
+  /** テキストボックスのタイトル */
+  title?: string;
+  /** テキストボックスの値が変更されたときのハンドラ関数 */
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  /** スタイル */
+  style?: React.CSSProperties;
+  /** テキストボックスがクリックされたときのハンドラ関数 */
+  onClick?: (event: React.MouseEvent<HTMLInputElement>) => void;
+  /** 非表示にするかどうか */
+  hidden?: boolean;
+};
+
 /**
  * formの送信対象から除外するときに使用する想定
  * @returns form内のテキストボックス
  */
-const TextBoxExclusionForm = ({
+const TextBoxExclusionForm: React.FC<TextBoxExclusionFormProps> = ({
   title = null,
   onChange,
   onClick,
   style,
   hidden = false,
-}: {
-  title?: string;
-  onChange?;
-  style?;
-  onClick?;
-
-  hidden?: boolean;
 }) => {
   const [inputValue, setinputValue] = useState('');
   const type = hidden ? 'hidden' : 'text';

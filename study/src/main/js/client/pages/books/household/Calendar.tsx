@@ -211,7 +211,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
   const getSelectedamountByDayList = () => {
     // console.log(`selectDay:${selectDay}`);
     if (isObjEmpty(amountList)) return [];
-    return amountList.filter((books) => {
+    const selectedList = amountList.filter((books) => {
       const amountday = parseDate(books.booksDate, books.booksDateFormat);
       // console.log(`booksDate:${books.booksDate}`);
       // console.log(`amountday:${amountday}`);
@@ -222,6 +222,8 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
         amountday
       );
     });
+    // console.log(`selectedList:${JSON.stringify(selectedList)}`);
+    return selectedList;
   };
 
   /**

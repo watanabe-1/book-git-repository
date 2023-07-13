@@ -60,7 +60,7 @@ const FileBox: React.FC<FileBoxProps> = ({
     <FormControl
       title={title}
       name={name}
-      value={value}
+      value={value ? value : ''}
       textValue={textValue ? textValue : String(value)}
       onChange={onChange}
       onBlur={onBlur}

@@ -64,7 +64,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({
   return (
     <FormControl
       name={name}
-      value={value}
+      value={value ? value : ''}
       textValue={text}
       onChange={onChange}
       onBlur={onBlur}

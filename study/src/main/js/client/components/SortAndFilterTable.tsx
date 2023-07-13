@@ -2,6 +2,7 @@ import { isNumber } from 'chart.js/helpers';
 import React, { useState } from 'react';
 import Table from 'react-bootstrap/Table';
 
+import BodysLodingSpinner from './BodysLodingSpinner';
 import Icon from './Icon';
 import TextBoxExclusionForm from './TextBoxExclusionForm';
 import { TableColumn, TableRow } from '../../@types/studyUtilType';
@@ -168,7 +169,7 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
                 </span>
               )}
               {isFilter && (
-                <div key={column.name}>
+                <div>
                   <TextBoxExclusionForm
                     onClick={(e) => e.stopPropagation()}
                     onChange={(e) => handleFilterChange(column, e.target.value)}
@@ -180,13 +181,25 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
         </tr>
       </thead>
       <tbody>
-        {filteredAndSortedRows.map((row) => {
+        {filteredAndSortedRows.map((row, rowIndex) => {
+          const rowId = row.primaryKey;
+          // console.log(`rowId:${rowId}`);
+          // おそらく連携パラメータが非同期実行などで取得したときなど、primaryKeyが取得できないときがある？ため、その場合はロード中の列を返却する
+          if (!rowId) {
+            return (
+              <tr key={rowIndex}>
+                <td>
+                  <BodysLodingSpinner />
+                </td>
+              </tr>
+            );
+          }
           return (
-            <tr key={row.primaryKey}>
+            <tr key={rowId}>
               {row.cells.map((cell) => {
                 return (
                   <td
-                    key={`${row.primaryKey}-${cell.name}`}
+                    key={cell.name}
                     hidden={cell.hidden}
                     className="text-nowrap"
                   >

@@ -53,7 +53,7 @@ const TextBox: React.FC<TextBoxProps> = ({
     <FormControl
       title={title}
       name={name}
-      value={value}
+      value={value ? value : ''}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}

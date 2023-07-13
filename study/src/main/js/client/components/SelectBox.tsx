@@ -70,7 +70,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
     <FormControl
       title={title}
       name={name}
-      value={value}
+      value={value ? value : ''}
       textValue={selectedType ? selectedType.name : ''}
       onChange={onChange}
       onBlur={onBlur}
@@ -86,7 +86,8 @@ const SelectBox: React.FC<SelectBoxProps> = ({
         {newTypeList.map((type) => (
           <option
             key={type.code}
-            selected={type.code === value}
+            //reactはselected非推奨なため使用しない
+            //selected={type.code === value}
             value={type.code}
           >
             {type.name}
