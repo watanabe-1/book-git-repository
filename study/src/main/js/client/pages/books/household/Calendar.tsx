@@ -6,6 +6,7 @@ import endOfWeek from 'date-fns/endOfWeek';
 import getDate from 'date-fns/getDate';
 import getDay from 'date-fns/getDay';
 import getMonth from 'date-fns/getMonth';
+import isValid from 'date-fns/isValid';
 import startOfMonth from 'date-fns/startOfMonth';
 import React, { useEffect, useState } from 'react';
 import Col from 'react-bootstrap/Col';
@@ -17,7 +18,7 @@ import ListTable from './ListTable';
 import { Books, Syukujits } from '../../../../@types/studyUtilType';
 import { onServerConst } from '../../../../constant/on-serverConstant';
 import { urlConst } from '../../../../constant/urlConstant';
-import { isInvalidDate } from '../../../../study/util/studyDateUtil';
+import { createDate, parseDate } from '../../../../study/util/studyDateUtil';
 import { fetchGet, isObjEmpty } from '../../../../study/util/studyUtil';
 import BodysLodingSpinner from '../../../components/BodysLodingSpinner';
 import { executeFuncIfNeeded, onServer } from '../../../on-server';
@@ -45,9 +46,9 @@ type CalendarProps = {
 };
 
 const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
-  const date = new Date(year, month - 1, day);
+  const date = createDate(year, month, day);
   // 日付けが正しく設定されるまで
-  if (isInvalidDate(date)) return <BodysLodingSpinner />;
+  if (!isValid(date)) return <BodysLodingSpinner />;
 
   const [initiaCalendarData, initScript] = onServer(
     (api, param) => api.getHouseholdCalendarInfo(param),
@@ -176,7 +177,10 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
   const getHoliday = (year: number, month: number, day: number) => {
     if (isObjEmpty(syukujitsuList)) return null;
     return syukujitsuList.find((syukujitsu) => {
-      const holiday = new Date(syukujitsu.date);
+      // console.log(
+      //   `syukujitsu.dateFormatPattern:${syukujitsu.dateFormat}`
+      // );
+      const holiday = parseDate(syukujitsu.date, syukujitsu.dateFormat);
       return equalsYearMonthDay(year, month, day, holiday);
     });
   };
@@ -193,7 +197,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
     if (isObjEmpty(amountList)) return [];
     return amountList
       .filter((books) => {
-        const amountday = new Date(books.booksDate);
+        const amountday = parseDate(books.booksDate, books.booksDateFormat);
         return equalsYearMonthDay(year, month, day, amountday);
       })
       .map((books) => books.booksAmmount);
@@ -208,7 +212,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
     // console.log(`selectDay:${selectDay}`);
     if (isObjEmpty(amountList)) return [];
     return amountList.filter((books) => {
-      const amountday = new Date(books.booksDate);
+      const amountday = parseDate(books.booksDate, books.booksDateFormat);
       // console.log(`booksDate:${books.booksDate}`);
       // console.log(`amountday:${amountday}`);
       return equalsYearMonthDay(
@@ -334,7 +338,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
                                 target.getAttribute('data-value')
                               );
                               // console.log(`day:${clickDay}`);
-                              setSelectDay(new Date(year, month - 1, clickDay));
+                              setSelectDay(createDate(year, month, clickDay));
                             }}
                           >
                             <div className="text-start">{weekDateOfDate}</div>

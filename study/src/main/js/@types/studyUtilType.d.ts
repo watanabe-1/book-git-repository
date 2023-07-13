@@ -2,7 +2,8 @@
  * 祝日一覧用
  */
 export type Syukujits = {
-  date: Date;
+  dateFormat: string;
+  date: string;
   name: string;
 };
 
@@ -60,7 +61,8 @@ export type Books = {
   booksId: string;
   userId: string;
   booksType: string;
-  booksDate: Date;
+  booksDate: string;
+  booksDateFormat: string;
   booksPlace: string;
   catCode: string;
   booksMethod: string;

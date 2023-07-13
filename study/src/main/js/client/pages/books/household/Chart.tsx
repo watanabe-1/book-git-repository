@@ -1,4 +1,5 @@
 import { ChartData } from 'chart.js';
+import isValid from 'date-fns/isValid';
 import React, { useEffect, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -6,7 +7,7 @@ import Row from 'react-bootstrap/Row';
 
 import { onServerConst } from '../../../../constant/on-serverConstant';
 import { urlConst } from '../../../../constant/urlConstant';
-import { isInvalidDate } from '../../../../study/util/studyDateUtil';
+import { createDate } from '../../../../study/util/studyDateUtil';
 import { fetchGet, isObjEmpty } from '../../../../study/util/studyUtil';
 import BarAndLineChart from '../../../components/BarAndLineChart';
 import BarChart from '../../../components/BarChart';
@@ -41,13 +42,13 @@ const Chart: React.FC<ChartProps> = ({ year, month }) => {
   ) as [HouseholdChartData, JSX.Element];
   const [chartData, setChartData] = useState(initiaChartData);
   const { monthCategory, monthMethod, yearAll } = chartData;
-  const date = new Date(year, month - 1);
+  const date = createDate(year, month);
 
   console.log('chartdata');
   console.log(chartData);
 
   // 日付けが正しく設定されるまで
-  if (isInvalidDate(date)) return <BodysLodingSpinner />;
+  if (!isValid(date)) return <BodysLodingSpinner />;
 
   /**
    * 1月ごとのカテゴリーチャート用データ取得

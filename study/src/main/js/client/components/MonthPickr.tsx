@@ -5,6 +5,7 @@ import Flatpickr from 'react-flatpickr';
 
 import Icon from './Icon';
 import { iconConst } from '../../constant/iconConstant';
+import { createDate } from '../../study/util/studyDateUtil';
 
 type MonthPickrProps = {
   /** 年 */
@@ -29,7 +30,7 @@ const MonthPickr: React.FC<MonthPickrProps> = ({
 }) => {
   //console.log(value);
   const [flatpickrKey, setFlatpickrKey] = useState(0);
-  const value = new Date(year, month - 1);
+  const value = createDate(year, month);
 
   useEffect(() => {
     // valueの変更を監視し、変更されたらflatpickrを再作成する

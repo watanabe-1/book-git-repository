@@ -1,6 +1,110 @@
 import addMonths from 'date-fns/addMonths';
+import parse from 'date-fns/parse';
 import startOfMonth from 'date-fns/startOfMonth';
 import subMonths from 'date-fns/subMonths';
+
+/**
+ * date型文字列をパーズする
+ *
+ * @param dateString date文字列
+ * @param formatString date format
+ * @param options オプション
+ * @returns
+ */
+export function parseDate(
+  dateString: string,
+  formatString: string,
+  options?: {
+    locale?: Locale;
+    weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
+    firstWeekContainsDate?: 1 | 2 | 3 | 4 | 5 | 6 | 7;
+    useAdditionalWeekYearTokens?: boolean;
+    useAdditionalDayOfYearTokens?: boolean;
+  }
+): Date {
+  return parse(dateString, formatString, new Date(), options);
+}
+
+/**
+ * 年、月、日、時、分、秒を元にDateオブジェクトを作成する
+ * new Date()で作成したときと違い存在しない日付の場合は
+ * invalid date が返却される
+ *
+ * @param year 年
+ * @param month 月 (1-12)。
+ * @param day 日 (1-31)。
+ * @param hours 時間 (0-23)。
+ * @param minutes 分 (0-59)。
+ * @param seconds 秒 (0-59)。
+ * @returns 提供された日時を表すDateオブジェクト
+ * @throws 有効な引数が提供されなかった場合にエラーがスローされる
+ */
+export function createDate(
+  year: number | string,
+  month?: number | string,
+  day?: number | string,
+  hours?: number | string,
+  minutes?: number | string,
+  seconds?: number | string
+): Date {
+  //console.log('call createDate');
+  const TOP_DELIM = '-';
+  const LOWER_DELIM = ':';
+  const topParts: (number | string)[] = [];
+  const lowerParts: (number | string)[] = [];
+
+  if (year) topParts.push(year);
+  if (month) topParts.push(month);
+  if (day) topParts.push(day);
+
+  if (hours) lowerParts.push(hours);
+  if (minutes) lowerParts.push(minutes);
+  if (seconds) lowerParts.push(seconds);
+
+  const topString = topParts.join(TOP_DELIM);
+  const lowerString = lowerParts.join(LOWER_DELIM);
+  const middleString = lowerString ? ' ' : '';
+  const dateString = `${topString}${middleString}${lowerString}`;
+  const formatString = determineFormatString(
+    dateString,
+    TOP_DELIM,
+    LOWER_DELIM
+  );
+
+  //console.log(`dateString:${dateString} formatString:${formatString}`);
+  const date = parseDate(dateString, formatString);
+  //console.log(`date:${date} `);
+  return date;
+}
+
+/**
+ * 提供された日時文字列の構造に基づいてフォーマット文字列を決定する
+ *
+ * @param dateString 分析する日時文字列
+ * @returns 日付をパースするためのフォーマット文字列
+ * @throws 日時文字列の構造が無効な場合にエラーがスローされる
+ */
+export function determineFormatString(
+  dateString: string,
+  topDelim: string,
+  lowerDelim?: string
+): string {
+  const parts = dateString.split(new RegExp(`[${topDelim}${lowerDelim}]`));
+
+  if (parts.length === 6) {
+    return `yyyy${topDelim}MM${topDelim}dd HH${lowerDelim}mm${lowerDelim}ss`;
+  } else if (parts.length === 5) {
+    return `yyyy${topDelim}MM${topDelim}dd HH${lowerDelim}mm`;
+  } else if (parts.length === 3) {
+    return `yyyy${topDelim}MM${topDelim}dd`;
+  } else if (parts.length === 2) {
+    return `yyyy${topDelim}MM`;
+  } else if (parts.length === 1) {
+    return 'yyyy';
+  } else {
+    throw new Error('Invalid date string');
+  }
+}
 
 /**
  * 次月を取得
@@ -17,6 +121,7 @@ export function getNextMonthDate(date: Date) {
 
 /**
  * 前月を取得
+ *
  * @param date 日付け
  * @returns 前月
  */
@@ -26,13 +131,4 @@ export function getPreviousMonthDate(date: Date) {
   // 最初の日にちを取得
   const firstDayOfPreviousMonth = startOfMonth(previousMonth);
   return firstDayOfPreviousMonth;
-}
-
-/**
- * JavaScript の Date クラスが返す、不正な日付を生成しようとしたときの値かどうかを判定
- * @param date
- * @returns 不正な日付け true それ以外 false
- */
-export function isInvalidDate(date: Date) {
-  return Number.isNaN(date.getTime());
 }

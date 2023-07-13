@@ -1,3 +1,4 @@
+import isValid from 'date-fns/isValid';
 import { Japanese } from 'flatpickr/dist/l10n/ja.js';
 import React, { useEffect, useState } from 'react';
 import Col from 'react-bootstrap/Col';
@@ -13,9 +14,9 @@ import { Books } from '../../../../@types/studyUtilType';
 import { onServerConst } from '../../../../constant/on-serverConstant';
 import { urlConst } from '../../../../constant/urlConstant';
 import {
+  createDate,
   getNextMonthDate,
   getPreviousMonthDate,
-  isInvalidDate,
 } from '../../../../study/util/studyDateUtil';
 import {
   fetchGet,
@@ -46,7 +47,7 @@ export type HouseholdUi = {
  * @return Date
  */
 const infoToDate = (data: HouseholdUi) =>
-  new Date(parseInt(data.year), parseInt(data.month) - 1, parseInt(data.day));
+  createDate(data.year, data.month, data.day);
 
 const Content = () => {
   const [initialInfo, initScript] = onServer(
@@ -80,7 +81,7 @@ const Content = () => {
     const paramTab = nullOrEmptyValueLogic(getLocationHrefParm('tab'), tab);
     const paramDate = nullOrEmptyValueLogic(
       getLocationHrefParm('date'),
-      isInvalidDate(date) ? null : date
+      !isValid(date) ? null : date
     );
     const params = {};
     if (paramTab) params['tab'] = paramTab;

@@ -12,14 +12,21 @@ import lombok.Data;
  * 祝日一覧のentityクラス
  */
 @Data
-@JsonPropertyOrder({ "date", "name" })
+@JsonPropertyOrder({"date", "name"})
 public class SyukujitsuColumn implements Serializable {
+
+  /**
+   * 祝日フォーマットパターン
+   */
+  @JsonProperty("dateFormat")
+  private final String DATE_FORMAT = StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH;
 
   /**
    * 祝日<br/>
    * タイムゾーンには00時00分として扱いたいため、Asia/Tokyoを指定
    */
-  @JsonFormat(pattern = StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH, timezone = StudyDateUtil.TIMEZONE_ASIA_TOKYO)
+  @JsonFormat(pattern = DATE_FORMAT,
+      timezone = StudyDateUtil.TIMEZONE_ASIA_TOKYO)
   @JsonProperty("date")
   private Date date;
 
