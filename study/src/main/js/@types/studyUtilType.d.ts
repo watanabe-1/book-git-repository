@@ -112,6 +112,25 @@ export type BooksUi = {
 };
 
 /**
+ * 家計簿変換UI
+ */
+export type BooksConvertUi = {
+  fileTypes: Type[];
+};
+
+/**
+ * 家計簿確認用データ
+ */
+export type HouseholdUi = {
+  expensesList: Books[];
+  incomeList: Books[];
+  year: string;
+  month: string;
+  day: string;
+  tab: string;
+};
+
+/**
  * エラー
  */
 export type ErrorResult = {

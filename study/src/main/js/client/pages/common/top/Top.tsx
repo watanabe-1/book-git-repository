@@ -1,6 +1,6 @@
 import React from 'react';
 
-import BodysHead from '../../../components/BodysHead';
+import BodysHead from '../../../components/layout/BodysHead';
 import { initialize } from '../../../init';
 
 /**

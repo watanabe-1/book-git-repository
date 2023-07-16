@@ -121,7 +121,7 @@ public class StudyJsUtil {
     GraalJSScriptEngine engine = initializeEngine(request, scriptPath, serverApi, param);
     String ret = null;
     try {
-      ret = engine.eval(String.format("window.renderAppOnServer('%s')", request.getRequestURI()))
+      ret = engine.eval(String.format("window.renderAppOnServer('%s');", request.getRequestURI()))
           .toString();
     } catch (ScriptException e) {
       log.error("", e, "");
@@ -256,6 +256,7 @@ public class StudyJsUtil {
       // window、navigator、selfをそのままだと解決できないため、グルーバルオブジェクトとして定義
       engine.eval("navigator = { userAgent: 'server'}");
       engine.eval("self = {}");
+      engine.eval("bind = {}");
       engine.eval(String.format(
           "window = { location: { hostname: 'localhost' }, navigator: navigator, isServer: true, requestUrl: \"%s\", contextPath: \"%s\" }",
           request.getRequestURI(), request.getContextPath()));
@@ -276,8 +277,10 @@ public class StudyJsUtil {
       // text-encoding-polyfill
       engine.eval(readJsFile("/static/js/webapi.bundle.js"));
       engine.eval("TextEncoder = window.TextEncoder");
+      engine.eval("setTimeout = window.setTimeout");
       engine.eval(readJsFile(scriptPath));
     } catch (ScriptException e) {
+      log.error("", e, "");
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
 

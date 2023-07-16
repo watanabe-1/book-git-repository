@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Content from './Content';
+import Content from '../../../features/category/list/components/Content';
 import { initialize } from '../../../init';
 
 const List = () => {

@@ -113,8 +113,34 @@ module.exports = {
           {
             loader: 'babel-loader',
             options: {
-              presets: ['@babel/preset-env', '@babel/preset-react'],
-              plugins: ['@babel/plugin-transform-runtime'],
+              presets: [
+                '@babel/preset-env',
+                {
+                  // 削除
+                  useBuiltIns: 'entry',
+                  // 削除(corejsバージョン指定)
+                  corejs: '3',
+                  modules: 'commonjs',
+                },
+                '@babel/preset-react',
+              ],
+              plugins: [
+                [
+                  '@babel/plugin-polyfill-corejs3',
+                  {
+                    // entry-global, usage-global, usage-pure のいずれかを指定
+                    // usage-pureを使用する場合は、core-js-pureを使用
+                    method: 'usage-pure',
+                  },
+                ],
+                '@babel/plugin-transform-runtime',
+                {
+                  // 削除(corejsバージョン指定)
+                  corejs: '3',
+                  // それ以外の設定はpolyfillとは関係ないので残す
+                  absoluteRuntime: false,
+                },
+              ],
               cacheDirectory: true,
             },
           },

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Content from './Content';
+import Content from '../../../features/books/convert/components/Content';
 import { initialize } from '../../../init';
 
 const Convert = () => {

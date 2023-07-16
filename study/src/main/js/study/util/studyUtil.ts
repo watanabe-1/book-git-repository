@@ -248,7 +248,7 @@ export async function fetchPost(
   };
 
   const body = objToFormData(params);
-  console.log(...body.entries());
+  //console.log(...body.entries());
   //console.log(JSON.stringify(params));
 
   const res: Response = await window.fetch(
