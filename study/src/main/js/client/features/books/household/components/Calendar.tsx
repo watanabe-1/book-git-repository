@@ -6,7 +6,6 @@ import endOfWeek from 'date-fns/endOfWeek';
 import getDate from 'date-fns/getDate';
 import getDay from 'date-fns/getDay';
 import getMonth from 'date-fns/getMonth';
-import isValid from 'date-fns/isValid';
 import startOfMonth from 'date-fns/startOfMonth';
 import React, { useState } from 'react';
 import Col from 'react-bootstrap/Col';
@@ -20,6 +19,7 @@ import { createDate, parseDate } from '../../../../../study/util/studyDateUtil';
 import { isObjEmpty } from '../../../../../study/util/studyUtil';
 import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import { useHouseholdCalendarInfoSWR } from '../../../../hooks/useBooks';
+import { buildParam } from '../functions/param';
 
 import '../../../../../../css/view/calendar/calendar.css';
 
@@ -43,31 +43,19 @@ type CalendarProps = {
   day: number;
 };
 
-/**
- * getInfo用param作成
- *
- * @returns
- */
-const buildParam = (date: Date) => {
-  const params = {};
-  if (date) params['date'] = date;
-
-  return params;
-};
-
 const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
   const date = createDate(year, month, day);
-  // 日付けが正しく設定されるまで
-  if (!isValid(date)) return <BodysLodingSpinner />;
-
+  const [selectDay, setSelectDay] = useState(date);
   const { data: calendarData, initScript } = useHouseholdCalendarInfoSWR(
     buildParam(date)
   );
-  const { syukujitsuList, amountList } = calendarData;
-  const [selectDay, setSelectDay] = useState(date);
 
-  console.log('calendardata');
-  console.log(calendarData);
+  if (isObjEmpty(calendarData)) return <BodysLodingSpinner />;
+
+  const { syukujitsuList, amountList } = calendarData;
+
+  // console.log('calendardata');
+  // console.log(calendarData);
   /**
    * 年月日が同じかどうか比較
    * @param {number} year 年

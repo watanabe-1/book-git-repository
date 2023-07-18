@@ -1,4 +1,5 @@
 import addMonths from 'date-fns/addMonths';
+import getMonth from 'date-fns/getMonth';
 import parse from 'date-fns/parse';
 import startOfMonth from 'date-fns/startOfMonth';
 import subMonths from 'date-fns/subMonths';
@@ -131,4 +132,16 @@ export function getPreviousMonthDate(date: Date) {
   // 最初の日にちを取得
   const firstDayOfPreviousMonth = startOfMonth(previousMonth);
   return firstDayOfPreviousMonth;
+}
+
+/**
+ * 実際の月を取得
+ *
+ * @param date 日付
+ * @returns 実月
+ */
+export function getActualMonth(date) {
+  const monthIndex = getMonth(date);
+  const actualMonth = monthIndex + 1;
+  return actualMonth;
 }

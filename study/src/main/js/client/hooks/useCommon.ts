@@ -1,5 +1,5 @@
 import { useSearchParams } from 'react-router-dom';
-import useSWR from 'swr';
+import useSWR, { SWRConfiguration } from 'swr';
 
 import { OnServerApi } from '../../@types/studyApi';
 import { fetchGet } from '../../study/util/studyUtil';
@@ -23,13 +23,21 @@ const get = (initialDataKey: string | [string, Record<string, string>]) => {
 
 export const useCommonSWR = <T>(
   apiFn: (api: OnServerApi, param?: object) => string,
-  initialDataKey: string | [string, Record<string, string>]
+  initialDataKey: string | [string, Record<string, string>],
+  config: Partial<SWRConfiguration> = {
+    revalidateOnFocus: false,
+  }
 ) => {
   const [initialData, initScript] = onServer(
     apiFn,
     [],
     typeof initialDataKey === 'string' ? initialDataKey : initialDataKey[0]
   ) as [T, JSX.Element];
+
+  const initialDataObj: Partial<SWRConfiguration> = {};
+  if (initialData) {
+    initialDataObj.fallbackData = initialData;
+  }
 
   // useSWRはssr時も、hydrate後にデータが正しいか再度取得に行く
   // つまり再度fetchが実行される
@@ -43,12 +51,22 @@ export const useCommonSWR = <T>(
         isValidating: null,
         isLoading: null,
       }
-    : useSWR<T>(initialDataKey, get, {
-        fallbackData: initialData,
-        revalidateOnFocus: false,
-      });
+    : useSWR<T>(initialDataKey, get, { ...config, ...initialDataObj });
 
   return { ...response, initScript };
+};
+
+export const useCommonSWRImmutable = <T>(
+  apiFn: (api: OnServerApi, param?: object) => string,
+  initialDataKey: string | [string, Record<string, string>],
+  config?: Partial<SWRConfiguration>
+) => {
+  return useCommonSWR<T>(apiFn, initialDataKey, {
+    ...config,
+    revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
 };
 
 export const useCommonSearchParam = (key: string) => {

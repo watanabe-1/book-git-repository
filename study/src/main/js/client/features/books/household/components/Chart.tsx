@@ -1,5 +1,4 @@
 import { ChartData } from 'chart.js';
-import isValid from 'date-fns/isValid';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -12,6 +11,7 @@ import BarChart from '../../../../components/elements/chart/BarChart';
 import DoughnutChart from '../../../../components/elements/chart/DoughnutChart';
 import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import { useHouseholdChartInfoSWR } from '../../../../hooks/useBooks';
+import { buildParam } from '../functions/param';
 
 /**
  * 家計簿図用データ
@@ -32,30 +32,18 @@ type ChartProps = {
   month: number;
 };
 
-/**
- * getInfo用param作成
- *
- * @returns
- */
-const buildParam = (date: Date) => {
-  const params = {};
-  if (date) params['date'] = date;
-
-  return params;
-};
-
 const Chart: React.FC<ChartProps> = ({ year, month }) => {
   const date = createDate(year, month);
   const { data: chartData, initScript } = useHouseholdChartInfoSWR(
     buildParam(date)
   );
+
+  if (isObjEmpty(chartData)) return <BodysLodingSpinner />;
+
   const { monthCategory, monthMethod, yearAll } = chartData;
 
-  console.log('chartdata');
-  console.log(chartData);
-
-  // 日付けが正しく設定されるまで
-  if (!isValid(date)) return <BodysLodingSpinner />;
+  // console.log('chartdata');
+  // console.log(chartData);
 
   return (
     <>

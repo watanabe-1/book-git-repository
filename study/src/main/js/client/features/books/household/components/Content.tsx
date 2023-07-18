@@ -1,3 +1,4 @@
+import format from 'date-fns/format';
 import { Japanese } from 'flatpickr/dist/l10n/ja.js';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
@@ -14,11 +15,14 @@ import {
   createDate,
   getNextMonthDate,
   getPreviousMonthDate,
+  parseDate,
 } from '../../../../../study/util/studyDateUtil';
+import { isObjEmpty } from '../../../../../study/util/studyUtil';
 import MonthPickr from '../../../../components/elements/pickr/MonthPickr';
 import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import BodysHead from '../../../../components/layout/BodysHead';
 import { useHouseholdInfoSWR } from '../../../../hooks/useBooks';
+import { buildParam } from '../functions/param';
 import { useTabParam, useDateParam } from '../hooks/useParam';
 
 /**
@@ -30,32 +34,20 @@ import { useTabParam, useDateParam } from '../hooks/useParam';
 const infoToDate = (data: HouseholdUi) =>
   createDate(data.year, data.month, data.day);
 
-/**
- * getInfo用param作成
- *
- * @returns
- */
-const buildParam = () => {
-  const paramTab = useTabParam();
-  const paramDate = useDateParam();
-  const params = {};
-  if (paramTab) params['tab'] = paramTab;
-  if (paramDate) params['date'] = paramDate;
-
-  return params;
-};
-
 const Content = () => {
-  const {
-    data: info,
-    mutate: setInfo,
-    initScript,
-  } = useHouseholdInfoSWR(buildParam());
+  const paramDate = useDateParam();
+  const { data: info, initScript } = useHouseholdInfoSWR(buildParam(paramDate));
   const navigate = useNavigate();
   const location = useLocation();
-  const { tab } = info;
-  const date = infoToDate(info);
+  const paramTab = useTabParam();
 
+  // 非同期が完了するまで次の処理に進まない
+  if (isObjEmpty(info)) return <BodysLodingSpinner />;
+
+  const tab = paramTab ? paramTab : info.tab;
+  const date = paramDate
+    ? parseDate(paramDate, info.dateFormat)
+    : infoToDate(info);
   /**
    * 家計簿データの金額の合計を取得する
    *
@@ -109,17 +101,17 @@ const Content = () => {
     navigate({
       pathname: location.pathname,
       search: createSearchParams({
-        date: String(date),
+        date: format(date, info.dateFormat),
         tab: tab,
       }).toString(),
     });
   };
 
-  console.log(info);
-  console.log(tab);
-  console.log(date);
+  // console.log(info);
+  // console.log(tab);
+  // console.log(date);
   // 非同期が完了するまで次の処理に進まない
-  if (!info.expensesList) return <BodysLodingSpinner />;
+  if (isObjEmpty(info)) return <BodysLodingSpinner />;
 
   const sumAmountByExpenses = sumAmount(info.expensesList);
   const sumAmountByIncome = sumAmount(info.incomeList);
@@ -134,7 +126,6 @@ const Content = () => {
         activeKey={tab}
         onSelect={(key) => {
           pushTabHistory(key);
-          setInfo({ ...info, tab: key });
         }}
       >
         <Row>
