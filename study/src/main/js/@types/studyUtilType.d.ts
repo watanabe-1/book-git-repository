@@ -92,6 +92,13 @@ export type Flag = {
 };
 
 /**
+ * 画面共通情報
+ */
+export type CommonUi = {
+  dateFormat: string;
+};
+
+/**
  * カテゴリーUI
  */
 export type CategoryUi = {
@@ -128,7 +135,6 @@ export type HouseholdUi = {
   month: string;
   day: string;
   tab: string;
-  dateFormat: string;
 };
 
 /**

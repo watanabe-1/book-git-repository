@@ -12,7 +12,7 @@ import lombok.AllArgsConstructor;
  */
 @Component
 @AllArgsConstructor
-public class BooksApi implements ServerApi {
+public class BooksApi extends CommonApi {
 
   /**
    * カテゴリー画面api

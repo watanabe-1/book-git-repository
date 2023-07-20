@@ -2,8 +2,6 @@ package org.book.app.study.dto.ui.books;
 
 import java.util.List;
 import org.book.app.study.entity.Books;
-import org.book.app.study.util.StudyDateUtil;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -11,12 +9,6 @@ import lombok.Data;
  */
 @Data
 public class HouseholdUi {
-
-  /**
-   * 日付フォーマットパターン
-   */
-  @JsonProperty("dateFormat")
-  private final String DATE_FORMAT = StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH;
 
   /**
    * 支出データ

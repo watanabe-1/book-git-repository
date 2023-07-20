@@ -2,6 +2,8 @@ import { useSearchParams } from 'react-router-dom';
 import useSWR, { SWRConfiguration } from 'swr';
 
 import { OnServerApi } from '../../@types/studyApi';
+import { CommonUi } from '../../@types/studyUtilType';
+import { urlConst } from '../../constant/urlConstant';
 import { fetchGet } from '../../study/util/studyUtil';
 import { onServer } from '../on-server';
 
@@ -67,6 +69,14 @@ export const useCommonSWRImmutable = <T>(
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });
+};
+
+export const useCommonInfoSWR = () => {
+  //console.log('call useCommonInfoSWR');
+  return useCommonSWR<CommonUi>(
+    (api) => api.getCommonInfo(),
+    urlConst.common.COMMON_INFO
+  );
 };
 
 export const useCommonSearchParam = (key: string) => {

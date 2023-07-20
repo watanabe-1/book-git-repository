@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
  */
 @Component
 @AllArgsConstructor
-public class CategoryApi implements ServerApi {
+public class CategoryApi extends CommonApi {
 
   /**
    * カテゴリー画面api

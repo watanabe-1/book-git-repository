@@ -22,6 +22,7 @@ import MonthPickr from '../../../../components/elements/pickr/MonthPickr';
 import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import BodysHead from '../../../../components/layout/BodysHead';
 import { useHouseholdInfoSWR } from '../../../../hooks/useBooks';
+import { useCommonInfoSWR } from '../../../../hooks/useCommon';
 import { buildParam } from '../functions/param';
 import { useTabParam, useDateParam } from '../hooks/useParam';
 
@@ -35,8 +36,11 @@ const infoToDate = (data: HouseholdUi) =>
   createDate(data.year, data.month, data.day);
 
 const Content = () => {
+  const { data: commonInfo, initScript: initCommonScript } = useCommonInfoSWR();
   const paramDate = useDateParam();
-  const { data: info, initScript } = useHouseholdInfoSWR(buildParam(paramDate));
+  const { data: info, initScript } = useHouseholdInfoSWR(
+    buildParam(paramDate, commonInfo.dateFormat)
+  );
   const navigate = useNavigate();
   const location = useLocation();
   const paramTab = useTabParam();
@@ -46,7 +50,7 @@ const Content = () => {
 
   const tab = paramTab ? paramTab : info.tab;
   const date = paramDate
-    ? parseDate(paramDate, info.dateFormat)
+    ? parseDate(paramDate, commonInfo.dateFormat)
     : infoToDate(info);
   /**
    * 家計簿データの金額の合計を取得する
@@ -101,7 +105,7 @@ const Content = () => {
     navigate({
       pathname: location.pathname,
       search: createSearchParams({
-        date: format(date, info.dateFormat),
+        date: format(date, commonInfo.dateFormat),
         tab: tab,
       }).toString(),
     });
@@ -192,6 +196,7 @@ const Content = () => {
         </Tab.Content>
       </Tab.Container>
       {initScript}
+      {initCommonScript}
     </div>
   );
 };

@@ -24,4 +24,9 @@ export const urlConst = {
     CONVERT_FILE: '/books/convertFile',
     HOUSEHOLD: '/books/household',
   },
+
+  /** 共通 */
+  common: {
+    COMMON_INFO: '/common/info',
+  },
 };

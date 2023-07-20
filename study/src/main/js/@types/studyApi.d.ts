@@ -2,6 +2,7 @@
  * api
  */
 export type OnServerApi = {
+  getCommonInfo(): string;
   getImageList: () => string;
   getListData: () => string;
   getInfo: () => string;

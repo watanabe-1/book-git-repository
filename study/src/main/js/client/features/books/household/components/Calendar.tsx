@@ -19,6 +19,7 @@ import { createDate, parseDate } from '../../../../../study/util/studyDateUtil';
 import { isObjEmpty } from '../../../../../study/util/studyUtil';
 import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import { useHouseholdCalendarInfoSWR } from '../../../../hooks/useBooks';
+import { useCommonInfoSWR } from '../../../../hooks/useCommon';
 import { buildParam } from '../functions/param';
 
 import '../../../../../../css/view/calendar/calendar.css';
@@ -44,10 +45,11 @@ type CalendarProps = {
 };
 
 const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
+  const { data: commonInfo } = useCommonInfoSWR();
   const date = createDate(year, month, day);
   const [selectDay, setSelectDay] = useState(date);
   const { data: calendarData, initScript } = useHouseholdCalendarInfoSWR(
-    buildParam(date)
+    buildParam(date, commonInfo.dateFormat)
   );
 
   if (isObjEmpty(calendarData)) return <BodysLodingSpinner />;

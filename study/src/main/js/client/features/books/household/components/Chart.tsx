@@ -11,6 +11,7 @@ import BarChart from '../../../../components/elements/chart/BarChart';
 import DoughnutChart from '../../../../components/elements/chart/DoughnutChart';
 import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import { useHouseholdChartInfoSWR } from '../../../../hooks/useBooks';
+import { useCommonInfoSWR } from '../../../../hooks/useCommon';
 import { buildParam } from '../functions/param';
 
 /**
@@ -33,9 +34,10 @@ type ChartProps = {
 };
 
 const Chart: React.FC<ChartProps> = ({ year, month }) => {
+  const { data: commonInfo } = useCommonInfoSWR();
   const date = createDate(year, month);
   const { data: chartData, initScript } = useHouseholdChartInfoSWR(
-    buildParam(date)
+    commonInfo ? buildParam(date, commonInfo.dateFormat) : null
   );
 
   if (isObjEmpty(chartData)) return <BodysLodingSpinner />;

@@ -40,11 +40,11 @@ export const useHouseholdInfoSWR = (token?: Record<string, string>) => {
   );
 };
 
-export const useHouseholdChartInfoSWR = (token?: Record<string, string>) => {
+export const useHouseholdChartInfoSWR = (token: Record<string, string>) => {
   //console.log('call useHouseholdChartInfoSWR');
   return useCommonSWR<HouseholdChartData>(
     (api, param) => api.getHouseholdChartInfo(param),
-    [urlConst.books.HOUSEHOLD_CHART_INFO, token]
+    token ? [urlConst.books.HOUSEHOLD_CHART_INFO, token] : null
   );
 };
 

@@ -5,11 +5,10 @@ import format from 'date-fns/format';
  *
  * @returns
  */
-export const buildParam = (date?: Date | string) => {
+export const buildParam = (date: Date | string, dateFormat: string) => {
   const params = {};
   if (date)
-    params['date'] =
-      typeof date === 'string' ? date : format(date, 'yyyy/MM/dd');
+    params['date'] = typeof date === 'string' ? date : format(date, dateFormat);
 
   return params;
 };
