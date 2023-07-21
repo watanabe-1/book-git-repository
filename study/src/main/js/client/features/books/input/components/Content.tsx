@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 
 import InputForm from './InputForm';
 import Result from './Result';
+import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import Stepper from '../../../../components/elements/stepper/Stepper';
 import BodysHead from '../../../../components/layout/BodysHead';
 
@@ -50,7 +51,9 @@ const Content = () => {
       <BodysHead title={steps[activeStep]} />
       <Col md="7" lg="8">
         <Stepper steps={steps} activeStep={activeStep}></Stepper>
-        {getStepContent(activeStep, handleNext, handleBack, handleReset)}
+        <Suspense fallback={<BodysLodingSpinner />}>
+          {getStepContent(activeStep, handleNext, handleBack, handleReset)}
+        </Suspense>
       </Col>
     </div>
   );

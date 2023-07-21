@@ -7,7 +7,7 @@ import getDate from 'date-fns/getDate';
 import getDay from 'date-fns/getDay';
 import getMonth from 'date-fns/getMonth';
 import startOfMonth from 'date-fns/startOfMonth';
-import React, { useState } from 'react';
+import React, { useState, useTransition } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -17,7 +17,6 @@ import ListTable from './ListTable';
 import { Syukujits, Books } from '../../../../../@types/studyUtilType';
 import { createDate, parseDate } from '../../../../../study/util/studyDateUtil';
 import { isObjEmpty } from '../../../../../study/util/studyUtil';
-import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import { useHouseholdCalendarInfoSWR } from '../../../../hooks/useBooks';
 import { useCommonInfoSWR } from '../../../../hooks/useCommon';
 import { buildParam } from '../functions/param';
@@ -51,9 +50,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
   const { data: calendarData, initScript } = useHouseholdCalendarInfoSWR(
     buildParam(date, commonInfo.dateFormat)
   );
-
-  if (isObjEmpty(calendarData)) return <BodysLodingSpinner />;
-
+  const [isPending, startTransition] = useTransition();
   const { syukujitsuList, amountList } = calendarData;
 
   // console.log('calendardata');
@@ -314,7 +311,9 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
                                 target.getAttribute('data-value')
                               );
                               // console.log(`day:${clickDay}`);
-                              setSelectDay(createDate(year, month, clickDay));
+                              startTransition(() => {
+                                setSelectDay(createDate(year, month, clickDay));
+                              });
                             }}
                           >
                             <div className="text-start">{weekDateOfDate}</div>

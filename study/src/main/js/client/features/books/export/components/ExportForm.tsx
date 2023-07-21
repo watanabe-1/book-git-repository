@@ -13,7 +13,6 @@ import {
 } from '../../../../../study/util/studyFileUtil';
 import { fetchPost } from '../../../../../study/util/studyUtil';
 import SubmitButton from '../../../../components/elements/button/SubmitButton';
-import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import SelectBox from '../../../../components/form/SelectBox';
 import { useDownloadtInfoSWR } from '../../../../hooks/useBooks';
@@ -63,8 +62,6 @@ const InputForm = () => {
   };
 
   console.log({ ...info });
-  // 非同期が完了するまで次の処理に進まない
-  if (!info.booksTypes) return <BodysLodingSpinner />;
 
   //yupで使用するスキーマの設定
   const additions = {};

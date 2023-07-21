@@ -14,7 +14,6 @@ import {
 import { getSetInputFileFunc } from '../../../../../study/util/studyFormUtil';
 import { fetchPost } from '../../../../../study/util/studyUtil';
 import SubmitButton from '../../../../components/elements/button/SubmitButton';
-import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import FileBox from '../../../../components/form/FileBox';
 import SelectBox from '../../../../components/form/SelectBox';
@@ -36,7 +35,6 @@ const ConvertForm = () => {
     React.Dispatch<React.SetStateAction<unknown>>
   ];
   const [isResultLoading, setResultLoading] = useState(false);
-  //const [validated, setValidated] = useState(false);
 
   /**
    * 送信ボタン
@@ -66,8 +64,6 @@ const ConvertForm = () => {
   };
 
   console.log({ ...info });
-  // 非同期が完了するまで次の処理に進まない
-  if (!info.fileTypes) return <BodysLodingSpinner />;
 
   //yupで使用するスキーマの設定
   const additions = {};

@@ -121,7 +121,11 @@ public class StudyJsUtil {
     GraalJSScriptEngine engine = initializeEngine(request, scriptPath, serverApi, param);
     String ret = null;
     try {
-      ret = engine.eval(String.format("window.renderAppOnServer('%s');", request.getRequestURI()))
+      String url = request.getRequestURL().toString();
+      String queryString = request.getQueryString();
+      String fullUrl = new StringBuffer().append(url).append("?").append(queryString).toString();
+
+      ret = engine.eval(String.format("window.renderAppOnServer('%s');", fullUrl))
           .toString();
     } catch (ScriptException e) {
       log.error("", e, "");

@@ -9,9 +9,8 @@ import { ErrorResults, Category } from '../../../../../@types/studyUtilType';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import { getSetInputFileFunc } from '../../../../../study/util/studyFormUtil';
-import { fetchPost, isObjEmpty } from '../../../../../study/util/studyUtil';
+import { fetchPost } from '../../../../../study/util/studyUtil';
 import SubmitButton from '../../../../components/elements/button/SubmitButton';
-import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import CheckBox from '../../../../components/form/CheckBox';
 import FileBox from '../../../../components/form/FileBox';
@@ -70,8 +69,6 @@ const Basic: React.FC<BasicProps> = (props) => {
   };
 
   console.log(info);
-  // 非同期が完了するまで次の処理に進まない
-  if (isObjEmpty(info)) return <BodysLodingSpinner />;
 
   //yupで使用するスキーマの設定
   const additions = {};

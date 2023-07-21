@@ -9,17 +9,12 @@ import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import { getSetInputFileFunc } from '../../../../../study/util/studyFormUtil';
-import {
-  fetchPost,
-  isObjEmpty,
-  keyJoin,
-} from '../../../../../study/util/studyUtil';
+import { fetchPost, keyJoin } from '../../../../../study/util/studyUtil';
 import {
   objArrayToObj,
   buildListTableFormObj,
 } from '../../../../../study/util/studyYupUtil';
 import ModalSlider from '../../../../components/elements/slider/ModalSlider';
-import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import CheckBox from '../../../../components/form/CheckBox';
 import FileBoxAndImg from '../../../../components/form/FileBoxAndImg';
 import RadioBtn from '../../../../components/form/RadioBtn';
@@ -45,11 +40,8 @@ const ListTable = () => {
     mutate: setList,
     initScript: initListScript,
   } = useCategoryListSWR();
-  const {
-    data: imageList,
-    mutate: setImageList,
-    initScript: initlImageListScript,
-  } = useImageListSWR();
+  const { data: imageList, initScript: initlImageListScript } =
+    useImageListSWR();
   const [errData, setErrData] = useState() as [
     ErrorResults,
     React.Dispatch<React.SetStateAction<unknown>>
@@ -84,7 +76,6 @@ const ListTable = () => {
 
   console.log({ ...info });
   console.log({ ...list });
-  if (isObjEmpty(info) || isObjEmpty(list)) return <BodysLodingSpinner />;
 
   // console.log(info);
   // console.log(list);

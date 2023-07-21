@@ -10,7 +10,8 @@ export const useCategoryInfoSWR = () => {
   //console.log('call useCategoryInfoSWR');
   return useCommonSWR<CategoryUi>(
     (api) => api.getInfo(),
-    urlConst.category.INFO
+    urlConst.category.INFO,
+    { revalidateOnFocus: false, suspense: true }
   );
 };
 
@@ -18,7 +19,8 @@ export const useCategoryListSWR = () => {
   //console.log('call useCategoryListSWR');
   return useCommonSWR<CategoryFormList>(
     (api) => api.getListData(),
-    urlConst.category.LISTDATA
+    urlConst.category.LISTDATA,
+    { revalidateOnFocus: false, suspense: true }
   );
 };
 
@@ -26,6 +28,7 @@ export const useImageListSWR = () => {
   //console.log('call useImageListSWR');
   return useCommonSWR<Image[]>(
     (api) => api.getImageList(),
-    urlConst.category.IMAGELISTDATA
+    urlConst.category.IMAGELISTDATA,
+    { revalidateOnFocus: false, suspense: true }
   );
 };

@@ -9,7 +9,7 @@ if (!anyWindow.TextEncoder) {
   anyWindow.TextEncoder = TextEncoder;
 }
 
-//setTimeoutが用意されていなかったら設定;
+//setTimeoutが用意されていなかったら設定
 if (!anyWindow.setTimeout) {
   anyWindow.setTimeout = setTimeout;
 }
