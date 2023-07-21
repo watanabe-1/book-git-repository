@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import format from 'date-fns/format';
 import { Japanese } from 'flatpickr/dist/l10n/ja';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
