@@ -1,5 +1,6 @@
 package org.book.app.study.service.api;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -17,7 +18,6 @@ import org.book.app.study.helper.BooksHelper;
 import org.book.app.study.service.BooksService;
 import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyFileUtil;
-import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -88,11 +88,10 @@ public class BooksApiService {
    * @param form booksForm
    * @return 画面情報
    */
-  public HouseholdUi getHouseholdInfo(BooksForm form) {
+  public HouseholdUi getHouseholdInfo(LocalDate pdate) {
     HouseholdUi ui = new HouseholdUi();
-    Date date = booksHelper.getDate(form);
-    String tab =
-        StudyStringUtil.isNullOrEmpty(form.getTab()) ? booksHelper.getDefaltTab() : form.getTab();
+    Date date = booksHelper.getDate(pdate);
+    String tab = booksHelper.getDefaltTab();
     List<Books> booksByExpenses =
         booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode());
     List<Books> booksByIncome = booksHelper.findByMonthAndType(date, BooksType.INCOME.getCode());
@@ -112,9 +111,9 @@ public class BooksApiService {
    * @param form booksForm
    * @return 画面情報
    */
-  public HouseholdChartUi getHouseholdChartInfo(BooksForm form) {
+  public HouseholdChartUi getHouseholdChartInfo(LocalDate pdate) {
     HouseholdChartUi ui = new HouseholdChartUi();
-    Date date = booksHelper.getDate(form);
+    Date date = booksHelper.getDate(pdate);
     ui.setMonthCategory(booksHelper
         .getChartDataByMonthCategory(date));
     ui.setMonthMethod(booksHelper
@@ -131,9 +130,9 @@ public class BooksApiService {
    * @param form booksForm
    * @return 画面情報
    */
-  public HouseholdCalendarUi getHouseholdCalendarInfo(BooksForm form) {
+  public HouseholdCalendarUi getHouseholdCalendarInfo(LocalDate pdate) {
     HouseholdCalendarUi ui = new HouseholdCalendarUi();
-    Date date = booksHelper.getDate(form);
+    Date date = booksHelper.getDate(pdate);
     // 祝日定義ファイルの取得
     ClassPathResource syukujitsuFile = new ClassPathResource("csv/syukujitsu.csv");
     List<SyukujitsuColumn> syukujitsuList =

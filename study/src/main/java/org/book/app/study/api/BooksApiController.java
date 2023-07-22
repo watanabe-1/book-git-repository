@@ -1,6 +1,7 @@
 package org.book.app.study.api;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import org.book.app.study.dto.file.BooksColumn;
@@ -31,6 +32,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
@@ -111,8 +113,9 @@ public class BooksApiController extends ApiController {
    */
   @RequestMapping(value = "/books/householdInfo", method = RequestMethod.GET)
   @ResponseBody
-  public HouseholdUi getHouseholdInfo(@ModelAttribute BooksForm form) {
-    return booksApiService.getHouseholdInfo(form);
+  public HouseholdUi getHouseholdInfo(
+      @RequestParam(name = "date", required = false) LocalDate date) {
+    return booksApiService.getHouseholdInfo(date);
   }
 
   /**
@@ -123,8 +126,9 @@ public class BooksApiController extends ApiController {
    */
   @RequestMapping(value = "/books/householdChartInfo", method = RequestMethod.GET)
   @ResponseBody
-  public HouseholdChartUi getHouseholdChartInfo(@ModelAttribute BooksForm form) {
-    return booksApiService.getHouseholdChartInfo(form);
+  public HouseholdChartUi getHouseholdChartInfo(
+      @RequestParam(name = "date", required = false) LocalDate date) {
+    return booksApiService.getHouseholdChartInfo(date);
   }
 
   /**
@@ -135,8 +139,9 @@ public class BooksApiController extends ApiController {
    */
   @RequestMapping(value = "/books/householdCalendarInfo", method = RequestMethod.GET)
   @ResponseBody
-  public HouseholdCalendarUi getHouseholdCalendarInfo(@ModelAttribute BooksForm form) {
-    return booksApiService.getHouseholdCalendarInfo(form);
+  public HouseholdCalendarUi getHouseholdCalendarInfo(
+      @RequestParam(name = "date", required = false) LocalDate date) {
+    return booksApiService.getHouseholdCalendarInfo(date);
   }
 
   /**

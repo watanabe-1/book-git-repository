@@ -7,8 +7,10 @@ import format from 'date-fns/format';
  */
 export const buildParam = (date: Date | string, dateFormat: string) => {
   const params = {};
-  if (date)
+  if (date) {
     params['date'] = typeof date === 'string' ? date : format(date, dateFormat);
+    params['dateFormat'] = dateFormat;
+  }
 
   return params;
 };

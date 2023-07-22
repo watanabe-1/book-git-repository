@@ -59,7 +59,7 @@ public class StudyJsUtil {
    */
   public static void setJsTemplate(ModelAndView model, String title, HttpServletRequest request,
       String scriptPath, ServerApi serverApi, Form form) {
-    setJsTemplate(model, title, request, scriptPath, serverApi, form, isSSR(form));
+    setJsTemplate(model, title, request, scriptPath, serverApi, isSSR(form));
   }
 
   /**
@@ -70,15 +70,14 @@ public class StudyJsUtil {
    * @param request リクエスト
    * @param scriptPath jsファイルのパス
    * @param serverApi jsに埋め込むjavaオブジェクト
-   * @param param jsに埋め込むjavaオブジェクトパラメータ
    * @param isSSR jsを実行するか
    */
   public static void setJsTemplate(ModelAndView model, String title, HttpServletRequest request,
-      String scriptPath, ServerApi serverApi, Object param, boolean isSSR) {
+      String scriptPath, ServerApi serverApi, boolean isSSR) {
     model.setViewName(VIEW_NAME);
 
     // react用bodyを作成
-    String body = render(request, scriptPath, serverApi, param, isSSR);
+    String body = render(request, scriptPath, serverApi, isSSR);
     // scriptタグの抜き出し
     List<String> scriptList = readScripts(body);
     body = StudyStringUtil.delete(body, scriptList);
@@ -96,14 +95,12 @@ public class StudyJsUtil {
    * @param request リクエスト
    * @param scriptPath jsファイルのパス
    * @param serverApi jsに埋め込むjavaオブジェクト
-   * @param param jsに埋め込むjavaオブジェクトパラメータ
    * @param isSSR jsを実行するか
    * @return 実行結果
    */
   public static String render(HttpServletRequest request, String scriptPath, ServerApi serverApi,
-      Object param,
       boolean isSSR) {
-    return isSSR ? renderSSR(request, scriptPath, serverApi, param)
+    return isSSR ? renderSSR(request, scriptPath, serverApi)
         : renderCSR(request, scriptPath);
   }
 
@@ -113,12 +110,11 @@ public class StudyJsUtil {
    * @param request リクエスト
    * @param scriptPath jsファイルのパス
    * @param serverApi jsに埋め込むjavaオブジェクト
-   * @param param jsに埋め込むjavaオブジェクトパラメータ
    * @return 実行結果
    */
   public static String renderSSR(HttpServletRequest request, String scriptPath,
-      ServerApi serverApi, Object param) {
-    GraalJSScriptEngine engine = initializeEngine(request, scriptPath, serverApi, param);
+      ServerApi serverApi) {
+    GraalJSScriptEngine engine = initializeEngine(request, scriptPath, serverApi);
     String ret = null;
     try {
       String url = request.getRequestURL().toString();
@@ -239,11 +235,10 @@ public class StudyJsUtil {
    * @param request リクエスト
    * @param scriptPath jsファイルのパス
    * @param serverApi jsに埋め込むjavaオブジェクト
-   * @param param jsに埋め込むjavaオブジェクトパラメータ
    * @return js実行エンジン
    */
   private static GraalJSScriptEngine initializeEngine(HttpServletRequest request, String scriptPath,
-      ServerApi serverApi, Object param) {
+      ServerApi serverApi) {
     // Source loadcompatibility = Source.create("js",
     // "load('nashorn:mozilla_compat.js')");
     GraalJSScriptEngine engine = GraalJSScriptEngine.create(
@@ -269,11 +264,6 @@ public class StudyJsUtil {
       if (!Objects.isNull(serverApi)) {
         engine.put("api", serverApi);
         engine.eval("window.api = api");
-      }
-      // param
-      if (!Objects.isNull(param)) {
-        engine.put("param", param);
-        engine.eval("window.param = param");
       }
 
       engine.eval(readJsFile("/static/js/depens.bundle.js"));

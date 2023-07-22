@@ -10,13 +10,13 @@ import { OnServerApi } from '../@types/studyApi';
  * @returnsz
  */
 export function onServer(
-  callback: (api: OnServerApi, param?: object) => string,
+  callback: (api: OnServerApi) => string,
   defaultValue,
   valueIdentifier: string
 ): [unknown, JSX.Element] {
   const anyWindow = window;
   if (anyWindow.isServer) {
-    const jsonValue = callback(anyWindow.api, anyWindow.param);
+    const jsonValue = callback(anyWindow.api);
     const sanitizedJson = jsonValue
       .replace(/\\/g, '\\\\')
       .replace(/"/g, '\\"')

@@ -25,10 +25,11 @@ const get = async (
 };
 
 export const useCommonSWR = <T>(
-  apiFn: (api: OnServerApi, param?: object) => string,
+  apiFn: (api: OnServerApi) => string,
   initialDataKey: string | [string, Record<string, string>],
   config: Partial<SWRConfiguration> = {
     revalidateOnFocus: false,
+    suspense: true,
   }
 ) => {
   const [initialData, initScript] = onServer(
@@ -78,8 +79,7 @@ export const useCommonInfoSWR = () => {
   //console.log('call useCommonInfoSWR');
   return useCommonSWR<CommonUi>(
     (api) => api.getCommonInfo(),
-    urlConst.common.COMMON_INFO,
-    { revalidateOnFocus: false, suspense: true }
+    urlConst.common.COMMON_INFO
   );
 };
 

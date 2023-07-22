@@ -1,5 +1,6 @@
 package org.book.app.study.helper;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -511,6 +512,16 @@ public class BooksHelper {
    */
   public Date getDate(BooksForm form) {
     return form.getDate() == null ? StudyUtil.getNowDate() : form.getDate();
+  }
+
+  /**
+   * 日付を取得
+   * 
+   * @param date
+   * @return 日付
+   */
+  public Date getDate(LocalDate date) {
+    return date == null ? StudyUtil.getNowDate() : StudyDateUtil.LocalDateToDate(date);
   }
 
 }

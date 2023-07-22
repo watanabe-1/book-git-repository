@@ -1,7 +1,7 @@
 package org.book.app.study.api.js;
 
+import java.time.LocalDate;
 import org.book.app.study.api.BooksApiController;
-import org.book.app.study.form.BooksForm;
 import org.book.app.study.util.StudyStringUtil;
 import org.springframework.stereotype.Component;
 import lombok.AllArgsConstructor;
@@ -52,8 +52,8 @@ public class BooksApi extends CommonApi {
    * @param form booksForm
    * @return 画面情報
    */
-  public String getHouseholdInfo(BooksForm form) {
-    return StudyStringUtil.objectToJsonStr(booksApiController.getHouseholdInfo(form));
+  public String getHouseholdInfo(LocalDate date) {
+    return StudyStringUtil.objectToJsonStr(booksApiController.getHouseholdInfo(date));
   }
 
   /**
@@ -62,8 +62,8 @@ public class BooksApi extends CommonApi {
    * @param form 送信されたデータ
    * @return 画面情報
    */
-  public String getHouseholdChartInfo(BooksForm form) {
-    return StudyStringUtil.objectToJsonStr(booksApiController.getHouseholdChartInfo(form));
+  public String getHouseholdChartInfo(LocalDate date) {
+    return StudyStringUtil.objectToJsonStr(booksApiController.getHouseholdChartInfo(date));
   }
 
   /**
@@ -72,8 +72,8 @@ public class BooksApi extends CommonApi {
    * @param form 送信されたデータ
    * @return 画面情報
    */
-  public String getHouseholdCalendarInfo(BooksForm form) {
-    return StudyStringUtil.objectToJsonStr(booksApiController.getHouseholdCalendarInfo(form));
+  public String getHouseholdCalendarInfo(LocalDate date) {
+    return StudyStringUtil.objectToJsonStr(booksApiController.getHouseholdCalendarInfo(date));
   }
 
 }
