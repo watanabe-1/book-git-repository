@@ -14,8 +14,8 @@ function createPostgreCodeInsertSql() {
   const values = sheet.getDataRange().getValues();
 
   //出力ファイル名
-  const codeListFileName = "INSERT_CODELIST.sql";
-  const codeLkupFileName = "INSERT_CODELKUP.sql";
+  const codeListFileName = "INSERT_CODE_LIST.sql";
+  const codeLkupFileName = "INSERT_CODE_LOOKUP.sql";
   //出力フォルダ
   const faldaID = getProperty("sql_insert_dir");
 
@@ -76,14 +76,14 @@ function createCodeEnumJava() {
 }
 
 /**
- * コード定義からcodelistテーブルのinsert文の作成
+ * コード定義からcode_listテーブルのinsert文の作成
  * @param {Object} values code定義データリスト
  * @param {integer} lastRow 最終行数
  * @return {string} postgresqlのcode_listテーブルのinsert
  */
 function getPostgreCodeListInsertSql(values, lastRow) {
   // 物理名を取得
-  const tbEnName = "CODELIST";
+  const tbEnName = "CODE_LIST";
   const codeLists = [];
   //SQL文の作成
   let sqlStr = ""
@@ -106,14 +106,14 @@ function getPostgreCodeListInsertSql(values, lastRow) {
 }
 
 /**
- * コード定義からcodelkupテーブルのinsert文の作成
+ * コード定義からcode_lookupテーブルのinsert文の作成
  * @param {Object} values code定義データリスト
  * @param {integer} lastRow 最終行数
  * @return {string} postgresqlのcode_listテーブルのinsert
  */
 function getPostgreCodeLkupInsertSql(values, lastRow) {
   // 物理名を取得
-  const tbEnName = "CODELKUP";
+  const tbEnName = "CODE_LOOKUP";
   //SQL文の作成
   let sqlStr = ""
   for (var j = 7; j <= lastRow; j++) {
