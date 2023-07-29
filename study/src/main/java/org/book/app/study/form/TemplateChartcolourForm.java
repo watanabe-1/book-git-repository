@@ -7,10 +7,10 @@ import jakarta.validation.constraints.Min;
 import lombok.Data;
 
 /**
- * TEMPLATECHARTCOLOUR:チャートカラーマスタ(図の表示に使用するrgbaの組み合わせを管理するマスタ)のformクラス
+ * TEMPLATE_CHARTCOLOUR:チャートカラーマスタ(図の表示に使用するrgbaの組み合わせを管理するマスタ)のformクラス
  */
 @Data
-public class TemplatechartcolourForm implements Serializable {
+public class TemplateChartcolourForm implements Serializable {
 
   /**
    * シリアルキー

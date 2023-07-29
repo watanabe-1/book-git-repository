@@ -22,5 +22,5 @@ SELECT
   , UPD_DATE -- 更新日時
   , UPD_USER -- 更新ユーザー
 FROM
-  CODELKUP;
+  CODE_LOOKUP;
 

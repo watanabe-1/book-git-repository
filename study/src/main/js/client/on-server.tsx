@@ -43,7 +43,7 @@ export function onServer(
   if (anyWindow.serverData) {
     const value = anyWindow.serverData[valueIdentifier];
     //anyWindow.serverData[valueIdentifier] = undefined;
-    console.log(`valueIdentifier:${valueIdentifier} `);
+    // console.log(`valueIdentifier:${valueIdentifier} `);
     if (value) {
       console.log(`ssr:${valueIdentifier} value↓`);
       console.log(value);

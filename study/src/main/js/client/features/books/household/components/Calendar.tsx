@@ -50,7 +50,7 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
   const { data: calendarData, initScript } = useHouseholdCalendarInfoSWR(
     buildParam(date, commonInfo.dateFormat)
   );
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const { syukujitsuList, amountList } = calendarData;
 
   // console.log('calendardata');

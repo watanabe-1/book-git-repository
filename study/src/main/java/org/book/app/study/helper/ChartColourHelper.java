@@ -11,13 +11,13 @@ import java.util.Random;
 import java.util.UUID;
 import org.book.app.study.dto.data.BooksChartData;
 import org.book.app.study.dto.data.BooksChartDatasets;
-import org.book.app.study.entity.Templatechartcolour;
+import org.book.app.study.entity.TemplateChartcolour;
 import org.book.app.study.enums.dbcode.ChartColourNum;
 import org.book.app.study.enums.dbcode.ChartColourRandomNum;
 import org.book.app.study.enums.dbcode.ChartColourTab;
 import org.book.app.study.enums.flag.ActiveFlag;
-import org.book.app.study.form.TemplatechartcolourForm;
-import org.book.app.study.service.TemplatechartcolourService;
+import org.book.app.study.form.TemplateChartcolourForm;
+import org.book.app.study.service.TemplateChartcolourService;
 import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyCodeUtil;
 import org.book.app.study.util.StudyDateUtil;
@@ -37,7 +37,7 @@ public class ChartColourHelper {
   /**
    * チャート色テンプレート Service
    */
-  private final TemplatechartcolourService TemplatechartcolourService;
+  private final TemplateChartcolourService templateChartcolourService;
 
   /**
    * ダミーデータ作成用基準値
@@ -62,15 +62,15 @@ public class ChartColourHelper {
     int cnt = 0;
 
     // ユーザーごとに作成し設定しているテンプレートを取得
-    Templatechartcolour activeTempColour = getActiveChartColorTemp();
+    TemplateChartcolour activeTempColour = getActiveChartColorTemp();
     // デフォルトのテンプレートを設定していなかった場合
     if (!Objects.equals(activeTempColour.getUserId(), StudyUtil.getCommonUser())) {
       // 現在設定しているテンプレートを設定していない状態に変更
-      cnt += TemplatechartcolourService.updateActiveAndNameById(ActiveFlag.NON_ACTIVE.getValue(),
+      cnt += templateChartcolourService.updateActiveAndNameById(ActiveFlag.NON_ACTIVE.getValue(),
           activeTempColour.getTemplateName(), date, user, activeTempColour.getTemplateId());
     }
     // 画面で選択したテンプレートを設定
-    cnt += TemplatechartcolourService.updateActiveAndNameById(ActiveFlag.ACTIVE.getValue(),
+    cnt += templateChartcolourService.updateActiveAndNameById(ActiveFlag.ACTIVE.getValue(),
         templateName, date, user, templateId);
 
     return cnt;
@@ -138,9 +138,9 @@ public class ChartColourHelper {
    * 
    * @return Templatechartcolour 設定されている色テンプレート
    */
-  public Templatechartcolour getActiveChartColorTemp() {
+  public TemplateChartcolour getActiveChartColorTemp() {
     // ユーザーごとに作成し設定しているテンプレートを取得
-    List<Templatechartcolour> activeTempColour = TemplatechartcolourService
+    List<TemplateChartcolour> activeTempColour = templateChartcolourService
         .findByUserIdAndActive(StudyUtil.getLoginUser(), ActiveFlag.ACTIVE.getValue());
 
     // デフォルト以外のテンプレートを設定していなかったらデフォルトを設定してることになる
@@ -155,8 +155,8 @@ public class ChartColourHelper {
    * 
    * @return Templatechartcolour 共通色テンプレート
    */
-  public Templatechartcolour getActiveCommonCharttColorTemp() {
-    return TemplatechartcolourService
+  public TemplateChartcolour getActiveCommonCharttColorTemp() {
+    return templateChartcolourService
         .findByUserIdAndActive(StudyUtil.getCommonUser(), ActiveFlag.ACTIVE.getValue()).get(0);
   }
 
@@ -166,11 +166,11 @@ public class ChartColourHelper {
    * @param activeColour 現在設定している色テンプレート
    * @return ログインユーザーが作成したテンプレート一覧
    */
-  public List<Templatechartcolour> getLoginUsersAllTempColours(Templatechartcolour activeColour) {
+  public List<TemplateChartcolour> getLoginUsersAllTempColours(TemplateChartcolour activeColour) {
     String commonUserId = StudyUtil.getCommonUser();
     // ログインユーザーが作成したテンプレートを取得
-    List<Templatechartcolour> allTempColours =
-        TemplatechartcolourService.findByUserId(StudyUtil.getLoginUser());
+    List<TemplateChartcolour> allTempColours =
+        templateChartcolourService.findByUserId(StudyUtil.getLoginUser());
 
     // 現在設定しているテンプレートが共通かどうか
     if (Objects.equals(activeColour.getUserId(), commonUserId)) {
@@ -179,7 +179,7 @@ public class ChartColourHelper {
     } else {
       // 現在設定しているテンプレートが共通でない場合は、共通のテンプレートを取得
       // 取得後にノンアクティブに変更(一覧の中のアクティブなテンプレートは現在設定しているものだけにしたいため)
-      Templatechartcolour commonColour = TemplatechartcolourService
+      TemplateChartcolour commonColour = templateChartcolourService
           .findByUserIdAndActive(commonUserId, ActiveFlag.ACTIVE.getValue()).get(0);
       commonColour.setActive(ActiveFlag.NON_ACTIVE.getValue());
       allTempColours.add(0, commonColour);
@@ -234,7 +234,7 @@ public class ChartColourHelper {
    */
   public List<String> getActiveRgbaList(int standard, float transparency) {
     // ユーザーごとに作成し設定しているテンプレートを取得
-    Templatechartcolour activeTempColour = getActiveChartColorTemp();
+    TemplateChartcolour activeTempColour = getActiveChartColorTemp();
 
     return getRgbaListWithTransparency(standard, transparency, activeTempColour.getSeedCoeffR(),
         activeTempColour.getSeedCoeffG(), activeTempColour.getSeedCoeffB());
@@ -289,13 +289,13 @@ public class ChartColourHelper {
    * @param maxCnt 発番する組み合わせの個数
    * @return List<Templatechartcolour> 発番した色の組み合わせ
    */
-  public List<Templatechartcolour> getRandomColourSeedCoef(int maxCnt) {
-    List<Templatechartcolour> ret = new ArrayList<>();
+  public List<TemplateChartcolour> getRandomColourSeedCoef(int maxCnt) {
+    List<TemplateChartcolour> ret = new ArrayList<>();
     Random rand = new Random();
     final int MAX_BOUND = 999999999;
 
     for (int i = 0; i < maxCnt; i++) {
-      Templatechartcolour tc = new Templatechartcolour();
+      TemplateChartcolour tc = new TemplateChartcolour();
       tc.setSeedCoeffR(rand.nextInt(MAX_BOUND));
       tc.setSeedCoeffG(rand.nextInt(MAX_BOUND));
       tc.setSeedCoeffB(rand.nextInt(MAX_BOUND));
@@ -311,12 +311,12 @@ public class ChartColourHelper {
    * @param form 画面から取得した値
    * @return Books セットされたentity
    */
-  public Templatechartcolour getTemplatechartcolourByForm(TemplatechartcolourForm form) {
+  public TemplateChartcolour getTemplateChartcolourByForm(TemplateChartcolourForm form) {
     // ログインユーザー取得
     String user = StudyUtil.getLoginUser();
 
     // フォームの値をエンティティにコピーし、共通項目をセット
-    Templatechartcolour newColorTemp = new Templatechartcolour();
+    TemplateChartcolour newColorTemp = new TemplateChartcolour();
     StudyBeanUtil.copyAndSetStudyEntityProperties(form, newColorTemp);
 
     newColorTemp.setTemplateId(UUID.randomUUID().toString());

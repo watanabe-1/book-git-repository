@@ -2,10 +2,10 @@ package org.book.app.study.controller;
 
 import java.util.List;
 import java.util.Objects;
-import org.book.app.study.entity.Templatechartcolour;
-import org.book.app.study.form.TemplatechartcolourForm;
+import org.book.app.study.entity.TemplateChartcolour;
+import org.book.app.study.form.TemplateChartcolourForm;
 import org.book.app.study.helper.ChartColourHelper;
-import org.book.app.study.service.TemplatechartcolourService;
+import org.book.app.study.service.TemplateChartcolourService;
 import org.book.app.study.util.StudyModelUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
@@ -31,7 +31,7 @@ public class ChartColourController {
   /**
    * チャート色テンプレート Service
    */
-  private final TemplatechartcolourService TemplatechartcolourService;
+  private final TemplateChartcolourService templateChartcolourService;
 
   /**
    * 図の色 Helper
@@ -48,12 +48,12 @@ public class ChartColourController {
    * @return リダイレクト先
    */
   @RequestMapping(value = "/chartColour/input", method = RequestMethod.POST)
-  public ModelAndView result(@ModelAttribute @Validated TemplatechartcolourForm form,
+  public ModelAndView result(@ModelAttribute @Validated TemplateChartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
     model.setViewName("redirect:/chartColour/index");
-    Templatechartcolour newColorTemp = chartColourHelper.getTemplatechartcolourByForm(form);
+    TemplateChartcolour newColorTemp = chartColourHelper.getTemplateChartcolourByForm(form);
     // 保存
-    TemplatechartcolourService.saveOne(newColorTemp);
+    templateChartcolourService.saveOne(newColorTemp);
 
     // redirect時に値を渡すための処理
     ModelMap modelMap = new ModelMap();
@@ -74,7 +74,7 @@ public class ChartColourController {
    * @return リダイレクト先
    */
   @RequestMapping(value = "/chartColour/delete", method = RequestMethod.POST)
-  public ModelAndView delete(@ModelAttribute @Validated TemplatechartcolourForm form,
+  public ModelAndView delete(@ModelAttribute @Validated TemplateChartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
     model.setViewName("redirect:/chartColour/index");
     // redirect時に値を渡すための処理
@@ -84,7 +84,7 @@ public class ChartColourController {
       modelMap.addAttribute("inputResultMessage", "デフォルトのテンプレートは削除できません!");
     } else {
       // 削除
-      TemplatechartcolourService.deleteOne(form.getTemplateId());
+      templateChartcolourService.deleteOne(form.getTemplateId());
       modelMap.addAttribute("inputResultMessage", "削除が完了しました!");
     }
 
@@ -104,7 +104,7 @@ public class ChartColourController {
    * @return リダイレクト先
    */
   @RequestMapping(value = "/chartColour/changeActive", method = RequestMethod.POST)
-  public ModelAndView changeActive(@ModelAttribute @Validated TemplatechartcolourForm form,
+  public ModelAndView changeActive(@ModelAttribute @Validated TemplateChartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
     model.setViewName("redirect:/chartColour/index");
     // 設定されている色テンプレートを変更
@@ -128,7 +128,7 @@ public class ChartColourController {
    * @return 画面表示情報
    */
   @RequestMapping(value = "/chartColour/index", method = RequestMethod.GET)
-  public ModelAndView index(@ModelAttribute TemplatechartcolourForm form, ModelAndView model,
+  public ModelAndView index(@ModelAttribute TemplateChartcolourForm form, ModelAndView model,
       @ModelAttribute(StudyModelUtil.MODEL_KEY_MODEL_MAP) ModelMap modelMap) {
     model.setViewName("chartColour/index");
 
@@ -143,9 +143,9 @@ public class ChartColourController {
     }
 
     // ユーザーごとに設定しているテンプレートを取得
-    Templatechartcolour activeColour = chartColourHelper.getActiveChartColorTemp();
+    TemplateChartcolour activeColour = chartColourHelper.getActiveChartColorTemp();
     // ログインユーザーが作成したテンプレート(共通ユーザー分も含む)を取得
-    List<Templatechartcolour> allTempColours =
+    List<TemplateChartcolour> allTempColours =
         chartColourHelper.getLoginUsersAllTempColours(activeColour);
 
     model.addObject("activeColour", activeColour);

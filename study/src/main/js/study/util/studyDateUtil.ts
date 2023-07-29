@@ -140,7 +140,7 @@ export function getPreviousMonthDate(date: Date) {
  * @param date 日付
  * @returns 実月
  */
-export function getActualMonth(date) {
+export function getActualMonth(date: Date) {
   const monthIndex = getMonth(date);
   const actualMonth = monthIndex + 1;
   return actualMonth;

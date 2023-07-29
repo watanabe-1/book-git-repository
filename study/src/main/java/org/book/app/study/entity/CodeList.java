@@ -8,7 +8,7 @@ import lombok.Data;
  * CODELIST:コードリスト(コード定義テーブル(ヘッダー))のentityクラス
  */
 @Data
-public class Codelist implements Serializable, Entity {
+public class CodeList implements Serializable, Entity {
 
   /**
    * シリアルキー

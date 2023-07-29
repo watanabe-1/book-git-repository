@@ -5,10 +5,10 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * TEMPLATECHARTCOLOUR:チャートカラーマスタ(図の表示に使用するrgbaの組み合わせを管理するマスタ)のentityクラス
+ * TEMPLATE_CHARTCOLOUR:チャートカラーマスタ(図の表示に使用するrgbaの組み合わせを管理するマスタ)のentityクラス
  */
 @Data
-public class Templatechartcolour implements Serializable, Entity {
+public class TemplateChartcolour implements Serializable, Entity {
 
   /**
    * シリアルキー

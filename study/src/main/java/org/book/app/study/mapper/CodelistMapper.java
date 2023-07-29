@@ -1,77 +1,74 @@
 package org.book.app.study.mapper;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.book.app.study.entity.Codelist;
+import org.book.app.study.entity.CodeList;
+
 
 /**
- * CODELIST:コードリスト(コード定義テーブル(ヘッダー))のmapperクラス
+ * CODE_LIST:コードリスト(コード定義テーブル(ヘッダー))のmapperクラス
  */
 @Mapper
-public interface CodelistMapper {
+public interface CodeListMapper {
 
   /**
    * 全検索
-   * 
    * @return 検索結果(複数行)
    */
-  List<Codelist> findAll();
+  List<CodeList> findAll();
 
   /**
    * 1行検索(引数にプライマルキーを指定)
-   * 
    * @param listName LIST_NAME(リストネーム)
    * @return 検索結果(1行)
    */
-  Codelist findOne(@Param("listName") String listName);
+  CodeList findOne(@Param("listName")String listName);
 
   /**
    * 複数行insert
-   * 
-   * @param codList entity(Codelist)のList
+   * @param codList entity(CodeList)のList
    * @return insert行数
    */
-  int saveBulk(@Param("codList") List<Codelist> codList);
+  int saveBulk(@Param("codList")List<CodeList> codList);
 
   /**
    * 1行insert
-   * 
-   * @param cod entity(Codelist)
+   * @param cod entity(CodeList)
    * @return insert行数
    */
-  int saveOne(Codelist cod);
+  int saveOne(CodeList cod);
 
   /**
    * 全行update
-   * 
-   * @param cod entity(Codelist)
+   * @param cod entity(CodeList)
    * @return update行数
    */
-  int updateAll(Codelist cod);
+  int updateAll(CodeList cod);
 
   /**
-   * 1行update プライマルキーをWhere句に指定 プライマルキー：@Param("listNameWhere")String listName
-   * 
-   * @param cod      entity(Codelist)
+   * 1行update
+   * プライマルキーをWhere句に指定
+   * プライマルキー：@Param("listNameWhere")String listName
+   * @param cod entity(CodeList)
    * @param listName LIST_NAME(リストネーム)
    * @return update行数
    */
-  int updateOne(@Param("cod") Codelist cod, @Param("listNameWhere") String listName);
+  int updateOne(@Param("cod") CodeList cod, @Param("listNameWhere")String listName);
 
   /**
    * 全行delete
-   * 
    * @return delete行数
    */
   int deleteAll();
 
   /**
    * 1行delete(引数にプライマルキーを指定)
-   * 
    * @param listName LIST_NAME(リストネーム)
    * @return delete行数
    */
-  int deleteOne(@Param("listName") String listName);
+  int deleteOne(@Param("listName")String listName);
 
 }
+

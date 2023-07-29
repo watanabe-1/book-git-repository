@@ -41,7 +41,7 @@ INSERT INTO IMAGE(IMG_ID,IMG_TYPE,IMG_PATH,IMG_NAME,NOTE) VALUES ('bonus_icon','
 --             ,('chart_rgb_color', 'b',  '図で使用する色を生成するためのシード値作成用係数', '3', '3', '1200');
 
 --図で使用する色を生成するためのデフォルトシード値を定義
-INSERT INTO TEMPLATECHARTCOLOUR (TEMPLATE_ID, TEMPLATE_NAME, USER_ID, ACTIVE, SEED_COEFF_R, SEED_COEFF_G, SEED_COEFF_B, NOTE) VALUES ('default1', 'デフォルト1', 'common', '1', '5973763', '727430704', '326989594', 'デフォルト1');
+INSERT INTO TEMPLATE_CHARTCOLOUR (TEMPLATE_ID, TEMPLATE_NAME, USER_ID, ACTIVE, SEED_COEFF_R, SEED_COEFF_G, SEED_COEFF_B, NOTE) VALUES ('default1', 'デフォルト1', 'common', '1', '5973763', '727430704', '326989594', 'デフォルト1');
 
 --test
 INSERT INTO ACCOUNT (USER_ID, PASSWORD, USER_NAME, ACCOUNT_TYPE) VALUES ('test', '$10$po.7dDhl7fWeu9wp4LcpkOAuBme9mugBW1Bo2HyVSSgWzGVTcuSCq', 'test', '03');

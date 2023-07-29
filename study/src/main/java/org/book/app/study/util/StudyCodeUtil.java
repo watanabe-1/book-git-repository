@@ -1,6 +1,6 @@
 package org.book.app.study.util;
 
-import org.book.app.study.service.CodelkupService;
+import org.book.app.study.service.CodeLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,16 +13,16 @@ public class StudyCodeUtil {
   /**
    * コード情報 Service
    */
-  private static CodelkupService codelkupService;
+  private static CodeLookupService codeLookupService;
 
   /**
    * コード情報 Serviceのセッター<br>
    * 
-   * @param codelkupService コード情報 Service
+   * @param CodeLookupService コード情報 Service
    */
   @Autowired
-  private void setCodelkupService(CodelkupService codelkupService) {
-    StudyCodeUtil.codelkupService = codelkupService;
+  private void setCodeLookupService(CodeLookupService CodeLookupService) {
+    StudyCodeUtil.codeLookupService = CodeLookupService;
   }
 
   /**
@@ -33,6 +33,6 @@ public class StudyCodeUtil {
    * @return ショート
    */
   public static String getShort(String listName, String code) {
-    return codelkupService.findOne(listName, code).getShortValue();
+    return codeLookupService.findOne(listName, code).getShortValue();
   }
 }

@@ -46,6 +46,7 @@ const TabContainer = () => {
   const date = paramDate
     ? parseDate(paramDate, commonInfo.dateFormat)
     : infoToDate(info);
+
   /**
    * 家計簿データの金額の合計を取得する
    *

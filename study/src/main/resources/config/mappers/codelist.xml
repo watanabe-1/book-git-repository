@@ -1,36 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="org.book.app.study.mapper.CodelistMapper">
-  <select id="findAll" resultType="org.book.app.study.entity.Codelist">
-    select SERIAL_KEY, LIST_NAME, DESCRIPTION, EDITABLE, INS_DATE, INS_USER, UPD_DATE, UPD_USER from CODELIST
+<mapper namespace="org.book.app.study.mapper.CodeListMapper">
+  <select id="findAll" resultType="org.book.app.study.entity.CodeList">
+    select SERIAL_KEY, LIST_NAME, DESCRIPTION, EDITABLE, INS_DATE, INS_USER, UPD_DATE, UPD_USER from CODE_LIST
       order by LIST_NAME
   </select>
-  <select id="findOne" resultType="org.book.app.study.entity.Codelist">
-    select SERIAL_KEY, LIST_NAME, DESCRIPTION, EDITABLE, INS_DATE, INS_USER, UPD_DATE, UPD_USER from CODELIST
+  <select id="findOne" resultType="org.book.app.study.entity.CodeList">
+    select SERIAL_KEY, LIST_NAME, DESCRIPTION, EDITABLE, INS_DATE, INS_USER, UPD_DATE, UPD_USER from CODE_LIST
       where LIST_NAME = #{listName}
   </select>
   <insert id="saveBulk" parameterType="java.util.List">
-    insert into CODELIST (LIST_NAME, DESCRIPTION, EDITABLE, INS_DATE, INS_USER, UPD_DATE, UPD_USER) values
-    <foreach collection="codList" item="cod" separator=",">
+    insert into CODE_LIST (LIST_NAME, DESCRIPTION, EDITABLE, INS_DATE, INS_USER, UPD_DATE, UPD_USER) values
+    <foreach collection="codList" item="cod" separator=","> 
       (#{cod.listName}, #{cod.description}, #{cod.editable}, #{cod.insDate}, #{cod.insUser}, #{cod.updDate}, #{cod.updUser})
     </foreach>
   </insert>
   <insert id="saveOne">
-    insert into CODELIST (LIST_NAME, DESCRIPTION, EDITABLE, INS_DATE, INS_USER, UPD_DATE, UPD_USER)
+    insert into CODE_LIST (LIST_NAME, DESCRIPTION, EDITABLE, INS_DATE, INS_USER, UPD_DATE, UPD_USER)
       values (#{listName}, #{description}, #{editable}, #{insDate}, #{insUser}, #{updDate}, #{updUser})
   </insert>
   <update id="updateAll">
-    update CODELIST set LIST_NAME = #{listName}, DESCRIPTION = #{description}, EDITABLE = #{editable}, UPD_DATE = #{updDate}, UPD_USER = #{updUser}
+    update CODE_LIST set LIST_NAME = #{listName}, DESCRIPTION = #{description}, EDITABLE = #{editable}, UPD_DATE = #{updDate}, UPD_USER = #{updUser}
   </update>
   <update id="updateOne">
-    update CODELIST set LIST_NAME = #{cod.listName}, DESCRIPTION = #{cod.description}, EDITABLE = #{cod.editable}, UPD_DATE = #{cod.updDate}, UPD_USER = #{cod.updUser}
+    update CODE_LIST set LIST_NAME = #{cod.listName}, DESCRIPTION = #{cod.description}, EDITABLE = #{cod.editable}, UPD_DATE = #{cod.updDate}, UPD_USER = #{cod.updUser}
       where LIST_NAME = #{listNameWhere}
   </update>
   <delete id="deleteAll">
-    delete from CODELIST
+    delete from CODE_LIST
   </delete>
   <delete id="deleteOne">
-    delete from CODELIST
+    delete from CODE_LIST
       where LIST_NAME = #{listName}
   </delete>
 </mapper>
+

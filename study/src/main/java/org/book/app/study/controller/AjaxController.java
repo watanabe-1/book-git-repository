@@ -8,7 +8,7 @@ import org.book.app.study.dto.file.SyukujitsuColumn;
 import org.book.app.study.entity.Books;
 import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.form.BooksForm;
-import org.book.app.study.form.TemplatechartcolourForm;
+import org.book.app.study.form.TemplateChartcolourForm;
 import org.book.app.study.helper.BooksHelper;
 import org.book.app.study.helper.ChartColourHelper;
 import org.book.app.study.util.StudyDateUtil;
@@ -133,7 +133,7 @@ public class AjaxController extends ApiController {
    */
   @RequestMapping(value = "/chartColour/chart", method = RequestMethod.POST)
   @ResponseBody
-  public BooksChartData chartColourByActive(@ModelAttribute @Validated TemplatechartcolourForm form,
+  public BooksChartData chartColourByActive(@ModelAttribute @Validated TemplateChartcolourForm form,
       BindingResult result, ModelAndView model) {
     return chartColourHelper.getActiveChartData(chartColourHelper.getQty(form.getQty()));
   }
@@ -148,7 +148,7 @@ public class AjaxController extends ApiController {
    */
   @RequestMapping(value = "/chartColour/confirm", method = RequestMethod.POST)
   @ResponseBody
-  public BooksChartData chartColourBySeed(@ModelAttribute @Validated TemplatechartcolourForm form,
+  public BooksChartData chartColourBySeed(@ModelAttribute @Validated TemplateChartcolourForm form,
       ModelAndView model) {
     return chartColourHelper.getChartDataByCoeff(chartColourHelper.getQty(form.getQty()),
         form.getSeedCoeffR(), form.getSeedCoeffG(), form.getSeedCoeffB());

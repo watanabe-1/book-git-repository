@@ -1,87 +1,84 @@
 package org.book.app.study.service;
 
 import java.util.List;
-import org.book.app.study.entity.Codelist;
-import org.book.app.study.mapper.CodelistMapper;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.book.app.study.entity.CodeList;
+import org.book.app.study.mapper.CodeListMapper;
 
 /**
- * CODELIST:コードリスト(コード定義テーブル(ヘッダー))のserviceクラス
+ * CODE_LIST:コードリスト(コード定義テーブル(ヘッダー))のserviceクラス
  */
 @Service
-@RequiredArgsConstructor
-public class CodelistService {
+public class CodeListService {
 
-  private final CodelistMapper codelistMapper;
+  @Autowired
+  private CodeListMapper codelistMapper;
 
   /**
    * 全検索
-   * 
    * @return 検索結果(複数行)
    */
-  public List<Codelist> findAll() {
+  public List<CodeList> findAll() {
     return codelistMapper.findAll();
   }
 
   /**
    * 1行検索(引数にプライマルキーを指定)
-   * 
    * @param listName LIST_NAME(リストネーム)
    * @return 検索結果(1行)
    */
-  public Codelist findOne(String listName) {
+  public CodeList findOne(String listName) {
     return codelistMapper.findOne(listName);
   }
 
   /**
    * 複数行insert
-   * 
-   * @param codList entity(Codelist)のList
+   * @param codList entity(CodeList)のList
    * @return insert行数
    */
   @Transactional
-  public int saveBulk(List<Codelist> codList) {
+  public int saveBulk(List<CodeList> codList) {
     return codelistMapper.saveBulk(codList);
   }
 
   /**
    * 1行insert
-   * 
-   * @param cod entity(Codelist)
+   * @param cod entity(CodeList)
    * @return insert行数
    */
   @Transactional
-  public int saveOne(Codelist cod) {
+  public int saveOne(CodeList cod) {
     return codelistMapper.saveOne(cod);
   }
 
   /**
    * 全行update
-   * 
-   * @param cod entity(Codelist)
+   * @param cod entity(CodeList)
    * @return update行数
    */
   @Transactional
-  public int updateAll(Codelist cod) {
+  public int updateAll(CodeList cod) {
     return codelistMapper.updateAll(cod);
   }
 
   /**
-   * 1行update プライマルキーをWhere句に指定 プライマルキー：String listName
-   * 
-   * @param cod entity(Codelist)
+   * 1行update
+   * プライマルキーをWhere句に指定
+   * プライマルキー：String listName
+   * @param cod entity(CodeList)
+   * @param listName LIST_NAME(リストネーム)
    * @return update行数
    */
   @Transactional
-  public int updateOne(Codelist cod, String listName) {
+  public int updateOne(CodeList cod, String listName) {
     return codelistMapper.updateOne(cod, listName);
   }
 
   /**
    * 全行delete
-   * 
    * @return delete行数
    */
   @Transactional
@@ -91,7 +88,6 @@ public class CodelistService {
 
   /**
    * 1行delete(引数にプライマルキーを指定)
-   * 
    * @param listName LIST_NAME(リストネーム)
    * @return delete行数
    */
@@ -101,3 +97,4 @@ public class CodelistService {
   }
 
 }
+
