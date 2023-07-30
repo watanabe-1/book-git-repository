@@ -26,7 +26,7 @@ const SimpleText: React.FC<SimpleTextProps> = ({
   onClick = () => null,
   onMouseDown = () => null,
   textColorClass = null,
-  textMaxLength = 15,
+  textMaxLength = 30,
 }) => {
   const str = String(value);
   const text =

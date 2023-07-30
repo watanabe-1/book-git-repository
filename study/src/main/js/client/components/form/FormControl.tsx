@@ -50,7 +50,7 @@ const FormControl: React.FC<FormControlProps> = ({
   name,
   value,
   textValue = null,
-  textMaxLength = 15,
+  textMaxLength = 30,
   onChange,
   onBlur,
   hidden = false,

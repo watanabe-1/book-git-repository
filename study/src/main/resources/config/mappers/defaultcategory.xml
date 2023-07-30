@@ -50,13 +50,13 @@
           , RANKED.BOOKS_METHOD
           , RANKED.CAT_CODE
     from (
-        select USER_ID
-              , BOOKS_PLACE
-              , BOOKS_TYPE
-              , BOOKS_METHOD
-              , CAT_CODE
-              , ROW_NUMBER() OVER (PARTITION BY BOOKS_PLACE ORDER BY COUNT(CAT_CODE) DESC) AS RN
-        from BOOKS b
+        select B.USER_ID
+              , B.BOOKS_PLACE
+              , B.BOOKS_TYPE
+              , B.BOOKS_METHOD
+              , B.CAT_CODE
+              , ROW_NUMBER() OVER (PARTITION BY USER_ID, BOOKS_PLACE, BOOKS_TYPE, BOOKS_METHOD  ORDER BY COUNT(CAT_CODE) DESC) AS RN
+        from BOOKS B
         where USER_ID = #{userId}
           and not exists (
                 select 1
