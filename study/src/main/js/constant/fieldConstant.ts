@@ -36,6 +36,17 @@ export const fieldConst = {
   },
 
   /**
+   * デフォルトカテゴリー
+   */
+  defaultCategory: {
+    BOOKS_TYPE: 'booksType',
+    BOOKS_PLACE: 'booksPlace',
+    CAT_CODE: 'catCode',
+    BOOKS_METHOD: 'booksMethod',
+    DELETE: 'delete',
+  },
+
+  /**
    * 家計簿
    */
   books: {

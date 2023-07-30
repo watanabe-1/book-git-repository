@@ -18,6 +18,7 @@ type SortAndFilterFormTableProps = {
   hiddenSubmitButton?: boolean;
   onEnterSubmit?: boolean;
   errData?: ErrorResults;
+  customeButton?: React.ReactElement | React.ReactElement[];
 };
 
 /**
@@ -30,6 +31,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   hiddenSubmitButton = false,
   onEnterSubmit = false,
   errData = null,
+  customeButton = null,
 }) => {
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   // yupで使用するスキーマの設定
@@ -94,6 +96,9 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
         onKeyDown={handleKeyDown}
       >
         <div className="text-end">
+          {Array.isArray(customeButton)
+            ? customeButton.map((button) => button)
+            : customeButton}
           <SubmitButton
             title="更新"
             isLoading={isSubmitLoading}

@@ -33,5 +33,47 @@
     delete from DEFAULT_CATEGORY
       where USER_ID = #{userId} AND BOOKS_PLACE = #{booksPlace} AND BOOKS_TYPE = #{booksType} AND BOOKS_METHOD = #{booksMethod}
   </delete>
+  <select id="findByUserId" resultType="org.book.app.study.entity.DefaultCategory">
+    select SERIAL_KEY, USER_ID, BOOKS_PLACE, BOOKS_TYPE, BOOKS_METHOD, CAT_CODE, INS_DATE, INS_USER, UPD_DATE, UPD_USER from DEFAULT_CATEGORY
+      where USER_ID = #{userId}
+      order by USER_ID, BOOKS_PLACE, BOOKS_TYPE, BOOKS_METHOD
+  </select>
+  <select id="countOne" resultType="java.lang.Integer">
+    select COUNT(1)
+      where USER_ID = #{userId} AND BOOKS_PLACE = #{booksPlace} AND BOOKS_TYPE = #{booksType} AND BOOKS_METHOD = #{booksMethod}
+  </select>
+  <insert id="saveAllFromBooks">
+    insert into DEFAULT_CATEGORY (USER_ID ,BOOKS_PLACE, BOOKS_TYPE, BOOKS_METHOD, CAT_CODE)
+    select RANKED.USER_ID
+          , RANKED.BOOKS_PLACE
+          , RANKED.BOOKS_TYPE
+          , RANKED.BOOKS_METHOD
+          , RANKED.CAT_CODE
+    from (
+        select USER_ID
+              , BOOKS_PLACE
+              , BOOKS_TYPE
+              , BOOKS_METHOD
+              , CAT_CODE
+              , ROW_NUMBER() OVER (PARTITION BY BOOKS_PLACE ORDER BY COUNT(CAT_CODE) DESC) AS RN
+        from BOOKS b
+        where USER_ID = #{userId}
+          and not exists (
+                select 1
+                from CODE_LOOKUP CDLK
+                where CDLK.LIST_NAME = #{listName}
+                  and CDLK.SHORT_VALUE = B.CAT_CODE
+            )
+        group by USER_ID, BOOKS_PLACE, BOOKS_TYPE, BOOKS_METHOD ,CAT_CODE
+    ) RANKED
+    where RANKED.RN = 1
+      and not exists (
+          select 1
+          from DEFAULT_CATEGORY DC
+          where DC.USER_ID = RANKED.USER_ID
+            and DC.BOOKS_PLACE = RANKED.BOOKS_PLACE
+            and DC.BOOKS_TYPE = RANKED.BOOKS_TYPE
+            and DC.BOOKS_METHOD = RANKED.BOOKS_METHOD
+      );
+  </insert>
 </mapper>
-

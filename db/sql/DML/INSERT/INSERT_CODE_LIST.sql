@@ -14,3 +14,7 @@ INSERT INTO CODE_LIST (LIST_NAME, DESCRIPTION, EDITABLE)
 DELETE FROM CODE_LIST WHERE LIST_NAME = 'books_tab';
 INSERT INTO CODE_LIST (LIST_NAME, DESCRIPTION, EDITABLE)
   VALUES ('books_tab', '家計簿画面タブ', '1');
+-- デフォルトカテゴリー置き換え対象カテゴリー
+DELETE FROM CODE_LIST WHERE LIST_NAME = 'default_category_target';
+INSERT INTO CODE_LIST (LIST_NAME, DESCRIPTION, EDITABLE)
+  VALUES ('default_category_target', 'デフォルトカテゴリー置き換え対象カテゴリー', '1');

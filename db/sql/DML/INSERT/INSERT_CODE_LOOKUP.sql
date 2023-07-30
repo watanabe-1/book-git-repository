@@ -22,3 +22,7 @@ INSERT INTO CODE_LOOKUP (LIST_NAME, CODE, DESCRIPTION, SHORT_VALUE, LONG_VALUE, 
 DELETE FROM CODE_LOOKUP WHERE LIST_NAME = 'books_tab' AND CODE = 'defalt_tab';
 INSERT INTO CODE_LOOKUP (LIST_NAME, CODE, DESCRIPTION, SHORT_VALUE, LONG_VALUE, EDITABLE, ACTIVE, SEQUENCE, UDF1, UDF2, UDF3, UDF4, UDF5, UDF6, UDF7, NOTE)
   VALUES ('books_tab', 'defalt_tab', '家計簿画面タブ-初期表示', 'tab1', 'tab1', '1', '1', '1', '', '', '', '', '', '', '', '');
+-- デフォルトカテゴリー置き換え対象カテゴリー-対象カテゴリー1
+DELETE FROM CODE_LOOKUP WHERE LIST_NAME = 'default_category_target' AND CODE = 'category1';
+INSERT INTO CODE_LOOKUP (LIST_NAME, CODE, DESCRIPTION, SHORT_VALUE, LONG_VALUE, EDITABLE, ACTIVE, SEQUENCE, UDF1, UDF2, UDF3, UDF4, UDF5, UDF6, UDF7, NOTE)
+  VALUES ('default_category_target', 'category1', 'デフォルトカテゴリー置き換え対象カテゴリー-対象カテゴリー1', 'no_setting', 'no_setting', '1', '1', '1', '', '', '', '', '', '', '', '');

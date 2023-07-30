@@ -33,5 +33,8 @@
     delete from CODE_LOOKUP
       where LIST_NAME = #{listName} AND CODE = #{code}
   </delete>
+  <select id="findByListName" resultType="org.book.app.study.entity.CodeLookup">
+    select SERIAL_KEY, LIST_NAME, CODE, DESCRIPTION, SHORT_VALUE, LONG_VALUE, EDITABLE, ACTIVE, SEQUENCE, UDF1, UDF2, UDF3, UDF4, UDF5, UDF6, UDF7, NOTE, INS_DATE, INS_USER, UPD_DATE, UPD_USER from CODE_LOOKUP
+      where LIST_NAME = #{listName} 
+  </select>
 </mapper>
-

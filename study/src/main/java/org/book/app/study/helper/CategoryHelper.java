@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
+import org.book.app.study.dto.data.TypeData;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.entity.Category;
 import org.book.app.study.enums.flag.DeleteFlag;
@@ -127,6 +129,17 @@ public class CategoryHelper {
     catList = categoryService.findAll();
 
     return catCode;
+  }
+
+  /**
+   * カテゴリータイプデータの取得
+   * 
+   * @return カテゴリータイプデータ
+   */
+  public List<TypeData> getCategoryTypeDataList() {
+    return categoryService.findAll().stream()
+        .map(cat -> new TypeData(cat.getCatCode(), cat.getCatName()))
+        .collect(Collectors.toList());
   }
 
   /**

@@ -54,6 +54,24 @@ export type CategoryFormList = {
 };
 
 /**
+ * デフォルトカテゴリー
+ */
+export type DefaultCategory = {
+  booksType: string;
+  booksPlace: string;
+  catCode: string;
+  booksMethod: string;
+  booksAmmount: number;
+};
+
+/**
+ * デフォルトカテゴリーリスト
+ */
+export type DefaultCategoryFormList = {
+  defCatDataList: DefaultCategory[];
+};
+
+/**
  * 家計簿
  */
 export type Books = {
@@ -107,6 +125,15 @@ export type CategoryUi = {
   catTypes: Type[];
   active: Flag;
   delete: Flag;
+};
+
+/**
+ * デフォルトカテゴリーUI
+ */
+export type DefaultCategoryUi = {
+  delete: Flag;
+  booksTypes: Type[];
+  categories: Type[];
 };
 
 /**
@@ -169,7 +196,7 @@ export type FormConfirmData = {
  */
 export type BuildListTableFormObjConfig = {
   className: string;
-  primaryKey: string;
+  primaryKey: string | string[];
   list: {
     name: string;
     table: {

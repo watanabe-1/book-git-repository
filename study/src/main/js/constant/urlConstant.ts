@@ -11,6 +11,18 @@ export const urlConst = {
     LISTDATAUPDATE: '/category/listdataUpdate',
   },
 
+  /** デフォルトカテゴリー */
+  defaultCategory: {
+    INFO: '/defaultCategory/info',
+    //CONFIRM: '/defaultCategory/confirm',
+    //RESULT: '/defaultCategory/result',
+    //LIST: '/defaultCategory/list',
+    LISTDATA: '/defaultCategory/listdata',
+    //IMAGELISTDATA: '/defaultCategory/imageList',
+    LISTDATAUPDATE: '/defaultCategory/listdataUpdate',
+    INPUTALL: '/defaultCategory/inputAll',
+  },
+
   /** 家計簿 */
   books: {
     UPLOAD_INFO: '/books/uploadInfo',

@@ -10,6 +10,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collector;
@@ -18,6 +19,7 @@ import org.book.app.study.dto.data.BooksChartData;
 import org.book.app.study.dto.data.BooksChartDatasets;
 import org.book.app.study.dto.file.BooksColumn;
 import org.book.app.study.entity.Books;
+import org.book.app.study.entity.DefaultCategory;
 import org.book.app.study.enums.dbcode.BooksTab;
 import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.form.BooksForm;
@@ -47,14 +49,17 @@ public class BooksHelper {
   /**
    * 図の色 Helper
    */
-
   private final ChartColourHelper chartColourHelper;
 
   /**
    * カテゴリーヘルパー
    */
-
   private final CategoryHelper categoryHelper;
+
+  /**
+   * デフォルトカテゴリーヘルパー
+   */
+  private final DefaultCategoryHelper defaultCategoryHelper;
 
   /**
    * カテゴリーネームを取得するようのファンクション
@@ -108,26 +113,42 @@ public class BooksHelper {
   public List<Books> csvToBooksList(MultipartFile booksFile, String booksType) {
     // ログインユーザー取得
     String user = StudyUtil.getLoginUser();
-    List<Books> booksList = new ArrayList<Books>();
+    // デフォルトカテゴリーマスタ変更対象
+    List<String> defCatTargets = defaultCategoryHelper.getDefaultCategoryTargets();
+    List<DefaultCategory> defCatList = defaultCategoryHelper.getDefaultCategoryList();
 
-    List<BooksColumn> booksColList =
-        StudyFileUtil.csvFileToList(booksFile, BooksColumn.class, false);
-    booksColList.forEach(col -> {
-      Books books = new Books();
-      books.setBooksId(UUID.randomUUID().toString());
-      books.setUserId(user);
-      books.setBooksType(booksType);
-      books.setBooksDate(col.getBooksDate());
-      books.setBooksPlace(col.getBooksPlace());
-      books.setCatCode(categoryHelper.getCatCode(col.getCatName()));
-      books.setBooksMethod(col.getBooksMethod());
-      books.setBooksAmmount(col.getBooksAmmount());
-      // 共通項目をセット
-      StudyBeanUtil.setStudyEntityProperties(books);
-      booksList.add(books);
-    });
+    return StudyFileUtil.csvFileToList(booksFile, BooksColumn.class, false)
+        .stream()
+        .map(col -> {
+          String catCode = categoryHelper.getCatCode(col.getCatName());
+          String booksPlace = col.getBooksPlace();
+          String booksMethod = col.getBooksMethod();
 
-    return booksList;
+          // カテゴリーがデフォルトカテゴリーマスタ変更対象の場合
+          if (defCatTargets.contains(catCode)) {
+            Optional<DefaultCategory> mutchDefCat =
+                defaultCategoryHelper.findOneFromDefaultCeategoryList(
+                    booksPlace, booksType, booksMethod, defCatList);
+            // デフォルトカテゴリーマスタに対象が設定されていたら
+            if (mutchDefCat.isPresent()) {
+              catCode = mutchDefCat.get().getCatCode();
+            }
+          }
+
+          Books books = new Books();
+          books.setBooksId(UUID.randomUUID().toString());
+          books.setUserId(user);
+          books.setBooksType(booksType);
+          books.setBooksDate(col.getBooksDate());
+          books.setBooksPlace(booksPlace);
+          books.setCatCode(catCode);
+          books.setBooksMethod(booksMethod);
+          books.setBooksAmmount(col.getBooksAmmount());
+          // 共通項目をセット
+          StudyBeanUtil.setStudyEntityProperties(books);
+
+          return books;
+        }).toList();
   }
 
   /**

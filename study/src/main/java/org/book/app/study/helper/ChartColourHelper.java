@@ -136,7 +136,7 @@ public class ChartColourHelper {
   /**
    * 設定されている色テンプレートを取得
    * 
-   * @return Templatechartcolour 設定されている色テンプレート
+   * @return TemplateChartcolour 設定されている色テンプレート
    */
   public TemplateChartcolour getActiveChartColorTemp() {
     // ユーザーごとに作成し設定しているテンプレートを取得
@@ -153,7 +153,7 @@ public class ChartColourHelper {
   /**
    * 共通色テンプレートを取得
    * 
-   * @return Templatechartcolour 共通色テンプレート
+   * @return TemplateChartcolour 共通色テンプレート
    */
   public TemplateChartcolour getActiveCommonCharttColorTemp() {
     return templateChartcolourService
@@ -287,7 +287,7 @@ public class ChartColourHelper {
    * ランダムにシード値係数を発番
    * 
    * @param maxCnt 発番する組み合わせの個数
-   * @return List<Templatechartcolour> 発番した色の組み合わせ
+   * @return List<TemplateChartcolour> 発番した色の組み合わせ
    */
   public List<TemplateChartcolour> getRandomColourSeedCoef(int maxCnt) {
     List<TemplateChartcolour> ret = new ArrayList<>();

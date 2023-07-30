@@ -1,5 +1,6 @@
 package org.book.app.study.util;
 
+import java.util.List;
 import org.book.app.study.service.CodeLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,5 +35,16 @@ public class StudyCodeUtil {
    */
   public static String getShort(String listName, String code) {
     return codeLookupService.findOne(listName, code).getShortValue();
+  }
+
+  /**
+   * コードルックアップテーブルを検索し、ショートを取得(複数)
+   * 
+   * @param listName リストネーム
+   * @return ショート
+   */
+  public static List<String> getShorts(String listName) {
+    return codeLookupService.findByListName(listName).stream()
+        .map((codelkup) -> codelkup.getShortValue()).toList();
   }
 }
