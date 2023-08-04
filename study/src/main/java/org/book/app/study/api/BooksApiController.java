@@ -179,7 +179,7 @@ public class BooksApiController extends ApiController {
    */
   @RequestMapping(value = "/books/download", method = RequestMethod.POST)
   public ResponseEntity<StreamingResponseBody> download(@ModelAttribute BooksForm form) {
-    List<BooksColumn> columnList = booksHelper.listBooksToListBooksColumn(
+    List<BooksColumn> columnList = booksHelper.booksListToBooksColumnList(
         booksHelper.finByYearAndType(form.getBooksYear(), form.getBooksType()));
     String fileNameType =
         StudyStringUtil.isNullOrEmpty(form.getBooksYear()) ? "ALL" : form.getBooksYear();

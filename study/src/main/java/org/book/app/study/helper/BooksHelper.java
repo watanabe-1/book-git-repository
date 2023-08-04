@@ -518,11 +518,37 @@ public class BooksHelper {
    * @param target 対象 List<Books>
    * @return List<BooksColumn>
    */
-  public List<BooksColumn> listBooksToListBooksColumn(List<Books> target) {
+  public List<BooksColumn> booksListToBooksColumnList(List<Books> target) {
     return target
         .stream().map(e -> new BooksColumn(e.getBooksDate(), e.getBooksPlace(),
             e.getCatCodes().getCatName(), e.getBooksMethod(), e.getBooksAmmount()))
         .collect(Collectors.toList());
+  }
+
+  /**
+   * BooksListからBooksFormListに変換
+   * 
+   * @param target 変換対象
+   * @return BooksFormList
+   */
+  public List<BooksForm> booksListToBooksFormList(List<Books> target) {
+    return StudyBeanUtil.createInstanceFromBeanList(target, BooksForm.class,
+        books -> booksToBooksForm(books));
+  }
+
+  /**
+   * BooksからBooksFormに変換
+   * 
+   * @param target 変換対象
+   * @return BooksForm
+   */
+  public BooksForm booksToBooksForm(Books target) {
+    return StudyBeanUtil.createInstanceFromBean(target, BooksForm.class,
+        (books, booksForm) -> {
+          booksForm.setCatCodes(
+              categoryHelper.categoryToCategoryForm(books.getCatCodes()));
+          return booksForm;
+        });
   }
 
   /**

@@ -23,7 +23,7 @@ public class DefaultCategoryUi {
   private BooksType[] booksTypes;
 
   /**
-   * 家計簿タイプ
+   * カテゴリー
    */
   private List<TypeData> categories;
 

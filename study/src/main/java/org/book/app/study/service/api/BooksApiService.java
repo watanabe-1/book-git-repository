@@ -11,10 +11,12 @@ import org.book.app.study.dto.ui.books.HouseholdCalendarUi;
 import org.book.app.study.dto.ui.books.HouseholdChartUi;
 import org.book.app.study.dto.ui.books.HouseholdUi;
 import org.book.app.study.entity.Books;
+import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.enums.type.FileType;
 import org.book.app.study.form.BooksForm;
 import org.book.app.study.helper.BooksHelper;
+import org.book.app.study.helper.CategoryHelper;
 import org.book.app.study.service.BooksService;
 import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyFileUtil;
@@ -40,6 +42,11 @@ public class BooksApiService {
    * 家計簿 Helper
    */
   private final BooksHelper booksHelper;
+
+  /**
+   * カテゴリー Helper
+   */
+  private final CategoryHelper categoryHelper;
 
   /**
    * アップロード画面情報取得
@@ -95,11 +102,13 @@ public class BooksApiService {
     List<Books> booksByExpenses =
         booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode());
     List<Books> booksByIncome = booksHelper.findByMonthAndType(date, BooksType.INCOME.getCode());
+    ui.setDelete(DeleteFlag.DELETE);
+    ui.setCategories(categoryHelper.getCategoryTypeDataList());
     ui.setYear(StudyDateUtil.getYearOfStr(date));
     ui.setMonth(StudyDateUtil.getMonthOfStr(date));
     ui.setDay(StudyDateUtil.getDayOfStr(date));
-    ui.setExpensesList(booksByExpenses);
-    ui.setIncomeList(booksByIncome);
+    ui.setExpensesList(booksHelper.booksListToBooksFormList(booksByExpenses));
+    ui.setIncomeList(booksHelper.booksListToBooksFormList(booksByIncome));
     ui.setTab(tab);
 
     return ui;
@@ -142,7 +151,8 @@ public class BooksApiService {
         .filter(col -> Objects.equals(StudyDateUtil.getYearMonth(col.getDate()),
             StudyDateUtil.getYearMonth(date)))
         .toList());
-    ui.setAmountList(booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode()));
+    ui.setAmountList(booksHelper.booksListToBooksFormList(
+        booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode())));
 
     return ui;
   }

@@ -2,13 +2,16 @@ package org.book.app.study.form;
 
 import java.io.Serializable;
 import java.util.Date;
-import jakarta.validation.constraints.NotBlank;
 import org.book.app.common.validation.UploadFileMaxSize;
 import org.book.app.common.validation.UploadFileMediaType;
 import org.book.app.common.validation.UploadFileNotEmpty;
 import org.book.app.common.validation.UploadFileRequired;
+import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyFileUtil;
 import org.springframework.web.multipart.MultipartFile;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
@@ -16,6 +19,12 @@ import lombok.Data;
  */
 @Data
 public class BooksForm implements Serializable, Form {
+
+  /**
+   * 日付(収入日、購入日)フォーマットパターン
+   */
+  @JsonProperty("booksDateFormat")
+  private final String BOOKS_DATE_FORMAT = StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH;
 
   /**
    * アップロードされたファイル
@@ -28,19 +37,9 @@ public class BooksForm implements Serializable, Form {
   private MultipartFile booksFile;
 
   /**
-   * シリアルキー
-   */
-  private String serialKey;
-
-  /**
    * 家計簿ID
    */
   private String booksId;
-
-  /**
-   * ユーザーID
-   */
-  private String userId;
 
   /**
    * 帳簿の種類(収入、支出を選ぶ)
@@ -51,6 +50,8 @@ public class BooksForm implements Serializable, Form {
   /**
    * 日付(収入日、購入日)
    */
+  @JsonFormat(pattern = BOOKS_DATE_FORMAT,
+      timezone = StudyDateUtil.TIMEZONE_ASIA_TOKYO)
   private Date booksDate;
 
   /**
@@ -74,29 +75,14 @@ public class BooksForm implements Serializable, Form {
   private Integer booksAmmount;
 
   /**
-   * 登録日時
-   */
-  private Date insDate;
-
-  /**
-   * 登録ユーザー
-   */
-  private String insUser;
-
-  /**
-   * 更新日時
-   */
-  private Date updDate;
-
-  /**
-   * 更新ユーザー
-   */
-  private String updUser;
-
-  /**
    * 年
    */
   private String booksYear;
+
+  /**
+   * カテゴリークラスの要素(親1対子1).
+   */
+  private CategoryForm catCodes;
 
   /**
    * 画面：日付け

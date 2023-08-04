@@ -3,17 +3,16 @@ package org.book.app.study.helper;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import org.book.app.study.dto.list.DefaultCategoryFormList;
 import org.book.app.study.entity.DefaultCategory;
 import org.book.app.study.enums.dbcode.DefaultCategoryTarget;
 import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.form.DefaultCategoryForm;
 import org.book.app.study.service.DefaultCategoryService;
+import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyCodeUtil;
 import org.book.app.study.util.StudyMessageUtil;
 import org.book.app.study.util.StudyUtil;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +30,28 @@ public class DefaultCategoryHelper {
   private final DefaultCategoryService defaultCategoryService;
 
   /**
+   * DefaultCategoryListからDefaultCategoryFormListに変換
+   * 
+   * @param target 変換対象
+   * @return DefaultCategoryFormList
+   */
+  public List<DefaultCategoryForm> defaultCategoryListToDefaultCategoryFormList(
+      List<DefaultCategory> target) {
+    return StudyBeanUtil.createInstanceFromBeanList(target, DefaultCategoryForm.class,
+        defCat -> defaultCategoryToDefaultCategoryForm(defCat));
+  }
+
+  /**
+   * DefaultCategoryからDefaultCategoryFormに変換
+   * 
+   * @param target 変換対象
+   * @return DefaultCategoryForm
+   */
+  public DefaultCategoryForm defaultCategoryToDefaultCategoryForm(DefaultCategory target) {
+    return StudyBeanUtil.createInstanceFromBean(target, DefaultCategoryForm.class);
+  }
+
+  /**
    * デフォルトカテゴリーフォームリストデータの取得
    * 
    * @return デフォルトカテゴリーフォームリストデータ
@@ -38,15 +59,7 @@ public class DefaultCategoryHelper {
   public DefaultCategoryFormList getDefaultCategoryFormList() {
     DefaultCategoryFormList defCatFromList = new DefaultCategoryFormList();
     defCatFromList.setDefCatDataList(
-        getDefaultCategoryList()
-            .stream()
-            .map(defCat -> {
-              DefaultCategoryForm form = new DefaultCategoryForm();
-              // 同名のフィールドにセット 引数1から2へ
-              BeanUtils.copyProperties(defCat, form);
-              return form;
-            })
-            .collect(Collectors.toList()));
+        defaultCategoryListToDefaultCategoryFormList(getDefaultCategoryList()));
 
     return defCatFromList;
   }

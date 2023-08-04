@@ -1,16 +1,13 @@
 package org.book.app.study.form;
 
 import java.io.Serializable;
-import java.util.Date;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import org.springframework.web.multipart.MultipartFile;
 import org.book.app.common.validation.UploadFileMaxSize;
 import org.book.app.common.validation.UploadFileMediaType;
 import org.book.app.common.validation.UploadFileNotEmpty;
-import org.book.app.study.entity.Entity;
-import org.book.app.study.entity.Image;
 import org.book.app.study.util.StudyStringUtil;
+import org.springframework.web.multipart.MultipartFile;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,10 +17,7 @@ import lombok.Setter;
  *
  */
 @Data
-public class CategoryForm implements Serializable, Form, Entity {
-
-  /* シリアルキー. */
-  private String serialKey;
+public class CategoryForm implements Serializable, Form {
 
   /* カテゴリーコード. */
   @NotBlank
@@ -53,18 +47,6 @@ public class CategoryForm implements Serializable, Form, Entity {
   /* アクティブフラグ. */
   private String active;
 
-  /* 挿入日時. */
-  private Date insDate;
-
-  /* 挿入ユーザー. */
-  private String insUser;
-
-  /* 更新日時. */
-  private Date updDate;
-
-  /* 更新ユーザー. */
-  private String updUser;
-
   /**
    * ssr判定
    */
@@ -77,30 +59,14 @@ public class CategoryForm implements Serializable, Form, Entity {
   private MultipartFile catIcon;
 
   /* 画像クラスの要素(親1対子1). */
-  private Image imgIds;
+  @Getter
+  @Setter
+  private ImageForm imgIds;
 
   /* 削除フラグ. */
   @Getter
   @Setter
   private String delete;
-
-  /**
-   * シリアルキーを取得します.
-   * 
-   * @return シリアルキー
-   */
-  public String getSerialKey() {
-    return serialKey;
-  }
-
-  /**
-   * シリアルキーを設定します.
-   * 
-   * @param serialKey シリアルキー
-   */
-  public void setSerialKey(String serialKey) {
-    this.serialKey = serialKey;
-  }
 
   /**
    * カテゴリーコードを取得します.
@@ -251,78 +217,6 @@ public class CategoryForm implements Serializable, Form, Entity {
   }
 
   /**
-   * 挿入日時を取得します.
-   * 
-   * @return 挿入日時
-   */
-  public Date getInsDate() {
-    return insDate;
-  }
-
-  /**
-   * 挿入日時を設定します.
-   * 
-   * @param insDate 挿入日時
-   */
-  public void setInsDate(Date insDate) {
-    this.insDate = insDate;
-  }
-
-  /**
-   * 挿入ユーザーを取得します.
-   * 
-   * @return 挿入ユーザー
-   */
-  public String getInsUser() {
-    return insUser;
-  }
-
-  /**
-   * 挿入ユーザーを設定します.
-   * 
-   * @param insUser 挿入ユーザー
-   */
-  public void setInsUser(String insUser) {
-    this.insUser = insUser;
-  }
-
-  /**
-   * 更新日時を取得します.
-   * 
-   * @return 更新日時
-   */
-  public Date getUpdDate() {
-    return updDate;
-  }
-
-  /**
-   * 更新日時を設定します.
-   * 
-   * @param updDate 更新日時
-   */
-  public void setUpdDate(Date updDate) {
-    this.updDate = updDate;
-  }
-
-  /**
-   * 更新ユーザーを取得します.
-   * 
-   * @return 更新ユーザー
-   */
-  public String getUpdUser() {
-    return updUser;
-  }
-
-  /**
-   * 更新ユーザーを設定します.
-   * 
-   * @param updUser 更新ユーザー
-   */
-  public void setUpdUser(String updUser) {
-    this.updUser = updUser;
-  }
-
-  /**
    * Iconを取得します.
    * 
    * @return Icon
@@ -338,24 +232,6 @@ public class CategoryForm implements Serializable, Form, Entity {
    */
   public void setCatIcon(MultipartFile catIcon) {
     this.catIcon = catIcon;
-  }
-
-  /**
-   * 画像クラスの要素(親1対子1)を取得します.
-   * 
-   * @return Icon
-   */
-  public Image getImgIds() {
-    return imgIds;
-  }
-
-  /**
-   * 画像クラスの要素(親1対子1)を設定します.
-   * 
-   * @param Image imgIds
-   */
-  public void setImgIds(Image imgIds) {
-    this.imgIds = imgIds;
   }
 
 }

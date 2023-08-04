@@ -44,10 +44,10 @@
               <th>画像タイプ</th>
               <th>画像ID</th>
               <th>アクティブフラグ</th>
-              <th hidden>挿入日時</th>
+              <!-- <th hidden>挿入日時</th>
               <th hidden>挿入ユーザー</th>
               <th hidden>更新日時</th>
-              <th hidden>更新ユーザー</th>
+              <th hidden>更新ユーザー</th> -->
               <th>画像</th>
             </tr>
           </thead>
@@ -127,7 +127,7 @@
                   th:field="*{catDataList[__${st.index}__].active}"
                 />
               </td>
-              <td class="center" hidden>
+              <!-- <td class="center" hidden>
                 <label
                   th:text="${#dates.format(cat.updDate, 'yyyy/MM/dd')}"
                 ></label>
@@ -142,7 +142,7 @@
               </td>
               <td hidden>
                 <label th:text="${cat.insUser}"></label>
-              </td>
+              </td> -->
               <td>
                 <img
                   th:src="@{${cat.imgIds.imgPath + '/' + cat.imgIds.imgName}}"

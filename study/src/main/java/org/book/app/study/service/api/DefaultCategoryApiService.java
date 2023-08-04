@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 public class DefaultCategoryApiService {
 
   /**
-   * ファイル保存用 Helper
+   * カテゴリー Helper
    */
   private final CategoryHelper categoryHelper;
 

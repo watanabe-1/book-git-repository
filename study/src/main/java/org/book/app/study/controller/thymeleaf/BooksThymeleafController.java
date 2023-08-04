@@ -118,7 +118,7 @@ public class BooksThymeleafController {
 
     String fileNameType =
         StudyStringUtil.isNullOrEmpty(form.getBooksYear()) ? "ALL" : form.getBooksYear();
-    List<BooksColumn> columnList = booksHelper.listBooksToListBooksColumn(
+    List<BooksColumn> columnList = booksHelper.booksListToBooksColumnList(
         booksHelper.finByYearAndType(form.getBooksYear(), form.getBooksType()));
 
     model.addObject(StudyModelUtil.MODEL_KEY_FILE_NAME, String.format("家計簿_%s_%s",

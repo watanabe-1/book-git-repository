@@ -1,7 +1,9 @@
 package org.book.app.study.dto.ui.books;
 
 import java.util.List;
-import org.book.app.study.entity.Books;
+import org.book.app.study.dto.data.TypeData;
+import org.book.app.study.enums.flag.DeleteFlag;
+import org.book.app.study.form.BooksForm;
 import lombok.Data;
 
 /**
@@ -9,16 +11,25 @@ import lombok.Data;
  */
 @Data
 public class HouseholdUi {
+  /**
+   * デリートフラグ
+   */
+  private DeleteFlag delete;
+
+  /**
+   * カテゴリー
+   */
+  private List<TypeData> categories;
 
   /**
    * 支出データ
    */
-  private List<Books> expensesList;
+  private List<BooksForm> expensesList;
 
   /**
    * 収入データ
    */
-  private List<Books> incomeList;
+  private List<BooksForm> incomeList;
 
   /**
    * 対象年

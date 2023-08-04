@@ -1,11 +1,8 @@
 package org.book.app.study.service;
 
 import java.util.List;
-import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.entity.Category;
-import org.book.app.study.form.CategoryForm;
 import org.book.app.study.mapper.CategoryMapper;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -109,18 +106,8 @@ public class CategoryService {
    * 
    * @return 検索結果(複数行)
    */
-  public CategoryFormList findAlljoinImage() {
-    CategoryFormList catDatalist = new CategoryFormList();
-
-    // カテゴリー情報を取得しformに変換しセット
-    catDatalist.setCatDataList(categoryMapper.findAllJoinImage().stream().map(cat -> {
-      CategoryForm data = new CategoryForm();
-      // 同名のフィールドにセット 引数1から2へ
-      BeanUtils.copyProperties(cat, data);
-      return data;
-    }).toList());
-
-    return catDatalist;
+  public List<Category> findAlljoinImage() {
+    return categoryMapper.findAllJoinImage();
   }
 
   /**

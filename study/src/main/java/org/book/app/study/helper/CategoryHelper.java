@@ -40,6 +40,10 @@ public class CategoryHelper {
   private final UploadHelper uploadHelper;
 
   /**
+   * 画像 Helper
+   */
+  private final ImageHelper imageHelper;
+  /**
    * カテゴリー情報保存用リスト
    */
   private List<Category> catList = new ArrayList<Category>();
@@ -140,6 +144,44 @@ public class CategoryHelper {
     return categoryService.findAll().stream()
         .map(cat -> new TypeData(cat.getCatCode(), cat.getCatName()))
         .collect(Collectors.toList());
+  }
+
+  /**
+   * デフォルトカテゴリーフォームリストデータの取得
+   * 
+   * @return デフォルトカテゴリーフォームリストデータ
+   */
+  public CategoryFormList getCategoryFormList() {
+    CategoryFormList catFromList = new CategoryFormList();
+    catFromList.setCatDataList(
+        categoryListToCategoryFormList(categoryService.findAlljoinImage()));
+
+    return catFromList;
+  }
+
+  /**
+   * CategoryListからCategiryFormListに変換
+   * 
+   * @param target 変換対象
+   * @return CategoryFormList
+   */
+  public List<CategoryForm> categoryListToCategoryFormList(List<Category> target) {
+    return StudyBeanUtil.createInstanceFromBeanList(target, CategoryForm.class,
+        cat -> categoryToCategoryForm(cat));
+  }
+
+  /**
+   * CategoryからCategiryFormに変換
+   * 
+   * @param target 変換対象
+   * @return CategoryForm
+   */
+  public CategoryForm categoryToCategoryForm(Category target) {
+    return StudyBeanUtil.createInstanceFromBean(target, CategoryForm.class,
+        (cat, catForm) -> {
+          catForm.setImgIds(imageHelper.imageToImageForm(cat.getImgIds()));
+          return catForm;
+        });
   }
 
   /**

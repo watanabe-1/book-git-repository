@@ -12,6 +12,7 @@ import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.enums.type.CategoryType;
 import org.book.app.study.enums.type.ImageType;
 import org.book.app.study.form.CategoryForm;
+import org.book.app.study.form.ImageForm;
 import org.book.app.study.helper.CategoryHelper;
 import org.book.app.study.helper.UploadHelper;
 import org.book.app.study.service.CategoryService;
@@ -125,7 +126,7 @@ public class CategoryThymeleafController {
       String noImgCd = StudyUtil.getNoImageCode();
       Image img = imageService.findOne(noImgCd);
       form.setImgId(noImgCd);
-      form.setImgIds(img);
+      form.setImgIds(StudyBeanUtil.createInstanceFromBean(img, ImageForm.class));
     }
     return model;
   }
@@ -179,7 +180,7 @@ public class CategoryThymeleafController {
     model.setViewName("category/index");
     // 画面にセット
     addCommonAttribute(model);
-    model.addObject("catListParam", categoryService.findAlljoinImage());
+    model.addObject("catListParam", categoryHelper.getCategoryFormList());
     model.addObject("imgList", StudyStringUtil.objectToJsonStr(imageService.findAll()));
 
     return model;

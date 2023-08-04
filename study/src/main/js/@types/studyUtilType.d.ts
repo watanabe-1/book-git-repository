@@ -11,16 +11,11 @@ export type Syukujits = {
  * 画像パス
  */
 export type Image = {
-  serialKey: string;
   imgId: string;
   imgType: string;
   imgPath: string;
   imgName: string;
   note: string;
-  insDate: Date;
-  insUser: string;
-  updDate: Date;
-  updUser: string;
   catIcon: File;
   imgIds: Image;
 };
@@ -29,7 +24,6 @@ export type Image = {
  * カテゴリー
  */
 export type Category = {
-  serialKey: string;
   catCode: string;
   catName: string;
   catType: string;
@@ -37,10 +31,6 @@ export type Category = {
   imgType: string;
   imgId: string;
   active: string;
-  insDate: Date;
-  insUser: string;
-  updDate: Date;
-  updUser: string;
   catIcon: File;
   imgIds: Image;
   delete: string;
@@ -75,9 +65,7 @@ export type DefaultCategoryFormList = {
  * 家計簿
  */
 export type Books = {
-  serialKey: string;
   booksId: string;
-  userId: string;
   booksType: string;
   booksDate: string;
   booksDateFormat: string;
@@ -85,10 +73,6 @@ export type Books = {
   catCode: string;
   booksMethod: string;
   booksAmmount: number;
-  insDate: Date;
-  insUser: string;
-  updDate: Date;
-  updUser: string;
   catCodes: Category;
   booksFile: File;
 };
