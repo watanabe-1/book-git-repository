@@ -14,12 +14,16 @@ import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/table';
 
 import ListTable from './ListTable';
-import { Syukujits, Books } from '../../../../../@types/studyUtilType';
+import { Syukujits } from '../../../../../@types/studyUtilType';
 import { createDate, parseDate } from '../../../../../study/util/studyDateUtil';
 import { isObjEmpty } from '../../../../../study/util/studyUtil';
-import { useHouseholdCalendarInfoSWR } from '../../../../hooks/useBooks';
+import {
+  useHouseholdCalendarInfoSWR,
+  useHouseholdDataSWR,
+} from '../../../../hooks/useBooks';
 import { useCommonInfoSWR } from '../../../../hooks/useCommon';
-import { buildParam } from '../functions/param';
+import { buildDataParam, buildInfoParam } from '../functions/param';
+import { useDateParam } from '../hooks/useParam';
 
 import '../../../../../../css/view/calendar/calendar.css';
 
@@ -28,7 +32,6 @@ import '../../../../../../css/view/calendar/calendar.css';
  */
 export type HouseholdCalendarData = {
   syukujitsuList: Syukujits[];
-  amountList: Books[];
 };
 
 /**
@@ -41,17 +44,24 @@ type CalendarProps = {
   month: number;
   /** 日 */
   day: number;
+  /** 家計簿タイプ */
+  booksType: string;
 };
 
-const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
+const Calendar: React.FC<CalendarProps> = ({ year, month, day, booksType }) => {
   const { data: commonInfo } = useCommonInfoSWR();
+  const paramDate = useDateParam();
+  const { data: booksFormList } = useHouseholdDataSWR(
+    buildDataParam(paramDate, commonInfo.dateFormat, booksType)
+  );
   const date = createDate(year, month, day);
   const [selectDay, setSelectDay] = useState(date);
   const { data: calendarData, initScript } = useHouseholdCalendarInfoSWR(
-    buildParam(date, commonInfo.dateFormat)
+    buildInfoParam(date, commonInfo.dateFormat)
   );
   const [, startTransition] = useTransition();
-  const { syukujitsuList, amountList } = calendarData;
+  const { syukujitsuList } = calendarData;
+  const amountList = booksFormList.booksDataList;
 
   // console.log('calendardata');
   // console.log(calendarData);
@@ -340,7 +350,10 @@ const Calendar: React.FC<CalendarProps> = ({ year, month, day }) => {
         </Row>
         <Row>
           <Col sm="12">
-            <ListTable booksList={getSelectedamountByDayList()} />
+            <ListTable
+              booksList={getSelectedamountByDayList()}
+              booksType={booksType}
+            />
           </Col>
         </Row>
       </Container>

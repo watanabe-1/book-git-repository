@@ -78,6 +78,13 @@ export type Books = {
 };
 
 /**
+ * 家計簿リスト
+ */
+export type BooksFormList = {
+  booksDataList: Books[];
+};
+
+/**
  * タイプ
  */
 export type Type = {
@@ -142,10 +149,16 @@ export type BooksConvertUi = {
 export type HouseholdUi = {
   expensesList: Books[];
   incomeList: Books[];
+  categoryList: Category[];
+  imageList: Image[];
   year: string;
   month: string;
   day: string;
   tab: string;
+  delete: Flag;
+  categoryTypes: Type[];
+  booksTypeExpenses: string;
+  booksTypeIncome: string;
 };
 
 /**

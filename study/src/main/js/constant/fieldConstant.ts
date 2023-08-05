@@ -66,6 +66,7 @@ export const fieldConst = {
     UPD_USER: 'updUser',
     BOOKS_FILE: 'booksFile',
     BOOKS_YEAR: 'booksYear',
+    DELETE: 'delete',
   },
 
   /**

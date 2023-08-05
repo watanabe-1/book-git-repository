@@ -6,6 +6,7 @@ import org.book.app.study.dto.file.BooksColumn;
 import org.book.app.study.entity.Books;
 import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.form.BooksForm;
+import org.book.app.study.form.BooksInputForm;
 import org.book.app.study.helper.BooksHelper;
 import org.book.app.study.service.BooksService;
 import org.book.app.study.util.StudyDateUtil;
@@ -13,6 +14,7 @@ import org.book.app.study.util.StudyModelUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
 import org.book.app.study.view.DownloadCsvView;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -64,12 +66,14 @@ public class BooksThymeleafController {
    * @return 画面表示用モデル
    */
   @RequestMapping(value = "/thymeleaf/books/result", method = RequestMethod.POST)
-  public ModelAndView result(@ModelAttribute @Validated BooksForm form, BindingResult result,
+  public ModelAndView result(@ModelAttribute @Validated BooksInputForm form, BindingResult result,
       ModelAndView model) {
+    BooksForm booksForm = new BooksForm();
+    BeanUtils.copyProperties(form, booksForm);
 
     // エラーがあったら画面に返す
     if (result.hasErrors()) {
-      return input(form, model);
+      return input(booksForm, model);
     }
 
     model.setViewName("books/result");

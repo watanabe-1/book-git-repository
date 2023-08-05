@@ -49,7 +49,7 @@ public class BooksApi extends CommonApi {
   /**
    * 家計簿確認画面情報取得
    * 
-   * @param form booksForm
+   * @param date 日付
    * @return 画面情報
    */
   public String getHouseholdInfo(LocalDate date) {
@@ -57,9 +57,21 @@ public class BooksApi extends CommonApi {
   }
 
   /**
+   * 家計簿確認画面情報取得
+   * 
+   * @param date 日付
+   * @param booksType 家計簿タイプ
+   * @return 画面情報
+   */
+  public String getHouseholdListData(LocalDate date, String booksType) {
+    return StudyStringUtil
+        .objectToJsonStr(booksApiController.getHouseholdListData(date, booksType));
+  }
+
+  /**
    * 家計簿確認画面図情報取得
    * 
-   * @param form 送信されたデータ
+   * @param date 日付
    * @return 画面情報
    */
   public String getHouseholdChartInfo(LocalDate date) {
@@ -69,7 +81,7 @@ public class BooksApi extends CommonApi {
   /**
    * 家計簿確認画面カレンダー情報取得
    * 
-   * @param form 送信されたデータ
+   * @param date 日付
    * @return 画面情報
    */
   public String getHouseholdCalendarInfo(LocalDate date) {

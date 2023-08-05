@@ -23,7 +23,7 @@
     update BOOKS set BOOKS_ID = #{booksId}, USER_ID = #{userId}, BOOKS_TYPE = #{booksType}, BOOKS_DATE = #{booksDate}, BOOKS_PLACE = #{booksPlace}, CAT_CODE = #{catCode}, BOOKS_METHOD = #{booksMethod}, BOOKS_AMMOUNT = #{booksAmmount}, UPD_DATE = #{updDate}, UPD_USER = #{updUser}
 	</update>
 	<update id="updateOne">
-    update BOOKS set BOOKS_ID = #{boo.booksId}, USER_ID = #{boo.userId}, BOOKS_TYPE = #{boo.booksType}, BOOKS_DATE = #{boo.booksDate}, BOOKS_PLACE = #{boo.booksPlace}, CAT_CODE = #{boo.catCode}, BOOKS_METHOD = #{boo.booksMethod}, BOOKS_AMMOUNT = #{boo.booksAmmount}, UPD_DATE = #{boo.updDate}, UPD_USER = #{boo.updUser}
+    update BOOKS set BOOKS_TYPE = #{boo.booksType}, BOOKS_DATE = #{boo.booksDate}, BOOKS_PLACE = #{boo.booksPlace}, CAT_CODE = #{boo.catCode}, BOOKS_METHOD = #{boo.booksMethod}, BOOKS_AMMOUNT = #{boo.booksAmmount}, UPD_DATE = #{boo.updDate}, UPD_USER = #{boo.updUser}
       where BOOKS_ID = #{booksIdWhere} AND USER_ID = #{userIdWhere}
 	</update>
 	<delete id="deleteAll">

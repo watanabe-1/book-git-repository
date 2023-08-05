@@ -7,12 +7,11 @@ import org.apache.commons.io.FilenameUtils;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.dto.ui.category.CategoryUi;
 import org.book.app.study.entity.Category;
-import org.book.app.study.entity.Image;
 import org.book.app.study.form.CategoryForm;
+import org.book.app.study.form.ImageForm;
 import org.book.app.study.helper.CategoryHelper;
 import org.book.app.study.helper.UploadHelper;
 import org.book.app.study.service.CategoryService;
-import org.book.app.study.service.ImageService;
 import org.book.app.study.service.api.CategoryApiService;
 import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyUtil;
@@ -58,11 +57,6 @@ public class CategoryApiController extends ApiController {
    * カテゴリー情報 Service
    */
   private final CategoryService categoryService;
-
-  /**
-   * 画像情報 Service
-   */
-  private final ImageService imageService;
 
   /**
    * 画面情報取得
@@ -163,8 +157,8 @@ public class CategoryApiController extends ApiController {
    */
   @RequestMapping(value = "/category/imageList", method = RequestMethod.GET)
   @ResponseBody
-  public List<Image> getImageList() {
-    return imageService.findAll();
+  public List<ImageForm> getImageList() {
+    return categoryHelper.getCategoryImageList();
   }
 
   /**

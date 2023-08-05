@@ -18,9 +18,12 @@ import {
   createDate,
 } from '../../../../../study/util/studyDateUtil';
 import MonthPickr from '../../../../components/elements/pickr/MonthPickr';
-import { useHouseholdInfoSWR } from '../../../../hooks/useBooks';
+import {
+  useHouseholdDataSWR,
+  useHouseholdInfoSWR,
+} from '../../../../hooks/useBooks';
 import { useCommonInfoSWR } from '../../../../hooks/useCommon';
-import { buildParam } from '../functions/param';
+import { buildDataParam, buildInfoParam } from '../functions/param';
 import { useDateParam, useTabParam } from '../hooks/useParam';
 
 /**
@@ -36,8 +39,16 @@ const TabContainer = () => {
   const { data: commonInfo, initScript: initCommonScript } = useCommonInfoSWR();
   const paramDate = useDateParam();
   const { data: info, initScript } = useHouseholdInfoSWR(
-    buildParam(paramDate, commonInfo.dateFormat)
+    buildInfoParam(paramDate, commonInfo.dateFormat)
   );
+  const { data: expensesList, initScript: initExpensesListScript } =
+    useHouseholdDataSWR(
+      buildDataParam(paramDate, commonInfo.dateFormat, info.booksTypeExpenses)
+    );
+  const { data: incomeList, initScript: initIncomeListScript } =
+    useHouseholdDataSWR(
+      buildDataParam(paramDate, commonInfo.dateFormat, info.booksTypeIncome)
+    );
   const navigate = useNavigate();
   const location = useLocation();
   const paramTab = useTabParam();
@@ -105,13 +116,12 @@ const TabContainer = () => {
       }).toString(),
     });
   };
-
   // console.log(info);
   // console.log(tab);
   // console.log(date);
 
-  const sumAmountByExpenses = sumAmount(info.expensesList);
-  const sumAmountByIncome = sumAmount(info.incomeList);
+  const sumAmountByExpenses = sumAmount(expensesList.booksDataList);
+  const sumAmountByIncome = sumAmount(incomeList.booksDataList);
   const differenceSumAmount = sumAmountByIncome - sumAmountByExpenses;
 
   // tabとtabで呼び出す画面の間に共通の項目を表示したいためTabsは使用せずカスタムtabを使用
@@ -170,10 +180,10 @@ const TabContainer = () => {
         </Row>
         <Tab.Content>
           <Tab.Pane eventKey="tab1">
-            <ListTable booksList={info.expensesList} />
+            <ListTable booksType={info.booksTypeExpenses} />
           </Tab.Pane>
           <Tab.Pane eventKey="tab2">
-            <ListTable booksList={info.incomeList} />
+            <ListTable booksType={info.booksTypeIncome} />
           </Tab.Pane>
           <Tab.Pane eventKey="tab3">
             <Chart year={parseInt(info.year)} month={parseInt(info.month)} />
@@ -183,11 +193,14 @@ const TabContainer = () => {
               year={parseInt(info.year)}
               month={parseInt(info.month)}
               day={parseInt(info.day)}
+              booksType={info.booksTypeExpenses}
             />
           </Tab.Pane>
         </Tab.Content>
         {initScript}
         {initCommonScript}
+        {initExpensesListScript}
+        {initIncomeListScript}
       </Tab.Container>
     </>
   );

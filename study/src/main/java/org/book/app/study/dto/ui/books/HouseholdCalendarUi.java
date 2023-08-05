@@ -2,7 +2,6 @@ package org.book.app.study.dto.ui.books;
 
 import java.util.List;
 import org.book.app.study.dto.file.SyukujitsuColumn;
-import org.book.app.study.form.BooksForm;
 import lombok.Data;
 
 /**
@@ -15,11 +14,4 @@ public class HouseholdCalendarUi {
    * 祝日一覧
    */
   private List<SyukujitsuColumn> syukujitsuList;
-
-  /**
-   * 日付けごとの料金一覧
-   */
-  private List<BooksForm> amountList;
-
-
 }

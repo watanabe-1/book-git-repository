@@ -11,7 +11,7 @@ import BarChart from '../../../../components/elements/chart/BarChart';
 import DoughnutChart from '../../../../components/elements/chart/DoughnutChart';
 import { useHouseholdChartInfoSWR } from '../../../../hooks/useBooks';
 import { useCommonInfoSWR } from '../../../../hooks/useCommon';
-import { buildParam } from '../functions/param';
+import { buildInfoParam } from '../functions/param';
 
 /**
  * 家計簿図用データ
@@ -36,7 +36,7 @@ const Chart: React.FC<ChartProps> = ({ year, month }) => {
   const { data: commonInfo } = useCommonInfoSWR();
   const date = createDate(year, month);
   const { data: chartData, initScript } = useHouseholdChartInfoSWR(
-    buildParam(date, commonInfo.dateFormat)
+    buildInfoParam(date, commonInfo.dateFormat)
   );
   const { monthCategory, monthMethod, yearAll } = chartData;
 

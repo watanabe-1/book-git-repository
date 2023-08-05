@@ -3,6 +3,7 @@ import {
   BooksUi,
   BooksConvertUi,
   HouseholdUi,
+  BooksFormList,
 } from '../../@types/studyUtilType';
 import { urlConst } from '../../constant/urlConstant';
 import { parseDate } from '../../study/util/studyDateUtil';
@@ -33,18 +34,29 @@ export const useUploadtInfoSWR = () => {
   );
 };
 
+const createParamdate = (token: Record<string, string>) =>
+  token.date ? parseDate(token.date, token.dateFormat) : null;
+
 export const useHouseholdInfoSWR = (token: Record<string, string>) => {
   //console.log('call useHouseholdInfoSWR');
   return useCommonSWR<HouseholdUi>(
-    (api) => api.getHouseholdInfo(parseDate(token.date, token.dateFormat)),
+    (api) => api.getHouseholdInfo(createParamdate(token)),
     [urlConst.books.HOUSEHOLD_INFO, token]
+  );
+};
+
+export const useHouseholdDataSWR = (token: Record<string, string>) => {
+  //console.log('call useHouseholdDataSWR');
+  return useCommonSWR<BooksFormList>(
+    (api) => api.getHouseholdListData(createParamdate(token), token.booksType),
+    [urlConst.books.LISTDATA, token]
   );
 };
 
 export const useHouseholdChartInfoSWR = (token: Record<string, string>) => {
   //console.log('call useHouseholdChartInfoSWR');
   return useCommonSWR<HouseholdChartData>(
-    (api) => api.getHouseholdChartInfo(parseDate(token.date, token.dateFormat)),
+    (api) => api.getHouseholdChartInfo(createParamdate(token)),
     [urlConst.books.HOUSEHOLD_CHART_INFO, token]
   );
 };
@@ -52,8 +64,7 @@ export const useHouseholdChartInfoSWR = (token: Record<string, string>) => {
 export const useHouseholdCalendarInfoSWR = (token?: Record<string, string>) => {
   //console.log('call useHouseholdCalendarInfoSWR');
   return useCommonSWR<HouseholdCalendarData>(
-    (api) =>
-      api.getHouseholdCalendarInfo(parseDate(token.date, token.dateFormat)),
+    (api) => api.getHouseholdCalendarInfo(createParamdate(token)),
     [urlConst.books.HOUSEHOLD_CALENDAR_INFO, token]
   );
 };

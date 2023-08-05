@@ -229,7 +229,7 @@ public class StudyStringUtil {
   public static <T> List<T> csvStrToList(String str, Class<T> pojoType,
       boolean isHeader) {
     return strToListByCsvMapper(str, pojoType,
-        StudyStringUtil.SEPARATOR_BY_CSV, isHeader, true);
+        SEPARATOR_BY_CSV, isHeader, true);
   }
 
   /**
@@ -243,7 +243,7 @@ public class StudyStringUtil {
   public static <T> List<T> tsvStrToList(String str, Class<T> pojoType,
       boolean isHeader) {
     return strToListByCsvMapper(str, pojoType,
-        StudyStringUtil.SEPARATOR_BY_TSV, isHeader, false);
+        SEPARATOR_BY_TSV, isHeader, false);
   }
 
   /**

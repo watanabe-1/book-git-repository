@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import org.book.app.study.dto.file.BooksColumn;
 import org.book.app.study.dto.file.SuicaColumn;
+import org.book.app.study.dto.list.BooksFormList;
 import org.book.app.study.dto.ui.books.BooksConvertUi;
 import org.book.app.study.dto.ui.books.BooksUi;
 import org.book.app.study.dto.ui.books.HouseholdCalendarUi;
@@ -16,6 +17,7 @@ import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.enums.type.FileType;
 import org.book.app.study.form.BooksConvertForm;
 import org.book.app.study.form.BooksForm;
+import org.book.app.study.form.BooksInputForm;
 import org.book.app.study.helper.BooksConvertHelper;
 import org.book.app.study.helper.BooksHelper;
 import org.book.app.study.helper.DownloadHelper;
@@ -108,7 +110,7 @@ public class BooksApiController extends ApiController {
   /**
    * 家計簿確認画面情報取得
    * 
-   * @param form booksForm
+   * @param date 日付
    * @return json(家計簿確認画面情報取得)
    */
   @RequestMapping(value = "/books/householdInfo", method = RequestMethod.GET)
@@ -121,7 +123,7 @@ public class BooksApiController extends ApiController {
   /**
    * 家計簿確認画面図情報取得
    * 
-   * @param form booksForm
+   * @param date 日付
    * @return json(家計簿確認画面図情報取得)
    */
   @RequestMapping(value = "/books/householdChartInfo", method = RequestMethod.GET)
@@ -134,7 +136,7 @@ public class BooksApiController extends ApiController {
   /**
    * 家計簿確認画面カレンダー情報取得
    * 
-   * @param form booksForm
+   * @param date 日付
    * @return json(家計簿確認画面カレンダー情報取得)
    */
   @RequestMapping(value = "/books/householdCalendarInfo", method = RequestMethod.GET)
@@ -142,6 +144,42 @@ public class BooksApiController extends ApiController {
   public HouseholdCalendarUi getHouseholdCalendarInfo(
       @RequestParam(name = "date", required = false) LocalDate date) {
     return booksApiService.getHouseholdCalendarInfo(date);
+  }
+
+  /**
+   * リスト画面情報取得
+   * 
+   * @param date 日付
+   * @param booksType 家計簿タイプ
+   * @return json(家計簿データの一覧)
+   */
+  @RequestMapping(value = "/books/listdata", method = RequestMethod.GET)
+  @ResponseBody
+  public BooksFormList getHouseholdListData(
+      @RequestParam(name = "date", required = false) LocalDate date,
+      @RequestParam(name = "booksType") String booksType) {
+    return booksApiService.getHouseholdData(date, booksType);
+  }
+
+  /**
+   * 家計簿一覧更新
+   * 
+   * @param booksListParam 送信されたデータ
+   * @param result エラーチェック]-+結果
+   * @param model モデル
+   * @return json(カテゴリーの一覧)
+   */
+  @RequestMapping(value = "/books/listdataUpdate", method = RequestMethod.POST)
+  @ResponseBody
+  public BooksFormList listUpdate(
+      @ModelAttribute @Validated BooksFormList booksListParam,
+      BindingResult result, ModelAndView model) throws BindException {
+    throwBindExceptionIfHasErrors(result);
+
+    // 家計簿情報の更新
+    booksHelper.updatBooks(booksListParam);
+
+    return getHouseholdListData(booksListParam.getDate(), booksListParam.getBooksType());
   }
 
   /**
@@ -154,7 +192,7 @@ public class BooksApiController extends ApiController {
    */
   @RequestMapping(value = "/books/result", method = RequestMethod.POST)
   @ResponseBody
-  public String result(@ModelAttribute @Validated BooksForm form,
+  public String result(@ModelAttribute @Validated BooksInputForm form,
       BindingResult result, ModelAndView model) throws BindException {
     throwBindExceptionIfHasErrors(result);
 

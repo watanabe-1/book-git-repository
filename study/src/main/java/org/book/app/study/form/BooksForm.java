@@ -2,16 +2,11 @@ package org.book.app.study.form;
 
 import java.io.Serializable;
 import java.util.Date;
-import org.book.app.common.validation.UploadFileMaxSize;
-import org.book.app.common.validation.UploadFileMediaType;
-import org.book.app.common.validation.UploadFileNotEmpty;
-import org.book.app.common.validation.UploadFileRequired;
 import org.book.app.study.util.StudyDateUtil;
-import org.book.app.study.util.StudyFileUtil;
-import org.springframework.web.multipart.MultipartFile;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
@@ -27,18 +22,9 @@ public class BooksForm implements Serializable, Form {
   private final String BOOKS_DATE_FORMAT = StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH;
 
   /**
-   * アップロードされたファイル
-   */
-  @UploadFileRequired
-  @UploadFileNotEmpty
-  @UploadFileMaxSize
-  @UploadFileMediaType(exts = StudyFileUtil.EXTENSION_BY_CSV,
-      mediaTypes = StudyFileUtil.MEDIATYPE_BY_CSV)
-  private MultipartFile booksFile;
-
-  /**
    * 家計簿ID
    */
+  @NotBlank
   private String booksId;
 
   /**
@@ -52,26 +38,31 @@ public class BooksForm implements Serializable, Form {
    */
   @JsonFormat(pattern = BOOKS_DATE_FORMAT,
       timezone = StudyDateUtil.TIMEZONE_ASIA_TOKYO)
+  @NotNull
   private Date booksDate;
 
   /**
    * 場所(収入元、購入先)
    */
+  @NotBlank
   private String booksPlace;
 
   /**
    * カテゴリーコード
    */
+  @NotBlank
   private String catCode;
 
   /**
    * 方法(受け取り方、支払い方)
    */
+  @NotBlank
   private String booksMethod;
 
   /**
    * 金額
    */
+  @NotNull
   private Integer booksAmmount;
 
   /**
@@ -93,6 +84,11 @@ public class BooksForm implements Serializable, Form {
    * 画面：タブ
    */
   private String tab;
+
+  /**
+   * 削除フラグ
+   */
+  private String delete;
 
   /**
    * ssr判定

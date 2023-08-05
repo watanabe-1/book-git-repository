@@ -22,8 +22,8 @@ public class StudyCodeUtil {
    * @param CodeLookupService コード情報 Service
    */
   @Autowired
-  private void setCodeLookupService(CodeLookupService CodeLookupService) {
-    StudyCodeUtil.codeLookupService = CodeLookupService;
+  private void setCodeLookupService(CodeLookupService codeLookupService) {
+    StudyCodeUtil.codeLookupService = codeLookupService;
   }
 
   /**

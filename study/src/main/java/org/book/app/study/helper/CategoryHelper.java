@@ -12,7 +12,9 @@ import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.entity.Category;
 import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.form.CategoryForm;
+import org.book.app.study.form.ImageForm;
 import org.book.app.study.service.CategoryService;
+import org.book.app.study.service.ImageService;
 import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyMessageUtil;
 import org.book.app.study.util.StudyStringUtil;
@@ -33,6 +35,12 @@ public class CategoryHelper {
    * カテゴリー情報 Service
    */
   private final CategoryService categoryService;
+
+  /**
+   * 画像情報 Service
+   */
+  private final ImageService imageService;
+
 
   /**
    * ファイル保存用 Helper
@@ -157,6 +165,27 @@ public class CategoryHelper {
         categoryListToCategoryFormList(categoryService.findAlljoinImage()));
 
     return catFromList;
+  }
+
+  /**
+   * カテゴリーイメージリストデータの取得
+   * 
+   * @return カテゴリーイメージリストデータ
+   */
+  public List<ImageForm> getCategoryImageList() {
+    return imageHelper.imageListToImageFormList(imageService.findAll());
+  }
+
+  /**
+   * CategiryFormListからTypeDataListに変換
+   * 
+   * @param target 変換対象
+   * @return カテゴリータイプデータ
+   */
+  public List<TypeData> categoryFormListToTypeDataList(List<CategoryForm> target) {
+    return target.stream()
+        .map(cat -> new TypeData(cat.getCatCode(), cat.getCatName()))
+        .collect(Collectors.toList());
   }
 
   /**

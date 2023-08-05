@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import org.book.app.study.dto.file.SyukujitsuColumn;
+import org.book.app.study.dto.list.BooksFormList;
 import org.book.app.study.dto.ui.books.BooksConvertUi;
 import org.book.app.study.dto.ui.books.BooksUi;
 import org.book.app.study.dto.ui.books.HouseholdCalendarUi;
@@ -15,6 +16,7 @@ import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.enums.type.FileType;
 import org.book.app.study.form.BooksForm;
+import org.book.app.study.form.CategoryForm;
 import org.book.app.study.helper.BooksHelper;
 import org.book.app.study.helper.CategoryHelper;
 import org.book.app.study.service.BooksService;
@@ -92,26 +94,37 @@ public class BooksApiService {
   /**
    * 家計簿確認画面情報取得
    * 
-   * @param form booksForm
+   * @param pdate 日付
    * @return 画面情報
    */
   public HouseholdUi getHouseholdInfo(LocalDate pdate) {
     HouseholdUi ui = new HouseholdUi();
     Date date = booksHelper.getDate(pdate);
     String tab = booksHelper.getDefaltTab();
-    List<Books> booksByExpenses =
-        booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode());
-    List<Books> booksByIncome = booksHelper.findByMonthAndType(date, BooksType.INCOME.getCode());
+    List<CategoryForm> catFormList = categoryHelper.getCategoryFormList().getCatDataList();
     ui.setDelete(DeleteFlag.DELETE);
-    ui.setCategories(categoryHelper.getCategoryTypeDataList());
+    ui.setCategoryTypes(categoryHelper.categoryFormListToTypeDataList(catFormList));
+    ui.setCategoryList(catFormList);
+    ui.setImageList(categoryHelper.getCategoryImageList());
     ui.setYear(StudyDateUtil.getYearOfStr(date));
     ui.setMonth(StudyDateUtil.getMonthOfStr(date));
     ui.setDay(StudyDateUtil.getDayOfStr(date));
-    ui.setExpensesList(booksHelper.booksListToBooksFormList(booksByExpenses));
-    ui.setIncomeList(booksHelper.booksListToBooksFormList(booksByIncome));
     ui.setTab(tab);
 
     return ui;
+  }
+
+  /**
+   * 家計簿確認画面家計簿データ
+   * 
+   * @param pdate 日付
+   * @param booksType 家計簿タイプ
+   * @return 画面情報
+   */
+  public BooksFormList getHouseholdData(LocalDate pdate, String booksType) {
+    Date date = booksHelper.getDate(pdate);
+
+    return booksHelper.getBooksFormList(date, booksType);
   }
 
   /**
@@ -151,8 +164,6 @@ public class BooksApiService {
         .filter(col -> Objects.equals(StudyDateUtil.getYearMonth(col.getDate()),
             StudyDateUtil.getYearMonth(date)))
         .toList());
-    ui.setAmountList(booksHelper.booksListToBooksFormList(
-        booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode())));
 
     return ui;
   }

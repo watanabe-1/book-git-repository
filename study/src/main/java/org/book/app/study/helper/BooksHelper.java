@@ -18,9 +18,11 @@ import java.util.stream.Collectors;
 import org.book.app.study.dto.data.BooksChartData;
 import org.book.app.study.dto.data.BooksChartDatasets;
 import org.book.app.study.dto.file.BooksColumn;
+import org.book.app.study.dto.list.BooksFormList;
 import org.book.app.study.entity.Books;
 import org.book.app.study.entity.DefaultCategory;
 import org.book.app.study.enums.dbcode.BooksTab;
+import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.form.BooksForm;
 import org.book.app.study.service.BooksService;
@@ -103,6 +105,30 @@ public class BooksHelper {
   }
 
   /**
+   * 複数の家計簿データをアップデート
+   * 
+   * @return 更新件数
+   */
+  public int updatBooks(BooksFormList booksListParam) {
+    // 家計簿データの更新
+    // 全件数送信されるため、変更してなくても更新される。とりあえず仮で実装
+    int updCnt = 0;
+    for (BooksForm booksForm : booksListParam.getBooksDataList()) {
+      if (DeleteFlag.isDelete(booksForm.getDelete())) {
+        updCnt += booksService.deleteOne(booksForm.getBooksId(), StudyUtil.getLoginUser());
+      } else {
+        Books books = new Books();
+        // フォームの値をエンティティにコピーし、共通項目をセット
+        StudyBeanUtil.copyAndSetStudyEntityProperties(booksForm, books);
+
+        updCnt += booksService.updateOne(books, booksForm.getBooksId(), StudyUtil.getLoginUser());
+      }
+    }
+
+    return updCnt;
+  }
+
+  /**
    * アップロードされたファイルデータをもとにentytiにセットし返却
    * 
    * @param booksFile アップロードされたデータ
@@ -149,6 +175,21 @@ public class BooksHelper {
 
           return books;
         }).toList();
+  }
+
+  /**
+   * 家計簿リストデータの取得
+   * 
+   * @param date 日付
+   * @param booksType 家計簿タイプ
+   * @return 家計簿リストデータ
+   */
+  public BooksFormList getBooksFormList(Date date, String booksType) {
+    BooksFormList booksFromList = new BooksFormList();
+    booksFromList.setBooksDataList(
+        booksListToBooksFormList(findByMonthAndType(date, booksType)));
+
+    return booksFromList;
   }
 
   /**
