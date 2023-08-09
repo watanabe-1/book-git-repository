@@ -18,7 +18,7 @@ import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import FileBox from '../../../../components/form/FileBox';
 import SelectBox from '../../../../components/form/SelectBox';
 import { useConvertInfoSWR } from '../../../../hooks/useBooks';
-import yup from '../../../../yup/message/ja';
+import yup from '../../../../locale/yup.locale';
 
 /**
  * 家計簿変換用Form

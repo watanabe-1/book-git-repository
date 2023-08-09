@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.terasoluna.gfw.common.exception.BusinessException;
+import org.terasoluna.gfw.common.exception.ResultMessagesNotificationException;
 import lombok.extern.slf4j.XSlf4j;
 
 /**
@@ -58,6 +59,7 @@ public class ApiController {
     // エラー情報を返却するためのJavaBeanを生成し、返却
     ErrorResults errorResults = new ErrorResults();
     addErrResult(e, locale, errorResults);
+    log.debug("BindException:", e);
 
     return errorResults;
   }
@@ -67,16 +69,15 @@ public class ApiController {
    * 
    * 業務エラーの例外クラス
    * 
-   * @param e MethodArgumentNotValidException
-   * @param locale ロケール
+   * @param e BusinessException
    */
   @ExceptionHandler(BusinessException.class)
   @ResponseStatus(value = HttpStatus.CONFLICT)
   @ResponseBody
-  public ErrorResults handleHttpBusinessException(BusinessException e, Locale locale) {
+  public ErrorResults handleBusinessException(BusinessException e) {
     ErrorResults errorResults = new ErrorResults();
-
-    // addErrResult(e, locale, errorResults);
+    addErrResult(e, errorResults);
+    log.debug("BusinessException:", e);
 
     return errorResults;
   }
@@ -97,6 +98,7 @@ public class ApiController {
       Locale locale) {
     ErrorResults errorResults = new ErrorResults();
     addErrResult(e, locale, errorResults);
+    log.debug("MethodArgumentNotValidException:", e);
 
     return errorResults;
   }
@@ -108,7 +110,7 @@ public class ApiController {
    * JavaBeanにバインドする際に、Bodyに格納されているデータからJavaBeanを生成できなかった場合に<br/>
    * する例外クラス
    * 
-   * @param e MethodArgumentNotValidException
+   * @param e HttpMessageNotReadableException
    * @param locale ロケール
    */
   @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -119,6 +121,7 @@ public class ApiController {
     ErrorResults errorResults = new ErrorResults();
 
     // addErrResult(e, locale, errorResults);
+    log.debug("HttpMessageNotReadableException:", e);
 
     return errorResults;
   }
@@ -133,12 +136,14 @@ public class ApiController {
   private void addErrResult(BindException e, Locale locale, ErrorResults errorResults) {
     e.getBindingResult().getFieldErrors().forEach(fieldError -> {
       String msg = messageSource.getMessage(fieldError, locale);
+
       errorResults.add(true, fieldError.getCode(), msg,
           fieldError.getField());
       log.debug(msg);
     });
     e.getBindingResult().getGlobalErrors().forEach(objectError -> {
       String msg = messageSource.getMessage(objectError, locale);
+
       errorResults.add(true, objectError.getCode(), msg,
           objectError.getObjectName());
       log.debug(msg);
@@ -152,9 +157,13 @@ public class ApiController {
    * @param locale ロケール
    * @param errorResults セット対象
    */
-  // private void addErrResult(ResultMessagesNotificationException e, Locale locale,
-  // ErrorResults errorResults) {
-  //
-  //
-  // }
+  private void addErrResult(ResultMessagesNotificationException e, ErrorResults errorResults) {
+    e.getResultMessages().getList().stream().forEach((resultMessage) -> {
+      String msg = resultMessage.getText();
+      String code = resultMessage.getCode();
+
+      errorResults.add(true, code, msg, code);
+      log.debug(msg);
+    });
+  }
 }

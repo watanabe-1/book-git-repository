@@ -7,7 +7,7 @@ import {
   ErrorResults,
   TableFormObjConfig,
 } from '../../../@types/studyUtilType';
-import yup from '../../yup/message/ja';
+import yup from '../../locale/yup.locale';
 import SubmitButton from '../elements/button/SubmitButton';
 import SortAndFilterTable from '../elements/table/SortAndFilterTable';
 

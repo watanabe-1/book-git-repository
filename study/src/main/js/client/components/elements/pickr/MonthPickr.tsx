@@ -1,10 +1,10 @@
 import monthSelectPlugin from 'flatpickr/dist/plugins/monthSelect';
-import { CustomLocale } from 'flatpickr/dist/types/locale';
 import React, { useEffect, useState } from 'react';
 import Flatpickr from 'react-flatpickr';
 
 import { iconConst } from '../../../../constant/iconConstant';
 import { createDate } from '../../../../study/util/studyDateUtil';
+import flatpickrLocale from '../../../locale/flatpickr.locale';
 import Icon from '../icon/Icon';
 
 type MonthPickrProps = {
@@ -12,8 +12,6 @@ type MonthPickrProps = {
   year: number;
   /** 月 */
   month: number;
-  /** ロケール */
-  locale: CustomLocale;
   /** 値が変更されたときのハンドラ関数 */
   onChange: (date: Date) => void;
 };
@@ -22,12 +20,7 @@ type MonthPickrProps = {
  *
  * @returns 月を選択できるinputボックス
  */
-const MonthPickr: React.FC<MonthPickrProps> = ({
-  year,
-  month,
-  locale,
-  onChange,
-}) => {
+const MonthPickr: React.FC<MonthPickrProps> = ({ year, month, onChange }) => {
   //console.log(value);
   const [flatpickrKey, setFlatpickrKey] = useState(0);
   const value = createDate(year, month);
@@ -45,7 +38,7 @@ const MonthPickr: React.FC<MonthPickrProps> = ({
       <Flatpickr
         key={`flatpickrKey-monthSelectPlugin-${flatpickrKey}`}
         options={{
-          locale: locale,
+          locale: flatpickrLocale,
           dateFormat: 'Y/m/d(D)',
           defaultDate: value,
           plugins: [

@@ -145,3 +145,39 @@ export function getActualMonth(date: Date) {
   const actualMonth = monthIndex + 1;
   return actualMonth;
 }
+
+/**
+ * flatpickerのフォーマットに変換
+ * 例: yyyy/MM/dd → "Y/m/d"
+ *
+ * @param inputFormat 変換元フォーマット
+ * @returns
+ */
+export function convertToFlatpickrFormat(inputFormat) {
+  const conversionTable = {
+    // 年
+    yyyy: 'Y',
+    // 月
+    MM: 'm',
+    M: 'n',
+    // 日
+    dd: 'd',
+    d: 'j',
+    // 時
+    hh: 'H',
+    h: 'G',
+    // 分
+    mm: 'i',
+    // 秒
+    ss: 'S',
+  };
+
+  const flatpickrFormat = inputFormat.replace(
+    /(yyyy|MM|M|dd|d|hh|h|mm|ss)/g,
+    (match) => {
+      return conversionTable[match];
+    }
+  );
+
+  return flatpickrFormat;
+}

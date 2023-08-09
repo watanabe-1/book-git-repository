@@ -9,9 +9,13 @@ import { isObjEmpty } from '../../../../../study/util/studyUtil';
 import BarAndLineChart from '../../../../components/elements/chart/BarAndLineChart';
 import BarChart from '../../../../components/elements/chart/BarChart';
 import DoughnutChart from '../../../../components/elements/chart/DoughnutChart';
-import { useHouseholdChartInfoSWR } from '../../../../hooks/useBooks';
+import {
+  useHouseholdChartInfoSWR,
+  useHouseholdInfoSWR,
+} from '../../../../hooks/useBooks';
 import { useCommonInfoSWR } from '../../../../hooks/useCommon';
 import { buildInfoParam } from '../functions/param';
+import { useDateParam } from '../hooks/useParam';
 
 /**
  * 家計簿図用データ
@@ -22,19 +26,13 @@ export type HouseholdChartData = {
   yearAll: ChartData<'bar'>;
 };
 
-/**
- * プロップス
- */
-type ChartProps = {
-  /** 年 */
-  year: number;
-  /** 月 */
-  month: number;
-};
-
-const Chart: React.FC<ChartProps> = ({ year, month }) => {
+const Chart = () => {
   const { data: commonInfo } = useCommonInfoSWR();
-  const date = createDate(year, month);
+  const paramDate = useDateParam();
+  const { data: info } = useHouseholdInfoSWR(
+    buildInfoParam(paramDate, commonInfo.dateFormat)
+  );
+  const date = createDate(info.year, info.month);
   const { data: chartData, initScript } = useHouseholdChartInfoSWR(
     buildInfoParam(date, commonInfo.dateFormat)
   );

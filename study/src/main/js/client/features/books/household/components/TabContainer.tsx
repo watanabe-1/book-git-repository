@@ -1,5 +1,4 @@
 import format from 'date-fns/format';
-import { Japanese } from 'flatpickr/dist/l10n/ja';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
@@ -164,7 +163,6 @@ const TabContainer = () => {
             <MonthPickr
               year={parseInt(info.year)}
               month={parseInt(info.month)}
-              locale={Japanese}
               onChange={pushJumpHistory}
             />
           </Col>
@@ -186,15 +184,10 @@ const TabContainer = () => {
             <ListTable booksType={info.booksTypeIncome} />
           </Tab.Pane>
           <Tab.Pane eventKey="tab3">
-            <Chart year={parseInt(info.year)} month={parseInt(info.month)} />
+            <Chart />
           </Tab.Pane>
           <Tab.Pane eventKey="tab4">
-            <Calendar
-              year={parseInt(info.year)}
-              month={parseInt(info.month)}
-              day={parseInt(info.day)}
-              booksType={info.booksTypeExpenses}
-            />
+            <Calendar booksType={info.booksTypeExpenses} />
           </Tab.Pane>
         </Tab.Content>
         {initScript}

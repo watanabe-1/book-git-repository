@@ -20,6 +20,8 @@ type FormControlProps = {
   onChange?: (event: React.ChangeEvent<FormControlHTMLElement>) => void;
   /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
   onBlur?: (event: React.FocusEvent<FormControlHTMLElement>) => void;
+  /** シンプルテキストをクリックしたときの動作 */
+  onTextClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   /** テキストボックスを非表示にするかどうか */
   hidden?: boolean;
   /** バリデーションを行うかどうかを示すフラグ */
@@ -53,6 +55,7 @@ const FormControl: React.FC<FormControlProps> = ({
   textMaxLength = 30,
   onChange,
   onBlur,
+  onTextClick,
   hidden = false,
   validate = false,
   touched = false,
@@ -115,17 +118,22 @@ const FormControl: React.FC<FormControlProps> = ({
       onBlur(event);
     }
     // 初期値から変更されたか判定
-    if (text === initialValue) {
+    const eventValue = event.target.value;
+    const textValue = eventValue ? eventValue : text;
+    if (textValue === initialValue) {
       setHasChanges(false);
     } else {
       setHasChanges(true);
     }
   };
 
-  const handleTextClick = () => {
+  const handleTextClick = (e) => {
     //console.log('call handleTextClick');
     if (!isEditing && isOnClickEditable && !readonly) {
       setIsEditing(isOnClickEditable);
+    }
+    if (onTextClick) {
+      onTextClick(e);
     }
   };
 
@@ -143,7 +151,7 @@ const FormControl: React.FC<FormControlProps> = ({
 
   useEffect(() => {
     // 編集可能になった場合にフォーカスが当たっているようにする
-    if (isEditing && isOnClickEditable) {
+    if (isEditing && isOnClickEditable && formElementRef.current) {
       formElementRef.current.focus();
     }
   }, [isEditing]);
@@ -173,6 +181,7 @@ const FormControl: React.FC<FormControlProps> = ({
     onFocus: handleFocus,
     isValid,
     isInvalid,
+    hidden: !isEditing,
     ref: formElementRef,
   };
 
@@ -189,14 +198,13 @@ const FormControl: React.FC<FormControlProps> = ({
         ? children.map((child, index) =>
             cloneElement(child, {
               key: index,
-              // hidden属性だとうまくいかないためstyleから直接非表示に
+              // hidden属性だけだとうまくいかないためstyleから直接非表示に
               style: { display: isEditing ? '' : 'none' },
               ...childrenProps,
             })
           )
         : cloneElement(children, {
             value: text,
-            hidden: !isEditing,
             ...childrenProps,
           })}
       <SimpleText

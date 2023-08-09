@@ -20,6 +20,7 @@ import { isObjEmpty } from '../../../../../study/util/studyUtil';
 import {
   useHouseholdCalendarInfoSWR,
   useHouseholdDataSWR,
+  useHouseholdInfoSWR,
 } from '../../../../hooks/useBooks';
 import { useCommonInfoSWR } from '../../../../hooks/useCommon';
 import { buildDataParam, buildInfoParam } from '../functions/param';
@@ -38,23 +39,22 @@ export type HouseholdCalendarData = {
  * プロップス
  */
 type CalendarProps = {
-  /** 年 */
-  year: number;
-  /** 月 */
-  month: number;
-  /** 日 */
-  day: number;
   /** 家計簿タイプ */
   booksType: string;
 };
 
-const Calendar: React.FC<CalendarProps> = ({ year, month, day, booksType }) => {
+const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
   const { data: commonInfo } = useCommonInfoSWR();
   const paramDate = useDateParam();
+  const { data: info } = useHouseholdInfoSWR(
+    buildInfoParam(paramDate, commonInfo.dateFormat)
+  );
   const { data: booksFormList } = useHouseholdDataSWR(
     buildDataParam(paramDate, commonInfo.dateFormat, booksType)
   );
-  const date = createDate(year, month, day);
+  const year = parseInt(info.year);
+  const month = parseInt(info.month);
+  const date = createDate(info.year, info.month, info.day);
   const [selectDay, setSelectDay] = useState(date);
   const { data: calendarData, initScript } = useHouseholdCalendarInfoSWR(
     buildInfoParam(date, commonInfo.dateFormat)

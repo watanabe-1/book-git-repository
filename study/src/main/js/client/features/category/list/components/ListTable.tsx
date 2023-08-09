@@ -27,7 +27,7 @@ import {
   useCategoryListSWR,
   useImageListSWR,
 } from '../../../../hooks/useCategory';
-import yup from '../../../../yup/message/ja';
+import yup from '../../../../locale/yup.locale';
 
 /**
  * カテゴリー リスト形式確認画面

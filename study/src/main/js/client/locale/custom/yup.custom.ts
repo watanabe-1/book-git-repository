@@ -1,11 +1,11 @@
 import * as yup from 'yup';
 
-import { ErrorResults } from '../../@types/studyUtilType';
-import { commonConst } from '../../constant/commonConstant';
+import { ErrorResults } from '../../../@types/studyUtilType';
+import { commonConst } from '../../../constant/commonConstant';
 import {
   getServerErr,
   extractAndDeleteServerErrMsg,
-} from '../../study/util/studyYupUtil';
+} from '../../../study/util/studyYupUtil';
 
 /**
  * サーバーでのバリデーション結果を取得するバリデーターを定義

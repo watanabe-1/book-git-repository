@@ -15,7 +15,7 @@ import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import FileBox from '../../../../components/form/FileBox';
 import SelectBox from '../../../../components/form/SelectBox';
 import { useUploadtInfoSWR } from '../../../../hooks/useBooks';
-import yup from '../../../../yup/message/ja';
+import yup from '../../../../locale/yup.locale';
 
 /**
  * 家計簿アップロードForm

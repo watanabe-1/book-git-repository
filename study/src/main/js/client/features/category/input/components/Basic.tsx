@@ -19,7 +19,7 @@ import SelectBox from '../../../../components/form/SelectBox';
 import TextArea from '../../../../components/form/TextArea';
 import TextBox from '../../../../components/form/TextBox';
 import { useCategoryInfoSWR } from '../../../../hooks/useCategory';
-import yup from '../../../../yup/message/ja';
+import yup from '../../../../locale/yup.locale';
 
 type BasicProps = {
   /** 次画面へ */

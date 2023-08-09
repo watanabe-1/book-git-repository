@@ -16,7 +16,7 @@ import SubmitButton from '../../../../components/elements/button/SubmitButton';
 import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import SelectBox from '../../../../components/form/SelectBox';
 import { useDownloadtInfoSWR } from '../../../../hooks/useBooks';
-import yup from '../../../../yup/message/ja';
+import yup from '../../../../locale/yup.locale';
 
 /**
  * 家計簿ダウンロードForm

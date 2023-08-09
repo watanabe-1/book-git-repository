@@ -21,6 +21,7 @@ import {
 } from '../../../../../study/util/studyYupUtil';
 import ImageIcon from '../../../../components/elements/icon/ImageIcon';
 import CheckBox from '../../../../components/form/CheckBox';
+import DayPickrBox from '../../../../components/form/DayPickrBox';
 import SelectBox from '../../../../components/form/SelectBox';
 import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
 import TextBox from '../../../../components/form/TextBox';
@@ -29,7 +30,7 @@ import {
   useHouseholdDataSWR,
 } from '../../../../hooks/useBooks';
 import { useCommonInfoSWR } from '../../../../hooks/useCommon';
-import yup from '../../../../yup/yup.custom';
+import yup from '../../../../locale/yup.locale';
 import { buildDataParam, buildInfoParam } from '../functions/param';
 import { useDateParam } from '../hooks/useParam';
 
@@ -131,15 +132,21 @@ const ListTable: React.FC<ListTableProps> = ({
             return (
               <FastField name={name}>
                 {({ field, meta }: FieldProps<string>) => {
+                  const dateFormat = props.getFieldProps(
+                    names[fieldConst.books.BOOKS_DATE_FORMAT]
+                  ).value;
                   return (
-                    <TextBox
+                    <DayPickrBox
                       name={field.name}
                       value={field.value}
+                      dateFormat={dateFormat}
+                      onlyValueMonth
                       validate
                       touched={meta.touched}
                       error={meta.error}
                       dirty={props.dirty}
-                      onBlur={field.onChange}
+                      setFieldValue={props.setFieldValue}
+                      fieldNameByNames={name}
                       isOnClickEditable
                     />
                   );
