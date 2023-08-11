@@ -111,7 +111,9 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
         value={value}
         onBlur={handleSet}
         onTextClick={() => {
-          openFp(fp);
+          if (!readonly) {
+            openFp(fp);
+          }
         }}
         hidden={hidden}
         validate={validate}
@@ -120,6 +122,7 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
         dirty={dirty}
         isOnClickEditable={isOnClickEditable}
         readonly={readonly}
+        ref={fp}
       >
         {/*エラーチェック結果を表示するため  Form.Controlを使用
         エラーチェック結果のみ表示されればよいのでhidden固定*/}
@@ -128,7 +131,6 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
           value={value}
           dateFormat={dateFormat}
           onlyValueMonth={onlyValueMonth}
-          ref={fp}
         />
       </FormControl>
     </div>
