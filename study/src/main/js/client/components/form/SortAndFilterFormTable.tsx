@@ -1,24 +1,33 @@
 import { FieldArray, FormikHelpers, FormikProvider, useFormik } from 'formik';
 import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
+import isEqual from 'react-fast-compare';
 
 import AutoValidateToken from './AutoValidateToken';
 import {
   ErrorResults,
   TableFormObjConfig,
 } from '../../../@types/studyUtilType';
+import { isObjEmpty } from '../../../study/util/studyUtil';
 import yup from '../../locale/yup.locale';
 import SubmitButton from '../elements/button/SubmitButton';
 import SortAndFilterTable from '../elements/table/SortAndFilterTable';
 
 type SortAndFilterFormTableProps = {
+  /** form table用 設定*/
   tableFormConfig: TableFormObjConfig;
+  /** 送信制御用関数 */
   handleFormSubmit: (values: unknown) => Promise<Response>;
-  validateButton?: React.MutableRefObject<HTMLButtonElement>;
+  /** submitボタンをhiddenにするかどうか */
   hiddenSubmitButton?: boolean;
+  /** enterで送信するかどうか */
   onEnterSubmit?: boolean;
+  /** エラーデータ(主にサーバー側を想定) */
   errData?: ErrorResults;
+  /** 追加でボタンを設置する場合はここに設定 */
   customeButton?: React.ReactElement | React.ReactElement[];
+  /** 修正した行のみ送信対象とする */
+  modifiedRowsOnlySubmitFlag?: boolean;
 };
 
 /**
@@ -32,6 +41,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   onEnterSubmit = false,
   errData = null,
   customeButton = null,
+  modifiedRowsOnlySubmitFlag = true,
 }) => {
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   // yupで使用するスキーマの設定
@@ -44,8 +54,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   const getRows = tableFormConfig.getRows;
   const rowName = tableFormConfig.rowName;
 
-  // console.log('initialValuesです。');
-  // console.log(JSON.stringify(initialValues));
+  console.log(`initialValuesです。\n ${JSON.stringify(initialValues)}`);
   // スキーマにセット
   const schema = yup.object().shape(additions);
 
@@ -66,13 +75,29 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
    * @param event formイベント
    */
   const handleSubmit = async (
-    values: unknown,
+    values: object,
     formikHelpers: FormikHelpers<unknown>
   ) => {
+    const submitValues = { ...values };
+    // 修正した行のみに送信対象を絞り込む
+    if (modifiedRowsOnlySubmitFlag) {
+      const rows: [] = values[rowName];
+      const initialRows: [] = initialValues[rowName];
+      const editRows = rows.filter((row, index) => {
+        const initialRow = initialRows[index];
+        console.log(`row is edited : ${!isEqual(row, initialRow)}`);
+
+        return !isEqual(row, initialRow);
+      });
+      submitValues[rowName] = isObjEmpty(editRows) ? null : editRows;
+      console.log(`editValues:${JSON.stringify(submitValues)}`);
+    }
+
     setSubmitLoading(true);
-    const res = await handleFormSubmit(values);
+    const res = await handleFormSubmit(submitValues);
     setSubmitLoading(false);
     //console.log('handleSubmit が完了しました');
+
     if (res?.ok) {
       // formを現在のvalueでリセット実施することでdirty（formのどこかの値を編集したかどうか）のフラグがfalseに設定される
       formikHelpers.resetForm({ values: values });
@@ -103,6 +128,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
             title="更新"
             isLoading={isSubmitLoading}
             hidden={hiddenSubmitButton}
+            disabled={!formik.dirty || isSubmitLoading}
           />
         </div>
         <FieldArray name={rowName}>

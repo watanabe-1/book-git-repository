@@ -151,7 +151,7 @@ const FormControl: React.FC<FormControlProps> = ({
 
   useEffect(() => {
     // 編集可能になった場合にフォーカスが当たっているようにする
-    if (isEditing && isOnClickEditable && formElementRef.current) {
+    if (isEditing && isOnClickEditable && formElementRef?.current?.focus) {
       formElementRef.current.focus();
     }
   }, [isEditing]);

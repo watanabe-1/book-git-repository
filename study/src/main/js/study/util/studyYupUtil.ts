@@ -1,7 +1,7 @@
 import { FormikProps } from 'formik/dist/types';
 import { array, object } from 'yup/index';
 
-import { keyJoin } from './studyUtil';
+import { isObjEmpty, keyJoin } from './studyUtil';
 import {
   ErrorResults,
   BuildListTableFormObjConfig,
@@ -243,6 +243,7 @@ export function objToFormData(obj: object) {
  * @return {}
  */
 export function objArrayToObj(objArray: object[], arrayName: string) {
+  if (isObjEmpty(objArray)) return;
   const data = {};
 
   objArray.forEach((obj, index) => {

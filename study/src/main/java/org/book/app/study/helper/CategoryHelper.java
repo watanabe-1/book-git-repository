@@ -62,10 +62,14 @@ public class CategoryHelper {
    * @return 更新件数
    */
   public int updatCeategorys(CategoryFormList catListParam) {
+    List<CategoryForm> catList = catListParam.getCatDataList();
+    if (catList == null) {
+      return 0;
+    }
+
     // カテゴリー情報の更新
-    // 全件数送信されるため、変更してなくても更新される。とりあえず仮で実装
     int updCnt = 0;
-    for (CategoryForm catForm : catListParam.getCatDataList()) {
+    for (CategoryForm catForm : catList) {
       if (DeleteFlag.isDelete(catForm.getDelete())) {
         updCnt += categoryService.deleteOne(catForm.getCatCode());
       } else {

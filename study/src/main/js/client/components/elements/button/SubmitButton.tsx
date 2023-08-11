@@ -12,6 +12,8 @@ type SubmitButtonProps = {
   hidden?: boolean;
   /** クリックされたときのハンドラ関数 */
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  /** ボタンを押下可能かどうか */
+  disabled?: boolean;
 };
 
 /**
@@ -24,6 +26,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   isLoading = false,
   hidden = false,
   onClick = null,
+  disabled = false,
 }) => {
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     //console.log('call handleTextClick');
@@ -42,6 +45,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
       type="submit"
       hidden={hidden}
       onClick={handleClick}
+      disabled={disabled}
     >
       {title}
     </Button>

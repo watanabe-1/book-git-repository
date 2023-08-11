@@ -110,10 +110,14 @@ public class BooksHelper {
    * @return 更新件数
    */
   public int updatBooks(BooksFormList booksListParam) {
+    List<BooksForm> booksFormList = booksListParam.getBooksDataList();
+    if (booksFormList == null) {
+      return 0;
+    }
+
     // 家計簿データの更新
-    // 全件数送信されるため、変更してなくても更新される。とりあえず仮で実装
     int updCnt = 0;
-    for (BooksForm booksForm : booksListParam.getBooksDataList()) {
+    for (BooksForm booksForm : booksFormList) {
       if (DeleteFlag.isDelete(booksForm.getDelete())) {
         updCnt += booksService.deleteOne(booksForm.getBooksId(), StudyUtil.getLoginUser());
       } else {
