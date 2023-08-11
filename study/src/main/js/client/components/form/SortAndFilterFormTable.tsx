@@ -54,7 +54,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   const getRows = tableFormConfig.getRows;
   const rowName = tableFormConfig.rowName;
 
-  console.log(`initialValuesです。\n ${JSON.stringify(initialValues)}`);
+  // console.log(`initialValuesです。\n ${JSON.stringify(initialValues)}`);
   // スキーマにセット
   const schema = yup.object().shape(additions);
 
@@ -85,12 +85,12 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
       const initialRows: [] = initialValues[rowName];
       const editRows = rows.filter((row, index) => {
         const initialRow = initialRows[index];
-        console.log(`row is edited : ${!isEqual(row, initialRow)}`);
+        // console.log(`row is edited : ${!isEqual(row, initialRow)}`);
 
         return !isEqual(row, initialRow);
       });
       submitValues[rowName] = isObjEmpty(editRows) ? null : editRows;
-      console.log(`editValues:${JSON.stringify(submitValues)}`);
+      // console.log(`editValues:${JSON.stringify(submitValues)}`);
     }
 
     setSubmitLoading(true);

@@ -230,8 +230,8 @@ export function objToFormData(obj: object) {
     }
     stack.shift();
   }
-  console.log('formDatatest');
-  console.log(test);
+  // console.log('formDatatest');
+  // console.log(test);
   return data;
 }
 
@@ -282,8 +282,8 @@ export function objArrayToObj(objArray: object[], arrayName: string) {
       stack.shift();
     }
   });
-  console.log('objarray→obj');
-  console.log(data);
+  // console.log('objarray→obj');
+  // console.log(data);
   return data;
 }
 
@@ -549,8 +549,8 @@ export function buildListTableFormObj(
     }),
   };
 
-  console.log('nakami');
-  console.log(result);
+  // console.log('nakami');
+  // console.log(result);
 
   return result;
 }

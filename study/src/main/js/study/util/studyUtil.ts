@@ -251,9 +251,10 @@ export async function fetchPost(
     return headers;
   };
 
+  // console.log(`call post param:${JSON.stringify(params)}`);
   const body = objToFormData(params);
-  //console.log(...body.entries());
-  //console.log(JSON.stringify(params));
+  console.log('call post param:');
+  console.log(...body.entries());
 
   const res: Response = await window.fetch(
     pathJoin(getContextPath(), baseurl),
@@ -263,7 +264,11 @@ export async function fetchPost(
       body: body,
     }
   );
-  console.log(res);
+  // console.log(`call post response:${{ ...res }}`);
+
+  console.log('call post response:');
+  console.log({ ...res });
+
   // if (!res.ok) {
   //   throw new Error(`unexpected status: ${res.status}`);
   // }

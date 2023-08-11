@@ -71,8 +71,8 @@ const ListTable: React.FC<ListTableProps> = ({
       )
     );
     const json = await res.json();
-    console.log('soushinkekka');
-    console.log(json);
+    // console.log('soushinkekka');
+    // console.log(json);
     if (res.ok) {
       setList(json);
     } else {
@@ -93,7 +93,7 @@ const ListTable: React.FC<ListTableProps> = ({
     return await fetchPost(urlConst.books.LISTDATAUPDATE, param);
   };
 
-  //console.log(JSON.stringify(booksList));
+  // console.log(JSON.stringify(booksList));
   const toObjConfig: BuildListTableFormObjConfig = {
     className: classConst.BOOKS_DATA_LIST,
     primaryKey: fieldConst.books.BOOKS_ID,

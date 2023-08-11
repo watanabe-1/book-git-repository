@@ -56,8 +56,8 @@ const ListTable = () => {
       objArrayToObj(form[classConst.CAT_DATA_LIST], classConst.CAT_DATA_LIST)
     );
     const json = await res.json();
-    console.log('soushinkekka');
-    console.log(json);
+    // console.log('soushinkekka');
+    // console.log(json);
     if (res.ok) {
       setList(json);
     } else {
