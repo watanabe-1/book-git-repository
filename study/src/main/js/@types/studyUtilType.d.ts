@@ -150,7 +150,6 @@ export type HouseholdUi = {
   expensesList: Books[];
   incomeList: Books[];
   categoryList: Category[];
-  imageList: Image[];
   year: string;
   month: string;
   day: string;

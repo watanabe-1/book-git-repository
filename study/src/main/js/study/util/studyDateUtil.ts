@@ -83,7 +83,7 @@ export function createDate(
  *
  * @param dateString 分析する日時文字列
  * @returns 日付をパースするためのフォーマット文字列
- * @throws 日時文字列の構造が無効な場合にエラーがスローされる
+ * @throws 日時文字列の構造が無効な場合にエラー
  */
 export function determineFormatString(
   dateString: string,
@@ -117,6 +117,7 @@ export function getNextMonthDate(date: Date) {
   const nextMonth = addMonths(date, 1);
   // 最初の日にちを取得
   const firstDayOfNextMonth = startOfMonth(nextMonth);
+
   return firstDayOfNextMonth;
 }
 
@@ -131,6 +132,7 @@ export function getPreviousMonthDate(date: Date) {
   const previousMonth = subMonths(date, 1);
   // 最初の日にちを取得
   const firstDayOfPreviousMonth = startOfMonth(previousMonth);
+
   return firstDayOfPreviousMonth;
 }
 
@@ -143,6 +145,7 @@ export function getPreviousMonthDate(date: Date) {
 export function getActualMonth(date: Date) {
   const monthIndex = getMonth(date);
   const actualMonth = monthIndex + 1;
+
   return actualMonth;
 }
 

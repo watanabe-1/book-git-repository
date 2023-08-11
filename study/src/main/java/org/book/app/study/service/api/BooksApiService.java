@@ -105,7 +105,6 @@ public class BooksApiService {
     ui.setDelete(DeleteFlag.DELETE);
     ui.setCategoryTypes(categoryHelper.categoryFormListToTypeDataList(catFormList));
     ui.setCategoryList(catFormList);
-    ui.setImageList(categoryHelper.getCategoryImageList());
     ui.setYear(StudyDateUtil.getYearOfStr(date));
     ui.setMonth(StudyDateUtil.getMonthOfStr(date));
     ui.setDay(StudyDateUtil.getDayOfStr(date));

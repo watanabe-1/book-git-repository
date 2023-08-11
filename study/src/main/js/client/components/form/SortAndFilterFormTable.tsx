@@ -73,7 +73,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
     const res = await handleFormSubmit(values);
     setSubmitLoading(false);
     //console.log('handleSubmit が完了しました');
-    if (res && res.ok) {
+    if (res?.ok) {
       // formを現在のvalueでリセット実施することでdirty（formのどこかの値を編集したかどうか）のフラグがfalseに設定される
       formikHelpers.resetForm({ values: values });
     }

@@ -148,6 +148,9 @@ const TabContainer = () => {
               <Nav.Item>
                 <Nav.Link eventKey="tab4">カレンダー_支出</Nav.Link>
               </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey="tab5">カレンダー_収入</Nav.Link>
+              </Nav.Item>
             </Nav>
           </Col>
         </Row>
@@ -177,17 +180,20 @@ const TabContainer = () => {
           </Col>
         </Row>
         <Tab.Content>
-          <Tab.Pane eventKey="tab1">
+          <Tab.Pane eventKey="tab1" mountOnEnter>
             <ListTable booksType={info.booksTypeExpenses} />
           </Tab.Pane>
-          <Tab.Pane eventKey="tab2">
+          <Tab.Pane eventKey="tab2" mountOnEnter>
             <ListTable booksType={info.booksTypeIncome} />
           </Tab.Pane>
-          <Tab.Pane eventKey="tab3">
+          <Tab.Pane eventKey="tab3" mountOnEnter>
             <Chart />
           </Tab.Pane>
-          <Tab.Pane eventKey="tab4">
+          <Tab.Pane eventKey="tab4" mountOnEnter>
             <Calendar booksType={info.booksTypeExpenses} />
+          </Tab.Pane>
+          <Tab.Pane eventKey="tab5" mountOnEnter>
+            <Calendar booksType={info.booksTypeIncome} />
           </Tab.Pane>
         </Tab.Content>
         {initScript}

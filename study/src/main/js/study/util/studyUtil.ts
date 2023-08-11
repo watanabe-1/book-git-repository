@@ -100,6 +100,7 @@ export function joinBase(base: string, add: string, separator: string): string {
  */
 export function getContextPath(): string {
   const anyWindow = window;
+
   return anyWindow.contextPath
     ? anyWindow.contextPath
     : document.querySelector<HTMLMetaElement>('meta[name="contextPath"]')
@@ -119,6 +120,7 @@ export function getLocationHrefParm(paramName: string): string {
   const params: URLSearchParams = url.searchParams;
   // getメソッド
   const param: string = params.get(paramName);
+
   return param;
 }
 
@@ -205,6 +207,7 @@ export function isObjEmpty(obj: object) {
   for (const i in obj) {
     return false;
   }
+
   return true;
 }
 
@@ -244,6 +247,7 @@ export async function fetchPost(
     const headers = {};
     //headers['Content-Type'] = 'application/json';
     headers[getCsrfTokenHeader()] = getCsrfToken();
+
     return headers;
   };
 
@@ -265,6 +269,7 @@ export async function fetchPost(
   // }
   // const json = await res.json();
   // console.log(json);
+
   return res;
 }
 

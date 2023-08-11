@@ -5,7 +5,6 @@ import org.book.app.study.dto.data.TypeData;
 import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.form.CategoryForm;
-import org.book.app.study.form.ImageForm;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -40,11 +39,6 @@ public class HouseholdUi {
    * カテゴリー一覧
    */
   private List<CategoryForm> categoryList;
-
-  /**
-   * 画像ー一覧
-   */
-  private List<ImageForm> imageList;
 
   /**
    * 対象年

@@ -1,9 +1,8 @@
 import endOfMonth from 'date-fns/endOfMonth';
 import startOfMonth from 'date-fns/startOfMonth';
-import { Instance } from 'flatpickr/dist/types/instance';
 import { BaseOptions } from 'flatpickr/dist/types/options';
 import { FormikErrors } from 'formik';
-import React, { useRef } from 'react';
+import React, { forwardRef, useRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import Flatpickr from 'react-flatpickr';
 import DatePicker from 'react-flatpickr';
@@ -65,15 +64,12 @@ type DayPickrProps = {
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   /** テキストボックスを非表示にするかどうか */
   hidden?: boolean;
-  /** flatpicker instance  */
-  inputRef: React.MutableRefObject<DatePicker>;
 };
 
 const openFp = (fp: React.MutableRefObject<DatePicker>) => {
   if (!fp?.current?.flatpickr) return;
-  const fpInstance: Instance = fp.current.flatpickr;
   setTimeout(() => {
-    fpInstance.open();
+    fp.current.flatpickr.open();
   }, 100);
 };
 
@@ -128,7 +124,7 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
           value={value}
           dateFormat={dateFormat}
           onlyValueMonth={onlyValueMonth}
-          inputRef={fp}
+          ref={fp}
         />
       </FormControl>
     </div>
@@ -139,71 +135,81 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
  *
  * @returns 日を選択できるinputボックス
  */
-const DayPickr: React.FC<DayPickrProps> = ({
-  value,
-  onChange,
-  onBlur,
-  hidden,
-  dateFormat: pdateFormat,
-  onlyValueMonth,
-  inputRef,
-}) => {
-  const date = parseDate(value, pdateFormat);
-  const dateFormat = convertToFlatpickrFormat(pdateFormat);
+const DayPickr = forwardRef<DatePicker, DayPickrProps>(
+  (
+    {
+      value,
+      onChange,
+      onBlur,
+      hidden,
+      dateFormat: pdateFormat,
+      onlyValueMonth,
+    },
+    ref
+  ) => {
+    const date = parseDate(value, pdateFormat);
+    const dateFormat = convertToFlatpickrFormat(pdateFormat);
 
-  const options: Partial<BaseOptions> = {
-    locale: flatpickrLocale,
-    dateFormat: dateFormat,
-    defaultDate: value,
-    //wrap: true,
-  };
-  if (onlyValueMonth) {
-    options.minDate = startOfMonth(date);
-    options.maxDate = endOfMonth(date);
-  }
-  return (
-    <div className="flatpickr" hidden={hidden}>
-      <Flatpickr
-        className="bg-white border border-gray-300 block w-full p-2.5 shadow"
-        options={options}
-        style={{ width: '120px' }}
-        value={value}
-        onValueUpdate={(_, dateStr) => {
-          if (dateStr !== value) {
-            const event = {
-              target: {
-                value: dateStr,
-              },
-            } as unknown as React.ChangeEvent<HTMLInputElement>;
+    const buildEventObject = (value: string) => {
+      return {
+        target: {
+          value: value,
+        },
+      } as unknown;
+    };
 
-            if (onChange) {
-              onChange(event);
+    const options: Partial<BaseOptions> = {
+      locale: flatpickrLocale,
+      dateFormat: dateFormat,
+      defaultDate: value,
+    };
+    if (onlyValueMonth) {
+      options.minDate = startOfMonth(date);
+      options.maxDate = endOfMonth(date);
+    }
+    return (
+      <div className="flatpickr" hidden={hidden}>
+        <Flatpickr
+          className="bg-white border border-gray-300 block w-full p-2.5 shadow"
+          options={options}
+          style={{ width: '120px' }}
+          value={value}
+          onValueUpdate={(_, dateStr) => {
+            if (dateStr !== value) {
+              const event = buildEventObject(
+                dateStr
+              ) as React.ChangeEvent<HTMLInputElement>;
+
+              if (onChange) {
+                onChange(event);
+              }
             }
-          }
-        }}
-        onClose={(_, dateStr) => {
-          const event = {
-            target: {
-              value: dateStr,
-            },
-          } as unknown as React.FocusEvent<HTMLInputElement>;
-          if (onBlur) {
-            onBlur(event);
-          }
-        }}
-        ref={inputRef}
-      />
-      <a
-        className="input-button"
-        title="toggle"
-        onClick={() => {
-          openFp(inputRef);
-        }}
-      >
-        <Icon icon={iconConst.bootstrap.BI_CALENDAR} />
-      </a>
-    </div>
-  );
-};
+          }}
+          onClose={(_, dateStr) => {
+            const event = buildEventObject(
+              dateStr
+            ) as React.FocusEvent<HTMLInputElement>;
+
+            if (onBlur) {
+              onBlur(event);
+            }
+          }}
+          ref={ref}
+        />
+        <a
+          className="input-button"
+          title="toggle"
+          onClick={() => {
+            openFp(ref as React.MutableRefObject<DatePicker>);
+          }}
+        >
+          <Icon icon={iconConst.bootstrap.BI_CALENDAR} />
+        </a>
+      </div>
+    );
+  }
+);
+
+DayPickr.displayName = 'DayPickr';
 
 export default DayPickrBox;

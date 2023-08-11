@@ -1,4 +1,4 @@
-import { FastField, Field, FieldProps, FormikProps } from 'formik';
+import { FastField, FieldProps, FormikProps } from 'formik';
 import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 
@@ -216,53 +216,46 @@ const ListTable: React.FC<ListTableProps> = ({
               ];
             return (
               <div>
-                <Field name={name}>
-                  {() => {
+                <FastField name={name}>
+                  {({ field, meta }: FieldProps<string>) => {
+                    // console.log('categories');
+                    // console.log(info.categories);
+                    // console.log(`field.name:${field.name}`);
+                    // console.log(`field.value:${field.value}`);
+                    const cat = info.categoryList.find(
+                      (cat) => cat.catCode === field.value
+                    );
+
                     return (
-                      <div>
-                        <FastField name={name}>
-                          {({ field, meta }: FieldProps<string>) => {
-                            // console.log('categories');
-                            // console.log(info.categories);
-                            // console.log(`field.name:${field.name}`);
-                            // console.log(`field.value:${field.value}`);
-                            const cat = info.categoryList.find(
-                              (cat) => cat.catCode === field.value
+                      <>
+                        <SelectBox
+                          name={field.name}
+                          value={field.value}
+                          validate
+                          touched={meta.touched}
+                          error={meta.error}
+                          typeList={info.categoryTypes}
+                          dirty={props.dirty}
+                          onBlur={(e) => {
+                            // どちらを更新したか紛らわしいので、両方更新
+                            props.setFieldValue(
+                              names[fieldConst.books.CAT_CODE],
+                              e.target.value
                             );
-                            const image = info.imageList.find(
-                              (image) => image.imgId === cat.imgIds.imgId
-                            );
-                            return (
-                              <>
-                                <SelectBox
-                                  name={field.name}
-                                  value={field.value}
-                                  validate
-                                  touched={meta.touched}
-                                  error={meta.error}
-                                  typeList={info.categoryTypes}
-                                  dirty={props.dirty}
-                                  onBlur={(e) => {
-                                    // どちらを更新したか紛らわしいので、両方更新
-                                    props.setFieldValue(
-                                      names[fieldConst.books.CAT_CODE],
-                                      e.target.value
-                                    );
-                                    field.onChange(e);
-                                  }}
-                                  isOnClickEditable
-                                />
-                                <ImageIcon
-                                  path={pathJoin(image.imgPath, image.imgName)}
-                                />
-                              </>
-                            );
+                            field.onChange(e);
                           }}
-                        </FastField>
-                      </div>
+                          isOnClickEditable
+                        />
+                        <ImageIcon
+                          path={pathJoin(
+                            cat.imgIds.imgPath,
+                            cat.imgIds.imgName
+                          )}
+                        />
+                      </>
                     );
                   }}
-                </Field>
+                </FastField>
               </div>
             );
           },
