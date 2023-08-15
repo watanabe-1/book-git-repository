@@ -53,7 +53,8 @@ const TextBox: React.FC<TextBoxProps> = ({
     <FormControl
       title={title}
       name={name}
-      value={value ? value : ''}
+      // 0はそのまま表示したいため
+      value={value == 0 || value ? value : ''}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}

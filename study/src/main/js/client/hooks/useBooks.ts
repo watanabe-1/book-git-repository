@@ -1,4 +1,4 @@
-import { useCommonSWR } from './useCommon';
+import { useCommonSWR, useStaticSWR } from './useCommon';
 import {
   BooksUi,
   BooksConvertUi,
@@ -66,5 +66,13 @@ export const useHouseholdCalendarInfoSWR = (token?: Record<string, string>) => {
   return useCommonSWR<HouseholdCalendarData>(
     (api) => api.getHouseholdCalendarInfo(createParamdate(token)),
     [urlConst.books.HOUSEHOLD_CALENDAR_INFO, token]
+  );
+};
+
+export const useHouseholdChartInfoStaticKeySWR = (initialData?: number) => {
+  //console.log('call useHouseholdChartInfoStaticKeySWR');
+  return useStaticSWR<number | null, Error>(
+    'useHouseholdChartInfoStaticKeySWR',
+    initialData
   );
 };

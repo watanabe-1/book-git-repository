@@ -211,7 +211,7 @@ export type BuildListTableFormObjConfig = {
  */
 export type TableFormObjConfig = {
   additions: Record<string, Reference<unknown>>;
-  initialValues: unknown;
+  initialValues: object;
   rowName: string;
   getRows: (props: FormikProps<unknown>) => TableRow[];
   columns: TableColumn[];

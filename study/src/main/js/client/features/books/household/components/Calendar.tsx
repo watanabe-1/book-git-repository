@@ -352,6 +352,7 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
           <Col sm="12">
             <ListTable
               booksList={getSelectedamountByDayList()}
+              booksDate={selectDay}
               booksType={booksType}
             />
           </Col>

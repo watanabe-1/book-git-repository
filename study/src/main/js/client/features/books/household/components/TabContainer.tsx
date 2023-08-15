@@ -18,6 +18,7 @@ import {
 } from '../../../../../study/util/studyDateUtil';
 import MonthPickr from '../../../../components/elements/pickr/MonthPickr';
 import {
+  useHouseholdChartInfoStaticKeySWR,
   useHouseholdDataSWR,
   useHouseholdInfoSWR,
 } from '../../../../hooks/useBooks';
@@ -48,6 +49,8 @@ const TabContainer = () => {
     useHouseholdDataSWR(
       buildDataParam(paramDate, commonInfo.dateFormat, info.booksTypeIncome)
     );
+  // 初期値を設定
+  useHouseholdChartInfoStaticKeySWR(1);
   const navigate = useNavigate();
   const location = useLocation();
   const paramTab = useTabParam();

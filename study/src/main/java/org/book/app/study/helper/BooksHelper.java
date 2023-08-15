@@ -105,6 +105,36 @@ public class BooksHelper {
   }
 
   /**
+   * 登録用デフォルトデータの作成
+   * 
+   * @param form アップロードされたデータ
+   * @return Books セットされたentity
+   */
+  public Books getDefault(BooksFormList booksListParam) {
+    // ログインユーザー取得
+    String user = StudyUtil.getLoginUser();
+    // デフォルトカテゴリーマスタ変更対象
+    List<String> defCatTargets = defaultCategoryHelper.getDefaultCategoryTargets();
+
+    String catCode = defCatTargets.get(0);
+    Date booksDate = getDate(booksListParam.getDate());
+
+    Books books = new Books();
+    books.setBooksId(UUID.randomUUID().toString());
+    books.setUserId(user);
+    books.setBooksType(booksListParam.getBooksType());
+    books.setBooksDate(booksDate);
+    books.setBooksPlace("");
+    books.setCatCode(catCode);
+    books.setBooksMethod("");
+    books.setBooksAmmount(0);
+    // 共通項目をセット
+    StudyBeanUtil.setStudyEntityProperties(books);
+
+    return books;
+  }
+
+  /**
    * 複数の家計簿データをアップデート
    * 
    * @return 更新件数

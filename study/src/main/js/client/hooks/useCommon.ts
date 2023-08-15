@@ -1,5 +1,12 @@
-import { useLocation, useSearchParams } from 'react-router-dom';
-import useSWR, { SWRConfiguration, unstable_serialize } from 'swr';
+import { useState } from 'react';
+import { Fetcher, useLocation, useSearchParams } from 'react-router-dom';
+import useSWR, {
+  Key,
+  SWRConfiguration,
+  SWRResponse,
+  mutate,
+  unstable_serialize,
+} from 'swr';
 
 import { OnServerApi } from '../../@types/studyApi';
 import { CommonUi } from '../../@types/studyUtilType';
@@ -19,9 +26,10 @@ const get = async (
     [url, token] = initialDataKey;
   }
 
-  const r = await fetchGet(url, token);
+  const res = await fetchGet(url, token);
   console.log(`call get:${url}${token ? JSON.stringify(token) : ''}`);
-  return await r.json();
+
+  return await res.json();
 };
 
 export const useCommonSWR = <T>(
@@ -70,6 +78,25 @@ export const useCommonSWRImmutable = <T>(
   return useCommonSWR<T>(apiFn, initialDataKey, {
     ...config,
     revalidateIfStale: false,
+    revalidateOnFocus: false,
+    revalidateOnReconnect: false,
+  });
+};
+
+export const useStaticSWR = <Data, Error>(
+  key: Key,
+  initialData?: Data | Fetcher<Data>
+): SWRResponse<Data, Error> => {
+  const [isInitialDataApplied, setIsInitialDataApplied] = useState(false);
+
+  // 初期値を設定後はこの関数内では再設定しない
+  // 数字の0は初期値として使用できないから注意
+  if (initialData && !isInitialDataApplied) {
+    mutate(key, initialData);
+    setIsInitialDataApplied(true);
+  }
+
+  return useSWR(key, null, {
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
   });

@@ -18,8 +18,12 @@ type SortAndFilterFormTableProps = {
   tableFormConfig: TableFormObjConfig;
   /** 送信制御用関数 */
   handleFormSubmit: (values: unknown) => Promise<Response>;
+  /** 送信制御用関数 */
+  handlePushSubmit?: (values: unknown) => Promise<Response>;
   /** submitボタンをhiddenにするかどうか */
   hiddenSubmitButton?: boolean;
+  /** 新規ボタンをhiddenにするかどうか */
+  hiddenPushButton?: boolean;
   /** enterで送信するかどうか */
   onEnterSubmit?: boolean;
   /** エラーデータ(主にサーバー側を想定) */
@@ -37,7 +41,9 @@ type SortAndFilterFormTableProps = {
 const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   tableFormConfig,
   handleFormSubmit,
+  handlePushSubmit,
   hiddenSubmitButton = false,
+  hiddenPushButton = true,
   onEnterSubmit = false,
   errData = null,
   customeButton = null,
@@ -48,6 +54,8 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   const additions = tableFormConfig.additions;
   // 初期値
   const initialValues = tableFormConfig.initialValues;
+  // リスト追加初期値
+  const defaultValues = tableFormConfig.defaultValues;
   // テーブル：ヘッダー
   const columns = tableFormConfig.columns;
   //テーブル: 行
@@ -125,6 +133,17 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
             ? customeButton.map((button) => button)
             : customeButton}
           <SubmitButton
+            title="新規"
+            isLoading={isSubmitLoading}
+            hidden={hiddenPushButton}
+            disabled={formik.dirty}
+            onClick={(event) => {
+              // from送信処理の停止
+              event.preventDefault();
+              handlePushSubmit(formik.values);
+            }}
+          />
+          <SubmitButton
             title="更新"
             isLoading={isSubmitLoading}
             hidden={hiddenSubmitButton}
@@ -137,8 +156,8 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
             // // const {
             // //   values: { valuesの値を取り出すよう },
             // // } = form;
-            // console.log('FieldArray form');
-            // console.log(form);
+            //console.log('FieldArray form');
+            //console.log(form.values[rowName]);
             return (
               <div>
                 <SortAndFilterTable

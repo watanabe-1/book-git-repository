@@ -136,7 +136,8 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
       // 初期値から変更されたか判定
       const eventValue = event.target.value;
       const textValue = eventValue ? eventValue : text;
-      if (textValue === initialValue) {
+      // 数値と文字列は同じように扱いため==で比較
+      if (textValue == initialValue) {
         setHasChanges(false);
       } else {
         setHasChanges(true);
@@ -157,7 +158,8 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
       // readonlyの時は連携された値が変更されているかどうかで判定を行う
       if (readonly) {
         // 初期値から変更されたか判定
-        if (value === initialValue) {
+        // 数値と文字列は同じように扱いため==で比較
+        if (value == initialValue) {
           setHasChanges(false);
         } else {
           setHasChanges(true);
@@ -185,9 +187,12 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
     const isArrayChildren = Array.isArray(children);
     const isValid = validate && touched && !error;
     const isInvalid = validate && !!error;
-    const textBase = textValue ? textValue : value;
-    const simpleTextValue = textBase ? textBase : '値がありません';
-    const textColorBase = textBase ? 'text-black' : 'text-black-50';
+    // 0はそのまま表示したいため
+    const textBase = textValue == '0' || textValue ? textValue : value;
+    const simpleTextValue =
+      textBase == '0' || textBase ? textBase : '値がありません';
+    const textColorBase =
+      textBase == '0' || textBase ? 'text-black' : 'text-black-50';
     const simpleTextColor = hasChanges ? 'text-warning' : textColorBase;
 
     const childrenProps = {

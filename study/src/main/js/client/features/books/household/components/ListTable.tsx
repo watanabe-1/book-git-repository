@@ -28,6 +28,7 @@ import TextBox from '../../../../components/form/TextBox';
 import {
   useHouseholdInfoSWR,
   useHouseholdDataSWR,
+  useHouseholdChartInfoStaticKeySWR,
 } from '../../../../hooks/useBooks';
 import { useCommonInfoSWR } from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
@@ -37,12 +38,15 @@ import { useDateParam } from '../hooks/useParam';
 type ListTableProps = {
   /** 家計簿データ */
   booksList?: Books[];
+  /** 新規データ作成時用基準の日付 */
+  booksDate?: Date;
   /** 家計簿タイプ */
   booksType: string;
 };
 
 const ListTable: React.FC<ListTableProps> = ({
   booksList: pbooksList,
+  booksDate,
   booksType,
 }) => {
   const { data: commonInfo } = useCommonInfoSWR();
@@ -53,6 +57,7 @@ const ListTable: React.FC<ListTableProps> = ({
   const { data: booksFormList, mutate: setList } = useHouseholdDataSWR(
     buildDataParam(paramDate, commonInfo.dateFormat, booksType)
   );
+  const { mutate: setChartInfoStaticKey } = useHouseholdChartInfoStaticKeySWR();
   const [errData, setErrData] = useState() as [
     ErrorResults,
     React.Dispatch<React.SetStateAction<unknown>>
@@ -60,7 +65,7 @@ const ListTable: React.FC<ListTableProps> = ({
   const booksList = pbooksList ? pbooksList : booksFormList.booksDataList;
 
   /**
-   * 送信ボタン
+   * 送信ボタン(更新)
    * @param form 送信パラメータ
    */
   const handleSubmit = async (form: unknown) => {
@@ -75,6 +80,31 @@ const ListTable: React.FC<ListTableProps> = ({
     // console.log(json);
     if (res.ok) {
       setList(json);
+      setChartInfoStaticKey((chartInfoStaticKey) => chartInfoStaticKey + 1);
+    } else {
+      setErrData(json);
+    }
+
+    return res;
+  };
+
+  /**
+   * 送信ボタン(新規)
+   * @param form 送信パラメータ
+   */
+  const handlePushData = async (form: unknown) => {
+    const res = await fetchPushData(
+      objArrayToObj(
+        form[classConst.BOOKS_DATA_LIST],
+        classConst.BOOKS_DATA_LIST
+      )
+    );
+    const json = await res.json();
+    // console.log('soushinkekka');
+    // console.log(json);
+    if (res.ok) {
+      setList(json);
+      setChartInfoStaticKey((chartInfoStaticKey) => chartInfoStaticKey + 1);
     } else {
       setErrData(json);
     }
@@ -91,6 +121,21 @@ const ListTable: React.FC<ListTableProps> = ({
       ...buildDataParam(paramDate, commonInfo.dateFormat, booksType),
     };
     return await fetchPost(urlConst.books.LISTDATAUPDATE, param);
+  };
+
+  /**
+   * 新規リストデータ追加
+   */
+  const fetchPushData = async (form: object) => {
+    const param = {
+      ...form,
+      ...buildDataParam(
+        booksDate ? booksDate : paramDate,
+        commonInfo.dateFormat,
+        booksType
+      ),
+    };
+    return await fetchPost(urlConst.books.LISTDATAPUSH, param);
   };
 
   // console.log(JSON.stringify(booksList));
@@ -324,7 +369,7 @@ const ListTable: React.FC<ListTableProps> = ({
           hidden: false,
         },
         addition: {
-          yup: yup.string().required().server(errData),
+          yup: yup.number().required().server(errData),
         },
       },
     ],
@@ -337,6 +382,8 @@ const ListTable: React.FC<ListTableProps> = ({
     <Container>
       <SortAndFilterFormTable
         tableFormConfig={listTableFormObj}
+        handlePushSubmit={handlePushData}
+        hiddenPushButton={false}
         handleFormSubmit={handleSubmit}
         errData={errData}
       />

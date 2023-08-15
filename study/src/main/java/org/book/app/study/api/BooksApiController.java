@@ -209,6 +209,25 @@ public class BooksApiController extends ApiController {
   }
 
   /**
+   * 家計簿新規デフォルトデータ作成
+   * 
+   * @param form 送信されたデータ
+   * @param result エラーチェック]-+結果
+   * @param model モデル
+   * @return null
+   */
+  @RequestMapping(value = "/books/listdataPush", method = RequestMethod.POST)
+  @ResponseBody
+  public BooksFormList listDataPush(@ModelAttribute @Validated BooksFormList booksListParam,
+      BindingResult result, ModelAndView model) throws BindException {
+    Books books = booksHelper.getDefault(booksListParam);
+    booksService.saveOne(books);
+
+    return getHouseholdListData(booksListParam.getDate(), booksListParam.getBooksType());
+
+  }
+
+  /**
    * 家計簿ダウンロード
    * 
    * @param form 送信されたデータ

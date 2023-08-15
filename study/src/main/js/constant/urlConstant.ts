@@ -35,6 +35,7 @@ export const urlConst = {
     DOWNLOAD: '/books/download',
     CONVERT_FILE: '/books/convertFile',
     HOUSEHOLD: '/books/household',
+    LISTDATAPUSH: '/books/listdataPush',
     LISTDATA: '/books/listdata',
     LISTDATAUPDATE: '/books/listdataUpdate',
   },

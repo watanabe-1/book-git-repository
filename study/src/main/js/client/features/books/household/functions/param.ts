@@ -20,6 +20,25 @@ export const buildInfoParam = (date: Date | string, dateFormat: string) => {
  *
  * @returns
  */
+export const buildChartParam = (
+  date: Date | string,
+  dateFormat: string,
+  validateKey: number
+) => {
+  const params = buildInfoParam(date, dateFormat);
+  // サーバー側で受け取るパラメータではなく
+  // 再度fetchを行うかの判定用のために使用
+  // 他のタブでデータが更新されたときにこのキーもカウントアップされる想定
+  params['validateKey'] = validateKey;
+
+  return params;
+};
+
+/**
+ * getHouseHoldData用param作成
+ *
+ * @returns
+ */
 export const buildDataParam = (
   date: Date | string,
   dateFormat: string,

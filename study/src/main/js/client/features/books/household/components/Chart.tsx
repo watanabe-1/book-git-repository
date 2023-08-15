@@ -11,10 +11,11 @@ import BarChart from '../../../../components/elements/chart/BarChart';
 import DoughnutChart from '../../../../components/elements/chart/DoughnutChart';
 import {
   useHouseholdChartInfoSWR,
+  useHouseholdChartInfoStaticKeySWR,
   useHouseholdInfoSWR,
 } from '../../../../hooks/useBooks';
 import { useCommonInfoSWR } from '../../../../hooks/useCommon';
-import { buildInfoParam } from '../functions/param';
+import { buildChartParam, buildInfoParam } from '../functions/param';
 import { useDateParam } from '../hooks/useParam';
 
 /**
@@ -33,11 +34,11 @@ const Chart = () => {
     buildInfoParam(paramDate, commonInfo.dateFormat)
   );
   const date = createDate(info.year, info.month);
+  const { data: chartInfoStaticKey } = useHouseholdChartInfoStaticKeySWR();
   const { data: chartData, initScript } = useHouseholdChartInfoSWR(
-    buildInfoParam(date, commonInfo.dateFormat)
+    buildChartParam(date, commonInfo.dateFormat, chartInfoStaticKey)
   );
   const { monthCategory, monthMethod, yearAll } = chartData;
-
   // console.log('chartdata');
   // console.log(chartData);
 
