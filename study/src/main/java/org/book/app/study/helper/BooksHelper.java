@@ -124,9 +124,9 @@ public class BooksHelper {
     books.setUserId(user);
     books.setBooksType(booksListParam.getBooksType());
     books.setBooksDate(booksDate);
-    books.setBooksPlace("");
+    books.setBooksPlace(" ");
     books.setCatCode(catCode);
-    books.setBooksMethod("");
+    books.setBooksMethod(" ");
     books.setBooksAmmount(0);
     // 共通項目をセット
     StudyBeanUtil.setStudyEntityProperties(books);

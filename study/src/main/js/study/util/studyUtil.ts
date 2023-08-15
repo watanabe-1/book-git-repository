@@ -221,6 +221,15 @@ export function isEmpty(obj: unknown) {
 }
 
 /**
+ * オブジェクトをtrimする
+ * @param obj
+ * @returns 判定結果
+ */
+export function trim(obj: unknown) {
+  return isEmpty(obj) ? obj : String(obj).trim();
+}
+
+/**
  * get通信を行う
  * @param baseurl 通信先
  * @param params パラメータ

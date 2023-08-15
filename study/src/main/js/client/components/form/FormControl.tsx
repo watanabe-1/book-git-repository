@@ -7,7 +7,7 @@ import React, {
 } from 'react';
 import Form from 'react-bootstrap/Form';
 
-import { isEmpty } from '../../../study/util/studyUtil';
+import { isEmpty, trim } from '../../../study/util/studyUtil';
 import SimpleText from '../elements/text/SimpleText';
 
 type FormControlProps = {
@@ -189,9 +189,10 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
     const isValid = validate && touched && !error;
     const isInvalid = validate && !!error;
     // 0はそのまま表示したいため
-    const textBase = isEmpty(textValue) ? value : textValue;
-    const simpleTextValue = isEmpty(textBase) ? '値がありません' : textBase;
-    const textColorBase = isEmpty(textBase) ? 'text-black-50' : 'text-black';
+    const textBase = isEmpty(trim(textValue)) ? value : textValue;
+    const isTextBaseEmpty = isEmpty(trim(textBase));
+    const simpleTextValue = isTextBaseEmpty ? '値がありません' : textBase;
+    const textColorBase = isTextBaseEmpty ? 'text-black-50' : 'text-black';
     const simpleTextColor = hasChanges ? 'text-warning' : textColorBase;
 
     const childrenProps = {

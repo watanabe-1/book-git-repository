@@ -44,7 +44,7 @@ public class BooksForm implements Serializable, Form {
   /**
    * 場所(収入元、購入先)
    */
-  @NotBlank
+  @NotNull
   private String booksPlace;
 
   /**
@@ -56,7 +56,7 @@ public class BooksForm implements Serializable, Form {
   /**
    * 方法(受け取り方、支払い方)
    */
-  @NotBlank
+  @NotNull
   private String booksMethod;
 
   /**
