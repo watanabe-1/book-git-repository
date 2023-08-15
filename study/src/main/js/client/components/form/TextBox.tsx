@@ -2,6 +2,7 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 
 import FormControl from './FormControl';
+import { isEmpty } from '../../../study/util/studyUtil';
 
 type TextBoxProps = {
   /** テキストボックスのタイトル */
@@ -54,7 +55,7 @@ const TextBox: React.FC<TextBoxProps> = ({
       title={title}
       name={name}
       // 0はそのまま表示したいため
-      value={value == 0 || value ? value : ''}
+      value={isEmpty(value) ? '' : value}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}

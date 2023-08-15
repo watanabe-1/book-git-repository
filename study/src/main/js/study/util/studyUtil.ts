@@ -212,6 +212,15 @@ export function isObjEmpty(obj: object) {
 }
 
 /**
+ * オブジェクトが空か判定する
+ * @param obj
+ * @returns 判定結果
+ */
+export function isEmpty(obj: unknown) {
+  return !(obj == '0' || obj);
+}
+
+/**
  * get通信を行う
  * @param baseurl 通信先
  * @param params パラメータ
@@ -267,7 +276,7 @@ export async function fetchPost(
   // console.log(`call post response:${{ ...res }}`);
 
   console.log('call post response:');
-  console.log({ ...res });
+  console.log(res);
 
   // if (!res.ok) {
   //   throw new Error(`unexpected status: ${res.status}`);

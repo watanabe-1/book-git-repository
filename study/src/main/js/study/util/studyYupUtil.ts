@@ -1,7 +1,7 @@
 import { FormikProps } from 'formik/dist/types';
 import { array, object } from 'yup/index';
 
-import { isObjEmpty, keyJoin } from './studyUtil';
+import { isEmpty, isObjEmpty, keyJoin } from './studyUtil';
 import {
   ErrorResults,
   BuildListTableFormObjConfig,
@@ -221,7 +221,7 @@ export function objToFormData(obj: object) {
         // console.log('formatted:' + formattedKey);
         // 中身がないものはおくらない
         // 0は送る
-        if (stack[0][j] == 0 || stack[0][j]) {
+        if (!isEmpty(stack[0][j])) {
           // console.log('type:' + Object.prototype.toString.call(stack[0][j]));
           // かぶりは上書き(基本的にかぶりはない想定)
           test[j] = stack[0][j];
@@ -274,7 +274,7 @@ export function objArrayToObj(objArray: object[], arrayName: string) {
           // console.log('formatted:' + formattedKey);
           // 中身がないものはおくらない
           // 0は送る
-          if (stack[0][j] == 0 || stack[0][j]) {
+          if (!isEmpty(stack[0][j])) {
             // console.log('type:' + Object.prototype.toString.call(stack[0][j]));
             // かぶりは上書き(基本的にかぶりはない想定)
             data[keyJoin(`${arrayName}[${index}]`, j)] = stack[0][j];
