@@ -71,8 +71,5 @@ export const useHouseholdCalendarInfoSWR = (token?: Record<string, string>) => {
 
 export const useHouseholdChartInfoStaticKeySWR = (initialData?: number) => {
   //console.log('call useHouseholdChartInfoStaticKeySWR');
-  return useStaticSWR<number | null, Error>(
-    'useHouseholdChartInfoStaticKeySWR',
-    initialData
-  );
+  return useStaticSWR<number>('useHouseholdChartInfoStaticKeySWR', initialData);
 };

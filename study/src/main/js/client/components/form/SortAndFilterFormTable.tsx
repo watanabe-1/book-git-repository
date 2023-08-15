@@ -54,8 +54,6 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   const additions = tableFormConfig.additions;
   // 初期値
   const initialValues = tableFormConfig.initialValues;
-  // リスト追加初期値
-  const defaultValues = tableFormConfig.defaultValues;
   // テーブル：ヘッダー
   const columns = tableFormConfig.columns;
   //テーブル: 行

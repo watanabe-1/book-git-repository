@@ -220,7 +220,8 @@ export function objToFormData(obj: object) {
         // const formattedKey = formatEscapeListItemId(j);
         // console.log('formatted:' + formattedKey);
         // 中身がないものはおくらない
-        if (stack[0][j]) {
+        // 0は送る
+        if (stack[0][j] == 0 || stack[0][j]) {
           // console.log('type:' + Object.prototype.toString.call(stack[0][j]));
           // かぶりは上書き(基本的にかぶりはない想定)
           test[j] = stack[0][j];
@@ -272,7 +273,8 @@ export function objArrayToObj(objArray: object[], arrayName: string) {
           // const formattedKey = formatEscapeListItemId(j);
           // console.log('formatted:' + formattedKey);
           // 中身がないものはおくらない
-          if (stack[0][j]) {
+          // 0は送る
+          if (stack[0][j] == 0 || stack[0][j]) {
             // console.log('type:' + Object.prototype.toString.call(stack[0][j]));
             // かぶりは上書き(基本的にかぶりはない想定)
             data[keyJoin(`${arrayName}[${index}]`, j)] = stack[0][j];

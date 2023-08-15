@@ -1,12 +1,6 @@
 import { useState } from 'react';
-import { Fetcher, useLocation, useSearchParams } from 'react-router-dom';
-import useSWR, {
-  Key,
-  SWRConfiguration,
-  SWRResponse,
-  mutate,
-  unstable_serialize,
-} from 'swr';
+import { useLocation, useSearchParams } from 'react-router-dom';
+import useSWR, { SWRConfiguration, mutate, unstable_serialize } from 'swr';
 
 import { OnServerApi } from '../../@types/studyApi';
 import { CommonUi } from '../../@types/studyUtilType';
@@ -83,10 +77,7 @@ export const useCommonSWRImmutable = <T>(
   });
 };
 
-export const useStaticSWR = <Data, Error>(
-  key: Key,
-  initialData?: Data | Fetcher<Data>
-): SWRResponse<Data, Error> => {
+export const useStaticSWR = <T>(key: string, initialData: T) => {
   const [isInitialDataApplied, setIsInitialDataApplied] = useState(false);
 
   // 初期値を設定後はこの関数内では再設定しない
@@ -97,8 +88,10 @@ export const useStaticSWR = <Data, Error>(
   }
 
   return useSWR(key, null, {
-    revalidateOnFocus: false,
-    revalidateOnReconnect: false,
+    revalidateOnFocus: false, // 画面フォーカス時の再検証（apiリクエスト）をオフ
+    revalidateOnMount: false, // コンポーネントマウント時の再検証（apiリクエスト）をオフ
+    revalidateOnReconnect: false, // ブラウザがネットワーク接続できた時の再検証(apiリクエスト)をオフ
+    revalidateIfStale: false, // キャッシュが古くなったときの再検証（apiリクエスト）をオフ
   });
 };
 
