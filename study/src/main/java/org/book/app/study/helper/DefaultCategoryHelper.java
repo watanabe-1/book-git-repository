@@ -3,10 +3,13 @@ package org.book.app.study.helper;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.book.app.study.dto.list.DefaultCategoryFormList;
 import org.book.app.study.entity.DefaultCategory;
 import org.book.app.study.enums.dbcode.DefaultCategoryTarget;
 import org.book.app.study.enums.flag.DeleteFlag;
+import org.book.app.study.enums.flag.RegexEnabledFlag;
 import org.book.app.study.form.DefaultCategoryForm;
 import org.book.app.study.service.DefaultCategoryService;
 import org.book.app.study.util.StudyBeanUtil;
@@ -75,7 +78,7 @@ public class DefaultCategoryHelper {
    */
   public Optional<DefaultCategory> findOneFromDefaultCeategoryList(String booksPlace,
       String booksType,
-      String booksMethod, List<DefaultCategory> defCatList) {
+      String booksMethod, int booksAmount, List<DefaultCategory> defCatList) {
     String targetKey =
         new StringBuffer().append(booksPlace).append(booksType).append(booksMethod).toString();
 
@@ -83,8 +86,30 @@ public class DefaultCategoryHelper {
         .filter(defCat -> {
           String defCatKey = new StringBuffer().append(defCat.getBooksPlace())
               .append(defCat.getBooksType()).append(defCat.getBooksMethod()).toString();
+          int booksAmmountMin = defCat.getBooksAmmountMin();
+          int booksAmmountMax = defCat.getBooksAmmountMax();
 
-          return Objects.equals(defCatKey, targetKey);
+          // 最小値が有効値の時かつ最小値よりも小さい値の時は対象外
+          if (booksAmmountMin >= 0 && booksAmount < booksAmmountMin) {
+            return false;
+          }
+
+          // 最大値が有効値の時かつ最大値よりも大きい値の時は対象外
+          if (booksAmmountMax >= 0 && booksAmount > booksAmmountMax) {
+            return false;
+          }
+
+          // 正規表現使用可否によって分岐
+          if (RegexEnabledFlag.isRegexEnabled(defCat.getRegexEnabled())) {
+            // 正規表現パターンをコンパイル
+            Pattern regexPattern = Pattern.compile(defCatKey);
+            // 正規表現パターンを使ってマッチングを行う
+            Matcher matcher = regexPattern.matcher(targetKey);
+
+            return matcher.matches();
+          } else {
+            return Objects.equals(defCatKey, targetKey);
+          }
         })
         .findFirst();
   }
@@ -120,9 +145,23 @@ public class DefaultCategoryHelper {
     for (DefaultCategoryForm defCatForm : defCatListParam.getDefCatDataList()) {
       if (DeleteFlag.isDelete(defCatForm.getDelete())) {
         updCnt +=
-            defaultCategoryService.deleteOne(StudyUtil.getLoginUser(), defCatForm.getBooksPlace(),
-                defCatForm.getBooksType(), defCatForm.getBooksMethod());
+            defaultCategoryService.deleteOne(defCatForm.getDefaultCategoryId(),
+                StudyUtil.getLoginUser());
+      } else {
+        String userId = StudyUtil.getLoginUser();
+        DefaultCategory defCat = new DefaultCategory();
+        // フォームの値をエンティティにコピーし、共通項目をセット
+        StudyBeanUtil.copyAndSetStudyEntityProperties(defCatForm, defCat);
+        defCat.setUserId(userId);
+        // 空文字などが入っているときは0を設定
+        if (!RegexEnabledFlag.isRegexEnabled(defCat.getRegexEnabled())) {
+          defCat.setRegexEnabled(RegexEnabledFlag.NON_SET_UP_FLAG_VALUE);
+        }
+
+        updCnt += defaultCategoryService.updateOne(defCat, defCatForm.getDefaultCategoryId(),
+            userId);
       }
+
     }
 
     return updCnt;

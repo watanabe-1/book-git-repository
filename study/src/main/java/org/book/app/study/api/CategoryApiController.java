@@ -7,6 +7,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.dto.ui.category.CategoryUi;
 import org.book.app.study.entity.Category;
+import org.book.app.study.enums.flag.ActiveFlag;
 import org.book.app.study.form.CategoryForm;
 import org.book.app.study.form.ImageForm;
 import org.book.app.study.helper.CategoryHelper;
@@ -125,6 +126,10 @@ public class CategoryApiController extends ApiController {
     Category cat = new Category();
     // フォームの値をエンティティにコピーし、共通項目をセット
     StudyBeanUtil.copyAndSetStudyEntityProperties(form, cat);
+    // 空文字などが入っているときは0を設定
+    if (!ActiveFlag.isActive(cat.getActive())) {
+      cat.setActive(ActiveFlag.NON_SET_UP_FLAG_VALUE);
+    }
 
     // dbのカテゴリーテーブルに登録
     categoryService.saveOne(cat);

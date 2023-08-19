@@ -32,12 +32,13 @@ type TextBoxProps = {
 
 /**
  * textbox初期値設定用関数
- * string型が来ないことが分かっている個所で使用する想定
+ * string型が来ないことが分かっている個所
+ * やnullが入る可能制がある箇所で使用する想定
  *
  * @param value 値
  * @returns
  */
-export const modifierTextBox = (value: string) => String(value);
+export const modifierTextBox = (value: unknown) => (value ? String(value) : '');
 
 /**
  * @returns form内のテキストボックス

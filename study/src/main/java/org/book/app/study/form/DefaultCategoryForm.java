@@ -10,6 +10,11 @@ import lombok.Data;
 public class DefaultCategoryForm implements Serializable, Form {
 
   /**
+   * デフォルトカテゴリーID
+   */
+  private String defaultCategoryId;
+
+  /**
    * 場所(収入元、購入先)
    */
   private String booksPlace;
@@ -25,9 +30,24 @@ public class DefaultCategoryForm implements Serializable, Form {
   private String booksMethod;
 
   /**
+   * 金額(最小値)(金額(最小値) マイナスの場合は検索対象から除外)
+   */
+  private Integer booksAmmountMin;
+
+  /**
+   * 金額(最大値)(金額(最大値) マイナスの場合は検索対象から除外)
+   */
+  private Integer booksAmmountMax;
+
+  /**
    * カテゴリーコード
    */
   private String catCode;
+
+  /**
+   * 正規表現使用可否(正規表現使用可否 1 = 使用 それ以外 = 使用しない)
+   */
+  private String regexEnabled;
 
   /**
    * 削除フラグ

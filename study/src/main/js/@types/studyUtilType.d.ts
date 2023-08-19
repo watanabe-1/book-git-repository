@@ -47,11 +47,15 @@ export type CategoryFormList = {
  * デフォルトカテゴリー
  */
 export type DefaultCategory = {
+  defaultCategoryId: string;
   booksType: string;
   booksPlace: string;
-  catCode: string;
   booksMethod: string;
-  booksAmmount: number;
+  booksAmmountMin: number;
+  booksAmmountMax: number;
+  catCode: string;
+  regexEnabled: string;
+  delete: string;
 };
 
 /**
@@ -124,6 +128,7 @@ export type CategoryUi = {
 export type DefaultCategoryUi = {
   delete: Flag;
   booksTypes: Type[];
+  regexEnabled: Flag;
   categories: Type[];
 };
 

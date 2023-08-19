@@ -28,15 +28,12 @@ public class DefaultCategoryService {
   /**
    * 1行検索(引数にプライマルキーを指定)
    * 
+   * @param defaultCategoryId DEFAULT_CATEGORY_ID(デフォルトカテゴリーID)
    * @param userId USER_ID(ユーザーID)
-   * @param booksPlace BOOKS_PLACE(場所--収入元、購入先)
-   * @param booksType BOOKS_TYPE(帳簿の種類--収入、支出を選ぶ)
-   * @param booksMethod BOOKS_METHOD(方法--受け取り方、支払い方)
    * @return 検索結果(1行)
    */
-  public DefaultCategory findOne(String userId, String booksPlace, String booksType,
-      String booksMethod) {
-    return defaultcategoryMapper.findOne(userId, booksPlace, booksType, booksMethod);
+  public DefaultCategory findOne(String defaultCategoryId, String userId) {
+    return defaultcategoryMapper.findOne(defaultCategoryId, userId);
   }
 
   /**
@@ -73,19 +70,16 @@ public class DefaultCategoryService {
   }
 
   /**
-   * 1行update プライマルキーをWhere句に指定 プライマルキー：String userId, String booksPlace, String booksType, String booksMethod
+   * 1行update プライマルキーをWhere句に指定 プライマルキー：String defaultCategoryId, String userId
    * 
    * @param def entity(DefaultCategory)
+   * @param defaultCategoryId DEFAULT_CATEGORY_ID(デフォルトカテゴリーID)
    * @param userId USER_ID(ユーザーID)
-   * @param booksPlace BOOKS_PLACE(場所--収入元、購入先)
-   * @param booksType BOOKS_TYPE(帳簿の種類--収入、支出を選ぶ)
-   * @param booksMethod BOOKS_METHOD(方法--受け取り方、支払い方)
    * @return update行数
    */
   @Transactional
-  public int updateOne(DefaultCategory def, String userId, String booksPlace, String booksType,
-      String booksMethod) {
-    return defaultcategoryMapper.updateOne(def, userId, booksPlace, booksType, booksMethod);
+  public int updateOne(DefaultCategory def, String defaultCategoryId, String userId) {
+    return defaultcategoryMapper.updateOne(def, defaultCategoryId, userId);
   }
 
   /**
@@ -101,15 +95,13 @@ public class DefaultCategoryService {
   /**
    * 1行delete(引数にプライマルキーを指定)
    * 
+   * @param defaultCategoryId DEFAULT_CATEGORY_ID(デフォルトカテゴリーID)
    * @param userId USER_ID(ユーザーID)
-   * @param booksPlace BOOKS_PLACE(場所--収入元、購入先)
-   * @param booksType BOOKS_TYPE(帳簿の種類--収入、支出を選ぶ)
-   * @param booksMethod BOOKS_METHOD(方法--受け取り方、支払い方)
    * @return delete行数
    */
   @Transactional
-  public int deleteOne(String userId, String booksPlace, String booksType, String booksMethod) {
-    return defaultcategoryMapper.deleteOne(userId, booksPlace, booksType, booksMethod);
+  public int deleteOne(String defaultCategoryId, String userId) {
+    return defaultcategoryMapper.deleteOne(defaultCategoryId, userId);
   }
 
   /**

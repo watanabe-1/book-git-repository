@@ -22,14 +22,12 @@ public interface DefaultCategoryMapper {
   /**
    * 1行検索(引数にプライマルキーを指定)
    * 
+   * @param defaultCategoryId DEFAULT_CATEGORY_ID(デフォルトカテゴリーID)
    * @param userId USER_ID(ユーザーID)
-   * @param booksPlace BOOKS_PLACE(場所--収入元、購入先)
-   * @param booksType BOOKS_TYPE(帳簿の種類--収入、支出を選ぶ)
-   * @param booksMethod BOOKS_METHOD(方法--受け取り方、支払い方)
    * @return 検索結果(1行)
    */
-  DefaultCategory findOne(@Param("userId") String userId, @Param("booksPlace") String booksPlace,
-      @Param("booksType") String booksType, @Param("booksMethod") String booksMethod);
+  DefaultCategory findOne(@Param("defaultCategoryId") String defaultCategoryId,
+      @Param("userId") String userId);
 
   /**
    * 複数行insert
@@ -56,19 +54,17 @@ public interface DefaultCategoryMapper {
   int updateAll(DefaultCategory def);
 
   /**
-   * 1行update プライマルキーをWhere句に指定 プライマルキー：@Param("userIdWhere")String userId, @Param("booksPlaceWhere")String
-   * booksPlace, @Param("booksTypeWhere")String booksType, @Param("booksMethodWhere")String booksMethod
+   * 1行update プライマルキーをWhere句に指定 プライマルキー：@Param("defaultCategoryIdWhere")String
+   * defaultCategoryId, @Param("userIdWhere")String userId
    * 
    * @param def entity(DefaultCategory)
+   * @param defaultCategoryId DEFAULT_CATEGORY_ID(デフォルトカテゴリーID)
    * @param userId USER_ID(ユーザーID)
-   * @param booksPlace BOOKS_PLACE(場所--収入元、購入先)
-   * @param booksType BOOKS_TYPE(帳簿の種類--収入、支出を選ぶ)
-   * @param booksMethod BOOKS_METHOD(方法--受け取り方、支払い方)
    * @return update行数
    */
-  int updateOne(@Param("def") DefaultCategory def, @Param("userIdWhere") String userId,
-      @Param("booksPlaceWhere") String booksPlace, @Param("booksTypeWhere") String booksType,
-      @Param("booksMethodWhere") String booksMethod);
+  int updateOne(@Param("def") DefaultCategory def,
+      @Param("defaultCategoryIdWhere") String defaultCategoryId,
+      @Param("userIdWhere") String userId);
 
   /**
    * 全行delete
@@ -80,14 +76,12 @@ public interface DefaultCategoryMapper {
   /**
    * 1行delete(引数にプライマルキーを指定)
    * 
+   * @param defaultCategoryId DEFAULT_CATEGORY_ID(デフォルトカテゴリーID)
    * @param userId USER_ID(ユーザーID)
-   * @param booksPlace BOOKS_PLACE(場所--収入元、購入先)
-   * @param booksType BOOKS_TYPE(帳簿の種類--収入、支出を選ぶ)
-   * @param booksMethod BOOKS_METHOD(方法--受け取り方、支払い方)
    * @return delete行数
    */
-  int deleteOne(@Param("userId") String userId, @Param("booksPlace") String booksPlace,
-      @Param("booksType") String booksType, @Param("booksMethod") String booksMethod);
+  int deleteOne(@Param("defaultCategoryId") String defaultCategoryId,
+      @Param("userId") String userId);
 
   /**
    * ユーザーID検索

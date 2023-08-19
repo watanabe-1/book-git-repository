@@ -31,7 +31,7 @@ import SelectBox, {
 } from '../../../../components/form/SelectBox';
 import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
 import TextArea from '../../../../components/form/TextArea';
-import TextBox from '../../../../components/form/TextBox';
+import TextBox, { modifierTextBox } from '../../../../components/form/TextBox';
 import {
   useCategoryInfoSWR,
   useCategoryListSWR,
@@ -245,6 +245,7 @@ const ListTable = () => {
       },
       {
         name: fieldConst.category.NOTE,
+        modifier: modifierTextBox,
         table: {
           head: 'メモ',
           getCell: (props: FormikProps<unknown>, names: unknown) => {

@@ -24,11 +24,12 @@ import SelectBox, {
   getSelectBoxTypeList,
 } from '../../../../components/form/SelectBox';
 import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
-import TextBox from '../../../../components/form/TextBox';
+import TextBox, { modifierTextBox } from '../../../../components/form/TextBox';
 import {
   useDefaultCategoryInfoSWR,
   useDefaultCategoryListSWR,
 } from '../../../../hooks/useDefaultCategory';
+import yup from '../../../../locale/yup.locale';
 
 /**
  * デフォルトカテゴリー リスト形式確認画面
@@ -138,16 +139,18 @@ const ListTable = () => {
             return {
               element: (
                 <FastField name={name}>
-                  {({ field }: FieldProps<string>) => {
+                  {({ field, meta }: FieldProps<string>) => {
                     return (
                       <SelectBox
                         name={field.name}
                         value={field.value}
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
                         typeList={typeList}
                         dirty={props.dirty}
                         onBlur={field.onChange}
                         isOnClickEditable
-                        readonly
                       />
                     );
                   }}
@@ -160,6 +163,9 @@ const ListTable = () => {
               ),
             };
           },
+        },
+        addition: {
+          yup: yup.string().required().server(errData),
         },
       },
       {
@@ -173,18 +179,17 @@ const ListTable = () => {
             return {
               element: (
                 <FastField name={name}>
-                  {({ field }: FieldProps<string>) => {
+                  {({ field, meta }: FieldProps<string>) => {
                     return (
                       <TextBox
                         name={field.name}
                         value={field.value}
-                        // validate
-                        // touched={meta.touched}
-                        // error={meta.error}
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
                         dirty={props.dirty}
                         onBlur={field.onChange}
                         isOnClickEditable
-                        readonly
                       />
                     );
                   }}
@@ -194,6 +199,9 @@ const ListTable = () => {
               textValue: value,
             };
           },
+        },
+        addition: {
+          yup: yup.string().required().server(errData),
         },
       },
       {
@@ -206,18 +214,17 @@ const ListTable = () => {
             return {
               element: (
                 <FastField name={name}>
-                  {({ field }: FieldProps<string>) => {
+                  {({ field, meta }: FieldProps<string>) => {
                     return (
                       <TextBox
                         name={field.name}
                         value={field.value}
-                        // validate
-                        // touched={meta.touched}
-                        // error={meta.error}
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
                         dirty={props.dirty}
                         onBlur={field.onChange}
                         isOnClickEditable
-                        readonly
                       />
                     );
                   }}
@@ -227,6 +234,81 @@ const ListTable = () => {
               textValue: value,
             };
           },
+        },
+        addition: {
+          yup: yup.string().required().server(errData),
+        },
+      },
+      {
+        name: fieldConst.defaultCategory.BOOKS_AMMOUNT_MIN,
+        modifier: modifierTextBox,
+        table: {
+          head: '金額(最小)',
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.defaultCategory.BOOKS_AMMOUNT_MIN];
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field, meta }: FieldProps<string>) => {
+                    return (
+                      <TextBox
+                        name={field.name}
+                        value={field.value}
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
+                        dirty={props.dirty}
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: value,
+            };
+          },
+        },
+        addition: {
+          yup: yup.number().required().server(errData),
+        },
+      },
+      {
+        name: fieldConst.defaultCategory.BOOKS_AMMOUNT_MAX,
+        modifier: modifierTextBox,
+        table: {
+          head: '金額(最大)',
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.defaultCategory.BOOKS_AMMOUNT_MAX];
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field, meta }: FieldProps<string>) => {
+                    return (
+                      <TextBox
+                        name={field.name}
+                        value={field.value}
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
+                        dirty={props.dirty}
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: value,
+            };
+          },
+        },
+        addition: {
+          yup: yup.number().required().server(errData),
         },
       },
       {
@@ -240,16 +322,18 @@ const ListTable = () => {
             return {
               element: (
                 <FastField name={name}>
-                  {({ field }: FieldProps<string>) => {
+                  {({ field, meta }: FieldProps<string>) => {
                     return (
                       <SelectBox
                         name={field.name}
                         value={field.value}
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
                         typeList={typeList}
                         dirty={props.dirty}
                         onBlur={field.onChange}
                         isOnClickEditable
-                        readonly
                       />
                     );
                   }}
@@ -260,6 +344,42 @@ const ListTable = () => {
                 getSelectBoxTypeList(typeList),
                 value
               ),
+            };
+          },
+        },
+        addition: {
+          yup: yup.string().required().server(errData),
+        },
+      },
+      {
+        name: fieldConst.defaultCategory.REGEX_ENABLED,
+        modifier: modifierCheckBox,
+        table: {
+          head: '正規表現',
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.defaultCategory.REGEX_ENABLED];
+            const value = props.getFieldProps(name).value;
+            const flag = info.regexEnabled;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    return (
+                      <CheckBox
+                        name={field.name}
+                        value={field.value}
+                        flag={flag}
+                        dirty={props.dirty}
+                        onChange={field.onChange}
+                        isOnClickEditable
+                        noLabel
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: getCheckBoxTextValue(flag, value),
             };
           },
         },

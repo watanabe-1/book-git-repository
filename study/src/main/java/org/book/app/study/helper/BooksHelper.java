@@ -151,11 +151,13 @@ public class BooksHelper {
       if (DeleteFlag.isDelete(booksForm.getDelete())) {
         updCnt += booksService.deleteOne(booksForm.getBooksId(), StudyUtil.getLoginUser());
       } else {
+        String userId = StudyUtil.getLoginUser();
         Books books = new Books();
         // フォームの値をエンティティにコピーし、共通項目をセット
         StudyBeanUtil.copyAndSetStudyEntityProperties(booksForm, books);
+        books.setUserId(userId);
 
-        updCnt += booksService.updateOne(books, booksForm.getBooksId(), StudyUtil.getLoginUser());
+        updCnt += booksService.updateOne(books, booksForm.getBooksId(), userId);
       }
     }
 
@@ -183,12 +185,13 @@ public class BooksHelper {
           String catCode = categoryHelper.getCatCode(col.getCatName());
           String booksPlace = col.getBooksPlace();
           String booksMethod = col.getBooksMethod();
+          int booksAmount = col.getBooksAmmount();
 
           // カテゴリーがデフォルトカテゴリーマスタ変更対象の場合
           if (defCatTargets.contains(catCode)) {
             Optional<DefaultCategory> mutchDefCat =
                 defaultCategoryHelper.findOneFromDefaultCeategoryList(
-                    booksPlace, booksType, booksMethod, defCatList);
+                    booksPlace, booksType, booksMethod, booksAmount, defCatList);
             // デフォルトカテゴリーマスタに対象が設定されていたら
             if (mutchDefCat.isPresent()) {
               catCode = mutchDefCat.get().getCatCode();

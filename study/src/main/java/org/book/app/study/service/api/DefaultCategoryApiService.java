@@ -2,6 +2,7 @@ package org.book.app.study.service.api;
 
 import org.book.app.study.dto.ui.defaultCategory.DefaultCategoryUi;
 import org.book.app.study.enums.flag.DeleteFlag;
+import org.book.app.study.enums.flag.RegexEnabledFlag;
 import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.helper.CategoryHelper;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ public class DefaultCategoryApiService {
     ui.setDelete(DeleteFlag.DELETE);
     ui.setBooksTypes(BooksType.values());
     ui.setCategories(categoryHelper.getCategoryTypeDataList());
+    ui.setRegexEnabled(RegexEnabledFlag.REGEX_ENABLED);
 
     return ui;
   }

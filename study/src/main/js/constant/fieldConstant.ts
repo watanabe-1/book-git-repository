@@ -29,10 +29,14 @@ export const fieldConst = {
    * デフォルトカテゴリー
    */
   defaultCategory: {
+    DEFAULT_CATEGORY_ID: 'defaultCategoryId',
     BOOKS_TYPE: 'booksType',
     BOOKS_PLACE: 'booksPlace',
-    CAT_CODE: 'catCode',
     BOOKS_METHOD: 'booksMethod',
+    BOOKS_AMMOUNT_MIN: 'booksAmmountMin',
+    BOOKS_AMMOUNT_MAX: 'booksAmmountMax',
+    CAT_CODE: 'catCode',
+    REGEX_ENABLED: 'regexEnabled',
     DELETE: 'delete',
   },
 

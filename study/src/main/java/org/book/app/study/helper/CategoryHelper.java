@@ -10,6 +10,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.book.app.study.dto.data.TypeData;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.entity.Category;
+import org.book.app.study.enums.flag.ActiveFlag;
 import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.form.CategoryForm;
 import org.book.app.study.form.ImageForm;
@@ -100,6 +101,10 @@ public class CategoryHelper {
         // imgaeIdをセット
         if (StudyStringUtil.isNullOrEmpty(cat.getImgId())) {
           cat.setImgId(catForm.getImgIds().getImgId());
+        }
+        // 空文字などが入っているときは0を設定
+        if (!ActiveFlag.isActive(cat.getActive())) {
+          cat.setActive(ActiveFlag.NON_SET_UP_FLAG_VALUE);
         }
 
         updCnt += categoryService.updateOne(cat, catForm.getCatCode());

@@ -16,6 +16,11 @@ public class DefaultCategory implements Serializable, Entity {
   private String serialKey;
 
   /**
+   * デフォルトカテゴリーID
+   */
+  private String defaultCategoryId;
+
+  /**
    * ユーザーID
    */
   private String userId;
@@ -36,9 +41,24 @@ public class DefaultCategory implements Serializable, Entity {
   private String booksMethod;
 
   /**
+   * 金額(最小値)(金額(最小値) マイナスの場合は検索対象から除外)
+   */
+  private Integer booksAmmountMin;
+
+  /**
+   * 金額(最大値)(金額(最大値) マイナスの場合は検索対象から除外)
+   */
+  private Integer booksAmmountMax;
+
+  /**
    * カテゴリーコード
    */
   private String catCode;
+
+  /**
+   * 正規表現使用可否(正規表現使用可否 1 = 使用 それ以外 = 使用しない)
+   */
+  private String regexEnabled;
 
   /**
    * 登録日時
@@ -61,4 +81,3 @@ public class DefaultCategory implements Serializable, Entity {
   private String updUser;
 
 }
-
