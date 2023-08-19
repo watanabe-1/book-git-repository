@@ -34,6 +34,8 @@ type CheckBoxProps = {
   readonly?: boolean;
   /** ラベルを表示しない */
   noLabel?: boolean;
+  /** ラベルにテキストバリューを使用するか */
+  isLabelTextValue?: boolean;
 };
 
 /**
@@ -48,6 +50,33 @@ export const modifierCheckBox = (value: string) => {
     return ['1'];
   }
   return [];
+};
+
+/**
+ * 選択肢の表示値を取得
+ *
+ * @param flag チェック選択フラグ
+ * @param code 取得したい選択肢のコード
+ */
+export const getCheckBoxTextValue = (flag: Flag, code) => {
+  return getConfirmMessage(code, typeConst.col.CHECK, {
+    typeList: null,
+    flag: flag,
+  });
+};
+
+/**
+ * 選択肢の表示値を取得
+ *
+ * @param flag チェック選択フラグ
+ * @param code 取得したい選択肢のコード
+ */
+export const getCheckBoxLabelValue = (
+  flag: Flag,
+  text: string,
+  isLabelTextValue = true
+) => {
+  return isLabelTextValue ? text : flag.name;
 };
 
 /**
@@ -68,12 +97,12 @@ const CheckBox: React.FC<CheckBoxProps> = ({
   isOnClickEditable = false,
   readonly = false,
   noLabel = false,
+  isLabelTextValue = true,
 }) => {
-  const text = getConfirmMessage(value, typeConst.col.CHECK, {
-    typeList: null,
-    flag: flag,
-  });
-  const label = noLabel ? null : flag.name;
+  const text = getCheckBoxTextValue(flag, value);
+  const label = noLabel
+    ? null
+    : getCheckBoxLabelValue(flag, text, isLabelTextValue);
   // console.log(`${name}-${value}`);
 
   return (

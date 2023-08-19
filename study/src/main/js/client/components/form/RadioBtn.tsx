@@ -35,6 +35,28 @@ type RadioBtnProps = {
 };
 
 /**
+ * typeListの取得
+ *
+ * @param baseList 選択肢のリスト
+ * @returns
+ */
+export const getRadioBtnTypeList = (baseList: Type[] | string[]) => {
+  return ToTypeArrayIfIsStringArray(baseList);
+};
+
+/**
+ * 選択肢の表示値を取得
+ *
+ * @param typeList 選択肢のリスト
+ * @param code 取得したい選択肢のコード
+ */
+export const getRadioBtnTextValue = (typeList: Type[], code) => {
+  const textValue = typeList.find((type) => type.code === code)?.name;
+
+  return textValue ? textValue : '';
+};
+
+/**
  *
  * @returns form内のラジオボタン
  */
@@ -53,8 +75,8 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
   isOnClickEditable = false,
   readonly = false,
 }) => {
-  const newTypeList = ToTypeArrayIfIsStringArray(typeList);
-  const selectedType = newTypeList.find((type) => type.code === value);
+  const newTypeList = getRadioBtnTypeList(typeList);
+  const textValue = getRadioBtnTextValue(newTypeList, value);
   const titleBr = !!title;
 
   return (
@@ -63,7 +85,7 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
       titleBr={titleBr}
       name={name}
       value={value ? value : ''}
-      textValue={selectedType ? selectedType.name : ''}
+      textValue={textValue ? textValue : ''}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}

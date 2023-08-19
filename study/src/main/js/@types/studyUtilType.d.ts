@@ -198,7 +198,14 @@ export type BuildListTableFormObjConfig = {
     modifier?: (value?: unknown) => unknown;
     table: {
       head: string;
-      getCell: (props: FormikProps<?>, names: unknown) => JSX.Element;
+      getCell: (
+        props: FormikProps<?>,
+        names: unknown
+      ) => {
+        element: JSX.Element;
+        value: unknown;
+        textValue: string;
+      };
       hidden?: boolean;
     };
     addition?: {
@@ -234,6 +241,7 @@ export type TableColumn = {
 export type TableCell = {
   name: string;
   value: string;
+  textValue: string;
   element: JSX.Element;
   hidden: boolean;
 };

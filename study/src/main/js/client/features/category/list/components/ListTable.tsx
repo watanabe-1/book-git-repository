@@ -1,5 +1,5 @@
 import { FastField, Field, FieldProps, FormikProps } from 'formik';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import {
   ErrorResults,
@@ -16,11 +16,19 @@ import {
 } from '../../../../../study/util/studyYupUtil';
 import ModalSlider from '../../../../components/elements/slider/ModalSlider';
 import CheckBox, {
+  getCheckBoxLabelValue,
+  getCheckBoxTextValue,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
 import FileBoxAndImg from '../../../../components/form/FileBoxAndImg';
-import RadioBtn from '../../../../components/form/RadioBtn';
-import SelectBox from '../../../../components/form/SelectBox';
+import RadioBtn, {
+  getRadioBtnTextValue,
+  getRadioBtnTypeList,
+} from '../../../../components/form/RadioBtn';
+import SelectBox, {
+  getSelectBoxTextValue,
+  getSelectBoxTypeList,
+} from '../../../../components/form/SelectBox';
 import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
 import TextArea from '../../../../components/form/TextArea';
 import TextBox from '../../../../components/form/TextBox';
@@ -94,31 +102,40 @@ const ListTable = () => {
           head: '削除',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.category.DELETE];
-            return (
-              <FastField name={name}>
-                {({ field }: FieldProps<string>) => {
-                  // console.log('Field');
-                  // console.log(field);
-                  // console.log('form');
-                  // console.log(form);
-                  // console.log('meta');
-                  // console.log(meta);
-                  // console.log('values');
-                  // console.log(props.values);
-                  // getFieldPropsで取得できる値はFieldタグのfieldと同じ(内部的に同じ関数が呼ばれている)
-                  // console.log('props.getFieldProps');
-                  // console.log(props.getFieldProps(name));
-                  return (
-                    <CheckBox
-                      name={field.name}
-                      value={field.value}
-                      flag={info.delete}
-                      onChange={field.onChange}
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            const flag = info.delete;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    // console.log('Field');
+                    // console.log(field);
+                    // console.log('form');
+                    // console.log(form);
+                    // console.log('meta');
+                    // console.log(meta);
+                    // console.log('values');
+                    // console.log(props.values);
+                    // getFieldPropsで取得できる値はFieldタグのfieldと同じ(内部的に同じ関数が呼ばれている)
+                    // console.log('props.getFieldProps');
+                    // console.log(props.getFieldProps(name));
+                    return (
+                      <CheckBox
+                        name={field.name}
+                        value={field.value}
+                        flag={flag}
+                        onChange={field.onChange}
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: getCheckBoxLabelValue(
+                flag,
+                getCheckBoxTextValue(flag, value)
+              ),
+            };
           },
         },
       },
@@ -128,22 +145,27 @@ const ListTable = () => {
           head: 'カテゴリーコード',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.category.CAT_CODE];
-            return (
-              <FastField name={name}>
-                {({ field, meta }: FieldProps<string>) => {
-                  return (
-                    <TextBox
-                      name={field.name}
-                      value={field.value}
-                      validate
-                      touched={meta.touched}
-                      error={meta.error}
-                      onChange={field.onChange}
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field, meta }: FieldProps<string>) => {
+                    return (
+                      <TextBox
+                        name={field.name}
+                        value={field.value}
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
+                        onChange={field.onChange}
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: value,
+            };
           },
           hidden: true,
         },
@@ -157,25 +179,30 @@ const ListTable = () => {
           head: 'カテゴリー名',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.category.CAT_NAME];
-            return (
-              <FastField name={name}>
-                {({ field, meta }: FieldProps<string>) => {
-                  return (
-                    <TextBox
-                      name={field.name}
-                      value={field.value}
-                      validate
-                      touched={meta.touched}
-                      error={meta.error}
-                      dirty={props.dirty}
-                      // onChangeにセットすると入力するたびにソートが走るので、画面が動きすぎて見づらいため、onBlurに設定
-                      onBlur={field.onChange}
-                      isOnClickEditable
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field, meta }: FieldProps<string>) => {
+                    return (
+                      <TextBox
+                        name={field.name}
+                        value={field.value}
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
+                        dirty={props.dirty}
+                        // onChangeにセットすると入力するたびにソートが走るので、画面が動きすぎて見づらいため、onBlurに設定
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: value,
+            };
           },
         },
         addition: {
@@ -188,22 +215,31 @@ const ListTable = () => {
           head: 'カテゴリータイプ',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.category.CAT_TYPE];
-            return (
-              <FastField name={name}>
-                {({ field }: FieldProps<string>) => {
-                  return (
-                    <RadioBtn
-                      name={field.name}
-                      value={field.value}
-                      typeList={info.catTypes}
-                      dirty={props.dirty}
-                      onChange={field.onChange}
-                      isOnClickEditable
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            const typeList = info.catTypes;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    return (
+                      <RadioBtn
+                        name={field.name}
+                        value={field.value}
+                        typeList={typeList}
+                        dirty={props.dirty}
+                        onChange={field.onChange}
+                        isOnClickEditable
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: getRadioBtnTextValue(
+                getRadioBtnTypeList(typeList),
+                value
+              ),
+            };
           },
         },
       },
@@ -213,21 +249,26 @@ const ListTable = () => {
           head: 'メモ',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.category.NOTE];
-            return (
-              <FastField name={name}>
-                {({ field }: FieldProps<string>) => {
-                  return (
-                    <TextArea
-                      name={field.name}
-                      value={field.value}
-                      dirty={props.dirty}
-                      onBlur={field.onChange}
-                      isOnClickEditable
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    return (
+                      <TextArea
+                        name={field.name}
+                        value={field.value}
+                        dirty={props.dirty}
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: value,
+            };
           },
         },
       },
@@ -237,23 +278,32 @@ const ListTable = () => {
           head: '画像タイプ',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.category.IMG_TYPE];
-            return (
-              <FastField name={name}>
-                {({ field }: FieldProps<string>) => {
-                  return (
-                    <SelectBox
-                      name={field.name}
-                      value={field.value}
-                      typeList={info.imgTypes}
-                      dirty={props.dirty}
-                      // onChangeにセットすると入力するたびにソートが走るので、画面が動きすぎて見づらいため、onBlurに設定
-                      onBlur={field.onChange}
-                      isOnClickEditable
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            const typeList = info.imgTypes;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    return (
+                      <SelectBox
+                        name={field.name}
+                        value={field.value}
+                        typeList={typeList}
+                        dirty={props.dirty}
+                        // onChangeにセットすると入力するたびにソートが走るので、画面が動きすぎて見づらいため、onBlurに設定
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: getSelectBoxTextValue(
+                getSelectBoxTypeList(typeList),
+                value
+              ),
+            };
           },
         },
       },
@@ -266,52 +316,57 @@ const ListTable = () => {
               names[
                 keyJoin(fieldConst.category.IMG_IDS, fieldConst.category.IMG_ID)
               ];
-            return (
-              <>
-                <FastField name={name}>
-                  {({ field }: FieldProps<string>) => {
-                    const startIndex = imageList.findIndex(
-                      (image) => image.imgId === field.value
-                    );
-                    return (
-                      <>
-                        <TextBox
-                          name={field.name}
-                          value={field.value}
-                          dirty={props.dirty}
-                          readonly
-                        />
-                        <ModalSlider
-                          imageList={imageList}
-                          startIndex={startIndex}
-                          setImage={(image) => {
-                            props.setFieldValue(name, image.imgId);
-                            props.setFieldValue(
-                              names[
-                                keyJoin(
-                                  fieldConst.category.IMG_IDS,
-                                  fieldConst.image.IMG_PATH
-                                )
-                              ],
-                              image.imgPath
-                            );
-                            props.setFieldValue(
-                              names[
-                                keyJoin(
-                                  fieldConst.category.IMG_IDS,
-                                  fieldConst.image.IMG_NAME
-                                )
-                              ],
-                              image.imgName
-                            );
-                          }}
-                        />
-                      </>
-                    );
-                  }}
-                </FastField>
-              </>
-            );
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <>
+                  <FastField name={name}>
+                    {({ field }: FieldProps<string>) => {
+                      const startIndex = imageList.findIndex(
+                        (image) => image.imgId === field.value
+                      );
+                      return (
+                        <>
+                          <TextBox
+                            name={field.name}
+                            value={field.value}
+                            dirty={props.dirty}
+                            readonly
+                          />
+                          <ModalSlider
+                            imageList={imageList}
+                            startIndex={startIndex}
+                            setImage={(image) => {
+                              props.setFieldValue(name, image.imgId);
+                              props.setFieldValue(
+                                names[
+                                  keyJoin(
+                                    fieldConst.category.IMG_IDS,
+                                    fieldConst.image.IMG_PATH
+                                  )
+                                ],
+                                image.imgPath
+                              );
+                              props.setFieldValue(
+                                names[
+                                  keyJoin(
+                                    fieldConst.category.IMG_IDS,
+                                    fieldConst.image.IMG_NAME
+                                  )
+                                ],
+                                image.imgName
+                              );
+                            }}
+                          />
+                        </>
+                      );
+                    }}
+                  </FastField>
+                </>
+              ),
+              value: value,
+              textValue: value,
+            };
           },
         },
       },
@@ -322,28 +377,34 @@ const ListTable = () => {
           head: 'アクティブフラグ',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.category.ACTIVE];
-            return (
-              <FastField name={name}>
-                {({ field }: FieldProps<string>) => {
-                  // console.log(
-                  //   `name:${name} value:${JSON.stringify(
-                  //     field.value
-                  //   )} type:${typeof field.value}`
-                  // );
-                  return (
-                    <CheckBox
-                      name={field.name}
-                      value={field.value}
-                      flag={info.active}
-                      dirty={props.dirty}
-                      onChange={field.onChange}
-                      isOnClickEditable
-                      noLabel
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            const flag = info.active;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    // console.log(
+                    //   `name:${name} value:${JSON.stringify(
+                    //     field.value
+                    //   )} type:${typeof field.value}`
+                    // );
+                    return (
+                      <CheckBox
+                        name={field.name}
+                        value={field.value}
+                        flag={flag}
+                        dirty={props.dirty}
+                        onChange={field.onChange}
+                        isOnClickEditable
+                        noLabel
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: getCheckBoxTextValue(flag, value),
+            };
           },
         },
       },
@@ -353,59 +414,64 @@ const ListTable = () => {
           head: '画像',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.category.CAT_ICON];
-            return (
-              // 他の入力項目から変更されることがある項目のためFastFieldではなくFieldを使用
-              <Field name={name}>
-                {({ field, meta }: FieldProps<string>) => {
-                  return (
-                    <FileBoxAndImg
-                      name={field.name}
-                      validate
-                      error={meta.error}
-                      dirty={props.dirty}
-                      accept="image/*"
-                      path={
-                        props.getFieldProps(
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                // 他の入力項目から変更されることがある項目のためFastFieldではなくFieldを使用
+                <Field name={name}>
+                  {({ field, meta }: FieldProps<string>) => {
+                    return (
+                      <FileBoxAndImg
+                        name={field.name}
+                        validate
+                        error={meta.error}
+                        dirty={props.dirty}
+                        accept="image/*"
+                        path={
+                          props.getFieldProps(
+                            names[
+                              keyJoin(
+                                fieldConst.category.IMG_IDS,
+                                fieldConst.image.IMG_PATH
+                              )
+                            ]
+                          ).value
+                        }
+                        fileName={
+                          props.getFieldProps(
+                            names[
+                              keyJoin(
+                                fieldConst.category.IMG_IDS,
+                                fieldConst.image.IMG_NAME
+                              )
+                            ]
+                          ).value
+                        }
+                        onChange={getSetInputFileFunc(
+                          props.setFieldValue,
+                          name,
                           names[
                             keyJoin(
                               fieldConst.category.IMG_IDS,
                               fieldConst.image.IMG_PATH
                             )
-                          ]
-                        ).value
-                      }
-                      fileName={
-                        props.getFieldProps(
+                          ],
                           names[
                             keyJoin(
                               fieldConst.category.IMG_IDS,
                               fieldConst.image.IMG_NAME
                             )
                           ]
-                        ).value
-                      }
-                      onChange={getSetInputFileFunc(
-                        props.setFieldValue,
-                        name,
-                        names[
-                          keyJoin(
-                            fieldConst.category.IMG_IDS,
-                            fieldConst.image.IMG_PATH
-                          )
-                        ],
-                        names[
-                          keyJoin(
-                            fieldConst.category.IMG_IDS,
-                            fieldConst.image.IMG_NAME
-                          )
-                        ]
-                      )}
-                      isOnClickEditable
-                    />
-                  );
-                }}
-              </Field>
-            );
+                        )}
+                        isOnClickEditable
+                      />
+                    );
+                  }}
+                </Field>
+              ),
+              value: value,
+              textValue: value,
+            };
           },
         },
         addition: {
@@ -415,7 +481,10 @@ const ListTable = () => {
     ],
   };
   // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成
-  const listTableFormObj = buildListTableFormObj(list.catDataList, toObjConfig);
+  const listTableFormObj = useMemo(
+    () => buildListTableFormObj(list.catDataList, toObjConfig),
+    [list.catDataList, toObjConfig]
+  );
 
   return (
     <div className="container">

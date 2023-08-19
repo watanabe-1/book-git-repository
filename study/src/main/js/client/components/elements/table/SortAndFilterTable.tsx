@@ -108,7 +108,7 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
           return true;
         }
         const cell = row.cells.find((cell) => cell.name === column.name);
-        const rowValue = String(cell.value).toLowerCase();
+        const rowValue = String(cell.textValue).toLowerCase();
         return rowValue.includes(column.filterValue.toLowerCase());
       });
     });
@@ -127,8 +127,8 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
     filteredAndSortedRows = filteredAndSortedRows.sort((aRow, bRow) => {
       const aCell = findCell(aRow);
       const bCell = findCell(bRow);
-      let aValue: string | number = aCell.value;
-      let bValue: string | number = bCell.value;
+      let aValue: string | number = aCell.textValue;
+      let bValue: string | number = bCell.textValue;
 
       if (isNumber(aValue) && isNumber(bValue)) {
         aValue = Number(aValue);

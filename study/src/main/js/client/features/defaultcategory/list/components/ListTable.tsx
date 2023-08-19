@@ -1,5 +1,5 @@
 import { FastField, FieldProps, FormikProps } from 'formik';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import InputAllButton from './InputAllButton';
 import {
@@ -15,9 +15,14 @@ import {
   buildListTableFormObj,
 } from '../../../../../study/util/studyYupUtil';
 import CheckBox, {
+  getCheckBoxLabelValue,
+  getCheckBoxTextValue,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
-import SelectBox from '../../../../components/form/SelectBox';
+import SelectBox, {
+  getSelectBoxTextValue,
+  getSelectBoxTypeList,
+} from '../../../../components/form/SelectBox';
 import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
 import TextBox from '../../../../components/form/TextBox';
 import {
@@ -96,20 +101,29 @@ const ListTable = () => {
           head: '削除',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.DELETE];
-            return (
-              <FastField name={name}>
-                {({ field }: FieldProps<string>) => {
-                  return (
-                    <CheckBox
-                      name={field.name}
-                      value={field.value}
-                      flag={info.delete}
-                      onChange={field.onChange}
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            const flag = info.delete;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    return (
+                      <CheckBox
+                        name={field.name}
+                        value={field.value}
+                        flag={flag}
+                        onChange={field.onChange}
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: getCheckBoxLabelValue(
+                flag,
+                getCheckBoxTextValue(flag, value)
+              ),
+            };
           },
         },
       },
@@ -119,23 +133,32 @@ const ListTable = () => {
           head: '家計簿タイプ',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.BOOKS_TYPE];
-            return (
-              <FastField name={name}>
-                {({ field }: FieldProps<string>) => {
-                  return (
-                    <SelectBox
-                      name={field.name}
-                      value={field.value}
-                      typeList={info.booksTypes}
-                      dirty={props.dirty}
-                      onBlur={field.onChange}
-                      isOnClickEditable
-                      readonly
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            const typeList = info.booksTypes;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    return (
+                      <SelectBox
+                        name={field.name}
+                        value={field.value}
+                        typeList={typeList}
+                        dirty={props.dirty}
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                        readonly
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: getSelectBoxTextValue(
+                getSelectBoxTypeList(typeList),
+                value
+              ),
+            };
           },
         },
       },
@@ -146,25 +169,30 @@ const ListTable = () => {
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.BOOKS_PLACE];
 
-            return (
-              <FastField name={name}>
-                {({ field }: FieldProps<string>) => {
-                  return (
-                    <TextBox
-                      name={field.name}
-                      value={field.value}
-                      // validate
-                      // touched={meta.touched}
-                      // error={meta.error}
-                      dirty={props.dirty}
-                      onBlur={field.onChange}
-                      isOnClickEditable
-                      readonly
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    return (
+                      <TextBox
+                        name={field.name}
+                        value={field.value}
+                        // validate
+                        // touched={meta.touched}
+                        // error={meta.error}
+                        dirty={props.dirty}
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                        readonly
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: value,
+            };
           },
         },
       },
@@ -174,25 +202,30 @@ const ListTable = () => {
           head: '決済方法',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.BOOKS_METHOD];
-            return (
-              <FastField name={name}>
-                {({ field }: FieldProps<string>) => {
-                  return (
-                    <TextBox
-                      name={field.name}
-                      value={field.value}
-                      // validate
-                      // touched={meta.touched}
-                      // error={meta.error}
-                      dirty={props.dirty}
-                      onBlur={field.onChange}
-                      isOnClickEditable
-                      readonly
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    return (
+                      <TextBox
+                        name={field.name}
+                        value={field.value}
+                        // validate
+                        // touched={meta.touched}
+                        // error={meta.error}
+                        dirty={props.dirty}
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                        readonly
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: value,
+            };
           },
         },
       },
@@ -202,32 +235,41 @@ const ListTable = () => {
           head: 'カテゴリー',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.CAT_CODE];
-            return (
-              <FastField name={name}>
-                {({ field }: FieldProps<string>) => {
-                  return (
-                    <SelectBox
-                      name={field.name}
-                      value={field.value}
-                      typeList={info.categories}
-                      dirty={props.dirty}
-                      onBlur={field.onChange}
-                      isOnClickEditable
-                      readonly
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            const typeList = info.categories;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    return (
+                      <SelectBox
+                        name={field.name}
+                        value={field.value}
+                        typeList={typeList}
+                        dirty={props.dirty}
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                        readonly
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: getSelectBoxTextValue(
+                getSelectBoxTypeList(typeList),
+                value
+              ),
+            };
           },
         },
       },
     ],
   };
   // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成
-  const listTableFormObj = buildListTableFormObj(
-    list.defCatDataList,
-    toObjConfig
+  const listTableFormObj = useMemo(
+    () => buildListTableFormObj(list.defCatDataList, toObjConfig),
+    [list.defCatDataList, toObjConfig]
   );
 
   return (

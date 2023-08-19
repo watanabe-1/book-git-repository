@@ -174,6 +174,7 @@ const Basic: React.FC<BasicProps> = (props) => {
                     value={values.active}
                     flag={info.active}
                     onChange={handleChange}
+                    isLabelTextValue={false}
                   />
                 </Col>
               </Row>

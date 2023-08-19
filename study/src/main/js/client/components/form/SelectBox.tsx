@@ -37,6 +37,40 @@ type SelectBoxProps = {
 };
 
 /**
+ * typeListの取得
+ *
+ * @param baseList 選択肢のリスト
+ * @param isUnshiftEmpty 選択肢の先頭に空の選択肢を追加するかどうか
+ * @returns
+ */
+export const getSelectBoxTypeList = (
+  baseList: Type[] | string[],
+  isUnshiftEmpty: boolean = false
+) => {
+  const typeList = ToTypeArrayIfIsStringArray(baseList);
+  //先頭に空要素を追加
+  if (isUnshiftEmpty) {
+    typeList.unshift({
+      code: '',
+      name: '選択してください',
+    });
+  }
+  return typeList;
+};
+
+/**
+ * 選択肢の表示値を取得
+ *
+ * @param typeList 選択肢のリスト
+ * @param code 取得したい選択肢のコード
+ */
+export const getSelectBoxTextValue = (typeList: Type[], code) => {
+  const textValue = typeList.find((type) => type.code === code)?.name;
+
+  return textValue ? textValue : '';
+};
+
+/**
  *
  * @returns form内のセレクトボックス(バリデーションあり)
  */
@@ -56,22 +90,15 @@ const SelectBox: React.FC<SelectBoxProps> = ({
   isOnClickEditable = false,
   readonly = false,
 }) => {
-  const newTypeList = ToTypeArrayIfIsStringArray(typeList);
-  //先頭に空要素を追加
-  if (isUnshiftEmpty) {
-    newTypeList.unshift({
-      code: '',
-      name: '選択してください',
-    });
-  }
-  const selectedType = newTypeList.find((type) => type.code === value);
+  const newTypeList = getSelectBoxTypeList(typeList, isUnshiftEmpty);
+  const textValue = getSelectBoxTextValue(newTypeList, value);
 
   return (
     <FormControl
       title={title}
       name={name}
       value={value ? value : ''}
-      textValue={selectedType ? selectedType.name : ''}
+      textValue={textValue}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}

@@ -538,10 +538,13 @@ export function buildListTableFormObj(
             // console.log(v.name);
             // console.log(names);
             // console.log(props.getFieldProps(names[v.name]).value);
+            const cellObj = v.table.getCell(props, names);
+
             return {
               name: v.name,
-              value: props.getFieldProps(names[v.name]).value,
-              element: v.table.getCell(props, names),
+              value: cellObj.value as string,
+              textValue: cellObj.textValue,
+              element: cellObj.element,
               hidden: v.table.hidden,
             };
           }),

@@ -21,10 +21,15 @@ import {
 } from '../../../../../study/util/studyYupUtil';
 import ImageIcon from '../../../../components/elements/icon/ImageIcon';
 import CheckBox, {
+  getCheckBoxLabelValue,
+  getCheckBoxTextValue,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
 import DayPickrBox from '../../../../components/form/DayPickrBox';
-import SelectBox from '../../../../components/form/SelectBox';
+import SelectBox, {
+  getSelectBoxTextValue,
+  getSelectBoxTypeList,
+} from '../../../../components/form/SelectBox';
 import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
 import TextBox, { modifierTextBox } from '../../../../components/form/TextBox';
 import {
@@ -160,27 +165,36 @@ const ListTable: React.FC<ListTableProps> = ({
         modifier: modifierCheckBox,
         table: {
           head: '削除',
-          getCell: (_: FormikProps<unknown>, names: unknown) => {
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.books.DELETE];
-            return (
-              <FastField name={name}>
-                {({ field }: FieldProps<string>) => {
-                  // console.log(
-                  //   `name:${name} value:${JSON.stringify(
-                  //     field.value
-                  //   )} type:${typeof field.value}`
-                  // );
-                  return (
-                    <CheckBox
-                      name={field.name}
-                      value={field.value}
-                      flag={info.delete}
-                      onChange={field.onChange}
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            const flag = info.delete;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field }: FieldProps<string>) => {
+                    // console.log(
+                    //   `name:${name} value:${JSON.stringify(
+                    //     field.value
+                    //   )} type:${typeof field.value}`
+                    // );
+                    return (
+                      <CheckBox
+                        name={field.name}
+                        value={field.value}
+                        flag={flag}
+                        onChange={field.onChange}
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: getCheckBoxLabelValue(
+                flag,
+                getCheckBoxTextValue(flag, value)
+              ),
+            };
           },
         },
       },
@@ -190,30 +204,35 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '日付',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.books.BOOKS_DATE];
-            return (
-              <FastField name={name}>
-                {({ field, meta }: FieldProps<string>) => {
-                  const dateFormat = props.getFieldProps(
-                    names[fieldConst.books.BOOKS_DATE_FORMAT]
-                  ).value;
-                  return (
-                    <DayPickrBox
-                      name={field.name}
-                      value={field.value}
-                      dateFormat={dateFormat}
-                      onlyValueMonth
-                      validate
-                      touched={meta.touched}
-                      error={meta.error}
-                      dirty={props.dirty}
-                      setFieldValue={props.setFieldValue}
-                      fieldNameByNames={name}
-                      isOnClickEditable
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field, meta }: FieldProps<string>) => {
+                    const dateFormat = props.getFieldProps(
+                      names[fieldConst.books.BOOKS_DATE_FORMAT]
+                    ).value;
+                    return (
+                      <DayPickrBox
+                        name={field.name}
+                        value={field.value}
+                        dateFormat={dateFormat}
+                        onlyValueMonth
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
+                        dirty={props.dirty}
+                        setFieldValue={props.setFieldValue}
+                        fieldNameByNames={name}
+                        isOnClickEditable
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: value,
+            };
           },
         },
         addition: {
@@ -226,35 +245,40 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '名称',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.books.BOOKS_PLACE];
-            return (
-              <FastField name={name}>
-                {({ field, meta }: FieldProps<string>) => {
-                  return (
-                    // console.log('Field');
-                    // console.log(field);
-                    // console.log('form');
-                    // console.log(form);
-                    // console.log('meta');
-                    // console.log(meta);
-                    // console.log('values');
-                    // console.log(props.values);
-                    // getFieldPropsで取得できる値はFieldタグのfieldと同じ(内部的に同じ関数が呼ばれている)
-                    // console.log('props.getFieldProps');
-                    // console.log(props.getFieldProps(name));
-                    <TextBox
-                      name={field.name}
-                      value={field.value}
-                      validate
-                      touched={meta.touched}
-                      error={meta.error}
-                      dirty={props.dirty}
-                      onBlur={field.onChange}
-                      isOnClickEditable
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field, meta }: FieldProps<string>) => {
+                    return (
+                      // console.log('Field');
+                      // console.log(field);
+                      // console.log('form');
+                      // console.log(form);
+                      // console.log('meta');
+                      // console.log(meta);
+                      // console.log('values');
+                      // console.log(props.values);
+                      // getFieldPropsで取得できる値はFieldタグのfieldと同じ(内部的に同じ関数が呼ばれている)
+                      // console.log('props.getFieldProps');
+                      // console.log(props.getFieldProps(name));
+                      <TextBox
+                        name={field.name}
+                        value={field.value}
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
+                        dirty={props.dirty}
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: value,
+            };
           },
         },
         addition: {
@@ -273,50 +297,59 @@ const ListTable: React.FC<ListTableProps> = ({
                   fieldConst.category.CAT_CODE
                 )
               ];
-            return (
-              <div>
-                <FastField name={name}>
-                  {({ field, meta }: FieldProps<string>) => {
-                    // console.log('categories');
-                    // console.log(info.categories);
-                    // console.log(`field.name:${field.name}`);
-                    // console.log(`field.value:${field.value}`);
-                    const cat = info.categoryList.find(
-                      (cat) => cat.catCode === field.value
-                    );
+            const value = props.getFieldProps(name).value;
+            const typeList = info.categoryTypes;
+            return {
+              element: (
+                <div>
+                  <FastField name={name}>
+                    {({ field, meta }: FieldProps<string>) => {
+                      // console.log('categories');
+                      // console.log(info.categories);
+                      // console.log(`field.name:${field.name}`);
+                      // console.log(`field.value:${field.value}`);
+                      const cat = info.categoryList.find(
+                        (cat) => cat.catCode === field.value
+                      );
 
-                    return (
-                      <>
-                        <SelectBox
-                          name={field.name}
-                          value={field.value}
-                          validate
-                          touched={meta.touched}
-                          error={meta.error}
-                          typeList={info.categoryTypes}
-                          dirty={props.dirty}
-                          onBlur={(e) => {
-                            // どちらを更新したか紛らわしいので、両方更新
-                            props.setFieldValue(
-                              names[fieldConst.books.CAT_CODE],
-                              e.target.value
-                            );
-                            field.onChange(e);
-                          }}
-                          isOnClickEditable
-                        />
-                        <ImageIcon
-                          path={pathJoin(
-                            cat.imgIds.imgPath,
-                            cat.imgIds.imgName
-                          )}
-                        />
-                      </>
-                    );
-                  }}
-                </FastField>
-              </div>
-            );
+                      return (
+                        <>
+                          <SelectBox
+                            name={field.name}
+                            value={field.value}
+                            validate
+                            touched={meta.touched}
+                            error={meta.error}
+                            typeList={typeList}
+                            dirty={props.dirty}
+                            onBlur={(e) => {
+                              // どちらを更新したか紛らわしいので、両方更新
+                              props.setFieldValue(
+                                names[fieldConst.books.CAT_CODE],
+                                e.target.value
+                              );
+                              field.onChange(e);
+                            }}
+                            isOnClickEditable
+                          />
+                          <ImageIcon
+                            path={pathJoin(
+                              cat.imgIds.imgPath,
+                              cat.imgIds.imgName
+                            )}
+                          />
+                        </>
+                      );
+                    }}
+                  </FastField>
+                </div>
+              ),
+              value: value,
+              textValue: getSelectBoxTextValue(
+                getSelectBoxTypeList(typeList),
+                value
+              ),
+            };
           },
         },
         addition: {
@@ -329,24 +362,29 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '決済方法',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.books.BOOKS_METHOD];
-            return (
-              <FastField name={name}>
-                {({ field, meta }: FieldProps<string>) => {
-                  return (
-                    <TextBox
-                      name={field.name}
-                      value={field.value}
-                      validate
-                      touched={meta.touched}
-                      error={meta.error}
-                      dirty={props.dirty}
-                      onBlur={field.onChange}
-                      isOnClickEditable
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field, meta }: FieldProps<string>) => {
+                    return (
+                      <TextBox
+                        name={field.name}
+                        value={field.value}
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
+                        dirty={props.dirty}
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: value,
+            };
           },
         },
         addition: {
@@ -360,24 +398,29 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '金額',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.books.BOOKS_AMMOUNT];
-            return (
-              <FastField name={name}>
-                {({ field, meta }: FieldProps<string>) => {
-                  return (
-                    <TextBox
-                      name={field.name}
-                      value={field.value}
-                      validate
-                      touched={meta.touched}
-                      error={meta.error}
-                      dirty={props.dirty}
-                      onBlur={field.onChange}
-                      isOnClickEditable
-                    />
-                  );
-                }}
-              </FastField>
-            );
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field, meta }: FieldProps<string>) => {
+                    return (
+                      <TextBox
+                        name={field.name}
+                        value={field.value}
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
+                        dirty={props.dirty}
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: value,
+            };
           },
         },
         addition: {
@@ -388,7 +431,10 @@ const ListTable: React.FC<ListTableProps> = ({
   };
 
   // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成
-  const listTableFormObj = buildListTableFormObj(booksList, toObjConfig);
+  const listTableFormObj = useMemo(
+    () => buildListTableFormObj(booksList, toObjConfig),
+    [booksList, toObjConfig]
+  );
 
   return (
     <Container>
