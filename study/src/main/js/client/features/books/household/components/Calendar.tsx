@@ -7,7 +7,7 @@ import getDate from 'date-fns/getDate';
 import getDay from 'date-fns/getDay';
 import getMonth from 'date-fns/getMonth';
 import startOfMonth from 'date-fns/startOfMonth';
-import React, { useState, useTransition } from 'react';
+import React, { useMemo, useState, useTransition } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -44,22 +44,33 @@ type CalendarProps = {
 };
 
 const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
+  const [, startTransition] = useTransition();
   const { data: commonInfo } = useCommonInfoSWR();
   const paramDate = useDateParam();
-  const { data: info } = useHouseholdInfoSWR(
-    buildInfoParam(paramDate, commonInfo.dateFormat)
+
+  const infoParam = useMemo(
+    () => buildInfoParam(paramDate, commonInfo.dateFormat),
+    [paramDate, commonInfo.dateFormat]
   );
-  const { data: booksFormList } = useHouseholdDataSWR(
-    buildDataParam(paramDate, commonInfo.dateFormat, booksType)
+  const { data: info } = useHouseholdInfoSWR(infoParam);
+
+  const { data: calendarData, initScript } =
+    useHouseholdCalendarInfoSWR(infoParam);
+
+  const dataParam = useMemo(
+    () => buildDataParam(paramDate, commonInfo.dateFormat, booksType),
+    [paramDate, commonInfo.dateFormat, booksType]
   );
-  const year = parseInt(info.year);
-  const month = parseInt(info.month);
-  const date = createDate(info.year, info.month, info.day);
+  const { data: booksFormList } = useHouseholdDataSWR(dataParam);
+
+  const year = useMemo(() => parseInt(info.year), [info.year]);
+  const month = useMemo(() => parseInt(info.month), [info.month]);
+  const date = useMemo(
+    () => createDate(info.year, info.month, info.day),
+    [info.year, info.month, info.day]
+  );
   const [selectDay, setSelectDay] = useState(date);
-  const { data: calendarData, initScript } = useHouseholdCalendarInfoSWR(
-    buildInfoParam(date, commonInfo.dateFormat)
-  );
-  const [, startTransition] = useTransition();
+
   const { syukujitsuList } = calendarData;
   const amountList = booksFormList.booksDataList;
 
@@ -334,7 +345,7 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
                             <div className="text-center">
                               {isAmountDay(amountListByDay) &&
                                 amountListByDay.reduce(
-                                  (sum, element) => sum + element,
+                                  (sum, element) => sum + Number(element),
                                   0
                                 )}
                             </div>

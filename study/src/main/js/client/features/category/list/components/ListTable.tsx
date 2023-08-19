@@ -15,7 +15,9 @@ import {
   buildListTableFormObj,
 } from '../../../../../study/util/studyYupUtil';
 import ModalSlider from '../../../../components/elements/slider/ModalSlider';
-import CheckBox from '../../../../components/form/CheckBox';
+import CheckBox, {
+  modifierCheckBox,
+} from '../../../../components/form/CheckBox';
 import FileBoxAndImg from '../../../../components/form/FileBoxAndImg';
 import RadioBtn from '../../../../components/form/RadioBtn';
 import SelectBox from '../../../../components/form/SelectBox';
@@ -87,6 +89,7 @@ const ListTable = () => {
     list: [
       {
         name: fieldConst.category.DELETE,
+        modifier: modifierCheckBox,
         table: {
           head: '削除',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
@@ -117,9 +120,7 @@ const ListTable = () => {
               </FastField>
             );
           },
-          hidden: false,
         },
-        addition: null,
       },
       {
         name: fieldConst.category.CAT_CODE,
@@ -176,7 +177,6 @@ const ListTable = () => {
               </FastField>
             );
           },
-          hidden: false,
         },
         addition: {
           yup: yup.string().required().server(errData),
@@ -205,9 +205,7 @@ const ListTable = () => {
               </FastField>
             );
           },
-          hidden: false,
         },
-        addition: null,
       },
       {
         name: fieldConst.category.NOTE,
@@ -231,9 +229,7 @@ const ListTable = () => {
               </FastField>
             );
           },
-          hidden: false,
         },
-        addition: null,
       },
       {
         name: fieldConst.category.IMG_TYPE,
@@ -259,9 +255,7 @@ const ListTable = () => {
               </FastField>
             );
           },
-          hidden: false,
         },
-        addition: null,
       },
       {
         name: keyJoin(fieldConst.category.IMG_IDS, fieldConst.category.IMG_ID),
@@ -319,12 +313,11 @@ const ListTable = () => {
               </>
             );
           },
-          hidden: false,
         },
-        addition: null,
       },
       {
         name: fieldConst.category.ACTIVE,
+        modifier: modifierCheckBox,
         table: {
           head: 'アクティブフラグ',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
@@ -332,6 +325,11 @@ const ListTable = () => {
             return (
               <FastField name={name}>
                 {({ field }: FieldProps<string>) => {
+                  // console.log(
+                  //   `name:${name} value:${JSON.stringify(
+                  //     field.value
+                  //   )} type:${typeof field.value}`
+                  // );
                   return (
                     <CheckBox
                       name={field.name}
@@ -347,9 +345,7 @@ const ListTable = () => {
               </FastField>
             );
           },
-          hidden: false,
         },
-        addition: null,
       },
       {
         name: fieldConst.category.CAT_ICON,
@@ -411,7 +407,6 @@ const ListTable = () => {
               </Field>
             );
           },
-          hidden: false,
         },
         addition: {
           yup: yup.mixed().nullable().server(errData),

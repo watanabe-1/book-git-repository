@@ -195,12 +195,13 @@ export type BuildListTableFormObjConfig = {
   primaryKey: string | string[];
   list: {
     name: string;
+    modifier?: (value?: unknown) => unknown;
     table: {
       head: string;
       getCell: (props: FormikProps<?>, names: unknown) => JSX.Element;
-      hidden: boolean;
+      hidden?: boolean;
     };
-    addition: {
+    addition?: {
       yup: RequiredStringSchema<string, AnyObject>;
     };
   }[];

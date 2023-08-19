@@ -1,5 +1,5 @@
 import format from 'date-fns/format';
-import React from 'react';
+import React, { useMemo } from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
@@ -37,18 +37,31 @@ const infoToDate = (data: HouseholdUi) =>
 
 const TabContainer = () => {
   const { data: commonInfo, initScript: initCommonScript } = useCommonInfoSWR();
+
   const paramDate = useDateParam();
-  const { data: info, initScript } = useHouseholdInfoSWR(
-    buildInfoParam(paramDate, commonInfo.dateFormat)
+
+  const infoParam = useMemo(
+    () => buildInfoParam(paramDate, commonInfo.dateFormat),
+    [paramDate, commonInfo.dateFormat]
+  );
+  const { data: info, initScript } = useHouseholdInfoSWR(infoParam);
+
+  const dataParamExpenses = useMemo(
+    () =>
+      buildDataParam(paramDate, commonInfo.dateFormat, info.booksTypeExpenses),
+    [paramDate, commonInfo.dateFormat, info.booksTypeExpenses]
   );
   const { data: expensesList, initScript: initExpensesListScript } =
-    useHouseholdDataSWR(
-      buildDataParam(paramDate, commonInfo.dateFormat, info.booksTypeExpenses)
-    );
+    useHouseholdDataSWR(dataParamExpenses);
+
+  const dataParamIncome = useMemo(
+    () =>
+      buildDataParam(paramDate, commonInfo.dateFormat, info.booksTypeIncome),
+    [paramDate, commonInfo.dateFormat, info.booksTypeIncome]
+  );
   const { data: incomeList, initScript: initIncomeListScript } =
-    useHouseholdDataSWR(
-      buildDataParam(paramDate, commonInfo.dateFormat, info.booksTypeIncome)
-    );
+    useHouseholdDataSWR(dataParamIncome);
+
   // 初期値を設定
   useHouseholdChartInfoStaticKeySWR(1);
   const navigate = useNavigate();
@@ -66,9 +79,10 @@ const TabContainer = () => {
    * @param booksList 家計簿データの配列
    */
   const sumAmount = (booksList: Books[]) => {
-    return booksList
-      .map((books) => books.booksAmmount)
-      .reduce((sum, booksAmmount) => sum + booksAmmount, 0);
+    return booksList.reduce(
+      (sum, books) => sum + Number(books.booksAmmount),
+      0
+    );
   };
 
   /**
@@ -122,9 +136,18 @@ const TabContainer = () => {
   // console.log(tab);
   // console.log(date);
 
-  const sumAmountByExpenses = sumAmount(expensesList.booksDataList);
-  const sumAmountByIncome = sumAmount(incomeList.booksDataList);
-  const differenceSumAmount = sumAmountByIncome - sumAmountByExpenses;
+  const expensesAmount = useMemo(
+    () => sumAmount(expensesList.booksDataList),
+    [expensesList]
+  );
+  const incomeAmount = useMemo(
+    () => sumAmount(incomeList.booksDataList),
+    [incomeList]
+  );
+  const differenceSumAmount = useMemo(
+    () => incomeAmount - expensesAmount,
+    [expensesAmount, incomeAmount]
+  );
 
   // tabとtabで呼び出す画面の間に共通の項目を表示したいためTabsは使用せずカスタムtabを使用
   return (
@@ -173,10 +196,10 @@ const TabContainer = () => {
             />
           </Col>
           <Col md={2}>
-            <span>{`総支出:${sumAmountByExpenses}`}</span>
+            <span>{`総支出:${expensesAmount}`}</span>
           </Col>
           <Col md={2}>
-            <span>{`総収入:${sumAmountByIncome}`}</span>
+            <span>{`総収入:${incomeAmount}`}</span>
           </Col>
           <Col md={2}>
             <span> {`貯金額:${differenceSumAmount}`}</span>

@@ -14,7 +14,9 @@ import {
   objArrayToObj,
   buildListTableFormObj,
 } from '../../../../../study/util/studyYupUtil';
-import CheckBox from '../../../../components/form/CheckBox';
+import CheckBox, {
+  modifierCheckBox,
+} from '../../../../components/form/CheckBox';
 import SelectBox from '../../../../components/form/SelectBox';
 import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
 import TextBox from '../../../../components/form/TextBox';
@@ -89,6 +91,7 @@ const ListTable = () => {
     list: [
       {
         name: fieldConst.defaultCategory.DELETE,
+        modifier: modifierCheckBox,
         table: {
           head: '削除',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
@@ -108,9 +111,7 @@ const ListTable = () => {
               </FastField>
             );
           },
-          hidden: false,
         },
-        addition: null,
       },
       {
         name: fieldConst.defaultCategory.BOOKS_TYPE,
@@ -136,9 +137,7 @@ const ListTable = () => {
               </FastField>
             );
           },
-          hidden: false,
         },
-        addition: null,
       },
       {
         name: fieldConst.defaultCategory.BOOKS_PLACE,
@@ -167,9 +166,7 @@ const ListTable = () => {
               </FastField>
             );
           },
-          hidden: false,
         },
-        addition: null,
       },
       {
         name: fieldConst.defaultCategory.BOOKS_METHOD,
@@ -197,9 +194,7 @@ const ListTable = () => {
               </FastField>
             );
           },
-          hidden: false,
         },
-        addition: null,
       },
       {
         name: fieldConst.defaultCategory.CAT_CODE,
@@ -225,9 +220,7 @@ const ListTable = () => {
               </FastField>
             );
           },
-          hidden: false,
         },
-        addition: null,
       },
     ],
   };

@@ -1,5 +1,5 @@
 import { ChartData } from 'chart.js';
-import React from 'react';
+import React, { useMemo } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -30,14 +30,27 @@ export type HouseholdChartData = {
 const Chart = () => {
   const { data: commonInfo } = useCommonInfoSWR();
   const paramDate = useDateParam();
-  const { data: info } = useHouseholdInfoSWR(
-    buildInfoParam(paramDate, commonInfo.dateFormat)
+
+  const infoParam = useMemo(
+    () => buildInfoParam(paramDate, commonInfo.dateFormat),
+    [paramDate, commonInfo.dateFormat]
   );
-  const date = createDate(info.year, info.month);
+  const { data: info } = useHouseholdInfoSWR(infoParam);
+
   const { data: chartInfoStaticKey } = useHouseholdChartInfoStaticKeySWR();
-  const { data: chartData, initScript } = useHouseholdChartInfoSWR(
-    buildChartParam(date, commonInfo.dateFormat, chartInfoStaticKey)
+
+  const date = useMemo(
+    () => createDate(info.year, info.month),
+    [info.year, info.month]
   );
+
+  const chartInfoParm = useMemo(
+    () => buildChartParam(date, commonInfo.dateFormat, chartInfoStaticKey),
+    [date, commonInfo.dateFormat, chartInfoStaticKey]
+  );
+  const { data: chartData, initScript } =
+    useHouseholdChartInfoSWR(chartInfoParm);
+
   const { monthCategory, monthMethod, yearAll } = chartData;
   // console.log('chartdata');
   // console.log(chartData);

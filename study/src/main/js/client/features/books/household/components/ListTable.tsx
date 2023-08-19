@@ -1,5 +1,5 @@
 import { FastField, FieldProps, FormikProps } from 'formik';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import Container from 'react-bootstrap/Container';
 
 import {
@@ -20,11 +20,13 @@ import {
   objArrayToObj,
 } from '../../../../../study/util/studyYupUtil';
 import ImageIcon from '../../../../components/elements/icon/ImageIcon';
-import CheckBox from '../../../../components/form/CheckBox';
+import CheckBox, {
+  modifierCheckBox,
+} from '../../../../components/form/CheckBox';
 import DayPickrBox from '../../../../components/form/DayPickrBox';
 import SelectBox from '../../../../components/form/SelectBox';
 import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
-import TextBox from '../../../../components/form/TextBox';
+import TextBox, { modifierTextBox } from '../../../../components/form/TextBox';
 import {
   useHouseholdInfoSWR,
   useHouseholdDataSWR,
@@ -51,17 +53,27 @@ const ListTable: React.FC<ListTableProps> = ({
 }) => {
   const { data: commonInfo } = useCommonInfoSWR();
   const paramDate = useDateParam();
-  const { data: info } = useHouseholdInfoSWR(
-    buildInfoParam(paramDate, commonInfo.dateFormat)
+
+  const infoParam = useMemo(
+    () => buildInfoParam(paramDate, commonInfo.dateFormat),
+    [paramDate, commonInfo.dateFormat]
   );
-  const { data: booksFormList, mutate: setList } = useHouseholdDataSWR(
-    buildDataParam(paramDate, commonInfo.dateFormat, booksType)
+  const { data: info } = useHouseholdInfoSWR(infoParam);
+
+  const dataParam = useMemo(
+    () => buildDataParam(paramDate, commonInfo.dateFormat, booksType),
+    [paramDate, commonInfo.dateFormat, booksType]
   );
+  const { data: booksFormList, mutate: setList } =
+    useHouseholdDataSWR(dataParam);
+
   const { mutate: setChartInfoStaticKey } = useHouseholdChartInfoStaticKeySWR();
+
   const [errData, setErrData] = useState() as [
     ErrorResults,
     React.Dispatch<React.SetStateAction<unknown>>
   ];
+
   const booksList = pbooksList ? pbooksList : booksFormList.booksDataList;
 
   /**
@@ -145,6 +157,7 @@ const ListTable: React.FC<ListTableProps> = ({
     list: [
       {
         name: fieldConst.books.DELETE,
+        modifier: modifierCheckBox,
         table: {
           head: '削除',
           getCell: (_: FormikProps<unknown>, names: unknown) => {
@@ -152,6 +165,11 @@ const ListTable: React.FC<ListTableProps> = ({
             return (
               <FastField name={name}>
                 {({ field }: FieldProps<string>) => {
+                  // console.log(
+                  //   `name:${name} value:${JSON.stringify(
+                  //     field.value
+                  //   )} type:${typeof field.value}`
+                  // );
                   return (
                     <CheckBox
                       name={field.name}
@@ -164,9 +182,7 @@ const ListTable: React.FC<ListTableProps> = ({
               </FastField>
             );
           },
-          hidden: false,
         },
-        addition: null,
       },
       {
         name: fieldConst.books.BOOKS_DATE,
@@ -199,7 +215,6 @@ const ListTable: React.FC<ListTableProps> = ({
               </FastField>
             );
           },
-          hidden: false,
         },
         addition: {
           yup: yup.string().required().server(errData),
@@ -241,7 +256,6 @@ const ListTable: React.FC<ListTableProps> = ({
               </FastField>
             );
           },
-          hidden: false,
         },
         addition: {
           yup: yup.string().required().server(errData),
@@ -304,7 +318,6 @@ const ListTable: React.FC<ListTableProps> = ({
               </div>
             );
           },
-          hidden: false,
         },
         addition: {
           yup: yup.string().nullable().server(errData),
@@ -335,7 +348,6 @@ const ListTable: React.FC<ListTableProps> = ({
               </FastField>
             );
           },
-          hidden: false,
         },
         addition: {
           yup: yup.string().required().server(errData),
@@ -343,6 +355,7 @@ const ListTable: React.FC<ListTableProps> = ({
       },
       {
         name: fieldConst.books.BOOKS_AMMOUNT,
+        modifier: modifierTextBox,
         table: {
           head: '金額',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
@@ -366,7 +379,6 @@ const ListTable: React.FC<ListTableProps> = ({
               </FastField>
             );
           },
-          hidden: false,
         },
         addition: {
           yup: yup.number().required().server(errData),

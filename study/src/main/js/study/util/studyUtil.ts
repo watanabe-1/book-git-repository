@@ -212,21 +212,12 @@ export function isObjEmpty(obj: object) {
 }
 
 /**
- * オブジェクトが空か判定する
- * @param obj
- * @returns 判定結果
- */
-export function isEmpty(obj: unknown) {
-  return !(obj == '0' || obj);
-}
-
-/**
  * オブジェクトをtrimする
  * @param obj
  * @returns 判定結果
  */
-export function trim(obj: unknown) {
-  return isEmpty(obj) ? obj : String(obj).trim();
+export function trim(obj: string) {
+  return obj ? obj.trim() : obj;
 }
 
 /**
@@ -335,5 +326,5 @@ export function nullOrEmptyValueLogic(target: unknown, value: unknown) {
  * @returns
  */
 export function isNumber(value: string) {
-  return isNaN(Number(value));
+  return !isNaN(Number(value));
 }

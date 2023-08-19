@@ -1,7 +1,7 @@
 import { FormikProps } from 'formik/dist/types';
 import { array, object } from 'yup/index';
 
-import { isEmpty, isObjEmpty, keyJoin } from './studyUtil';
+import { isObjEmpty, keyJoin } from './studyUtil';
 import {
   ErrorResults,
   BuildListTableFormObjConfig,
@@ -220,8 +220,7 @@ export function objToFormData(obj: object) {
         // const formattedKey = formatEscapeListItemId(j);
         // console.log('formatted:' + formattedKey);
         // 中身がないものはおくらない
-        // 0は送る
-        if (!isEmpty(stack[0][j])) {
+        if (stack[0][j]) {
           // console.log('type:' + Object.prototype.toString.call(stack[0][j]));
           // かぶりは上書き(基本的にかぶりはない想定)
           test[j] = stack[0][j];
@@ -273,8 +272,7 @@ export function objArrayToObj(objArray: object[], arrayName: string) {
           // const formattedKey = formatEscapeListItemId(j);
           // console.log('formatted:' + formattedKey);
           // 中身がないものはおくらない
-          // 0は送る
-          if (!isEmpty(stack[0][j])) {
+          if (stack[0][j]) {
             // console.log('type:' + Object.prototype.toString.call(stack[0][j]));
             // かぶりは上書き(基本的にかぶりはない想定)
             data[keyJoin(`${arrayName}[${index}]`, j)] = stack[0][j];
@@ -482,7 +480,7 @@ export function buildListTableFormObj(
     while (stack.length) {
       for (const j in stack[0]) {
         // 設定を取得
-        //const mutchconfig = config.list.find((v) => v.name === j);
+        // const mutchconfig = config.list.find((v) => v.name === j);
         if (
           stack[0][j] &&
           stack[0][j].constructor === Object &&
@@ -500,6 +498,15 @@ export function buildListTableFormObj(
           // console.log(j);
           //names[j] = buildEscapeListItemId(config.className, j, index);
           names[j] = keyJoin(`${config.className}[${index}]`, j);
+
+          // 設定を取得
+          const mutchconfig = config.list.find((v) => v.name === j);
+          // 値の加工用ファンクションが設定されていたら加工を行う
+          if (mutchconfig?.modifier) {
+            const initialValue = initialValues[config.className][index][j];
+            initialValues[config.className][index][j] =
+              mutchconfig.modifier(initialValue);
+          }
         }
       }
       stack.shift();

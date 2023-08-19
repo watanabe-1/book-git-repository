@@ -2,7 +2,6 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 
 import FormControl from './FormControl';
-import { isEmpty } from '../../../study/util/studyUtil';
 
 type TextBoxProps = {
   /** テキストボックスのタイトル */
@@ -32,6 +31,15 @@ type TextBoxProps = {
 };
 
 /**
+ * textbox初期値設定用関数
+ * string型が来ないことが分かっている個所で使用する想定
+ *
+ * @param value 値
+ * @returns
+ */
+export const modifierTextBox = (value: string) => String(value);
+
+/**
  * @returns form内のテキストボックス
  */
 const TextBox: React.FC<TextBoxProps> = ({
@@ -54,8 +62,7 @@ const TextBox: React.FC<TextBoxProps> = ({
     <FormControl
       title={title}
       name={name}
-      // 0はそのまま表示したいため
-      value={isEmpty(value) ? '' : value}
+      value={value ? value : ''}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}

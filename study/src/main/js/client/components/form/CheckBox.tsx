@@ -5,6 +5,7 @@ import FormControl from './FormControl';
 import { Flag } from '../../../@types/studyUtilType';
 import { typeConst } from '../../../constant/typeConstant';
 import { getConfirmMessage } from '../../../study/util/studyMessageUtil';
+import { isNumber } from '../../../study/util/studyUtil';
 
 type CheckBoxProps = {
   /** テキストボックスの名前 */
@@ -36,6 +37,20 @@ type CheckBoxProps = {
 };
 
 /**
+ * checkbox初期値設定用関数
+ *
+ * @param value 値
+ * @returns
+ */
+export const modifierCheckBox = (value: string) => {
+  const isChecked = Boolean(isNumber(value) ? Number(value) : value);
+  if (isChecked) {
+    return ['1'];
+  }
+  return [];
+};
+
+/**
  *
  * @returns form内のチェックボックス
  */
@@ -64,7 +79,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({
   return (
     <FormControl
       name={name}
-      value={value ? value : ''}
+      value={value}
       textValue={text}
       onChange={onChange}
       onBlur={onBlur}
