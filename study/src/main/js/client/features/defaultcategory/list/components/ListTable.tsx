@@ -62,8 +62,31 @@ const ListTable = () => {
       )
     );
     const json = await res.json();
-    console.log('soushinkekka');
-    console.log(json);
+    // console.log('soushinkekka');
+    // console.log(json);
+    if (res.ok) {
+      setList(json);
+    } else {
+      setErrData(json);
+    }
+
+    return res;
+  };
+
+  /**
+   * 送信ボタン(新規)
+   * @param form 送信パラメータ
+   */
+  const handlePushData = async (form: unknown) => {
+    const res = await fetchPushData(
+      objArrayToObj(
+        form[classConst.DEF_CAT_DATA_LIST],
+        classConst.DEF_CAT_DATA_LIST
+      )
+    );
+    const json = await res.json();
+    // console.log('soushinkekka');
+    // console.log(json);
     if (res.ok) {
       setList(json);
     } else {
@@ -78,6 +101,13 @@ const ListTable = () => {
    */
   const fetchUpdListData = async (form) => {
     return await fetchPost(urlConst.defaultCategory.LISTDATAUPDATE, form);
+  };
+
+  /**
+   * 新規リストデータ追加
+   */
+  const fetchPushData = async (form: object) => {
+    return await fetchPost(urlConst.defaultCategory.LISTDATAPUSH, form);
   };
 
   // console.log({ ...info });
@@ -396,6 +426,8 @@ const ListTable = () => {
     <div className="container">
       <SortAndFilterFormTable
         tableFormConfig={listTableFormObj}
+        handlePushSubmit={handlePushData}
+        hiddenPushButton={false}
         handleFormSubmit={handleSubmit}
         errData={errData}
         customeButton={<InputAllButton setList={setList} />}

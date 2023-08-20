@@ -2,7 +2,9 @@ package org.book.app.study.api;
 
 import org.book.app.study.dto.list.DefaultCategoryFormList;
 import org.book.app.study.dto.ui.defaultCategory.DefaultCategoryUi;
+import org.book.app.study.entity.DefaultCategory;
 import org.book.app.study.helper.DefaultCategoryHelper;
+import org.book.app.study.service.DefaultCategoryService;
 import org.book.app.study.service.api.DefaultCategoryApiService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
@@ -32,6 +34,11 @@ public class DefaultCategoryApiController extends ApiController {
    * デフォルトカテゴリーヘルパー
    */
   private final DefaultCategoryHelper defaultCategoryHelper;
+
+  /**
+   * デフォルトカテゴリー Service
+   */
+  private final DefaultCategoryService defaultCategoryService;
 
   /**
    * 画面情報取得
@@ -84,6 +91,26 @@ public class DefaultCategoryApiController extends ApiController {
       BindingResult result, ModelAndView model) throws BindException {
     // デフォルトカテゴリー情報の更新
     defaultCategoryHelper.updatDefaultCeategorys(defCatListParam);
+
+    return getListData();
+  }
+
+  /**
+   * デフォルトカテゴリー新規デフォルトデータ作成
+   * 
+   * @param catListParam 送信されたデータ
+   * @param result エラーチェック]-+結果
+   * @param model モデル
+   * @return json(カテゴリーの一覧)
+   */
+  @RequestMapping(value = "/defaultCategory/listdataPush", method = RequestMethod.POST)
+  @ResponseBody
+  public DefaultCategoryFormList listDataPush(
+      @ModelAttribute @Validated DefaultCategoryFormList defCatListParam,
+      BindingResult result, ModelAndView model) throws BindException {
+    // デフォルトカテゴリー情報の初期データ登録
+    DefaultCategory defCat = defaultCategoryHelper.getDefault(defCatListParam);
+    defaultCategoryService.saveOne(defCat);
 
     return getListData();
   }

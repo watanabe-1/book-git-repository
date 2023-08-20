@@ -104,7 +104,7 @@ public class CategoryHelper {
         }
         // 空文字などが入っているときは0を設定
         if (!ActiveFlag.isActive(cat.getActive())) {
-          cat.setActive(ActiveFlag.NON_SET_UP_FLAG_VALUE);
+          cat.setActive(ActiveFlag.NON_ACTIVE.getValue());
         }
 
         updCnt += categoryService.updateOne(cat, catForm.getCatCode());

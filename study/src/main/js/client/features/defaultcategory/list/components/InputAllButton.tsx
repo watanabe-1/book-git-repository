@@ -19,7 +19,7 @@ type InputAllButtonProps = {
 const InputAllButton: React.FC<InputAllButtonProps> = ({ setList }) => {
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   // formik リセットフォーム
-  const { resetForm } = useFormikContext();
+  const { resetForm, dirty } = useFormikContext();
 
   /**
    * 送信ボタン
@@ -55,6 +55,7 @@ const InputAllButton: React.FC<InputAllButtonProps> = ({ setList }) => {
       title="家計簿データから一括登録"
       isLoading={isSubmitLoading}
       onClick={handleSubmit}
+      disabled={dirty}
     />
   );
 };

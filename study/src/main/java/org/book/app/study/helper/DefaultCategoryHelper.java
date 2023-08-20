@@ -3,6 +3,7 @@ package org.book.app.study.helper;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.book.app.study.dto.list.DefaultCategoryFormList;
@@ -10,6 +11,7 @@ import org.book.app.study.entity.DefaultCategory;
 import org.book.app.study.enums.dbcode.DefaultCategoryTarget;
 import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.enums.flag.RegexEnabledFlag;
+import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.form.DefaultCategoryForm;
 import org.book.app.study.service.DefaultCategoryService;
 import org.book.app.study.util.StudyBeanUtil;
@@ -155,7 +157,7 @@ public class DefaultCategoryHelper {
         defCat.setUserId(userId);
         // 空文字などが入っているときは0を設定
         if (!RegexEnabledFlag.isRegexEnabled(defCat.getRegexEnabled())) {
-          defCat.setRegexEnabled(RegexEnabledFlag.NON_SET_UP_FLAG_VALUE);
+          defCat.setRegexEnabled(RegexEnabledFlag.NON_REGEX_ENABLED.getValue());
         }
 
         updCnt += defaultCategoryService.updateOne(defCat, defCatForm.getDefaultCategoryId(),
@@ -165,6 +167,36 @@ public class DefaultCategoryHelper {
     }
 
     return updCnt;
+  }
+
+  /**
+   * 登録用デフォルトデータの作成
+   * 
+   * @param form アップロードされたデータ
+   * @return DefaultCategory セットされたentity
+   */
+  public DefaultCategory getDefault(DefaultCategoryFormList defCatListParam) {
+    // ログインユーザー取得
+    String user = StudyUtil.getLoginUser();
+    // デフォルトカテゴリーマスタ変更対象
+    List<String> defCatTargets = getDefaultCategoryTargets();
+
+    String catCode = defCatTargets.get(0);
+
+    DefaultCategory defCat = new DefaultCategory();
+    defCat.setDefaultCategoryId(UUID.randomUUID().toString());
+    defCat.setUserId(user);
+    defCat.setBooksType(BooksType.EXPENSES.getCode());
+    defCat.setBooksPlace(" ");
+    defCat.setCatCode(catCode);
+    defCat.setBooksMethod(" ");
+    defCat.setBooksAmmountMin(-1);
+    defCat.setBooksAmmountMax(-1);
+    defCat.setRegexEnabled(RegexEnabledFlag.NON_REGEX_ENABLED.getValue());
+    // 共通項目をセット
+    StudyBeanUtil.setStudyEntityProperties(defCat);
+
+    return defCat;
   }
 
   /**

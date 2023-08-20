@@ -20,6 +20,7 @@ export const urlConst = {
     LISTDATA: '/defaultCategory/listdata',
     //IMAGELISTDATA: '/defaultCategory/imageList',
     LISTDATAUPDATE: '/defaultCategory/listdataUpdate',
+    LISTDATAPUSH: '/defaultCategory/listdataPush',
     INPUTALL: '/defaultCategory/inputAll',
   },
 
