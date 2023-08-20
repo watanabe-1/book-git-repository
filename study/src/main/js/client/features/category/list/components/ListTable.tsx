@@ -140,40 +140,6 @@ const ListTable = () => {
         },
       },
       {
-        name: fieldConst.category.CAT_CODE,
-        table: {
-          head: 'カテゴリーコード',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.category.CAT_CODE];
-            const value = props.getFieldProps(name).value;
-            return {
-              element: (
-                <FastField name={name}>
-                  {({ field, meta }: FieldProps<string>) => {
-                    return (
-                      <TextBox
-                        name={field.name}
-                        value={field.value}
-                        validate
-                        touched={meta.touched}
-                        error={meta.error}
-                        onChange={field.onChange}
-                      />
-                    );
-                  }}
-                </FastField>
-              ),
-              value: value,
-              textValue: value,
-            };
-          },
-          hidden: true,
-        },
-        addition: {
-          yup: yup.string().required().server(errData),
-        },
-      },
-      {
         name: fieldConst.category.CAT_NAME,
         table: {
           head: 'カテゴリー名',

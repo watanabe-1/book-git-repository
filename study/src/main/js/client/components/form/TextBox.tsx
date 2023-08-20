@@ -38,7 +38,8 @@ type TextBoxProps = {
  * @param value 値
  * @returns
  */
-export const modifierTextBox = (value: unknown) => (value ? String(value) : '');
+export const modifierTextBox = (value: unknown) =>
+  value == 0 || value ? String(value) : '';
 
 /**
  * @returns form内のテキストボックス

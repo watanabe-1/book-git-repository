@@ -68,13 +68,7 @@ type DayPickrProps = {
 
 const openFp = (fp: React.MutableRefObject<DatePicker>) => {
   if (!fp?.current?.flatpickr) return;
-  // カレンダーの表示基準元が存在しない場合、
-  // カレンダーの表示位置がバグってしまうため、
-  // カレンダーの表示元が描画された後に動くよう
-  // に少し実施を遅らせる
-  setTimeout(() => {
-    fp.current.flatpickr.open();
-  }, 100);
+  fp.current.flatpickr.open();
 };
 
 /**
@@ -110,7 +104,7 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
         name={name}
         value={value}
         onBlur={handleSet}
-        onTextClick={() => {
+        onEditing={() => {
           if (!readonly) {
             openFp(fp);
           }

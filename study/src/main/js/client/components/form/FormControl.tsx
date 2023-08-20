@@ -29,6 +29,8 @@ type FormControlProps = {
   onBlur?: (event: React.FocusEvent<FormControlHTMLElement>) => void;
   /** シンプルテキストをクリックしたときの動作 */
   onTextClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
+  /** isOnClickEditable == true かつ isEditing → trueになったときに実行  */
+  onEditing?: () => void;
   /** テキストボックスを非表示にするかどうか */
   hidden?: boolean;
   /** バリデーションを行うかどうかを示すフラグ */
@@ -65,6 +67,7 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
       onChange,
       onBlur,
       onTextClick,
+      onEditing,
       hidden = false,
       validate = false,
       touched = false,
@@ -81,6 +84,7 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
     const [initialValue, setInitialValue] = useState(value);
     const [isEditing, setIsEditing] = useState(!readonly && !isOnClickEditable);
     const [hasChanges, setHasChanges] = useState(false);
+    const [isInitialApplied, setIsInitialApplied] = useState(false);
     const elementRef = useRef(null);
     const blurTimeoutRef = useRef(null);
 
@@ -88,6 +92,14 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
     if (ref == null) {
       ref = elementRef;
     }
+
+    const handlesetIsEditing = (value: boolean) => {
+      setIsEditing(value);
+      // 初めて編集可能になったときのみ判定
+      if (value && !isInitialApplied) {
+        setIsInitialApplied(true);
+      }
+    };
 
     const handleChange = (event: React.ChangeEvent<FormControlHTMLElement>) => {
       // valueが変更されたとき
@@ -128,7 +140,7 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
         // はisEditing→falseに更新しない
         blurTimeoutRef.current = setTimeout(() => {
           //console.log('call blurTimeoutRef.current');
-          setIsEditing(false);
+          handlesetIsEditing(false);
         }, 100);
       }
       if (onBlur) {
@@ -148,7 +160,7 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
     const handleTextClick = (e) => {
       //console.log('call handleTextClick');
       if (!isEditing && isOnClickEditable && !readonly) {
-        setIsEditing(isOnClickEditable);
+        handlesetIsEditing(isOnClickEditable);
       }
       if (onTextClick) {
         onTextClick(e);
@@ -169,9 +181,15 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
     }, [value]);
 
     useEffect(() => {
-      // 編集可能になった場合にフォーカスが当たっているようにする
-      if (isEditing && isOnClickEditable && ref?.current?.focus) {
-        ref.current.focus();
+      if (isEditing && isOnClickEditable) {
+        // 編集可能になった場合にフォーカスが当たっているようにする
+        if (ref?.current?.focus) {
+          ref.current.focus();
+        }
+
+        if (onEditing) {
+          onEditing();
+        }
       }
     }, [isEditing]);
 
@@ -215,7 +233,9 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
             <Form.Label onClick={handleTextClick}>{title}</Form.Label>
           ))}
         {titleBr && <br />}
-        {isArrayChildren
+        {!isInitialApplied && isOnClickEditable
+          ? null
+          : isArrayChildren
           ? children.map((child, index) =>
               cloneElement(child, {
                 key: index,
