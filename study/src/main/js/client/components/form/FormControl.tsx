@@ -4,6 +4,7 @@ import React, {
   useEffect,
   useRef,
   forwardRef,
+  ReactNode,
 } from 'react';
 import Form from 'react-bootstrap/Form';
 
@@ -84,7 +85,7 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
     const [initialValue, setInitialValue] = useState(value);
     const [isEditing, setIsEditing] = useState(!readonly && !isOnClickEditable);
     const [hasChanges, setHasChanges] = useState(false);
-    const [isInitialApplied, setIsInitialApplied] = useState(false);
+    const [isInitialByOnEditable, setIsInitialByOnEditable] = useState(false);
     const elementRef = useRef(null);
     const blurTimeoutRef = useRef(null);
 
@@ -93,11 +94,11 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
       ref = elementRef;
     }
 
-    const handlesetIsEditing = (value: boolean) => {
+    const handleSetIsEditing = (value: boolean) => {
       setIsEditing(value);
-      // 初めて編集可能になったときのみ判定
-      if (value && !isInitialApplied) {
-        setIsInitialApplied(true);
+      // 初めて編集可能になったときのみ
+      if (value && !isInitialByOnEditable) {
+        setIsInitialByOnEditable(true);
       }
     };
 
@@ -140,7 +141,7 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
         // はisEditing→falseに更新しない
         blurTimeoutRef.current = setTimeout(() => {
           //console.log('call blurTimeoutRef.current');
-          handlesetIsEditing(false);
+          handleSetIsEditing(false);
         }, 100);
       }
       if (onBlur) {
@@ -160,7 +161,7 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
     const handleTextClick = (e) => {
       //console.log('call handleTextClick');
       if (!isEditing && isOnClickEditable && !readonly) {
-        handlesetIsEditing(isOnClickEditable);
+        handleSetIsEditing(isOnClickEditable);
       }
       if (onTextClick) {
         onTextClick(e);
@@ -224,6 +225,17 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
       ref: ref,
     };
 
+    /**
+     * 速度改善のため
+     * isOnClickEditable==trueの時は
+     * 一度編集可能になるまで描画しない
+     *
+     * @param callBack レンダリング対象
+     * @returns
+     */
+    const renderInitialByOnEditable = (callBack: () => ReactNode) =>
+      !isInitialByOnEditable && isOnClickEditable ? null : callBack();
+
     return (
       <Form.Group controlId={name} hidden={hidden}>
         {title &&
@@ -233,21 +245,21 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
             <Form.Label onClick={handleTextClick}>{title}</Form.Label>
           ))}
         {titleBr && <br />}
-        {!isInitialApplied && isOnClickEditable
-          ? null
-          : isArrayChildren
-          ? children.map((child, index) =>
-              cloneElement(child, {
-                key: index,
-                // hidden属性だけだとうまくいかないためstyleから直接非表示に
-                style: { display: isEditing ? '' : 'none' },
+        {renderInitialByOnEditable(() =>
+          isArrayChildren
+            ? children.map((child, index) =>
+                cloneElement(child, {
+                  key: index,
+                  // hidden属性だけだとうまくいかないためstyleから直接非表示に
+                  style: { display: isEditing ? '' : 'none' },
+                  ...childrenProps,
+                })
+              )
+            : cloneElement(children, {
+                value: text,
                 ...childrenProps,
               })
-            )
-          : cloneElement(children, {
-              value: text,
-              ...childrenProps,
-            })}
+        )}
         <SimpleText
           name={name}
           value={simpleTextValue}
@@ -256,15 +268,21 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
           textMaxLength={textMaxLength}
           onClick={handleTextClick}
         />
-        {validate && (
-          <Form.Control.Feedback onClick={handleTextClick}>
-            OK!
-          </Form.Control.Feedback>
+        {renderInitialByOnEditable(
+          () =>
+            validate && (
+              <Form.Control.Feedback onClick={handleTextClick}>
+                OK!
+              </Form.Control.Feedback>
+            )
         )}
-        {validate && (
-          <Form.Control.Feedback type="invalid" onClick={handleTextClick}>
-            {error as string}
-          </Form.Control.Feedback>
+        {renderInitialByOnEditable(
+          () =>
+            validate && (
+              <Form.Control.Feedback type="invalid" onClick={handleTextClick}>
+                {error as string}
+              </Form.Control.Feedback>
+            )
         )}
       </Form.Group>
     );
