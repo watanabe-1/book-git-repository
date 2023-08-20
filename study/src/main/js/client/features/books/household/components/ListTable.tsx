@@ -441,7 +441,6 @@ const ListTable: React.FC<ListTableProps> = ({
       <SortAndFilterFormTable
         tableFormConfig={listTableFormObj}
         handlePushSubmit={handlePushData}
-        hiddenPushButton={false}
         handleFormSubmit={handleSubmit}
         errData={errData}
       />

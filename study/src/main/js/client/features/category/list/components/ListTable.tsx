@@ -492,6 +492,7 @@ const ListTable = () => {
       <SortAndFilterFormTable
         tableFormConfig={listTableFormObj}
         handleFormSubmit={handleSubmit}
+        hiddenPushButton
         errData={errData}
       />
       {initInfoScript}

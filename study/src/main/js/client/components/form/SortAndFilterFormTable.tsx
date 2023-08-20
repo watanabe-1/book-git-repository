@@ -43,7 +43,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   handleFormSubmit,
   handlePushSubmit,
   hiddenSubmitButton = false,
-  hiddenPushButton = true,
+  hiddenPushButton = false,
   onEnterSubmit = false,
   errData = null,
   customeButton = null,
@@ -133,7 +133,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
           <SubmitButton
             title="新規"
             isLoading={isSubmitLoading}
-            hidden={hiddenPushButton}
+            hidden={hiddenPushButton && !handlePushSubmit}
             disabled={formik.dirty}
             onClick={(event) => {
               // from送信処理の停止
@@ -144,7 +144,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
           <SubmitButton
             title="更新"
             isLoading={isSubmitLoading}
-            hidden={hiddenSubmitButton}
+            hidden={hiddenSubmitButton && !handleSubmit}
             disabled={!formik.dirty || isSubmitLoading}
           />
         </div>

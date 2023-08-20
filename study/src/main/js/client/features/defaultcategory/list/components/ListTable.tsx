@@ -427,7 +427,6 @@ const ListTable = () => {
       <SortAndFilterFormTable
         tableFormConfig={listTableFormObj}
         handlePushSubmit={handlePushData}
-        hiddenPushButton={false}
         handleFormSubmit={handleSubmit}
         errData={errData}
         customeButton={<InputAllButton setList={setList} />}
