@@ -64,6 +64,7 @@
     "setTimeout": "^0.4.9",
     "swr": "^2.2.0",
     "text-encoding-polyfill": "^0.6.7",
+    "uuid": "^9.0.0",
     "yup": "^1.2.0",
     "yup-locale-ja": "^1.0.0"
   },

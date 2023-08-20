@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import useSWR, { SWRConfiguration, mutate, unstable_serialize } from 'swr';
+import { v4 as uuidv4 } from 'uuid';
 
 import { OnServerApi } from '../../@types/studyApi';
 import { CommonUi } from '../../@types/studyUtilType';
@@ -120,4 +121,14 @@ export const useCommonSearchParam = (key: string) => {
 
     return searchParams.get(key);
   }
+};
+
+export const useInitialUUID = () => {
+  const [uuid, setUuid] = useState(null);
+
+  useEffect(() => {
+    setUuid(uuidv4());
+  }, []);
+
+  return uuid;
 };

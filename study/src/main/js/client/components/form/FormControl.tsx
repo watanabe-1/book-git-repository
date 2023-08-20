@@ -9,6 +9,7 @@ import React, {
 import Form from 'react-bootstrap/Form';
 
 import { trim } from '../../../study/util/studyUtil';
+import { useInitialUUID } from '../../hooks/useCommon';
 import SimpleText from '../elements/text/SimpleText';
 
 type FormControlProps = {
@@ -88,6 +89,7 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
     const [isInitialByOnEditable, setIsInitialByOnEditable] = useState(false);
     const elementRef = useRef(null);
     const blurTimeoutRef = useRef(null);
+    const uuid = useInitialUUID();
 
     // 呼び出し元でrefが設定されていない場合
     if (ref == null) {
@@ -102,10 +104,18 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
       }
     };
 
+    const handlesetHasChanges = (value: boolean) => {
+      setHasChanges(value);
+      // 初めて対象が変更になったときのみ
+      if (value && !isInitialByOnEditable) {
+        setIsInitialByOnEditable(true);
+      }
+    };
+
     const handleChange = (event: React.ChangeEvent<FormControlHTMLElement>) => {
       // valueが変更されたとき
       // 編集済み判定フラグを編集済みに
-      setHasChanges(true);
+      handlesetHasChanges(true);
       setText(event.target.value);
       if (onChange) {
         onChange(event);
@@ -152,9 +162,9 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
       const textValue = eventValue ? eventValue : text;
       // 数値と文字列は同じように扱いため==で比較
       if (textValue == initialValue) {
-        setHasChanges(false);
+        handlesetHasChanges(false);
       } else {
-        setHasChanges(true);
+        handlesetHasChanges(true);
       }
     };
 
@@ -174,9 +184,9 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
         // 初期値から変更されたか判定
         // 数値と文字列は同じように扱いため==で比較
         if (value == initialValue) {
-          setHasChanges(false);
+          handlesetHasChanges(false);
         } else {
-          setHasChanges(true);
+          handlesetHasChanges(true);
         }
       }
     }, [value]);
@@ -198,7 +208,7 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
       // dirtyがtrue→falseに変更されたときは送信ボタンが押されたとき(dirtyがfalseの時)
       if (!dirty) {
         // 編集済み判定フラグをリセット
-        setHasChanges(false);
+        handlesetHasChanges(false);
         // 初期値を更新
         setInitialValue(value);
       }
@@ -227,17 +237,20 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
 
     /**
      * 速度改善のため
-     * isOnClickEditable==trueの時は
+     * isOnClickEditable==true
+     * もしくはreedonly==trueの時は
      * 一度編集可能になるまで描画しない
      *
      * @param callBack レンダリング対象
      * @returns
      */
     const renderInitialByOnEditable = (callBack: () => ReactNode) =>
-      !isInitialByOnEditable && isOnClickEditable ? null : callBack();
+      !isInitialByOnEditable && (isOnClickEditable || readonly)
+        ? null
+        : callBack();
 
     return (
-      <Form.Group controlId={name} hidden={hidden}>
+      <Form.Group controlId={uuid} hidden={hidden}>
         {title &&
           (isArrayChildren ? (
             <span> {title}</span>
@@ -260,14 +273,16 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
                 ...childrenProps,
               })
         )}
-        <SimpleText
-          name={name}
-          value={simpleTextValue}
-          hidden={isEditing}
-          textColorClass={simpleTextColor}
-          textMaxLength={textMaxLength}
-          onClick={handleTextClick}
-        />
+        {!isEditing && (
+          <SimpleText
+            name={name}
+            value={simpleTextValue}
+            hidden={isEditing}
+            textColorClass={simpleTextColor}
+            textMaxLength={textMaxLength}
+            onClick={handleTextClick}
+          />
+        )}
         {renderInitialByOnEditable(
           () =>
             validate && (
