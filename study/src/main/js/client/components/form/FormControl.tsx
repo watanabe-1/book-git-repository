@@ -104,7 +104,7 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
       }
     };
 
-    const handlesetHasChanges = (value: boolean) => {
+    const handleSetHasChanges = (value: boolean) => {
       setHasChanges(value);
       // 初めて対象が変更になったときのみ
       if (value && !isInitialByOnEditable) {
@@ -115,7 +115,7 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
     const handleChange = (event: React.ChangeEvent<FormControlHTMLElement>) => {
       // valueが変更されたとき
       // 編集済み判定フラグを編集済みに
-      handlesetHasChanges(true);
+      handleSetHasChanges(true);
       setText(event.target.value);
       if (onChange) {
         onChange(event);
@@ -162,9 +162,9 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
       const textValue = eventValue ? eventValue : text;
       // 数値と文字列は同じように扱いため==で比較
       if (textValue == initialValue) {
-        handlesetHasChanges(false);
+        handleSetHasChanges(false);
       } else {
-        handlesetHasChanges(true);
+        handleSetHasChanges(true);
       }
     };
 
@@ -184,9 +184,9 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
         // 初期値から変更されたか判定
         // 数値と文字列は同じように扱いため==で比較
         if (value == initialValue) {
-          handlesetHasChanges(false);
+          handleSetHasChanges(false);
         } else {
-          handlesetHasChanges(true);
+          handleSetHasChanges(true);
         }
       }
     }, [value]);
@@ -208,7 +208,7 @@ const FormControl = forwardRef<React.ReactElement, FormControlProps>(
       // dirtyがtrue→falseに変更されたときは送信ボタンが押されたとき(dirtyがfalseの時)
       if (!dirty) {
         // 編集済み判定フラグをリセット
-        handlesetHasChanges(false);
+        handleSetHasChanges(false);
         // 初期値を更新
         setInitialValue(value);
       }
