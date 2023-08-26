@@ -2,12 +2,12 @@ import endOfMonth from 'date-fns/endOfMonth';
 import startOfMonth from 'date-fns/startOfMonth';
 import { BaseOptions } from 'flatpickr/dist/types/options';
 import { FormikErrors } from 'formik';
-import React, { forwardRef, useRef } from 'react';
+import React, { forwardRef } from 'react';
 import Form from 'react-bootstrap/Form';
 import Flatpickr from 'react-flatpickr';
 import DatePicker from 'react-flatpickr';
 
-import FormControl from './FormControl';
+import FormControl, { ChildlenRefs } from './FormControl';
 import { iconConst } from '../../../constant/iconConstant';
 import {
   convertToFlatpickrFormat,
@@ -62,20 +62,12 @@ type DayPickrProps = {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+  /** クリックしたときの関数 */
+  onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   /** テキストボックスを非表示にするかどうか */
   hidden?: boolean;
 };
-
-const openFp = (fp: React.MutableRefObject<DatePicker>) => {
-  if (!fp?.current?.flatpickr) return;
-  // カレンダーの表示基準元が存在しない場合、
-  // カレンダーの表示位置がバグってしまうため、
-  // カレンダーの表示元が描画された後に動くよう
-  // に少し実施を遅らせる
-  setTimeout(() => {
-    fp.current.flatpickr.open();
-  }, 100);
-};
+type DatePickerCallBackRef = (fp: Flatpickr) => void;
 
 /**
  * @returns form内のテキストボックス
@@ -96,11 +88,22 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
   isOnClickEditable = false,
   readonly = false,
 }) => {
-  const fp = useRef(null);
   const value = pvalue ? pvalue : '';
-
+  const DayPickrId = 'dayPickr';
   const handleSet = (e) => {
     setFieldValue(fieldNameByNames, e.target.value);
+  };
+  const openFp = (refs: ChildlenRefs) => {
+    const fp = refs?.current[DayPickrId] as DatePicker;
+    //console.log(fp);
+    if (!fp?.flatpickr) return;
+    // カレンダーの表示基準元が存在しない場合、
+    // カレンダーの表示位置がバグってしまうため、
+    // カレンダーの表示元が描画された後に動くよう
+    // に少し実施を遅らせる
+    setTimeout(() => {
+      fp?.flatpickr?.open();
+    }, 100);
   };
 
   return (
@@ -110,9 +113,14 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
         name={name}
         value={value}
         onBlur={handleSet}
-        onEditing={() => {
+        onEditing={(refs) => {
           if (!readonly) {
-            openFp(fp);
+            openFp(refs);
+          }
+        }}
+        onClick={(_, refs) => {
+          if (!readonly) {
+            openFp(refs);
           }
         }}
         hidden={hidden}
@@ -122,15 +130,15 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
         dirty={dirty}
         isOnClickEditable={isOnClickEditable}
         readonly={readonly}
-        ref={fp}
       >
         {/*エラーチェック結果を表示するため  Form.Controlを使用
         エラーチェック結果のみ表示されればよいのでhidden固定*/}
-        <Form.Control type="hidden" />
+        <Form.Control type="hidden" key={'dayPickerFormControl'} />
         <DayPickr
           value={value}
           dateFormat={dateFormat}
           onlyValueMonth={onlyValueMonth}
+          key={DayPickrId}
         />
       </FormControl>
     </div>
@@ -141,12 +149,13 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
  *
  * @returns 日を選択できるinputボックス
  */
-const DayPickr = forwardRef<DatePicker, DayPickrProps>(
+const DayPickr = forwardRef<DatePickerCallBackRef, DayPickrProps>(
   (
     {
       value,
       onChange,
       onBlur,
+      onClick,
       hidden,
       dateFormat: pdateFormat,
       onlyValueMonth,
@@ -200,13 +209,15 @@ const DayPickr = forwardRef<DatePicker, DayPickrProps>(
               onBlur(event);
             }
           }}
-          ref={ref}
+          ref={ref as unknown as DatePickerCallBackRef}
         />
         <a
           className="input-button"
           title="toggle"
-          onClick={() => {
-            openFp(ref as React.MutableRefObject<DatePicker>);
+          onClick={(event) => {
+            if (onClick) {
+              onClick(event);
+            }
           }}
         >
           <Icon icon={iconConst.bootstrap.BI_CALENDAR} />

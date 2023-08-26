@@ -78,12 +78,12 @@ export const useCommonSWRImmutable = <T>(
   });
 };
 
-export const useStaticSWR = <T>(key: string, initialData: T) => {
+export const useStaticSWR = <T>(key: string, initialData: T = null) => {
   const [isInitialDataApplied, setIsInitialDataApplied] = useState(false);
 
   // 初期値を設定後はこの関数内では再設定しない
-  // 数字の0は初期値として使用できないから注意
-  if (initialData && !isInitialDataApplied) {
+  // nullは初期値として使用できないから注意
+  if (initialData != null && !isInitialDataApplied) {
     mutate(key, initialData);
     setIsInitialDataApplied(true);
   }
