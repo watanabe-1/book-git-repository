@@ -23,15 +23,15 @@ type RadioBtnProps = {
   /** バリデーションを行うかどうかを示すフラグ */
   validate?: boolean;
   /** バリデーションが実行されたかどうかを示すフラグ */
-  touched?: unknown;
+  touched?: boolean;
   /** エラーメッセージ */
-  error?: unknown;
+  error?: string | null;
   /** formが変更されたかどうか */
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
   /** 読み取り専用にするか */
-  readonly?: boolean;
+  isReadonly?: boolean;
 };
 
 /**
@@ -73,7 +73,7 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
-  readonly = false,
+  isReadonly = false,
 }) => {
   const newTypeList = getRadioBtnTypeList(typeList);
   const textValue = getRadioBtnTextValue(newTypeList, value);
@@ -84,7 +84,7 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
       title={title}
       titleBr={titleBr}
       name={name}
-      value={value ? value : ''}
+      value={value || ''}
       textValue={textValue ? textValue : ''}
       onChange={onChange}
       onBlur={onBlur}
@@ -94,7 +94,7 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
-      readonly={readonly}
+      readonly={isReadonly}
     >
       {newTypeList.map((type, index) => {
         const id = `${name}-${index}`;

@@ -19,15 +19,15 @@ type TextAreaProps = {
   /** バリデーションを行うかどうかを示すフラグ */
   validate?: boolean;
   /** バリデーションが実行されたかどうかを示すフラグ */
-  touched?: unknown;
+  touched?: boolean;
   /** エラーメッセージ */
-  error?: unknown;
+  error?: string | null;
   /** formが変更されたかどうか */
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
   /** 読み取り専用にするか */
-  readonly?: boolean;
+  isReadonly?: boolean;
 };
 
 /**
@@ -46,13 +46,13 @@ const TextArea: React.FC<TextAreaProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
-  readonly = false,
+  isReadonly = false,
 }) => {
   return (
     <FormControl
       title={title}
       name={name}
-      value={value ? value : ''}
+      value={value || ''}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}
@@ -61,7 +61,7 @@ const TextArea: React.FC<TextAreaProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
-      readonly={readonly}
+      readonly={isReadonly}
     >
       <Form.Control as="textarea" />
     </FormControl>

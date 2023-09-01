@@ -81,7 +81,7 @@ const ListTable = () => {
    * リストデータ更新
    */
   const fetchUpdListData = async (form) => {
-    return await fetchPost(urlConst.category.LISTDATAUPDATE, form);
+    return await fetchPost(urlConst.category.LIST_DATA_UPDATE, form);
   };
 
   console.log({ ...info });
@@ -298,7 +298,7 @@ const ListTable = () => {
                             name={field.name}
                             value={field.value}
                             dirty={props.dirty}
-                            readonly
+                            isReadonly
                           />
                           <ModalSlider
                             imageList={imageList}

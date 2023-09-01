@@ -23,15 +23,15 @@ type CheckBoxProps = {
   /** バリデーションを行うかどうかを示すフラグ */
   validate?: boolean;
   /** バリデーションが実行されたかどうかを示すフラグ */
-  touched?: unknown;
+  touched?: boolean;
   /** エラーメッセージ */
-  error?: unknown;
+  error?: string | null;
   /** formが変更されたかどうか */
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
   /** 読み取り専用にするか */
-  readonly?: boolean;
+  isReadonly?: boolean;
   /** ラベルを表示しない */
   noLabel?: boolean;
   /** ラベルにテキストバリューを使用するか */
@@ -95,7 +95,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
-  readonly = false,
+  isReadonly = false,
   noLabel = false,
   isLabelTextValue = true,
 }) => {
@@ -118,7 +118,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
-      readonly={readonly}
+      readonly={isReadonly}
     >
       {
         // チェックボックスは1つのみで使用する想定のため長さ1の配列でループ

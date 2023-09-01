@@ -23,13 +23,13 @@ type FileBoxProps = {
   /** バリデーションを行うかどうかを示すフラグ */
   validate?: boolean;
   /** バリデーションが実行されたかどうかを示すフラグ */
-  touched?: unknown;
+  touched?: boolean;
   /** エラーメッセージ */
-  error?: unknown;
+  error?: unknown | null;
   /** formが変更されたかどうか */
   dirty?: boolean;
   /** 読み取り専用にするか */
-  readonly?: boolean;
+  isReadonly?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
 };
@@ -52,7 +52,7 @@ const FileBox: React.FC<FileBoxProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
-  readonly = false,
+  isReadonly = false,
 }) => {
   const type = hidden ? 'hidden' : 'file';
 
@@ -60,7 +60,7 @@ const FileBox: React.FC<FileBoxProps> = ({
     <FormControl
       title={title}
       name={name}
-      value={value ? value : ''}
+      value={value || ''}
       textValue={textValue ? textValue : String(value)}
       onChange={onChange}
       onBlur={onBlur}
@@ -70,7 +70,7 @@ const FileBox: React.FC<FileBoxProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
-      readonly={readonly}
+      readonly={isReadonly}
     >
       <Form.Control type={type} accept={accept} />
     </FormControl>

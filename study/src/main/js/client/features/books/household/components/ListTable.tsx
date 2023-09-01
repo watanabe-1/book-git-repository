@@ -137,7 +137,7 @@ const ListTable: React.FC<ListTableProps> = ({
       ...form,
       ...buildDataParam(paramDate, commonInfo.dateFormat, booksType),
     };
-    return await fetchPost(urlConst.books.LISTDATAUPDATE, param);
+    return await fetchPost(urlConst.books.LIST_DATA_UPDATE, param);
   };
 
   /**
@@ -152,7 +152,7 @@ const ListTable: React.FC<ListTableProps> = ({
         booksType
       ),
     };
-    return await fetchPost(urlConst.books.LISTDATAPUSH, param);
+    return await fetchPost(urlConst.books.LIST_DATA_PUSH, param);
   };
 
   // console.log(JSON.stringify(booksList));

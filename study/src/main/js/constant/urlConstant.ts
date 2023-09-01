@@ -1,48 +1,52 @@
+/** URL Base Paths */
+const BASE_PATHS = {
+  CATEGORY: '/category',
+  DEFAULT_CATEGORY: '/defaultCategory',
+  BOOKS: '/books',
+  COMMON: '/common',
+};
+
 /** URL */
 export const urlConst = {
   /** カテゴリー */
   category: {
-    INFO: '/category/info',
-    CONFIRM: '/category/confirm',
-    RESULT: '/category/result',
-    LIST: '/category/list',
-    LISTDATA: '/category/listdata',
-    IMAGELISTDATA: '/category/imageList',
-    LISTDATAUPDATE: '/category/listdataUpdate',
+    INFO: `${BASE_PATHS.CATEGORY}/info`,
+    CONFIRM: `${BASE_PATHS.CATEGORY}/confirm`,
+    RESULT: `${BASE_PATHS.CATEGORY}/result`,
+    LIST: `${BASE_PATHS.CATEGORY}/list`,
+    LIST_DATA: `${BASE_PATHS.CATEGORY}/listData`,
+    IMAGE_LIST_DATA: `${BASE_PATHS.CATEGORY}/imageListData`,
+    LIST_DATA_UPDATE: `${BASE_PATHS.CATEGORY}/listDataUpdate`,
   },
 
   /** デフォルトカテゴリー */
   defaultCategory: {
-    INFO: '/defaultCategory/info',
-    //CONFIRM: '/defaultCategory/confirm',
-    //RESULT: '/defaultCategory/result',
-    //LIST: '/defaultCategory/list',
-    LISTDATA: '/defaultCategory/listdata',
-    //IMAGELISTDATA: '/defaultCategory/imageList',
-    LISTDATAUPDATE: '/defaultCategory/listdataUpdate',
-    LISTDATAPUSH: '/defaultCategory/listdataPush',
-    INPUTALL: '/defaultCategory/inputAll',
+    INFO: `${BASE_PATHS.DEFAULT_CATEGORY}/info`,
+    LIST_DATA: `${BASE_PATHS.DEFAULT_CATEGORY}/listData`,
+    LIST_DATA_UPDATE: `${BASE_PATHS.DEFAULT_CATEGORY}/listDataUpdate`,
+    LIST_DATA_PUSH: `${BASE_PATHS.DEFAULT_CATEGORY}/listDataPush`,
+    INPUT_ALL: `${BASE_PATHS.DEFAULT_CATEGORY}/inputAll`,
   },
 
   /** 家計簿 */
   books: {
-    UPLOAD_INFO: '/books/uploadInfo',
-    DOWNLOAD_INFO: '/books/downloadInfo',
-    CONVERT_INFO: '/books/convertInfo',
-    HOUSEHOLD_INFO: '/books/householdInfo',
-    HOUSEHOLD_CHART_INFO: '/books/householdChartInfo',
-    HOUSEHOLD_CALENDAR_INFO: '/books/householdCalendarInfo',
-    RESULT: '/books/result',
-    DOWNLOAD: '/books/download',
-    CONVERT_FILE: '/books/convertFile',
-    HOUSEHOLD: '/books/household',
-    LISTDATAPUSH: '/books/listdataPush',
-    LISTDATA: '/books/listdata',
-    LISTDATAUPDATE: '/books/listdataUpdate',
+    UPLOAD_INFO: `${BASE_PATHS.BOOKS}/uploadInfo`,
+    DOWNLOAD_INFO: `${BASE_PATHS.BOOKS}/downloadInfo`,
+    CONVERT_INFO: `${BASE_PATHS.BOOKS}/convertInfo`,
+    HOUSEHOLD_INFO: `${BASE_PATHS.BOOKS}/householdInfo`,
+    HOUSEHOLD_CHART_INFO: `${BASE_PATHS.BOOKS}/householdChartInfo`,
+    HOUSEHOLD_CALENDAR_INFO: `${BASE_PATHS.BOOKS}/householdCalendarInfo`,
+    RESULT: `${BASE_PATHS.BOOKS}/result`,
+    DOWNLOAD: `${BASE_PATHS.BOOKS}/download`,
+    CONVERT_FILE: `${BASE_PATHS.BOOKS}/convertFile`,
+    HOUSEHOLD: `${BASE_PATHS.BOOKS}/household`,
+    LIST_DATA_PUSH: `${BASE_PATHS.BOOKS}/listDataPush`,
+    LIST_DATA: `${BASE_PATHS.BOOKS}/listData`,
+    LIST_DATA_UPDATE: `${BASE_PATHS.BOOKS}/listDataUpdate`,
   },
 
   /** 共通 */
   common: {
-    COMMON_INFO: '/common/info',
+    COMMON_INFO: `${BASE_PATHS.COMMON}/info`,
   },
 };

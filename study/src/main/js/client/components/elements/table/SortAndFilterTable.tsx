@@ -15,6 +15,10 @@ type SortAndFilterTableProps = {
   isFilter?: boolean;
 };
 
+// コンポーネントの外で定義すると、コンポーネントのレンダリングのたびに再定義されることを避ける
+const ASCENDING = 'ASC';
+const DESCENDING = 'DESC';
+
 /**
  * ソート、フィルター可能なテーブル
  * @returns テーブル
@@ -25,9 +29,6 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
   isSort = true,
   isFilter = true,
 }) => {
-  const ASCENDING = 'ASC';
-  const DESCENDING = 'DESC';
-
   // const [tableData, setTableData] = useState({
   //   columns: pColumns,
   //   rows: pRows,

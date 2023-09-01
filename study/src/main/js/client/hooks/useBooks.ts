@@ -49,7 +49,7 @@ export const useHouseholdDataSWR = (token: Record<string, string>) => {
   //console.log('call useHouseholdDataSWR');
   return useCommonSWR<BooksFormList>(
     (api) => api.getHouseholdListData(createParamdate(token), token.booksType),
-    [urlConst.books.LISTDATA, token]
+    [urlConst.books.LIST_DATA, token]
   );
 };
 

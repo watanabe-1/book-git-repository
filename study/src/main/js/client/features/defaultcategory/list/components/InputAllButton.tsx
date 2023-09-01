@@ -47,7 +47,7 @@ const InputAllButton: React.FC<InputAllButtonProps> = ({ setList }) => {
    * リストデータ登録
    */
   const fetchInputAll = async () => {
-    return await fetchPost(urlConst.defaultCategory.INPUTALL);
+    return await fetchPost(urlConst.defaultCategory.INPUT_ALL);
   };
 
   return (

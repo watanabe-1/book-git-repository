@@ -12,7 +12,7 @@ import { trim } from '../../../study/util/studyUtil';
 import { useInitialUUID } from '../../hooks/useCommon';
 import SimpleText from '../elements/text/SimpleText';
 
-export type ChildlenRefs = React.MutableRefObject<{
+export type ChildrenRefs = React.MutableRefObject<{
   [x: string]: unknown;
 }>;
 
@@ -36,13 +36,13 @@ type FormControlProps = {
   /** シンプルテキストをクリックしたときの動作 */
   onTextClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   /**
-   * isOnClickEditable == true
+   * isOnClickEditable === true
    * かつ isEditing → trueになったときに実行
    *
    * @param elementRefs childrenの参照を詰めたオブジェクト elementRefs.current[childenのkeyで取得可能]
    * @returns
    */
-  onEditing?: (elementRefs: ChildlenRefs) => void;
+  onEditing?: (elementRefs: ChildrenRefs) => void;
   /**
    * childをclickしたときに発生
    *
@@ -52,7 +52,7 @@ type FormControlProps = {
    */
   onClick?: (
     event: React.MouseEvent<HTMLElement, MouseEvent>,
-    elementRefs: ChildlenRefs
+    elementRefs: ChildrenRefs
   ) => void;
   /** テキストボックスを非表示にするかどうか */
   hidden?: boolean;
@@ -104,7 +104,7 @@ const FormControl: React.FC<FormControlProps> = ({
   const [isEditing, setIsEditing] = useState(!readonly && !isOnClickEditable);
   const [hasChanges, setHasChanges] = useState(false);
   const [isInitialByOnEditable, setIsInitialByOnEditable] = useState(false);
-  const elementRefs: ChildlenRefs = useRef<{
+  const elementRefs: ChildrenRefs = useRef<{
     [key in string]: unknown;
   }>({});
   const blurTimeoutRef = useRef(null);
@@ -156,9 +156,7 @@ const FormControl: React.FC<FormControlProps> = ({
     // 編集済み判定フラグを編集済みに
     handleSetHasChanges(true);
     setText(event.target.value);
-    if (onChange) {
-      onChange(event);
-    }
+    onChange?.(event);
   };
 
   const handleFocus = () => {
@@ -193,18 +191,13 @@ const FormControl: React.FC<FormControlProps> = ({
         handleSetIsEditing(false);
       }, 100);
     }
-    if (onBlur) {
-      onBlur(event);
-    }
+    onBlur?.(event);
+
     // 初期値から変更されたか判定
     const eventValue = event.target.value;
     const textValue = eventValue ? eventValue : text;
     // 数値と文字列は同じように扱いため==で比較
-    if (textValue == initialValue) {
-      handleSetHasChanges(false);
-    } else {
-      handleSetHasChanges(true);
-    }
+    setHasChanges(textValue != initialValue.toString());
   };
 
   const handleTextClick = (e) => {
@@ -212,16 +205,12 @@ const FormControl: React.FC<FormControlProps> = ({
     if (!isEditing && isOnClickEditable && !readonly) {
       handleSetIsEditing(isOnClickEditable);
     }
-    if (onTextClick) {
-      onTextClick(e);
-    }
+    onTextClick?.(e);
   };
 
   const handleChildClick = (e) => {
     //console.log('call handleChildClick');
-    if (onClick) {
-      onClick(e, elementRefs);
-    }
+    onClick?.(e, elementRefs);
   };
 
   useEffect(() => {
@@ -229,11 +218,7 @@ const FormControl: React.FC<FormControlProps> = ({
     if (readonly) {
       // 初期値から変更されたか判定
       // 数値と文字列は同じように扱いため==で比較
-      if (value == initialValue) {
-        handleSetHasChanges(false);
-      } else {
-        handleSetHasChanges(true);
-      }
+      setHasChanges(value != initialValue);
     }
   }, [value]);
 
@@ -249,10 +234,7 @@ const FormControl: React.FC<FormControlProps> = ({
           break;
         }
       }
-
-      if (onEditing) {
-        onEditing(elementRefs);
-      }
+      onEditing?.(elementRefs);
     }
   }, [isEditing]);
 
@@ -268,9 +250,9 @@ const FormControl: React.FC<FormControlProps> = ({
 
   const isValid = validate && touched && !error;
   const isInvalid = validate && !!error;
-  const textBase = trim(textValue) ? textValue : value;
-  const trimTextBase = typeof textBase === 'string' ? trim(textBase) : textBase;
-  const simpleTextValue = trimTextBase ? trimTextBase : '値がありません';
+  const textBase = textValue || value;
+  const trimTextBase = trim(textBase.toString());
+  const simpleTextValue = trimTextBase || '値がありません';
   const textColorBase = trimTextBase ? 'text-black' : 'text-black-50';
   const simpleTextColor = hasChanges ? 'text-warning' : textColorBase;
 
@@ -315,11 +297,11 @@ const FormControl: React.FC<FormControlProps> = ({
         ))}
       {titleBr && <br />}
       {renderInitialByOnEditable(() =>
-        convertedChildList.map((childObject) => {
-          return cloneElement(childObject.child, {
-            key: childObject.id,
-            ref: childObject.refCallbackFunction,
+        convertedChildList.map(({ id, child, refCallbackFunction }) => {
+          return cloneElement(child, {
             ...childrenProps,
+            key: id,
+            ref: refCallbackFunction,
           });
         })
       )}

@@ -21,10 +21,18 @@ const get = async (
     [url, token] = initialDataKey;
   }
 
-  const res = await fetchGet(url, token);
-  console.log(`call get:${url}${token ? JSON.stringify(token) : ''}`);
+  try {
+    const res = await fetchGet(url, token);
+    console.log(`call get:${url}${token ? JSON.stringify(token) : ''}`);
 
-  return await res.json();
+    return await res.json();
+  } catch (error) {
+    console.error(
+      `Failed to fetch from ${url}${token ? JSON.stringify(token) : ''}`,
+      error
+    );
+    throw error;
+  }
 };
 
 export const useCommonSWR = <T>(
@@ -83,7 +91,7 @@ export const useStaticSWR = <T>(key: string, initialData: T = null) => {
 
   // 初期値を設定後はこの関数内では再設定しない
   // nullは初期値として使用できないから注意
-  if (initialData != null && !isInitialDataApplied) {
+  if (initialData !== null && !isInitialDataApplied) {
     mutate(key, initialData);
     setIsInitialDataApplied(true);
   }
@@ -123,8 +131,8 @@ export const useCommonSearchParam = (key: string) => {
   }
 };
 
-export const useInitialUUID = () => {
-  const [uuid, setUuid] = useState(null);
+export const useInitialUUID = (): string | null => {
+  const [uuid, setUuid] = useState<string | null>(null);
 
   useEffect(() => {
     setUuid(uuidv4());

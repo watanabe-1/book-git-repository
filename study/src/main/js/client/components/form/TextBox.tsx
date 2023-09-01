@@ -19,15 +19,15 @@ type TextBoxProps = {
   /** バリデーションを行うかどうかを示すフラグ */
   validate?: boolean;
   /** バリデーションが実行されたかどうかを示すフラグ */
-  touched?: unknown;
+  touched?: boolean;
   /** エラーメッセージ */
-  error?: unknown;
+  error?: string | null;
   /** formが変更されたかどうか */
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
   /** 読み取り専用にするか */
-  readonly?: boolean;
+  isReadonly?: boolean;
 };
 
 /**
@@ -38,8 +38,12 @@ type TextBoxProps = {
  * @param value 値
  * @returns
  */
-export const modifierTextBox = (value: unknown) =>
-  value == 0 || value ? String(value) : '';
+export const modifierTextBox = (value: unknown) => {
+  if (value == 0 || value) {
+    return String(value);
+  }
+  return '';
+};
 
 /**
  * @returns form内のテキストボックス
@@ -56,7 +60,7 @@ const TextBox: React.FC<TextBoxProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
-  readonly = false,
+  isReadonly = false,
 }) => {
   const type = hidden ? 'hidden' : 'text';
 
@@ -64,7 +68,7 @@ const TextBox: React.FC<TextBoxProps> = ({
     <FormControl
       title={title}
       name={name}
-      value={value ? value : ''}
+      value={value || ''}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}
@@ -73,7 +77,7 @@ const TextBox: React.FC<TextBoxProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
-      readonly={readonly}
+      readonly={isReadonly}
     >
       <Form.Control type={type} />
     </FormControl>

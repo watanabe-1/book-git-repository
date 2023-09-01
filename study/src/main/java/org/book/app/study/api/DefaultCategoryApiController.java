@@ -56,7 +56,7 @@ public class DefaultCategoryApiController extends ApiController {
    * 
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/defaultCategory/listdata", method = RequestMethod.GET)
+  @RequestMapping(value = "/defaultCategory/listData", method = RequestMethod.GET)
   @ResponseBody
   public DefaultCategoryFormList getListData() {
     return defaultCategoryHelper.getDefaultCategoryFormList();
@@ -84,7 +84,7 @@ public class DefaultCategoryApiController extends ApiController {
    * @param model モデル
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/defaultCategory/listdataUpdate", method = RequestMethod.POST)
+  @RequestMapping(value = "/defaultCategory/listDataUpdate", method = RequestMethod.POST)
   @ResponseBody
   public DefaultCategoryFormList listUpdate(
       @ModelAttribute @Validated DefaultCategoryFormList defCatListParam,
@@ -103,7 +103,7 @@ public class DefaultCategoryApiController extends ApiController {
    * @param model モデル
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/defaultCategory/listdataPush", method = RequestMethod.POST)
+  @RequestMapping(value = "/defaultCategory/listDataPush", method = RequestMethod.POST)
   @ResponseBody
   public DefaultCategoryFormList listDataPush(
       @ModelAttribute @Validated DefaultCategoryFormList defCatListParam,

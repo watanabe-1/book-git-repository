@@ -88,14 +88,14 @@ const TabContainer = () => {
   /**
    * 次月のページに遷移
    */
-  const pushNextHistory = async () => {
+  const pushNextHistory = () => {
     pushHistory(getNextMonthDate(date), tab);
   };
 
   /**
    * 前月のページに遷移
    */
-  const pushPreviousHistory = async () => {
+  const pushPreviousHistory = () => {
     pushHistory(getPreviousMonthDate(date), tab);
   };
 
@@ -104,7 +104,7 @@ const TabContainer = () => {
    *
    * @param date
    */
-  const pushJumpHistory = async (date: Date) => {
+  const pushJumpHistory = (date: Date) => {
     pushHistory(date, tab);
   };
 
@@ -112,7 +112,7 @@ const TabContainer = () => {
    * 指定のタブに繊維
    *
    */
-  const pushTabHistory = async (tab: string) => {
+  const pushTabHistory = (tab: string) => {
     pushHistory(date, tab);
   };
 
@@ -151,83 +151,81 @@ const TabContainer = () => {
 
   // tabとtabで呼び出す画面の間に共通の項目を表示したいためTabsは使用せずカスタムtabを使用
   return (
-    <>
-      <Tab.Container
-        id="controlled-household-tab"
-        activeKey={tab}
-        onSelect={(key) => {
-          pushTabHistory(key);
-        }}
-      >
-        <Row>
-          <Col>
-            <Nav variant="tabs">
-              <Nav.Item>
-                <Nav.Link eventKey="tab1">リスト_支出</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="tab2">リスト_収入</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="tab3">グラフ</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="tab4">カレンダー_支出</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey="tab5">カレンダー_収入</Nav.Link>
-              </Nav.Item>
-            </Nav>
-          </Col>
-        </Row>
-        <Row>
-          <Col md={6}>
-            <a className="btn btn-link" onClick={() => pushPreviousHistory()}>
-              <span>前月</span>
-            </a>
-            <span>{`${info.year}年${info.month}月`}</span>
-            <a className="btn btn-link" onClick={() => pushNextHistory()}>
-              <span>次月</span>
-            </a>
-            <MonthPickr
-              year={parseInt(info.year)}
-              month={parseInt(info.month)}
-              onChange={pushJumpHistory}
-            />
-          </Col>
-          <Col md={2}>
-            <span>{`総支出:${expensesAmount}`}</span>
-          </Col>
-          <Col md={2}>
-            <span>{`総収入:${incomeAmount}`}</span>
-          </Col>
-          <Col md={2}>
-            <span> {`貯金額:${differenceSumAmount}`}</span>
-          </Col>
-        </Row>
-        <Tab.Content>
-          <Tab.Pane eventKey="tab1" mountOnEnter>
-            <ListTable booksType={info.booksTypeExpenses} />
-          </Tab.Pane>
-          <Tab.Pane eventKey="tab2" mountOnEnter>
-            <ListTable booksType={info.booksTypeIncome} />
-          </Tab.Pane>
-          <Tab.Pane eventKey="tab3" mountOnEnter>
-            <Chart />
-          </Tab.Pane>
-          <Tab.Pane eventKey="tab4" mountOnEnter>
-            <Calendar booksType={info.booksTypeExpenses} />
-          </Tab.Pane>
-          <Tab.Pane eventKey="tab5" mountOnEnter>
-            <Calendar booksType={info.booksTypeIncome} />
-          </Tab.Pane>
-        </Tab.Content>
-        {initScript}
-        {initCommonScript}
-        {initExpensesListScript}
-        {initIncomeListScript}
-      </Tab.Container>
-    </>
+    <Tab.Container
+      id="controlled-household-tab"
+      activeKey={tab}
+      onSelect={(key) => {
+        pushTabHistory(key);
+      }}
+    >
+      <Row>
+        <Col>
+          <Nav variant="tabs">
+            <Nav.Item>
+              <Nav.Link eventKey="tab1">リスト_支出</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="tab2">リスト_収入</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="tab3">グラフ</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="tab4">カレンダー_支出</Nav.Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Nav.Link eventKey="tab5">カレンダー_収入</Nav.Link>
+            </Nav.Item>
+          </Nav>
+        </Col>
+      </Row>
+      <Row>
+        <Col md={6}>
+          <a className="btn btn-link" onClick={() => pushPreviousHistory()}>
+            <span>前月</span>
+          </a>
+          <span>{`${info.year}年${info.month}月`}</span>
+          <a className="btn btn-link" onClick={() => pushNextHistory()}>
+            <span>次月</span>
+          </a>
+          <MonthPickr
+            year={parseInt(info.year)}
+            month={parseInt(info.month)}
+            onChange={pushJumpHistory}
+          />
+        </Col>
+        <Col md={2}>
+          <span>{`総支出:${expensesAmount}`}</span>
+        </Col>
+        <Col md={2}>
+          <span>{`総収入:${incomeAmount}`}</span>
+        </Col>
+        <Col md={2}>
+          <span> {`貯金額:${differenceSumAmount}`}</span>
+        </Col>
+      </Row>
+      <Tab.Content>
+        <Tab.Pane eventKey="tab1" mountOnEnter>
+          <ListTable booksType={info.booksTypeExpenses} />
+        </Tab.Pane>
+        <Tab.Pane eventKey="tab2" mountOnEnter>
+          <ListTable booksType={info.booksTypeIncome} />
+        </Tab.Pane>
+        <Tab.Pane eventKey="tab3" mountOnEnter>
+          <Chart />
+        </Tab.Pane>
+        <Tab.Pane eventKey="tab4" mountOnEnter>
+          <Calendar booksType={info.booksTypeExpenses} />
+        </Tab.Pane>
+        <Tab.Pane eventKey="tab5" mountOnEnter>
+          <Calendar booksType={info.booksTypeIncome} />
+        </Tab.Pane>
+      </Tab.Content>
+      {initScript}
+      {initCommonScript}
+      {initExpensesListScript}
+      {initIncomeListScript}
+    </Tab.Container>
   );
 };
 

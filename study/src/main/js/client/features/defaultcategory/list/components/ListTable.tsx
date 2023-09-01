@@ -100,14 +100,14 @@ const ListTable = () => {
    * リストデータ更新
    */
   const fetchUpdListData = async (form) => {
-    return await fetchPost(urlConst.defaultCategory.LISTDATAUPDATE, form);
+    return await fetchPost(urlConst.defaultCategory.LIST_DATA_UPDATE, form);
   };
 
   /**
    * 新規リストデータ追加
    */
   const fetchPushData = async (form: object) => {
-    return await fetchPost(urlConst.defaultCategory.LISTDATAPUSH, form);
+    return await fetchPost(urlConst.defaultCategory.LIST_DATA_PUSH, form);
   };
 
   // console.log({ ...info });

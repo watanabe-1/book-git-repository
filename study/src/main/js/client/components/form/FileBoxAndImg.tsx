@@ -26,9 +26,9 @@ type FileBoxAndImgProps = {
   /** バリデーションを行うかどうかを示すフラグ */
   validate?: boolean;
   /** バリデーションが実行されたかどうかを示すフラグ */
-  touched?: unknown;
+  touched?: boolean;
   /** エラーメッセージ */
-  error?: unknown;
+  error?: unknown | null;
   /** formが変更されたかどうか */
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */

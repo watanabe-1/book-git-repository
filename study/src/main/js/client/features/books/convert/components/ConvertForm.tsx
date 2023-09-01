@@ -63,7 +63,7 @@ const ConvertForm = () => {
     return response;
   };
 
-  console.log({ ...info });
+  //console.log({ ...info });
 
   //yupで使用するスキーマの設定
   const additions = {};

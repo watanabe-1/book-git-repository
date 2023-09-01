@@ -31,7 +31,7 @@ type SortAndFilterFormTableProps = {
   /** 追加でボタンを設置する場合はここに設定 */
   customeButton?: React.ReactElement | React.ReactElement[];
   /** 修正した行のみ送信対象とする */
-  modifiedRowsOnlySubmitFlag?: boolean;
+  submitModifiedRowsOnly?: boolean;
 };
 
 /**
@@ -47,19 +47,11 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   onEnterSubmit = false,
   errData = null,
   customeButton = null,
-  modifiedRowsOnlySubmitFlag = true,
+  submitModifiedRowsOnly = true,
 }) => {
   const [isSubmitLoading, setSubmitLoading] = useState(false);
-  // yupで使用するスキーマの設定
-  const additions = tableFormConfig.additions;
-  // 初期値
-  const initialValues = tableFormConfig.initialValues;
-  // テーブル：ヘッダー
-  const columns = tableFormConfig.columns;
-  //テーブル: 行
-  const getRows = tableFormConfig.getRows;
-  const rowName = tableFormConfig.rowName;
-
+  const { additions, initialValues, columns, getRows, rowName } =
+    tableFormConfig;
   // console.log(`initialValuesです。\n ${JSON.stringify(initialValues)}`);
   // スキーマにセット
   const schema = yup.object().shape(additions);
@@ -86,9 +78,9 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   ) => {
     const submitValues = { ...values };
     // 修正した行のみに送信対象を絞り込む
-    if (modifiedRowsOnlySubmitFlag) {
-      const rows: [] = values[rowName];
-      const initialRows: [] = initialValues[rowName];
+    if (submitModifiedRowsOnly) {
+      const rows = values[rowName] as [];
+      const initialRows = initialValues[rowName] as [];
       const editRows = rows.filter((row, index) => {
         const initialRow = initialRows[index];
         // console.log(`row is edited : ${!isEqual(row, initialRow)}`);
@@ -99,14 +91,18 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
       // console.log(`editValues:${JSON.stringify(submitValues)}`);
     }
 
-    setSubmitLoading(true);
-    const res = await handleFormSubmit(submitValues);
-    setSubmitLoading(false);
-    //console.log('handleSubmit が完了しました');
-
-    if (res?.ok) {
-      // formを現在のvalueでリセット実施することでdirty（formのどこかの値を編集したかどうか）のフラグがfalseに設定される
-      formikHelpers.resetForm({ values: values });
+    try {
+      setSubmitLoading(true);
+      const res = await handleFormSubmit(submitValues);
+      if (res?.ok) {
+        // formを現在のvalueでリセット実施することでdirty（formのどこかの値を編集したかどうか）のフラグがfalseに設定される
+        formikHelpers.resetForm({ values: values });
+      }
+    } catch (error) {
+      console.error('Error occurred during submission:', error);
+    } finally {
+      //console.log('handleSubmit が完了しました');
+      setSubmitLoading(false);
     }
   };
 
@@ -130,24 +126,29 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
           {Array.isArray(customeButton)
             ? customeButton.map((button) => button)
             : customeButton}
-          <SubmitButton
-            title="新規"
-            isLoading={isSubmitLoading}
-            hidden={hiddenPushButton && !handlePushSubmit}
-            disabled={formik.dirty}
-            onClick={(event) => {
-              // from送信処理の停止
-              event.preventDefault();
-              handlePushSubmit(formik.values);
-            }}
-          />
-          <SubmitButton
-            title="更新"
-            isLoading={isSubmitLoading}
-            hidden={hiddenSubmitButton && !handleSubmit}
-            disabled={!formik.dirty || isSubmitLoading}
-          />
+          {handlePushSubmit && (
+            <SubmitButton
+              title="新規"
+              isLoading={isSubmitLoading}
+              hidden={hiddenPushButton}
+              disabled={formik.dirty}
+              onClick={(event) => {
+                // from送信処理の停止
+                event.preventDefault();
+                handlePushSubmit(formik.values);
+              }}
+            />
+          )}
+          {handleFormSubmit && (
+            <SubmitButton
+              title="更新"
+              isLoading={isSubmitLoading}
+              hidden={hiddenSubmitButton}
+              disabled={!formik.dirty || isSubmitLoading}
+            />
+          )}
         </div>
+
         <FieldArray name={rowName}>
           {() => {
             // const { push, remove, form } = fieldArrayProps;

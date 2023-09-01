@@ -153,7 +153,7 @@ public class BooksApiController extends ApiController {
    * @param booksType 家計簿タイプ
    * @return json(家計簿データの一覧)
    */
-  @RequestMapping(value = "/books/listdata", method = RequestMethod.GET)
+  @RequestMapping(value = "/books/listData", method = RequestMethod.GET)
   @ResponseBody
   public BooksFormList getHouseholdListData(
       @RequestParam(name = "date", required = false) LocalDate date,
@@ -169,7 +169,7 @@ public class BooksApiController extends ApiController {
    * @param model モデル
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/books/listdataUpdate", method = RequestMethod.POST)
+  @RequestMapping(value = "/books/listDataUpdate", method = RequestMethod.POST)
   @ResponseBody
   public BooksFormList listUpdate(
       @ModelAttribute @Validated BooksFormList booksListParam,
@@ -216,7 +216,7 @@ public class BooksApiController extends ApiController {
    * @param model モデル
    * @return null
    */
-  @RequestMapping(value = "/books/listdataPush", method = RequestMethod.POST)
+  @RequestMapping(value = "/books/listDataPush", method = RequestMethod.POST)
   @ResponseBody
   public BooksFormList listDataPush(@ModelAttribute @Validated BooksFormList booksListParam,
       BindingResult result, ModelAndView model) throws BindException {

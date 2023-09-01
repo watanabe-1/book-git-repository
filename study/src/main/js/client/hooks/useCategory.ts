@@ -18,7 +18,7 @@ export const useCategoryListSWR = () => {
   //console.log('call useCategoryListSWR');
   return useCommonSWR<CategoryFormList>(
     (api) => api.getListData(),
-    urlConst.category.LISTDATA
+    urlConst.category.LIST_DATA
   );
 };
 
@@ -26,6 +26,6 @@ export const useImageListSWR = () => {
   //console.log('call useImageListSWR');
   return useCommonSWR<Image[]>(
     (api) => api.getImageList(),
-    urlConst.category.IMAGELISTDATA
+    urlConst.category.IMAGE_LIST_DATA
   );
 };

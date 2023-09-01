@@ -17,6 +17,6 @@ export const useDefaultCategoryListSWR = () => {
   //console.log('call useDefaultCategoryListSWR');
   return useCommonSWR<DefaultCategoryFormList>(
     (api) => api.getListData(),
-    urlConst.defaultCategory.LISTDATA
+    urlConst.defaultCategory.LIST_DATA
   );
 };

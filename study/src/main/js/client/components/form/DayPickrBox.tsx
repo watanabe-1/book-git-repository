@@ -7,7 +7,7 @@ import Form from 'react-bootstrap/Form';
 import Flatpickr from 'react-flatpickr';
 import DatePicker from 'react-flatpickr';
 
-import FormControl, { ChildlenRefs } from './FormControl';
+import FormControl, { ChildrenRefs } from './FormControl';
 import { iconConst } from '../../../constant/iconConstant';
 import {
   convertToFlatpickrFormat,
@@ -40,15 +40,15 @@ type DayPickrBoxProps = {
   /** バリデーションを行うかどうかを示すフラグ */
   validate?: boolean;
   /** バリデーションが実行されたかどうかを示すフラグ */
-  touched?: unknown;
+  touched?: boolean;
   /** エラーメッセージ */
-  error?: unknown;
+  error?: string | null;
   /** formが変更されたかどうか */
   dirty?: boolean;
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
   /** 読み取り専用にするか */
-  readonly?: boolean;
+  isReadonly?: boolean;
 };
 
 type DayPickrProps = {
@@ -86,15 +86,15 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
-  readonly = false,
+  isReadonly = false,
 }) => {
   const value = pvalue ? pvalue : '';
-  const DayPickrId = 'dayPickr';
+  const DayPickrKey = 'dayPickr';
   const handleSet = (e) => {
     setFieldValue(fieldNameByNames, e.target.value);
   };
-  const openFp = (refs: ChildlenRefs) => {
-    const fp = refs?.current[DayPickrId] as DatePicker;
+  const openFp = (refs: ChildrenRefs) => {
+    const fp = refs?.current[DayPickrKey] as DatePicker;
     //console.log(fp);
     if (!fp?.flatpickr) return;
     // カレンダーの表示基準元が存在しない場合、
@@ -114,12 +114,12 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
         value={value}
         onBlur={handleSet}
         onEditing={(refs) => {
-          if (!readonly) {
+          if (!isReadonly) {
             openFp(refs);
           }
         }}
         onClick={(_, refs) => {
-          if (!readonly) {
+          if (!isReadonly) {
             openFp(refs);
           }
         }}
@@ -129,16 +129,16 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
         error={error}
         dirty={dirty}
         isOnClickEditable={isOnClickEditable}
-        readonly={readonly}
+        readonly={isReadonly}
       >
         {/*エラーチェック結果を表示するため  Form.Controlを使用
         エラーチェック結果のみ表示されればよいのでhidden固定*/}
-        <Form.Control type="hidden" key={'dayPickerFormControl'} />
+        <Form.Control type="hidden" key="dayPickerFormControl" />
         <DayPickr
           value={value}
           dateFormat={dateFormat}
           onlyValueMonth={onlyValueMonth}
-          key={DayPickrId}
+          key={DayPickrKey}
         />
       </FormControl>
     </div>

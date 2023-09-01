@@ -149,7 +149,7 @@ public class CategoryApiController extends ApiController {
    * 
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/category/listdata", method = RequestMethod.GET)
+  @RequestMapping(value = "/category/listData", method = RequestMethod.GET)
   @ResponseBody
   public CategoryFormList getListData() {
     return categoryHelper.getCategoryFormList();
@@ -160,7 +160,7 @@ public class CategoryApiController extends ApiController {
    * 
    * @return json(画像情報一覧)
    */
-  @RequestMapping(value = "/category/imageList", method = RequestMethod.GET)
+  @RequestMapping(value = "/category/imageListData", method = RequestMethod.GET)
   @ResponseBody
   public List<ImageForm> getImageList() {
     return categoryHelper.getCategoryImageList();
@@ -174,7 +174,7 @@ public class CategoryApiController extends ApiController {
    * @param model モデル
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/category/listdataUpdate", method = RequestMethod.POST)
+  @RequestMapping(value = "/category/listDataUpdate", method = RequestMethod.POST)
   @ResponseBody
   public CategoryFormList listUpdate(
       @ModelAttribute @Validated CategoryFormList catListParam,
