@@ -206,10 +206,9 @@ const FormControl: React.FC<FormControlProps> = ({
 
   useEffect(() => {
     // 初期値から変更されたか判定
-    // 数値と文字列は同じように扱いため==で比較
     // console.log(`value:${value}`);
     // console.log(`initialValue:${initialValue}`);
-    handleSetHasChanges(value != initialValue);
+    handleSetHasChanges(value !== initialValue);
   }, [value]);
 
   useEffect(() => {
