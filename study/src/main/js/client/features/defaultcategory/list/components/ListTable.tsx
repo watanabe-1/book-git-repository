@@ -119,11 +119,7 @@ const ListTable = () => {
   // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成するための設定
   const toObjConfig: BuildListTableFormObjConfig = {
     className: classConst.DEF_CAT_DATA_LIST,
-    primaryKey: [
-      fieldConst.defaultCategory.BOOKS_TYPE,
-      fieldConst.defaultCategory.BOOKS_METHOD,
-      fieldConst.defaultCategory.BOOKS_PLACE,
-    ],
+    primaryKey: fieldConst.defaultCategory.DEFAULT_CATEGORY_ID,
     list: [
       {
         name: fieldConst.defaultCategory.DELETE,

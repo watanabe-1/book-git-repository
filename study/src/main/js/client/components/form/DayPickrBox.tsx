@@ -194,20 +194,14 @@ const DayPickr = forwardRef<DatePickerCallBackRef, DayPickrProps>(
               const event = buildEventObject(
                 dateStr
               ) as React.ChangeEvent<HTMLInputElement>;
-
-              if (onChange) {
-                onChange(event);
-              }
+              onChange?.(event);
             }
           }}
           onClose={(_, dateStr) => {
             const event = buildEventObject(
               dateStr
             ) as React.FocusEvent<HTMLInputElement>;
-
-            if (onBlur) {
-              onBlur(event);
-            }
+            onBlur?.(event);
           }}
           ref={ref as unknown as DatePickerCallBackRef}
         />
@@ -215,9 +209,7 @@ const DayPickr = forwardRef<DatePickerCallBackRef, DayPickrProps>(
           className="input-button"
           title="toggle"
           onClick={(event) => {
-            if (onClick) {
-              onClick(event);
-            }
+            onClick?.(event);
           }}
         >
           <Icon icon={iconConst.bootstrap.BI_CALENDAR} />

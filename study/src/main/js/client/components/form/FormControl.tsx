@@ -152,9 +152,6 @@ const FormControl: React.FC<FormControlProps> = ({
   };
 
   const handleChange = (event: React.ChangeEvent<FormControlHTMLElement>) => {
-    // valueが変更されたとき
-    // 編集済み判定フラグを編集済みに
-    handleSetHasChanges(true);
     setText(event.target.value);
     onChange?.(event);
   };
@@ -192,12 +189,6 @@ const FormControl: React.FC<FormControlProps> = ({
       }, 100);
     }
     onBlur?.(event);
-
-    // 初期値から変更されたか判定
-    const eventValue = event.target.value;
-    const textValue = eventValue ? eventValue : text;
-    // 数値と文字列は同じように扱いため==で比較
-    setHasChanges(textValue != initialValue.toString());
   };
 
   const handleTextClick = (e) => {
@@ -214,12 +205,11 @@ const FormControl: React.FC<FormControlProps> = ({
   };
 
   useEffect(() => {
-    // readonlyの時は連携された値が変更されているかどうかで判定を行う
-    if (readonly) {
-      // 初期値から変更されたか判定
-      // 数値と文字列は同じように扱いため==で比較
-      setHasChanges(value != initialValue);
-    }
+    // 初期値から変更されたか判定
+    // 数値と文字列は同じように扱いため==で比較
+    // console.log(`value:${value}`);
+    // console.log(`initialValue:${initialValue}`);
+    handleSetHasChanges(value != initialValue);
   }, [value]);
 
   useEffect(() => {
@@ -240,6 +230,7 @@ const FormControl: React.FC<FormControlProps> = ({
 
   useEffect(() => {
     // dirtyがtrue→falseに変更されたときは送信ボタンが押されたとき(dirtyがfalseの時)
+    //console.log(dirty);
     if (!dirty) {
       // 編集済み判定フラグをリセット
       handleSetHasChanges(false);
