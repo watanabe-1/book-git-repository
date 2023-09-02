@@ -7,6 +7,7 @@ import React, {
   useMemo,
 } from 'react';
 import Form from 'react-bootstrap/Form';
+import isEqual from 'react-fast-compare';
 
 import { trim } from '../../../study/util/studyUtil';
 import { useInitialUUID } from '../../hooks/useCommon';
@@ -205,10 +206,13 @@ const FormControl: React.FC<FormControlProps> = ({
   };
 
   useEffect(() => {
+    // console.log(`value:${JSON.stringify(value)}`);
+    // console.log(`initialValue:${JSON.stringify(initialValue)}`);
+    // console.log(`value !== initialValue:${value !== initialValue}`);
+
     // 初期値から変更されたか判定
-    // console.log(`value:${value}`);
-    // console.log(`initialValue:${initialValue}`);
-    handleSetHasChanges(value !== initialValue);
+    // 配列が比較対象になることがあるため、react-fast-compareを使用して比較
+    handleSetHasChanges(!isEqual(value, initialValue));
   }, [value]);
 
   useEffect(() => {

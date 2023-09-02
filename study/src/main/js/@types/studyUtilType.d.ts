@@ -257,4 +257,5 @@ export type TableCell = {
 export type TableRow = {
   primaryKey: string;
   cells: TableCell[];
+  hidden: boolean;
 };

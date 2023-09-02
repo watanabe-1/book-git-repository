@@ -548,6 +548,7 @@ export function buildListTableFormObj(
               hidden: v.table.hidden,
             };
           }),
+          hidden: false,
         };
       });
     },

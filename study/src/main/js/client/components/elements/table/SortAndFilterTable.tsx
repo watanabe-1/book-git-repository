@@ -123,8 +123,8 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
     //   });
     // };
 
-    filteredAndSortedRows = pRows.filter((row) => {
-      return columns.every((column) => {
+    filteredAndSortedRows = pRows.map((row) => {
+      row.hidden = !columns.every((column) => {
         if (column.filterValue === '') {
           return true;
         }
@@ -153,6 +153,8 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
 
         return rowValue.includes(colValaue);
       });
+
+      return row;
     });
   }
 
@@ -237,7 +239,7 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
             );
           }
           return (
-            <tr key={rowId}>
+            <tr key={rowId} hidden={row.hidden}>
               {row.cells.map((cell) => {
                 return (
                   <td
