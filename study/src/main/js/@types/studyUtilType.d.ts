@@ -54,6 +54,7 @@ export type DefaultCategory = {
   booksAmmountMin: number;
   booksAmmountMax: number;
   catCode: string;
+  priority: number;
   regexEnabled: string;
   delete: string;
 };

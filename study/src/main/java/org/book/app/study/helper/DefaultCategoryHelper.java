@@ -1,5 +1,6 @@
 package org.book.app.study.helper;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -113,6 +114,7 @@ public class DefaultCategoryHelper {
             return Objects.equals(defCatKey, targetKey);
           }
         })
+        .sorted(Comparator.comparing(DefaultCategory::getPriority))
         .findFirst();
   }
 
@@ -188,10 +190,11 @@ public class DefaultCategoryHelper {
     defCat.setUserId(user);
     defCat.setBooksType(BooksType.EXPENSES.getCode());
     defCat.setBooksPlace(" ");
-    defCat.setCatCode(catCode);
     defCat.setBooksMethod(" ");
     defCat.setBooksAmmountMin(-1);
     defCat.setBooksAmmountMax(-1);
+    defCat.setCatCode(catCode);
+    defCat.setPriority(99999);
     defCat.setRegexEnabled(RegexEnabledFlag.NON_REGEX_ENABLED.getValue());
     // 共通項目をセット
     StudyBeanUtil.setStudyEntityProperties(defCat);

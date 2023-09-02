@@ -1,0 +1,10 @@
+.text-truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.text-fit {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  word-break: break-all;
+}

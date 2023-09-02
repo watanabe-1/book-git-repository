@@ -36,6 +36,7 @@ export const fieldConst = {
     BOOKS_AMMOUNT_MIN: 'booksAmmountMin',
     BOOKS_AMMOUNT_MAX: 'booksAmmountMax',
     CAT_CODE: 'catCode',
+    PRIORITY: 'priority',
     REGEX_ENABLED: 'regexEnabled',
     DELETE: 'delete',
   },

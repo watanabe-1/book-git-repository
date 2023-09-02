@@ -45,6 +45,11 @@ public class DefaultCategoryForm implements Serializable, Form {
   private String catCode;
 
   /**
+   * 優先度(優先順(昇順))
+   */
+  private Integer priority;
+
+  /**
    * 正規表現使用可否(正規表現使用可否 1 = 使用 それ以外 = 使用しない)
    */
   private String regexEnabled;

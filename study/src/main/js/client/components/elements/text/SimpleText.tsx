@@ -3,6 +3,8 @@ import React from 'react';
 
 import { TextColor } from '../../../../@types/studyBootstrap';
 
+import '../../../../../css/view/text/text.css';
+
 type SimpleTextProps = {
   title?: string;
   name: string;
@@ -33,7 +35,7 @@ const SimpleText: React.FC<SimpleTextProps> = ({
     textMaxLength && value && str.length > textMaxLength
       ? str.substring(0, textMaxLength) + '…'
       : value;
-  const divClass = cn('text-wrap', textColorClass);
+  const divClass = cn('text-fit', 'text-wrap', textColorClass);
 
   return (
     <div onClick={onClick} onMouseDown={onMouseDown}>

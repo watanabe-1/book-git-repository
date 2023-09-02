@@ -378,6 +378,42 @@ const ListTable = () => {
         },
       },
       {
+        name: fieldConst.defaultCategory.PRIORITY,
+        modifier: modifierTextBox,
+        table: {
+          head: '優先度',
+          getCell: (props: FormikProps<unknown>, names: unknown) => {
+            const name = names[fieldConst.defaultCategory.PRIORITY];
+            const value = props.getFieldProps(name).value;
+            return {
+              element: (
+                <FastField name={name}>
+                  {({ field, meta }: FieldProps<string>) => {
+                    return (
+                      <TextBox
+                        name={field.name}
+                        value={field.value}
+                        validate
+                        touched={meta.touched}
+                        error={meta.error}
+                        dirty={props.dirty}
+                        onBlur={field.onChange}
+                        isOnClickEditable
+                      />
+                    );
+                  }}
+                </FastField>
+              ),
+              value: value,
+              textValue: value,
+            };
+          },
+        },
+        addition: {
+          yup: yup.number().required().server(errData),
+        },
+      },
+      {
         name: fieldConst.defaultCategory.REGEX_ENABLED,
         modifier: modifierCheckBox,
         table: {
