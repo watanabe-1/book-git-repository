@@ -159,10 +159,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
             //console.log(form.values[rowName]);
             return (
               <div>
-                <SortAndFilterTable
-                  pColumns={columns}
-                  pRows={getRows(formik)}
-                />
+                <SortAndFilterTable columns={columns} rows={getRows(formik)} />
               </div>
             );
           }}

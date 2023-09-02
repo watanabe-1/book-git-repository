@@ -9,10 +9,20 @@ import Icon from '../icon/Icon';
 import BodysLodingSpinner from '../spinner/BodysLodingSpinner';
 
 type SortAndFilterTableProps = {
-  pColumns: TableColumn[];
-  pRows: TableRow[];
+  /** 列 */
+  columns: TableColumn[];
+  /** 行 */
+  rows: TableRow[];
+  /** ヘッダーをクリックしたときにソートを行うか */
   isSort?: boolean;
+  /** ヘッダーにフィルター用検索ボックスを設置するか */
   isFilter?: boolean;
+  /** 正規化してから絞り込みをかけるか(主に半角、全角を区別なく検索できるようにするために使用する想定) */
+  normalizeBeforeFilter?: boolean;
+  /** 大文字小文字を区別して絞り込みをかけるか */
+  caseSensitiveBeforeFilter?: boolean;
+  /** ひらがなとかたかなを区別して絞り込みをかけるか*/
+  separateHiraganaKatakanaBeforeFilter?: boolean;
 };
 
 // コンポーネントの外で定義すると、コンポーネントのレンダリングのたびに再定義されることを避ける
@@ -24,26 +34,20 @@ const DESCENDING = 'DESC';
  * @returns テーブル
  */
 const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
-  pColumns,
-  pRows,
+  columns: pColumns,
+  rows: pRows,
   isSort = true,
   isFilter = true,
+  normalizeBeforeFilter = true,
+  caseSensitiveBeforeFilter = false,
+  separateHiraganaKatakanaBeforeFilter = false,
 }) => {
-  // const [tableData, setTableData] = useState({
-  //   columns: pColumns,
-  //   rows: pRows,
-  //   sortColumn: '',
-  //   sortDirection: ASCENDING,
-  // });
-
   // use stateでJSX.Elementを管理しようとすると、JSX.Elementに紐づいている
   // eventが正常に動作しなくなったため、JSX.Elementが入っているpRowsはuseState
   // で管理しない
-  const [tableData, setTableData] = useState({
-    columns: pColumns,
-    sortColumn: '',
-    sortDirection: ASCENDING,
-  });
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState(ASCENDING);
+  const [columns, setColumns] = useState(pColumns);
 
   // console.log('pRows');
   // console.log(pRows);
@@ -56,28 +60,15 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
    */
   const handleSort = (column: TableColumn) => {
     if (isSort) {
-      const { sortColumn, sortDirection } = tableData;
-
       const newDirection =
         sortColumn === column.name && sortDirection === ASCENDING
           ? DESCENDING
           : ASCENDING;
 
-      // setTableData({
-      //   ...tableData,
-      //   rows: sortedRows,
-      //   sortColumn: column.name,
-      //   sortDirection: newDirection,
-      // });
-      setTableData({
-        ...tableData,
-        sortColumn: column.name,
-        sortDirection: newDirection,
-      });
+      setSortColumn(column.name);
+      setSortDirection(newDirection);
     }
   };
-
-  const { columns, sortColumn, sortDirection } = tableData;
 
   /**
    * 絞り込みを行うフィルター条件のセット
@@ -94,23 +85,73 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
         }
         return c;
       });
-      setTableData({
-        ...tableData,
-        columns: newColumns,
-      });
+
+      setColumns(newColumns);
     }
   };
 
   let filteredAndSortedRows = pRows;
   if (isFilter) {
+    /**
+     * 正規化を行う
+     * @param str 正規化対象
+     * @returns
+     */
+    const normalizeString = (str: string): string => {
+      return str.normalize('NFKC');
+    };
+    /**
+     * ひらがなからカタカナに変換
+     * @param str 変換対象
+     * @returns
+     */
+    const hiraToKata = (str: string) => {
+      return str.replace(/[\u3041-\u3096]/g, (match) => {
+        const charCode = match.charCodeAt(0) + 0x60;
+        return String.fromCharCode(charCode);
+      });
+    };
+    // /**
+    //  * カタカナからひらがなに変換
+    //  * @param str 変換対象
+    //  * @returns
+    //  */
+    // const kataToHira = (str: string) => {
+    //   return str.replace(/[\u30a1-\u30f6]/g, (match) => {
+    //     const charCode = match.charCodeAt(0) - 0x60;
+    //     return String.fromCharCode(charCode);
+    //   });
+    // };
+
     filteredAndSortedRows = pRows.filter((row) => {
       return columns.every((column) => {
         if (column.filterValue === '') {
           return true;
         }
         const cell = row.cells.find((cell) => cell.name === column.name);
-        const rowValue = String(cell.textValue).toLowerCase();
-        return rowValue.includes(column.filterValue.toLowerCase());
+
+        let rowValue = String(cell.textValue);
+        let colValaue = column.filterValue;
+
+        // 正規化する(主に半角全角などを区別したくないときに使用する想定)
+        if (normalizeBeforeFilter) {
+          rowValue = normalizeString(rowValue);
+          colValaue = normalizeString(colValaue);
+        }
+
+        // 大文字小文字を区別しない
+        if (!caseSensitiveBeforeFilter) {
+          rowValue = rowValue.toLowerCase();
+          colValaue = colValaue.toLowerCase();
+        }
+
+        // ひらがなとカタカナを区別しない
+        if (!separateHiraganaKatakanaBeforeFilter) {
+          rowValue = hiraToKata(rowValue);
+          colValaue = hiraToKata(colValaue);
+        }
+
+        return rowValue.includes(colValaue);
       });
     });
   }
