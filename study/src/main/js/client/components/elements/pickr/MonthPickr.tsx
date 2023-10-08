@@ -41,6 +41,7 @@ const MonthPickr: React.FC<MonthPickrProps> = ({ year, month, onChange }) => {
           locale: flatpickrLocale,
           dateFormat: 'Y/m/d(D)',
           defaultDate: value,
+          disableMobile: true,
           plugins: [
             monthSelectPlugin({
               shorthand: true, // デフォルトはfalse

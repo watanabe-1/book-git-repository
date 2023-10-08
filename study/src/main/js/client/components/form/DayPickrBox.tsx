@@ -88,7 +88,7 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
   isOnClickEditable = false,
   isReadonly = false,
 }) => {
-  const value = pvalue ? pvalue : '';
+  const value = pvalue || '';
   const DayPickrKey = 'dayPickr';
   const handleSet = (e) => {
     setFieldValue(fieldNameByNames, e.target.value);
@@ -129,7 +129,7 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
         error={error}
         dirty={dirty}
         isOnClickEditable={isOnClickEditable}
-        readonly={isReadonly}
+        isReadonly={isReadonly}
       >
         {/*エラーチェック結果を表示するため  Form.Controlを使用
         エラーチェック結果のみ表示されればよいのでhidden固定*/}

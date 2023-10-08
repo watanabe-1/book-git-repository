@@ -55,6 +55,7 @@ export const getSelectBoxTypeList = (
       name: '選択してください',
     });
   }
+
   return typeList;
 };
 
@@ -107,7 +108,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
-      readonly={isReadonly}
+      isReadonly={isReadonly}
     >
       <Form.Select>
         {newTypeList.map((type) => (

@@ -34,12 +34,13 @@ const InputAllButton: React.FC<InputAllButtonProps> = ({ setList }) => {
     const res = await fetchInputAll();
     setSubmitLoading(false);
     const json = await res.json();
-    console.log('soushinkekka');
-    console.log(json);
+    // console.log('soushinkekka');
+    // console.log(json);
     if (res && res.ok) {
       setList(json);
       resetForm({ values: json });
     }
+
     return res;
   };
 

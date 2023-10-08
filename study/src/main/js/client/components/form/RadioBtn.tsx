@@ -94,7 +94,7 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
-      readonly={isReadonly}
+      isReadonly={isReadonly}
     >
       {newTypeList.map((type, index) => {
         const id = `${name}-${index}`;

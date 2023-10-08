@@ -42,6 +42,7 @@ export const modifierTextBox = (value: unknown) => {
   if (value == 0 || value) {
     return String(value);
   }
+
   return '';
 };
 
@@ -77,7 +78,7 @@ const TextBox: React.FC<TextBoxProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
-      readonly={isReadonly}
+      isReadonly={isReadonly}
     >
       <Form.Control type={type} />
     </FormControl>

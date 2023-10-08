@@ -108,23 +108,6 @@ export function getContextPath(): string {
 }
 
 /**
- * urlのパラメーターを取得
- *
- * @param {string} paramName - パラメーター名
- * @return urlのパラメータ
- */
-export function getLocationHrefParm(paramName: string): string {
-  // URLを取得
-  const url: URL = new URL(window.location.href);
-  // URLSearchParamsオブジェクトを取得
-  const params: URLSearchParams = url.searchParams;
-  // getメソッド
-  const param: string = params.get(paramName);
-
-  return param;
-}
-
-/**
  * 画像がない場合の画像パスを取得
  *
  * @return urlのコンテキストパス
@@ -174,7 +157,7 @@ export function getCsrfTokenParmName(): string {
  * @param {string} classOne 切り替えクラス1
  * @param {string} classTwo 切り替えクラス2
  */
-export function swichClass(
+export function switchClass(
   target: HTMLElement,
   classOne: string,
   classTwo: string
@@ -213,11 +196,11 @@ export function isObjEmpty(obj: object) {
 
 /**
  * オブジェクトをtrimする
- * @param obj
+ * @param str
  * @returns 判定結果
  */
-export function trim(obj: string) {
-  return obj ? obj.trim() : obj;
+export function simpleTrim(str: string) {
+  return str?.trim();
 }
 
 /**
@@ -230,11 +213,20 @@ export async function fetchGet(
   baseurl: string,
   params: Record<string, string> = {}
 ) {
+  console.log(
+    `call get:${baseurl}${!isObjEmpty(params) ? JSON.stringify(params) : ''}`
+  );
+
   const query = new URLSearchParams(params);
   const url = pathJoin(getContextPath(), baseurl);
+
   const res: Response = await window.fetch(
-    isObjEmpty(params) ? url : url + '?' + query
+    isObjEmpty(params) ? url : `${url}?${query}`
   );
+
+  console.log('call get response:');
+  console.log(res);
+
   if (!res.ok) {
     throw new Error(`unexpected status: ${res.status}`);
   }
@@ -260,6 +252,7 @@ export async function fetchPost(
     return headers;
   };
 
+  console.log(`call post url: ${baseurl}`);
   // console.log(`call post param:${JSON.stringify(params)}`);
   const body = objToFormData(params);
   console.log('call post param:');
@@ -317,7 +310,7 @@ export function ToTypeArrayIfIsStringArray(array: Type[] | string[]) {
  * @returns type
  */
 export function nullOrEmptyValueLogic(target: unknown, value: unknown) {
-  return target ? target : value;
+  return target || value;
 }
 
 /**

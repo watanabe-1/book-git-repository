@@ -33,7 +33,7 @@ const TextBoxExclusionForm: React.FC<TextBoxExclusionFormProps> = ({
    * @param e event
    */
   const handleChange = async (e) => {
-    if (onChange) onChange(e);
+    onChange?.(e);
     setinputValue(e.target.value);
   };
 

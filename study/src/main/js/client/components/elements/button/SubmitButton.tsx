@@ -30,9 +30,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
 }) => {
   const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
     //console.log('call handleTextClick');
-    if (onClick) {
-      onClick(event);
-    }
+    onClick?.(event);
   };
 
   return isLoading ? (

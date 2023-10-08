@@ -70,7 +70,7 @@ const FileBox: React.FC<FileBoxProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
-      readonly={isReadonly}
+      isReadonly={isReadonly}
     >
       <Form.Control type={type} accept={accept} />
     </FormControl>

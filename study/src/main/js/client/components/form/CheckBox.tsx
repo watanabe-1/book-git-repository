@@ -118,7 +118,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
-      readonly={isReadonly}
+      isReadonly={isReadonly}
     >
       {
         // チェックボックスは1つのみで使用する想定のため長さ1の配列でループ

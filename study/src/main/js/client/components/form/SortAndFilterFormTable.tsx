@@ -69,14 +69,13 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   };
 
   /**
-   * 送信
-   * @param event formイベント
+   * 修正した行のみに送信対象を絞り込む
+   * @param values
+   * @returns
    */
-  const handleSubmit = async (
-    values: object,
-    formikHelpers: FormikHelpers<unknown>
-  ) => {
+  const filterRowValues = (values: object) => {
     const submitValues = { ...values };
+
     // 修正した行のみに送信対象を絞り込む
     if (submitModifiedRowsOnly) {
       const rows = values[rowName] as [];
@@ -90,6 +89,19 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
       submitValues[rowName] = isObjEmpty(editRows) ? null : editRows;
       // console.log(`editValues:${JSON.stringify(submitValues)}`);
     }
+
+    return submitValues;
+  };
+
+  /**
+   * 送信
+   * @param event formイベント
+   */
+  const handleSubmit = async (
+    values: object,
+    formikHelpers: FormikHelpers<unknown>
+  ) => {
+    const submitValues = filterRowValues(values);
 
     try {
       setSubmitLoading(true);
@@ -135,7 +147,7 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
               onClick={(event) => {
                 // from送信処理の停止
                 event.preventDefault();
-                handlePushSubmit(formik.values);
+                handlePushSubmit(filterRowValues(formik.values as object));
               }}
             />
           )}

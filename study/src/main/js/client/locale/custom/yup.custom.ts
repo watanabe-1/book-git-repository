@@ -41,7 +41,7 @@ const addServerMethod = <T extends yup.Schema<unknown>>(
   schema: T,
   errData: ErrorResults
 ): T =>
-  schema.test(commonConst.SERVER_TEST_NAME, (value, context) => {
+  schema.test(commonConst.SERVER_TEST_NAME, (_, context) => {
     return serverValidator(errData, context);
   }) as T;
 

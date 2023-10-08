@@ -23,7 +23,6 @@ const get = async (
 
   try {
     const res = await fetchGet(url, token);
-    console.log(`call get:${url}${token ? JSON.stringify(token) : ''}`);
 
     return await res.json();
   } catch (error) {

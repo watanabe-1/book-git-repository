@@ -9,7 +9,7 @@ import React, {
 import Form from 'react-bootstrap/Form';
 import isEqual from 'react-fast-compare';
 
-import { trim } from '../../../study/util/studyUtil';
+import { simpleTrim } from '../../../study/util/studyUtil';
 import { useInitialUUID } from '../../hooks/useCommon';
 import SimpleText from '../elements/text/SimpleText';
 
@@ -68,7 +68,7 @@ type FormControlProps = {
   /** 通常は文字のみでクリックしたときに入力できるようにする */
   isOnClickEditable?: boolean;
   /** 読み取り専用にするか */
-  readonly?: boolean;
+  isReadonly?: boolean;
   /** 子コンポーネント react bootstrap form elementを想定 */
   children: React.ReactElement | React.ReactElement[];
 };
@@ -97,12 +97,12 @@ const FormControl: React.FC<FormControlProps> = ({
   error = '',
   dirty = false,
   isOnClickEditable = false,
-  readonly = false,
+  isReadonly = false,
   children,
 }) => {
   const [text, setText] = useState(value);
   const [initialValue, setInitialValue] = useState(value);
-  const [isEditing, setIsEditing] = useState(!readonly && !isOnClickEditable);
+  const [isEditing, setIsEditing] = useState(!isReadonly && !isOnClickEditable);
   const [hasChanges, setHasChanges] = useState(false);
   const [isInitialByOnEditable, setIsInitialByOnEditable] = useState(false);
   const elementRefs: ChildrenRefs = useRef<{
@@ -194,7 +194,7 @@ const FormControl: React.FC<FormControlProps> = ({
 
   const handleTextClick = (e) => {
     //console.log('call handleTextClick');
-    if (!isEditing && isOnClickEditable && !readonly) {
+    if (!isEditing && isOnClickEditable && !isReadonly) {
       handleSetIsEditing(isOnClickEditable);
     }
     onTextClick?.(e);
@@ -245,7 +245,7 @@ const FormControl: React.FC<FormControlProps> = ({
   const isValid = validate && touched && !error;
   const isInvalid = validate && !!error;
   const textBase = textValue || value;
-  const trimTextBase = trim(textBase.toString());
+  const trimTextBase = simpleTrim(textBase.toString());
   const simpleTextValue = trimTextBase || '値がありません';
   const textColorBase = trimTextBase ? 'text-black' : 'text-black-50';
   const simpleTextColor = hasChanges ? 'text-warning' : textColorBase;
@@ -277,7 +277,7 @@ const FormControl: React.FC<FormControlProps> = ({
    * @returns
    */
   const renderInitialByOnEditable = (callBack: () => ReactNode) =>
-    !isInitialByOnEditable && (isOnClickEditable || readonly)
+    !isInitialByOnEditable && (isOnClickEditable || isReadonly)
       ? null
       : callBack();
 

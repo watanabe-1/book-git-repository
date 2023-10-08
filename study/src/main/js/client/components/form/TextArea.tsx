@@ -61,7 +61,7 @@ const TextArea: React.FC<TextAreaProps> = ({
       error={error}
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
-      readonly={isReadonly}
+      isReadonly={isReadonly}
     >
       <Form.Control as="textarea" />
     </FormControl>
