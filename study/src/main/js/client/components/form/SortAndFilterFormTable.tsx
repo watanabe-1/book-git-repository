@@ -32,6 +32,10 @@ type SortAndFilterFormTableProps = {
   customeButton?: React.ReactElement | React.ReactElement[];
   /** 修正した行のみ送信対象とする */
   submitModifiedRowsOnly?: boolean;
+  /** ヘッダーをクリックしたときにソートを行うか */
+  isSort?: boolean;
+  /** ヘッダーにフィルター用検索ボックスを設置するか */
+  isFilter?: boolean;
 };
 
 /**
@@ -48,6 +52,8 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
   errData = null,
   customeButton = null,
   submitModifiedRowsOnly = true,
+  isSort = true,
+  isFilter = true,
 }) => {
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   const { additions, initialValues, columns, getRows, rowName } =
@@ -171,7 +177,12 @@ const SortAndFilterFormTable: React.FC<SortAndFilterFormTableProps> = ({
             //console.log(form.values[rowName]);
             return (
               <div>
-                <SortAndFilterTable columns={columns} rows={getRows(formik)} />
+                <SortAndFilterTable
+                  columns={columns}
+                  rows={getRows(formik)}
+                  isSort={isSort}
+                  isFilter={isFilter}
+                />
               </div>
             );
           }}

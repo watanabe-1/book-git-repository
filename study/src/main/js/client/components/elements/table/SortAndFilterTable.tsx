@@ -1,5 +1,6 @@
 import { isNumber } from 'chart.js/helpers';
 import React, { useState } from 'react';
+import ListGroup from 'react-bootstrap/ListGroup';
 import Table from 'react-bootstrap/Table';
 
 import { TableColumn, TableRow } from '../../../../@types/studyUtilType';
@@ -7,6 +8,7 @@ import { iconConst } from '../../../../constant/iconConstant';
 import TextBoxExclusionForm from '../../form/TextBoxExclusionForm';
 import Icon from '../icon/Icon';
 import BodysLodingSpinner from '../spinner/BodysLodingSpinner';
+import '../../../../../css/view/table/autocomplete.css';
 
 type SortAndFilterTableProps = {
   /** 列 */
@@ -17,6 +19,10 @@ type SortAndFilterTableProps = {
   isSort?: boolean;
   /** ヘッダーにフィルター用検索ボックスを設置するか */
   isFilter?: boolean;
+  /** サジェストをフィルター用検索ボックスに表示するか*/
+  isSuggestions?: boolean;
+  /** サジェストの表示件数 -数値を指定で全件表示*/
+  maxSuggestions?: number;
   /** 正規化してから絞り込みをかけるか(主に半角、全角を区別なく検索できるようにするために使用する想定) */
   normalizeBeforeFilter?: boolean;
   /** 大文字小文字を区別して絞り込みをかけるか */
@@ -38,6 +44,8 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
   rows: pRows,
   isSort = true,
   isFilter = true,
+  isSuggestions = true,
+  maxSuggestions = 5,
   normalizeBeforeFilter = true,
   caseSensitiveBeforeFilter = false,
   separateHiraganaKatakanaBeforeFilter = false,
@@ -51,6 +59,32 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
 
   // console.log('pRows');
   // console.log(pRows);
+
+  /**
+   *  サジェスト関係stateの更新
+   *
+   * @param column TableColumn
+   * @param showSuggestions
+   * @param activeSuggestionIndex
+   */
+  const setSuggestions = (
+    column: TableColumn,
+    showSuggestions: boolean,
+    activeSuggestionIndex: number
+  ) => {
+    setColumns((newCoumns) =>
+      newCoumns.map((c) => {
+        if (c.name === column.name) {
+          return {
+            ...c,
+            showSuggestions: showSuggestions,
+            activeSuggestionIndex: activeSuggestionIndex,
+          };
+        }
+        return c;
+      })
+    );
+  };
 
   /**
    * 並び替えの条件のセット
@@ -79,16 +113,105 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
    */
   const handleFilterChange = (column: TableColumn, value: string) => {
     if (isFilter) {
-      const newColumns = columns.map((c) => {
-        if (c.name === column.name) {
-          return { ...c, filterValue: value };
-        }
-        return c;
-      });
-
-      setColumns(newColumns);
+      setColumns((newColumns) =>
+        newColumns.map((c) => {
+          if (c.name === column.name) {
+            return { ...c, filterValue: value };
+          }
+          return { ...c, showSuggestions: false };
+        })
+      );
+      setSuggestions(column, true, 0);
     }
   };
+
+  /**
+   * 最初に入力ボックスをクリックしたらサジェストを出す
+   *
+   * @param column TableColumn
+   * @param value 値
+   */
+  const handleSuggestionClick = (column: TableColumn) => {
+    //console.log('call handleSuggestionClick');
+    // 値をセット
+    if (isSuggestions) {
+      setSuggestions(column, true, 0);
+    }
+  };
+
+  /**
+   * サジェストに出した値を入力値としてセット
+   *
+   * @param column TableColumn
+   * @param value 値
+   */
+  const handleSuggestionItemClick = (column: TableColumn, value: string) => {
+    //console.log('call handleSuggestionItemClick');
+    // 値をセット
+    if (isSuggestions) {
+      handleFilterChange(column, value);
+    }
+  };
+
+  /**
+   * フォーカスが外れたときはサジェストを表示しない
+   * @param column TableColumn
+   */
+  const handleSuggestionBlur = (column: TableColumn) => {
+    // console.log('call handleSuggestionFocus');
+
+    // フォーカスが外れたときはサジェストを表示しない
+    if (isSuggestions) {
+      // サジェストリスト内の項目をクリックする時、
+      // リストがすぐに非表示にならないようにする
+      // ためにsetTimeout を使用
+      // リストが非表示になるまで処理を遅延し、
+      // ユーザーが項目をクリックするための時間を確保する
+      setTimeout(() => {
+        //console.log('call setTimeout handleSuggestionFocus');
+        setSuggestions(column, false, 0);
+      }, 250);
+    }
+  };
+
+  const handleSuggestionKeyDown = (
+    e: React.KeyboardEvent<HTMLInputElement>,
+    column: TableColumn,
+    filteredSuggestions
+  ) => {
+    if (isSuggestions && column.showSuggestions) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        handleFilterChange(
+          column,
+          filteredSuggestions[column.activeSuggestionIndex]
+        );
+        setSuggestions(column, false, 0);
+      } else if (e.key === 'ArrowUp') {
+        if (column.activeSuggestionIndex === 0) {
+          setSuggestions(column, true, filteredSuggestions.length - 1);
+          return;
+        }
+        setSuggestions(column, true, column.activeSuggestionIndex - 1);
+      } else if (e.key === 'ArrowDown') {
+        if (column.activeSuggestionIndex === filteredSuggestions.length - 1) {
+          setSuggestions(column, true, 0);
+          return;
+        }
+        setSuggestions(column, true, column.activeSuggestionIndex + 1);
+      }
+    }
+  };
+
+  /**
+   * nameが一致するcellを取得
+   *
+   * @param row TableRow
+   * @param name cell名
+   * @returns cell
+   */
+  const findCell = (row: TableRow, name: string) =>
+    row.cells.find((cell) => cell.name === name);
 
   let filteredAndSortedRows = pRows;
   if (isFilter) {
@@ -128,7 +251,7 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
         if (column.filterValue === '') {
           return true;
         }
-        const cell = row.cells.find((cell) => cell.name === column.name);
+        const cell = findCell(row, column.name);
 
         let rowValue = String(cell.textValue);
         let colValaue = column.filterValue;
@@ -159,18 +282,9 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
   }
 
   if (sortColumn && isSort) {
-    /**
-     * nameが一致するcellを取得
-     *
-     * @param row TableRow
-     * @returns cell
-     */
-    const findCell = (row: TableRow) =>
-      row.cells.find((cell) => cell.name === sortColumn);
-
     filteredAndSortedRows = filteredAndSortedRows.sort((aRow, bRow) => {
-      const aCell = findCell(aRow);
-      const bCell = findCell(bRow);
+      const aCell = findCell(aRow, sortColumn);
+      const bCell = findCell(bRow, sortColumn);
       let aValue: string | number = aCell.textValue;
       let bValue: string | number = bCell.textValue;
 
@@ -191,6 +305,20 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
     });
   }
 
+  let filteredSuggestions = [];
+  if (isSuggestions) {
+    // サジェスト対象
+    const column = columns.find((column) => column.showSuggestions);
+    // どのボックスもサジェスト対象になっていないとき
+    if (column) {
+      filteredSuggestions = filteredAndSortedRows
+        .filter((row) => !row.hidden)
+        .map((row) => findCell(row, column.name).textValue)
+        // 重複除外
+        .filter((textValue, index, self) => self.indexOf(textValue) === index)
+        .slice(0, maxSuggestions);
+    }
+  }
   return (
     <Table bordered>
       <thead>
@@ -215,9 +343,45 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
               {isFilter && (
                 <div>
                   <TextBoxExclusionForm
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSuggestionClick(column);
+                    }}
                     onChange={(e) => handleFilterChange(column, e.target.value)}
+                    value={column.filterValue}
+                    onBlur={() => {
+                      handleSuggestionBlur(column);
+                    }}
+                    onKeyDown={(e) => {
+                      handleSuggestionKeyDown(e, column, filteredSuggestions);
+                    }}
                   />
+                  {column.showSuggestions && (
+                    <ListGroup className="suggestionsContainer">
+                      {filteredSuggestions.map((textValue, index) => {
+                        return (
+                          <ListGroup.Item
+                            key={index}
+                            // 十字キーで選択されているとき
+                            variant={
+                              index === column.activeSuggestionIndex
+                                ? 'dark'
+                                : ''
+                            }
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleSuggestionItemClick(column, textValue);
+                              // action=trueが設定されているときにformの中にクリック項目があるとformが送信されてしまうため、ここでeventがこれ以上伝搬することを防ぐ
+                              e.preventDefault();
+                            }}
+                            action
+                          >
+                            {textValue}
+                          </ListGroup.Item>
+                        );
+                      })}
+                    </ListGroup>
+                  )}
                 </div>
               )}
             </th>

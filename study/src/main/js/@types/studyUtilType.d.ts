@@ -90,6 +90,27 @@ export type BooksFormList = {
 };
 
 /**
+ * 色確認
+ */
+export type ChartColour = {
+  templateId: string;
+  templateName: string;
+  userId: string;
+  active: string;
+  seedCoeffR: number;
+  seedCoeffG: number;
+  seedCoeffB: number;
+  delete: string;
+};
+
+/**
+ * 色確認リスト
+ */
+export type ChartColourFormList = {
+  chartColourDataList: ChartColour[];
+};
+
+/**
  * タイプ
  */
 export type Type = {
@@ -167,6 +188,17 @@ export type HouseholdUi = {
 };
 
 /**
+ * 図の色確認用データ
+ */
+export type InspectionPanelUi = {
+  tab: string;
+  delete: Flag;
+  active: Flag;
+  date: string;
+  dateFormat: string;
+};
+
+/**
  * エラー
  */
 export type ErrorResult = {
@@ -239,6 +271,8 @@ export type TableColumn = {
   value: string;
   filterValue: string;
   hidden: boolean;
+  showSuggestions: boolean;
+  activeSuggestionIndex: number;
 };
 
 /**
