@@ -174,6 +174,14 @@ const SortAndFilterTable: React.FC<SortAndFilterTableProps> = ({
     }
   };
 
+  /**
+   * サジェスト対象を十字キーで選択できるようにする
+   *
+   * @param e イベント
+   * @param column TableColumn
+   * @param filteredSuggestions サジェスト対象
+   * @returns
+   */
   const handleSuggestionKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement>,
     column: TableColumn,
