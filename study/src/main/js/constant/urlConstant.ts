@@ -3,6 +3,7 @@ const BASE_PATHS = {
   CATEGORY: '/category',
   DEFAULT_CATEGORY: '/defaultCategory',
   BOOKS: '/books',
+  CHART_COLOUR: '/chartColour',
   COMMON: '/common',
 };
 
@@ -43,6 +44,15 @@ export const urlConst = {
     LIST_DATA_PUSH: `${BASE_PATHS.BOOKS}/listDataPush`,
     LIST_DATA: `${BASE_PATHS.BOOKS}/listData`,
     LIST_DATA_UPDATE: `${BASE_PATHS.BOOKS}/listDataUpdate`,
+  },
+
+  /** 色確認 */
+  chartColour: {
+    INFO: `${BASE_PATHS.CHART_COLOUR}/info`,
+    LIST_DATA: `${BASE_PATHS.CHART_COLOUR}/listData`,
+    LIST_DATA_PUSH: `${BASE_PATHS.CHART_COLOUR}/listDataPush`,
+    LIST_DATA_UPDATE: `${BASE_PATHS.CHART_COLOUR}/listDataUpdate`,
+    ACTIVE_CHART: `${BASE_PATHS.CHART_COLOUR}/activeChart`,
   },
 
   /** 共通 */

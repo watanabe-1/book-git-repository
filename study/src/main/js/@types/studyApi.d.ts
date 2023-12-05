@@ -13,4 +13,5 @@ export type OnServerApi = {
   getDownloadInfo: () => string;
   getUploadInfo: () => string;
   getConvertInfo: () => string;
+  getChartColourByActive: (qty: number) => string;
 };

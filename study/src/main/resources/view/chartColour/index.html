@@ -59,7 +59,7 @@
         <div class="col-12">
           <a
             class="btn btn-link"
-            th:href="@{/chartColour/index(tab = ${tab})}"
+            th:href="@{/thymeleaf/chartColour/index(tab = ${tab})}"
             id="reload"
           >
             <span data-feather="user-plus">再読み込み</span>
@@ -119,7 +119,7 @@
             <a
               hiidden
               id="restActiveTemp"
-              th:href="@{/ajax/chartColour/chart}"
+              th:href="@{/ajax/thymeleaf/chartColour/chart}"
             ></a>
           </div>
         </div>
@@ -200,7 +200,7 @@
                   <a
                     hiidden
                     id="restConfirmTempList"
-                    th:href="@{/ajax/chartColour/confirm}"
+                    th:href="@{/ajax/thymeleaf/chartColour/confirm}"
                   ></a>
                 </div>
                 <div class="row border-bottom my-2"></div>
@@ -235,7 +235,7 @@
                       <a
                         hiidden
                         id="savelistModalUrl"
-                        th:href="@{/chartColour/changeActive}"
+                        th:href="@{/thymeleaf/chartColour/changeActive}"
                       ></a>
                     </div>
                   </div>
@@ -284,7 +284,7 @@
                       <a
                         hiidden
                         id="deletelistModalUrl"
-                        th:href="@{/chartColour/delete}"
+                        th:href="@{/thymeleaf/chartColour/delete}"
                       ></a>
                       <button
                         class="btn btn-primary float-end"
@@ -354,18 +354,22 @@
             <a
               hiidden
               th:id="${'restRandom' + stat.index}"
-              th:href="@{/ajax/chartColour/confirm}"
+              th:href="@{/ajax/thymeleaf/chartColour/confirm}"
             ></a>
             <div class="row border-bottom my-2"></div>
           </div>
         </div>
-        <a hiidden id="saveRandomModalUrl" th:href="@{/chartColour/input}"></a>
+        <a
+          hiidden
+          id="saveRandomModalUrl"
+          th:href="@{/thymeleaf/chartColour/input}"
+        ></a>
       </div>
       <div id="tab4" class="tab-pane" th:classappend="${tab4}">
         <div class="container">
           <form
             class="needs-validation"
-            th:action="@{/chartColour/input}"
+            th:action="@{/thymeleaf/chartColour/input}"
             th:object="${templateChartcolourForm}"
             method="post"
           >
@@ -502,7 +506,7 @@
                   <a
                     hiidden
                     id="restConfirmTemp"
-                    th:href="@{/ajax/chartColour/confirm}"
+                    th:href="@{/ajax/thymeleaf/chartColour/confirm}"
                   ></a>
                 </div>
                 <div class="row border-bottom my-2"></div>
@@ -525,7 +529,7 @@
                 <a
                   hiidden
                   id="saveConfirmModalUrl"
-                  th:href="@{/chartColour/input}"
+                  th:href="@{/thymeleaf/chartColour/input}"
                 ></a>
               </div>
             </div>

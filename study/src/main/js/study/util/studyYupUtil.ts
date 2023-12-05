@@ -6,6 +6,7 @@ import {
   ErrorResults,
   BuildListTableFormObjConfig,
   ErrorResult,
+  TableColumn,
 } from '../../@types/studyUtilType';
 
 // /**
@@ -558,7 +559,9 @@ export function buildListTableFormObj(
         value: v.table.head,
         filterValue: '',
         hidden: v.table.hidden,
-      };
+        showSuggestions: false,
+        activeSuggestionIndex: 0,
+      } as TableColumn;
     }),
   };
 

@@ -104,8 +104,7 @@ public class DownloadHelper {
             buildContentDisposition(fileName, charset))
         .body(os -> {
           setFileData(os,
-              data
-                  .getBytes());
+              data.getBytes());
         });
   }
 

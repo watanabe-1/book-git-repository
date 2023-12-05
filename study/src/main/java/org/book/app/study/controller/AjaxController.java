@@ -131,7 +131,7 @@ public class AjaxController extends ApiController {
    * @param qty 指定するデータの個数
    * @return json(カテゴリーごとの家計簿情報)
    */
-  @RequestMapping(value = "/chartColour/chart", method = RequestMethod.POST)
+  @RequestMapping(value = "/thymeleaf/chartColour/chart", method = RequestMethod.POST)
   @ResponseBody
   public BooksChartData chartColourByActive(@ModelAttribute @Validated TemplateChartcolourForm form,
       BindingResult result, ModelAndView model) {
@@ -146,7 +146,7 @@ public class AjaxController extends ApiController {
    * @param qty 指定するデータの個数
    * @return json(カテゴリーごとの家計簿情報)
    */
-  @RequestMapping(value = "/chartColour/confirm", method = RequestMethod.POST)
+  @RequestMapping(value = "/thymeleaf/chartColour/confirm", method = RequestMethod.POST)
   @ResponseBody
   public BooksChartData chartColourBySeed(@ModelAttribute @Validated TemplateChartcolourForm form,
       ModelAndView model) {

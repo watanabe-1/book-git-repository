@@ -66,4 +66,18 @@ export const fieldConst = {
     FILE_TYPE: 'fileType',
     FILE: 'file',
   },
+
+  /**
+   * 図の色確認
+   */
+  chartColour: {
+    TEMPLATE_ID: 'templateId',
+    TEMPLATE_NAME: 'templateName',
+    USER_ID: 'userId',
+    ACTIVE: 'active',
+    SEED_COEFF_R: 'seedCoeffR',
+    SEED_COEFF_G: 'seedCoeffG',
+    SEED_COEFF_B: 'seedCoeffB',
+    DELETE: 'delete',
+  },
 };

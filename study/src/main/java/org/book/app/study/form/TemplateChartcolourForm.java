@@ -10,7 +10,7 @@ import lombok.Data;
  * TEMPLATE_CHARTCOLOUR:チャートカラーマスタ(図の表示に使用するrgbaの組み合わせを管理するマスタ)のformクラス
  */
 @Data
-public class TemplateChartcolourForm implements Serializable {
+public class TemplateChartcolourForm implements Serializable, Form {
 
   /**
    * シリアルキー
@@ -92,6 +92,11 @@ public class TemplateChartcolourForm implements Serializable {
    * 画面：個数
    */
   private Integer qty;
+
+  /**
+   * ssr判定
+   */
+  private String ssr;
 
   /**
    * シード値算出に使用する係数(R)を設定します.
