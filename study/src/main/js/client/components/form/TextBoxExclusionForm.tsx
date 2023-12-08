@@ -37,7 +37,7 @@ const TextBoxExclusionForm: React.FC<TextBoxExclusionFormProps> = ({
   style,
   hidden = false,
 }) => {
-  const [inputValue, setinputValue] = useState('');
+  const [inputValue, setinputValue] = useState(value);
   const type = hidden ? 'hidden' : 'text';
 
   /**

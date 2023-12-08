@@ -11,7 +11,7 @@ import {
 import { isObjEmpty } from '../../../study/util/studyUtil';
 import yup from '../../locale/yup.locale';
 import SubmitButton from '../elements/button/SubmitButton';
-import SortAndFilterTable from '../elements/table/SortAndFilterTable';
+import SortAndFilterTable from '../elements/table/listTable/ListTable';
 
 type SortAndFilterFormTableProps = {
   /** form table用 設定*/
