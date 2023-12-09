@@ -2,6 +2,7 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 
 import FormControl from './FormControl';
+import { simpleTrim } from '../../../study/util/studyStringUtil';
 
 type TextBoxProps = {
   /** テキストボックスのタイトル */
@@ -40,10 +41,25 @@ type TextBoxProps = {
  */
 export const modifierTextBox = (value: unknown) => {
   if (value == 0 || value) {
-    return String(value);
+    return simpleTrim(String(value));
   }
 
   return '';
+};
+
+/**
+ * 値がないときの表示値用
+ *
+ * @param value 値
+ */
+export const getTextBoxTextValue = (value: unknown) => {
+  const trimValue = simpleTrim(String(value));
+
+  if (trimValue) {
+    return trimValue;
+  }
+
+  return '値がありません';
 };
 
 /**
@@ -64,12 +80,14 @@ const TextBox: React.FC<TextBoxProps> = ({
   isReadonly = false,
 }) => {
   const type = hidden ? 'hidden' : 'text';
+  const textValue = getTextBoxTextValue(value);
 
   return (
     <FormControl
       title={title}
       name={name}
       value={value || ''}
+      textValue={textValue}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}

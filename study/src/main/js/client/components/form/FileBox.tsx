@@ -2,6 +2,7 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 
 import FormControl from './FormControl';
+import { simpleTrim } from '../../../study/util/studyStringUtil';
 
 type FileBoxProps = {
   /** テキストボックスのタイトル */
@@ -35,6 +36,21 @@ type FileBoxProps = {
 };
 
 /**
+ * 値がないときの表示用
+ *
+ * @param value 値
+ */
+export const getFileBoxTextValue = (value: unknown) => {
+  const trimValue = simpleTrim(String(value));
+
+  if (trimValue) {
+    return trimValue;
+  }
+
+  return '値がありません';
+};
+
+/**
  *
  * @returns form内のファイル用インプットボックス
  */
@@ -43,7 +59,7 @@ const FileBox: React.FC<FileBoxProps> = ({
   name,
   accept,
   value = null,
-  textValue,
+  textValue: pTextValue,
   onChange,
   onBlur,
   hidden = false,
@@ -55,13 +71,14 @@ const FileBox: React.FC<FileBoxProps> = ({
   isReadonly = false,
 }) => {
   const type = hidden ? 'hidden' : 'file';
+  const textValue = pTextValue ? pTextValue : getFileBoxTextValue(value);
 
   return (
     <FormControl
       title={title}
       name={name}
       value={value || ''}
-      textValue={textValue ? textValue : String(value)}
+      textValue={textValue}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}

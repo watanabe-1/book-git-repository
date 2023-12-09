@@ -9,7 +9,7 @@ import React, {
 import Form from 'react-bootstrap/Form';
 import isEqual from 'react-fast-compare';
 
-import { simpleTrim } from '../../../study/util/studyUtil';
+import { simpleTrim } from '../../../study/util/studyStringUtil';
 import { useInitialUUID } from '../../hooks/useCommon';
 import SimpleText from '../elements/text/SimpleText';
 
@@ -244,10 +244,13 @@ const FormControl: React.FC<FormControlProps> = ({
 
   const isValid = validate && touched && !error;
   const isInvalid = validate && !!error;
-  const textBase = textValue || value;
-  const trimTextBase = simpleTrim(textBase.toString());
+  const trimText = simpleTrim(textValue);
+  const trimValue = simpleTrim(value.toString());
+  const trimTextBase = trimText || trimValue;
+  // 基本的には必ずTextValueには値が入る想定だが、ない場合も考慮して一応変換
   const simpleTextValue = trimTextBase || '値がありません';
-  const textColorBase = trimTextBase ? 'text-black' : 'text-black-50';
+  // valueがないときは薄く表示
+  const textColorBase = trimValue ? 'text-black' : 'text-black-50';
   const simpleTextColor = hasChanges ? 'text-warning' : textColorBase;
 
   const childrenProps = {

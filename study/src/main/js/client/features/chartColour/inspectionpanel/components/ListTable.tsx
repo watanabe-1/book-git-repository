@@ -21,7 +21,9 @@ import CheckBox, {
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
 import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
-import TextBox from '../../../../components/form/TextBox';
+import TextBox, {
+  getTextBoxTextValue,
+} from '../../../../components/form/TextBox';
 import {
   useChartColourListSWR,
   useInspectionPanelInfoSWR,
@@ -202,7 +204,7 @@ const ListTable: React.FC<ListTableProps> = ({
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
@@ -272,7 +274,7 @@ const ListTable: React.FC<ListTableProps> = ({
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
@@ -308,7 +310,7 @@ const ListTable: React.FC<ListTableProps> = ({
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
@@ -344,7 +346,7 @@ const ListTable: React.FC<ListTableProps> = ({
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
@@ -380,7 +382,7 @@ const ListTable: React.FC<ListTableProps> = ({
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },

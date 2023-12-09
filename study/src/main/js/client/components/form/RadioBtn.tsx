@@ -53,7 +53,7 @@ export const getRadioBtnTypeList = (baseList: Type[] | string[]) => {
 export const getRadioBtnTextValue = (typeList: Type[], code) => {
   const textValue = typeList.find((type) => type.code === code)?.name;
 
-  return textValue ? textValue : '';
+  return textValue ? textValue : '値がありません';
 };
 
 /**

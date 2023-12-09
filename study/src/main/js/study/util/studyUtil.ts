@@ -195,15 +195,6 @@ export function isObjEmpty(obj: object) {
 }
 
 /**
- * オブジェクトをtrimする
- * @param str
- * @returns 判定結果
- */
-export function simpleTrim(str: string) {
-  return str?.trim();
-}
-
-/**
  * get通信を行う
  * @param baseurl 通信先
  * @param params パラメータ

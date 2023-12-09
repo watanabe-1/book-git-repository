@@ -2,6 +2,7 @@ import React from 'react';
 import Form from 'react-bootstrap/Form';
 
 import FormControl from './FormControl';
+import { simpleTrim } from '../../../study/util/studyStringUtil';
 
 type TextAreaProps = {
   /** テキストボックスのタイトル */
@@ -31,6 +32,21 @@ type TextAreaProps = {
 };
 
 /**
+ * 値がないときの表示値用
+ *
+ * @param value 値
+ */
+export const getTextAreaTextValue = (value: unknown) => {
+  const trimValue = simpleTrim(String(value));
+
+  if (trimValue) {
+    return trimValue;
+  }
+
+  return '値がありません';
+};
+
+/**
  *
  * @returns form内のテキストエリア
  */
@@ -48,11 +64,14 @@ const TextArea: React.FC<TextAreaProps> = ({
   isOnClickEditable = false,
   isReadonly = false,
 }) => {
+  const textValue = getTextAreaTextValue(value);
+
   return (
     <FormControl
       title={title}
       name={name}
       value={value || ''}
+      textValue={textValue}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}

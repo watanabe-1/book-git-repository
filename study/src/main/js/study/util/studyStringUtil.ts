@@ -34,3 +34,12 @@ export function kataToHira(str: string) {
     return String.fromCharCode(charCode);
   });
 }
+/**
+ * オブジェクトをtrimする
+ * @param str
+ * @returns 判定結果
+ */
+
+export function simpleTrim(str: string) {
+  return str?.trim();
+}

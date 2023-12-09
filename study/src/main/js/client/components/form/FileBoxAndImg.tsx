@@ -36,6 +36,12 @@ type FileBoxAndImgProps = {
 };
 
 /**
+ * 表示値用
+ *
+ */
+export const getFileBoxAndImageTextValue = () => 'ファイルをアップロード';
+
+/**
  *
  * @returns form内のファイル用インプットボックス
  */
@@ -56,6 +62,7 @@ const FileBoxAndImg: React.FC<FileBoxAndImgProps> = ({
   isOnClickEditable = false,
 }) => {
   const newPath = fileName ? pathJoin(path, fileName) : path;
+  const textValue = getFileBoxAndImageTextValue();
 
   return (
     <>
@@ -68,7 +75,7 @@ const FileBoxAndImg: React.FC<FileBoxAndImgProps> = ({
         name={name}
         accept={accept}
         value={value}
-        textValue="ファイルをアップロード"
+        textValue={textValue}
         onChange={onChange}
         onBlur={onBlur}
         hidden={hidden}

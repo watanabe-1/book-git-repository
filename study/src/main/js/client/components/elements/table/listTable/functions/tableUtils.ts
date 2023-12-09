@@ -50,7 +50,7 @@ export const filterRows = (
       const cell = findCell(row, column.name);
 
       let rowValue = String(cell.textValue);
-      let colValaue = column.filterValue;
+      let colValaue = String(column.filterValue);
 
       // 正規化する(主に半角全角などを区別したくないときに使用する想定)
       if (normalizeBeforeFilter) {
@@ -94,7 +94,7 @@ export const sortRows = (
 ) => {
   if (!(sortColumn && isSort)) return rows;
 
-  // sortは自身を変更してしまう破壊的なメソッドなため、浅いコピーに対してsortを実行するようにする
+  // sortは自身を変更してしまう破壊的な関数なため、浅いコピーに対してsortを実行するようにする
   return [...rows].sort((aRow, bRow) => {
     const aCell = findCell(aRow, sortColumn);
     const bCell = findCell(bRow, sortColumn);

@@ -20,7 +20,9 @@ import CheckBox, {
   getCheckBoxTextValue,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
-import FileBoxAndImg from '../../../../components/form/FileBoxAndImg';
+import FileBoxAndImg, {
+  getFileBoxAndImageTextValue,
+} from '../../../../components/form/FileBoxAndImg';
 import RadioBtn, {
   getRadioBtnTextValue,
   getRadioBtnTypeList,
@@ -30,8 +32,13 @@ import SelectBox, {
   getSelectBoxTypeList,
 } from '../../../../components/form/SelectBox';
 import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
-import TextArea from '../../../../components/form/TextArea';
-import TextBox, { modifierTextBox } from '../../../../components/form/TextBox';
+import TextArea, {
+  getTextAreaTextValue,
+} from '../../../../components/form/TextArea';
+import TextBox, {
+  getTextBoxTextValue,
+  modifierTextBox,
+} from '../../../../components/form/TextBox';
 import {
   useCategoryInfoSWR,
   useCategoryListSWR,
@@ -167,7 +174,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
@@ -234,7 +241,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextAreaTextValue(value),
             };
           },
         },
@@ -332,7 +339,7 @@ const ListTable = () => {
                 </>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
@@ -437,7 +444,7 @@ const ListTable = () => {
                 </Field>
               ),
               value: value,
-              textValue: value,
+              textValue: getFileBoxAndImageTextValue(),
             };
           },
         },

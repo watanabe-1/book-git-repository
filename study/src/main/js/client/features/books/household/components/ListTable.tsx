@@ -31,7 +31,10 @@ import SelectBox, {
   getSelectBoxTypeList,
 } from '../../../../components/form/SelectBox';
 import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
-import TextBox, { modifierTextBox } from '../../../../components/form/TextBox';
+import TextBox, {
+  getTextBoxTextValue,
+  modifierTextBox,
+} from '../../../../components/form/TextBox';
 import {
   useHouseholdInfoSWR,
   useHouseholdDataSWR,
@@ -277,7 +280,7 @@ const ListTable: React.FC<ListTableProps> = ({
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
@@ -383,7 +386,7 @@ const ListTable: React.FC<ListTableProps> = ({
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
@@ -419,7 +422,7 @@ const ListTable: React.FC<ListTableProps> = ({
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },

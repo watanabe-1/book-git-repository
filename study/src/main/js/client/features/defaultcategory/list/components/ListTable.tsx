@@ -24,7 +24,10 @@ import SelectBox, {
   getSelectBoxTypeList,
 } from '../../../../components/form/SelectBox';
 import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
-import TextBox, { modifierTextBox } from '../../../../components/form/TextBox';
+import TextBox, {
+  getTextBoxTextValue,
+  modifierTextBox,
+} from '../../../../components/form/TextBox';
 import {
   useDefaultCategoryInfoSWR,
   useDefaultCategoryListSWR,
@@ -222,7 +225,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
@@ -257,7 +260,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
@@ -293,7 +296,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
@@ -329,7 +332,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
@@ -405,7 +408,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: value,
+              textValue: getTextBoxTextValue(value),
             };
           },
         },
