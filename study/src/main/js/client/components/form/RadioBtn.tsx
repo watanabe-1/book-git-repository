@@ -1,7 +1,7 @@
 import React from 'react';
 import Form from 'react-bootstrap/Form';
 
-import FormControl from './FormControl';
+import FormControl from './formControl/FormControl';
 import { Type } from '../../../@types/studyUtilType';
 import { ToTypeArrayIfIsStringArray } from '../../../study/util/studyUtil';
 

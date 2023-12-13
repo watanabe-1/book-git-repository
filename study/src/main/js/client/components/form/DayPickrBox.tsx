@@ -7,7 +7,8 @@ import Form from 'react-bootstrap/Form';
 import Flatpickr from 'react-flatpickr';
 import DatePicker from 'react-flatpickr';
 
-import FormControl, { ChildrenRefs } from './FormControl';
+import FormControl from './formControl/FormControl';
+import { ChildrenRefs } from './formControl/types/formControlProps';
 import { iconConst } from '../../../constant/iconConstant';
 import {
   convertToFlatpickrFormat,

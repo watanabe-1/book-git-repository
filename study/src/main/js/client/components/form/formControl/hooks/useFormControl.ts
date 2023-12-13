@@ -1,105 +1,31 @@
-import React, {
-  cloneElement,
-  useState,
-  useEffect,
-  useRef,
-  ReactNode,
-  useMemo,
-} from 'react';
-import Form from 'react-bootstrap/Form';
+import React, { useState, useEffect, useRef, useMemo, ReactNode } from 'react';
 import isEqual from 'react-fast-compare';
 
-import { simpleTrim } from '../../../study/util/studyStringUtil';
-import { useInitialUUID } from '../../hooks/useCommon';
-import SimpleText from '../elements/text/SimpleText';
+import { TextColor } from '../../../../../@types/studyBootstrap';
+import { simpleTrim } from '../../../../../study/util/studyStringUtil';
+import {
+  ChildrenRefs,
+  FormControlHTMLElement,
+  FormControlProps,
+} from '../types/formControlProps';
 
-export type ChildrenRefs = React.MutableRefObject<{
-  [x: string]: unknown;
-}>;
-
-type FormControlProps = {
-  /** テキストボックスのタイトル */
-  title?: string;
-  /** ラベルの後にbrタグを入れるかどうか */
-  titleBr?: boolean;
-  /** テキストボックスの名前 */
-  name: string;
-  /** テキストボックスの値 */
-  value: string | number | string[];
-  /** テキストとして表示する値 */
-  textValue?: string;
-  /** テキストの最大桁数 */
-  textMaxLength?: number;
-  /** テキストボックスの値が変更されたときのハンドラ関数 */
-  onChange?: (event: React.ChangeEvent<FormControlHTMLElement>) => void;
-  /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
-  onBlur?: (event: React.FocusEvent<FormControlHTMLElement>) => void;
-  /** シンプルテキストをクリックしたときの動作 */
-  onTextClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
-  /**
-   * isOnClickEditable === true
-   * かつ isEditing → trueになったときに実行
-   *
-   * @param elementRefs childrenの参照を詰めたオブジェクト elementRefs.current[childenのkeyで取得可能]
-   * @returns
-   */
-  onEditing?: (elementRefs: ChildrenRefs) => void;
-  /**
-   * childをclickしたときに発生
-   *
-   * @param event clickイベント
-   * @param elementRefs childrenの参照を詰めたオブジェクト elementRefs.current[childenのkeyで取得可能]
-   * @returns
-   */
-  onClick?: (
-    event: React.MouseEvent<HTMLElement, MouseEvent>,
-    elementRefs: ChildrenRefs
-  ) => void;
-  /** テキストボックスを非表示にするかどうか */
-  hidden?: boolean;
-  /** バリデーションを行うかどうかを示すフラグ */
-  validate?: boolean;
-  /** バリデーションが実行されたかどうかを示すフラグ */
-  touched?: unknown;
-  /** エラーメッセージ */
-  error?: unknown;
-  /** formが変更されたかどうか */
-  dirty?: boolean;
-  /** 通常は文字のみでクリックしたときに入力できるようにする */
-  isOnClickEditable?: boolean;
-  /** 読み取り専用にするか */
-  isReadonly?: boolean;
-  /** 子コンポーネント react bootstrap form elementを想定 */
-  children: React.ReactElement | React.ReactElement[];
-};
-
-type FormControlHTMLElement = HTMLInputElement | HTMLSelectElement;
-
-/**
- *
- * @returns form内のテキストボックス
- */
-const FormControl: React.FC<FormControlProps> = ({
-  title = null,
-  titleBr = false,
+export const useFormControl = ({
   name,
   value,
-  textValue = null,
-  textMaxLength = 30,
+  textValue,
   onChange,
   onBlur,
   onTextClick,
   onEditing,
   onClick,
-  hidden = false,
-  validate = false,
-  touched = false,
-  error = '',
-  dirty = false,
-  isOnClickEditable = false,
-  isReadonly = false,
+  validate,
+  touched,
+  error,
+  dirty,
+  isOnClickEditable,
+  isReadonly,
   children,
-}) => {
+}: FormControlProps) => {
   const [text, setText] = useState(value);
   const [initialValue, setInitialValue] = useState(value);
   const [isEditing, setIsEditing] = useState(!isReadonly && !isOnClickEditable);
@@ -109,7 +35,6 @@ const FormControl: React.FC<FormControlProps> = ({
     [key in string]: unknown;
   }>({});
   const blurTimeoutRef = useRef(null);
-  const uuid = useInitialUUID();
   const isArrayChildren = Array.isArray(children);
   const childArray = isArrayChildren ? children : [children];
 
@@ -205,6 +130,20 @@ const FormControl: React.FC<FormControlProps> = ({
     onClick?.(e, elementRefs);
   };
 
+  /**
+   * 速度改善のため
+   * isOnClickEditable==true
+   * もしくはreedonly==trueの時は
+   * 一度編集可能になるまで描画しない
+   *
+   * @param callBack レンダリング対象
+   * @returns
+   */
+  const renderInitialByOnEditable = (callBack: () => ReactNode) =>
+    !isInitialByOnEditable && (isOnClickEditable || isReadonly)
+      ? null
+      : callBack();
+
   useEffect(() => {
     // console.log(`value:${JSON.stringify(value)}`);
     // console.log(`initialValue:${JSON.stringify(initialValue)}`);
@@ -250,8 +189,10 @@ const FormControl: React.FC<FormControlProps> = ({
   // 基本的には必ずTextValueには値が入る想定だが、ない場合も考慮して一応変換
   const simpleTextValue = trimTextBase || '値がありません';
   // valueがないときは薄く表示
-  const textColorBase = trimValue ? 'text-black' : 'text-black-50';
-  const simpleTextColor = hasChanges ? 'text-warning' : textColorBase;
+  const textColorBase: TextColor = trimValue ? 'text-black' : 'text-black-50';
+  const simpleTextColor: TextColor = hasChanges
+    ? 'text-warning'
+    : textColorBase;
 
   const childrenProps = {
     name,
@@ -270,66 +211,15 @@ const FormControl: React.FC<FormControlProps> = ({
     childrenProps['value'] = text;
   }
 
-  /**
-   * 速度改善のため
-   * isOnClickEditable==true
-   * もしくはreedonly==trueの時は
-   * 一度編集可能になるまで描画しない
-   *
-   * @param callBack レンダリング対象
-   * @returns
-   */
-  const renderInitialByOnEditable = (callBack: () => ReactNode) =>
-    !isInitialByOnEditable && (isOnClickEditable || isReadonly)
-      ? null
-      : callBack();
-
-  return (
-    <Form.Group controlId={uuid} hidden={hidden}>
-      {title &&
-        (isArrayChildren ? (
-          <span> {title}</span>
-        ) : (
-          <Form.Label onClick={handleTextClick}>{title}</Form.Label>
-        ))}
-      {titleBr && <br />}
-      {renderInitialByOnEditable(() =>
-        convertedChildList.map(({ id, child, refCallbackFunction }) => {
-          return cloneElement(child, {
-            ...childrenProps,
-            key: id,
-            ref: refCallbackFunction,
-          });
-        })
-      )}
-      {!isEditing && (
-        <SimpleText
-          name={name}
-          value={simpleTextValue}
-          hidden={isEditing}
-          textColorClass={simpleTextColor}
-          textMaxLength={textMaxLength}
-          onClick={handleTextClick}
-        />
-      )}
-      {renderInitialByOnEditable(
-        () =>
-          validate && (
-            <Form.Control.Feedback onClick={handleTextClick}>
-              OK!
-            </Form.Control.Feedback>
-          )
-      )}
-      {renderInitialByOnEditable(
-        () =>
-          validate && (
-            <Form.Control.Feedback type="invalid" onClick={handleTextClick}>
-              {error as string}
-            </Form.Control.Feedback>
-          )
-      )}
-    </Form.Group>
-  );
+  return {
+    convertedChildList,
+    simpleTextColor,
+    simpleTextValue,
+    isArrayChildren,
+    childrenProps,
+    isEditing,
+    handleTextClick,
+    handleChildClick,
+    renderInitialByOnEditable,
+  };
 };
-
-export default FormControl;
