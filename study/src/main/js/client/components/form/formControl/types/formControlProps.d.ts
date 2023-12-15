@@ -70,7 +70,7 @@ export type FormControlChildrenProps = {
   /** テキストボックスがフォーカスされたときのハンドラ関数 */
   onFocus: () => void;
   /** テキストボックスがクリックされたときのハンドラ関数 */
-  onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+  onClick: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   /** バリデーションを行うか */
   isValid: boolean;
   /** バリデーションエラーかどうか */
