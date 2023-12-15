@@ -4,7 +4,8 @@ import isEqual from 'react-fast-compare';
 import { TextColor } from '../../../../../@types/studyBootstrap';
 import { simpleTrim } from '../../../../../study/util/studyStringUtil';
 import {
-  ChildrenRefs,
+  FormControlChildrenRefs,
+  FormControlChildrenProps,
   FormControlHTMLElement,
   FormControlProps,
 } from '../types/formControlProps';
@@ -31,7 +32,7 @@ export const useFormControl = ({
   const [isEditing, setIsEditing] = useState(!isReadonly && !isOnClickEditable);
   const [hasChanges, setHasChanges] = useState(false);
   const [isInitialByOnEditable, setIsInitialByOnEditable] = useState(false);
-  const elementRefs: ChildrenRefs = useRef<{
+  const elementRefs: FormControlChildrenRefs = useRef<{
     [key in string]: unknown;
   }>({});
   const blurTimeoutRef = useRef(null);
@@ -117,17 +118,21 @@ export const useFormControl = ({
     onBlur?.(event);
   };
 
-  const handleTextClick = (e) => {
+  const handleTextClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     //console.log('call handleTextClick');
     if (!isEditing && isOnClickEditable && !isReadonly) {
       handleSetIsEditing(isOnClickEditable);
     }
-    onTextClick?.(e);
+    onTextClick?.(event);
   };
 
-  const handleChildClick = (e) => {
+  const handleChildClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
     //console.log('call handleChildClick');
-    onClick?.(e, elementRefs);
+    onClick?.(event, elementRefs);
   };
 
   /**
@@ -205,10 +210,10 @@ export const useFormControl = ({
     hidden: !isEditing,
     // hidden属性だけだとうまくいかないためstyleから直接非表示に
     style: { display: isEditing ? '' : 'none' },
-  };
+  } as FormControlChildrenProps;
 
   if (!isArrayChildren) {
-    childrenProps['value'] = text;
+    childrenProps.value = text;
   }
 
   return {

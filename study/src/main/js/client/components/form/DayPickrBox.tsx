@@ -1,21 +1,10 @@
-import endOfMonth from 'date-fns/endOfMonth';
-import startOfMonth from 'date-fns/startOfMonth';
-import { BaseOptions } from 'flatpickr/dist/types/options';
-import { FormikErrors } from 'formik';
-import React, { forwardRef } from 'react';
+import React from 'react';
 import Form from 'react-bootstrap/Form';
-import Flatpickr from 'react-flatpickr';
 import DatePicker from 'react-flatpickr';
 
 import FormControl from './formControl/FormControl';
-import { ChildrenRefs } from './formControl/types/formControlProps';
-import { iconConst } from '../../../constant/iconConstant';
-import {
-  convertToFlatpickrFormat,
-  parseDate,
-} from '../../../study/util/studyDateUtil';
-import flatpickrLocale from '../../locale/flatpickr.locale';
-import Icon from '../elements/icon/Icon';
+import { FormControlChildrenRefs } from './formControl/types/formControlProps';
+import { DayPickr } from '../elements/pickr/DayPickr';
 
 type DayPickrBoxProps = {
   /** テキストボックスのタイトル */
@@ -24,14 +13,10 @@ type DayPickrBoxProps = {
   name: string;
   /** テキストボックスの値 */
   value: string;
-  /** 選択日付保存先名称 */
-  fieldNameByNames: string;
-  /** formikvalue保存用関数 */
-  setFieldValue: (
-    field: string,
-    value: string,
-    shouldValidate?: boolean
-  ) => Promise<void | FormikErrors<unknown>>;
+  /** テキストボックスの値が変更されたときのハンドラ関数 */
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   /** 日付フォーマット*/
   dateFormat: string;
   /** 選択可能範囲をvalueの月のみにするか */
@@ -52,24 +37,6 @@ type DayPickrBoxProps = {
   isReadonly?: boolean;
 };
 
-type DayPickrProps = {
-  /** 日付 */
-  value: string;
-  /** 日付フォーマット*/
-  dateFormat: string;
-  /** 選択可能範囲をvalueの月のみにするか */
-  onlyValueMonth: boolean;
-  /** 値が変更されたときのハンドラ関数 */
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
-  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
-  /** クリックしたときの関数 */
-  onClick?: (event: React.MouseEvent<HTMLElement, MouseEvent>) => void;
-  /** テキストボックスを非表示にするかどうか */
-  hidden?: boolean;
-};
-type DatePickerCallBackRef = (fp: Flatpickr) => void;
-
 /**
  * @returns form内のテキストボックス
  */
@@ -78,8 +45,8 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
   name,
   value: pvalue,
   dateFormat,
-  fieldNameByNames,
-  setFieldValue,
+  onChange,
+  onBlur,
   onlyValueMonth = false,
   hidden = false,
   validate = false,
@@ -90,12 +57,9 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
   isReadonly = false,
 }) => {
   const value = pvalue || '';
-  const DayPickrKey = 'dayPickr';
-  const handleSet = (e) => {
-    setFieldValue(fieldNameByNames, e.target.value);
-  };
-  const openFp = (refs: ChildrenRefs) => {
-    const fp = refs?.current[DayPickrKey] as DatePicker;
+  const dayPickrKey = 'dayPickr';
+  const openFp = (refs: FormControlChildrenRefs) => {
+    const fp = refs?.current[dayPickrKey] as DatePicker;
     //console.log(fp);
     if (!fp?.flatpickr) return;
     // カレンダーの表示基準元が存在しない場合、
@@ -113,7 +77,8 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
         title={title}
         name={name}
         value={value}
-        onBlur={handleSet}
+        onChange={onChange}
+        onBlur={onBlur}
         onEditing={(refs) => {
           if (!isReadonly) {
             openFp(refs);
@@ -139,87 +104,11 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
           value={value}
           dateFormat={dateFormat}
           onlyValueMonth={onlyValueMonth}
-          key={DayPickrKey}
+          key={dayPickrKey}
         />
       </FormControl>
     </div>
   );
 };
-
-/**
- *
- * @returns 日を選択できるinputボックス
- */
-const DayPickr = forwardRef<DatePickerCallBackRef, DayPickrProps>(
-  (
-    {
-      value,
-      onChange,
-      onBlur,
-      onClick,
-      hidden,
-      dateFormat: pdateFormat,
-      onlyValueMonth,
-    },
-    ref
-  ) => {
-    const date = parseDate(value, pdateFormat);
-    const dateFormat = convertToFlatpickrFormat(pdateFormat);
-
-    const buildEventObject = (value: string) => {
-      return {
-        target: {
-          value: value,
-        },
-      } as unknown;
-    };
-
-    const options: Partial<BaseOptions> = {
-      locale: flatpickrLocale,
-      dateFormat: dateFormat,
-      defaultDate: value,
-    };
-    if (onlyValueMonth) {
-      options.minDate = startOfMonth(date);
-      options.maxDate = endOfMonth(date);
-    }
-    return (
-      <div className="flatpickr" hidden={hidden}>
-        <Flatpickr
-          className="bg-white border border-gray-300 block w-full p-2.5 shadow"
-          options={options}
-          style={{ width: '120px' }}
-          value={value}
-          onValueUpdate={(_, dateStr) => {
-            if (dateStr !== value) {
-              const event = buildEventObject(
-                dateStr
-              ) as React.ChangeEvent<HTMLInputElement>;
-              onChange?.(event);
-            }
-          }}
-          onClose={(_, dateStr) => {
-            const event = buildEventObject(
-              dateStr
-            ) as React.FocusEvent<HTMLInputElement>;
-            onBlur?.(event);
-          }}
-          ref={ref as unknown as DatePickerCallBackRef}
-        />
-        <a
-          className="input-button"
-          title="toggle"
-          onClick={(event) => {
-            onClick?.(event);
-          }}
-        >
-          <Icon icon={iconConst.bootstrap.BI_CALENDAR} />
-        </a>
-      </div>
-    );
-  }
-);
-
-DayPickr.displayName = 'DayPickr';
 
 export default DayPickrBox;

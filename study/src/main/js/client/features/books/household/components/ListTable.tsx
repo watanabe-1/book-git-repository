@@ -225,8 +225,7 @@ const ListTable: React.FC<ListTableProps> = ({
                         touched={meta.touched}
                         error={meta.error}
                         dirty={props.dirty}
-                        setFieldValue={props.setFieldValue}
-                        fieldNameByNames={name}
+                        onBlur={field.onChange}
                         isOnClickEditable
                       />
                     );

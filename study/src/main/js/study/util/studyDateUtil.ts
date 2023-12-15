@@ -156,7 +156,7 @@ export function getActualMonth(date: Date) {
  * @param inputFormat 変換元フォーマット
  * @returns
  */
-export function convertToFlatpickrFormat(inputFormat) {
+export function convertToFlatpickrFormat(inputFormat: string) {
   const conversionTable = {
     // 年
     yyyy: 'Y',

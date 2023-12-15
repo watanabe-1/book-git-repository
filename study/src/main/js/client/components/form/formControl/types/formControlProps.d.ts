@@ -1,9 +1,3 @@
-import React from 'react';
-import React from 'react';
-
-import { ChildrenRefs } from './formControlProps';
-import { FormControlHTMLElement } from './formControlProps';
-
 export type FormControlProps = {
   /** テキストボックスのタイトル */
   title?: string;
@@ -30,7 +24,7 @@ export type FormControlProps = {
    * @param elementRefs childrenの参照を詰めたオブジェクト elementRefs.current[childenのkeyで取得可能]
    * @returns
    */
-  onEditing?: (elementRefs: ChildrenRefs) => void;
+  onEditing?: (elementRefs: FormControlChildrenRefs) => void;
   /**
    * childをclickしたときに発生
    *
@@ -40,7 +34,7 @@ export type FormControlProps = {
    */
   onClick?: (
     event: React.MouseEvent<HTMLElement, MouseEvent>,
-    elementRefs: ChildrenRefs
+    elementRefs: FormControlChildrenRefs
   ) => void;
   /** テキストボックスを非表示にするかどうか */
   hidden?: boolean;
@@ -60,8 +54,33 @@ export type FormControlProps = {
   children: React.ReactElement | React.ReactElement[];
 };
 
-export type ChildrenRefs = React.MutableRefObject<{
+export type FormControlChildrenRefs = React.MutableRefObject<{
   [x: string]: unknown;
 }>;
+
+export type FormControlChildrenProps = {
+  /** テキストボックスの名前 */
+  name: string;
+  /** テキストボックスの値 */
+  value: string | number | string[];
+  /** テキストボックスの値が変更されたときのハンドラ関数 */
+  onChange: (event: React.ChangeEvent<FormControlHTMLElement>) => void;
+  /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
+  onBlur: (event: React.FocusEvent<FormControlHTMLElement, Element>) => void;
+  /** テキストボックスがフォーカスされたときのハンドラ関数 */
+  onFocus: () => void;
+  /** テキストボックスがクリックされたときのハンドラ関数 */
+  onClick: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+  /** バリデーションを行うか */
+  isValid: boolean;
+  /** バリデーションエラーかどうか */
+  isInvalid: boolean;
+  /** テキストボックスを非表示にするかどうか */
+  hidden: boolean;
+  /** style */
+  style: {
+    display: string;
+  };
+};
 
 export type FormControlHTMLElement = HTMLInputElement | HTMLSelectElement;
