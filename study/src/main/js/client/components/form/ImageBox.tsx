@@ -1,27 +1,30 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import FileBox from './FileBox';
-import { addContextPath, pathJoin } from '../../../study/util/studyUtil';
+import { pathJoin } from '../../../study/util/studyUtil';
 import ImageIcon from '../elements/icon/ImageIcon';
 
-type FileBoxAndImgProps = {
-  /** テキストボックスのタイトル */
+type ImageBoxProps = {
+  /** ファイルボックスのタイトル */
   title?: string;
-  /** テキストボックスの名前 */
+  /** ファイルボックスの名前 */
   name: string;
-  /** テキストボックスの値 */
-  value?: string | number | string[];
+  /** ファイルボックスの値 */
+  value?: File;
   /** 選択できるデフォルトファイルタイプ */
-  accept: string;
+  accept?: string;
   /** imageパス */
-  path: string;
-  /** ファイル名*/
-  fileName?: string;
-  /** テキストボックスの値が変更されたときのハンドラ関数 */
+  initialPath?: string;
+  /** ファイル名 ここに値をセットするとinitialPathと結合したパスとして扱われる*/
+  initialFileName?: string;
+  /** ファイルボックスの値が変更されたときのハンドラ関数 */
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
+  /** ファイルボックスからフォーカスが外れた時のハンドラ関数 */
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
-  /** テキストボックスを非表示にするかどうか */
+
+  /** 画像をプレビューとして表示するかどうか */
+  showPreview?: boolean;
+  /** ファイルボックスを非表示にするかどうか */
   hidden?: boolean;
   /** バリデーションを行うかどうかを示すフラグ */
   validate?: boolean;
@@ -39,21 +42,22 @@ type FileBoxAndImgProps = {
  * 表示値用
  *
  */
-export const getFileBoxAndImageTextValue = () => 'ファイルをアップロード';
+export const getImageBoxTextValue = () => '画像をアップロード';
 
 /**
  *
- * @returns form内のファイル用インプットボックス
+ * @returns form内の画像用インプットボックス
  */
-const FileBoxAndImg: React.FC<FileBoxAndImgProps> = ({
+const ImageBox: React.FC<ImageBoxProps> = ({
   title = null,
   name,
-  accept,
   value = null,
-  path,
-  fileName = '',
+  accept = 'image/*',
+  initialPath = null,
+  initialFileName = null,
   onChange,
   onBlur,
+  showPreview = false,
   hidden = false,
   validate = false,
   touched = false,
@@ -61,15 +65,18 @@ const FileBoxAndImg: React.FC<FileBoxAndImgProps> = ({
   dirty = false,
   isOnClickEditable = false,
 }) => {
-  const newPath = fileName ? pathJoin(path, fileName) : path;
-  const textValue = getFileBoxAndImageTextValue();
+  const path = useMemo(() => {
+    if (!initialPath) return null;
+
+    return initialFileName
+      ? pathJoin(initialPath, initialFileName)
+      : initialPath;
+  }, [initialPath, initialFileName]);
+  const textValue = getImageBoxTextValue();
 
   return (
     <>
-      <ImageIcon
-        path={path.startsWith('data:') ? newPath : addContextPath(newPath)}
-        isAddContextPath={false}
-      />
+      {showPreview && <ImageIcon path={path} file={value} />}
       <FileBox
         title={title}
         name={name}
@@ -89,4 +96,4 @@ const FileBoxAndImg: React.FC<FileBoxAndImgProps> = ({
   );
 };
 
-export default FileBoxAndImg;
+export default ImageBox;

@@ -150,13 +150,18 @@ export const useFormControl = ({
       : callBack();
 
   useEffect(() => {
+    // console.log(`name:${name}`);
     // console.log(`value:${JSON.stringify(value)}`);
     // console.log(`initialValue:${JSON.stringify(initialValue)}`);
     // console.log(`value !== initialValue:${value !== initialValue}`);
+    // console.log(
+    //   `!isEqual(value, initialValue):${!isEqual(value, initialValue)}`
+    // );
 
     // 初期値から変更されたか判定
     // 配列が比較対象になることがあるため、react-fast-compareを使用して比較
-    handleSetHasChanges(!isEqual(value, initialValue));
+    // 非同期実行(useEffectの実行)のタイミングによってはdirtyがfalseの時でも、initialValueの値がdirtyトリガーのuseEffectによって更新される前に比較を実行してしまうことがあるため、必ずdirtyがtrueの時のみhasChangeがtrueになるようにする
+    handleSetHasChanges(!isEqual(value, initialValue) && dirty);
   }, [value]);
 
   useEffect(() => {
@@ -177,7 +182,9 @@ export const useFormControl = ({
 
   useEffect(() => {
     // dirtyがtrue→falseに変更されたときは送信ボタンが押されたとき(dirtyがfalseの時)
-    //console.log(dirty);
+    // console.log(`name:${name}`);
+    // console.log(`value:${JSON.stringify(value)}`);
+    // console.log(`dirty:${dirty}`);
     if (!dirty) {
       // 編集済み判定フラグをリセット
       handleSetHasChanges(false);

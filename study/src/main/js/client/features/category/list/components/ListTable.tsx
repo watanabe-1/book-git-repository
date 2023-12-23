@@ -8,7 +8,7 @@ import {
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
-import { getSetInputFileFunc } from '../../../../../study/util/studyFormUtil';
+import { getInputFile } from '../../../../../study/util/studyFormUtil';
 import { fetchPost, keyJoin } from '../../../../../study/util/studyUtil';
 import {
   objArrayToObj,
@@ -20,9 +20,9 @@ import CheckBox, {
   getCheckBoxTextValue,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
-import FileBoxAndImg, {
-  getFileBoxAndImageTextValue,
-} from '../../../../components/form/FileBoxAndImg';
+import ImageBox, {
+  getImageBoxTextValue,
+} from '../../../../components/form/ImageBox';
 import RadioBtn, {
   getRadioBtnTextValue,
   getRadioBtnTypeList,
@@ -96,6 +96,21 @@ const ListTable = () => {
 
   // console.log(info);
   // console.log(list);
+
+  const CATEGORY_IMGIDS_IMGID = useMemo(
+    () => keyJoin(fieldConst.category.IMG_IDS, fieldConst.image.IMG_ID),
+    [fieldConst.category.IMG_IDS, fieldConst.image.IMG_ID]
+  );
+
+  const CATEGORY_IMGIDS_IMGPATH = useMemo(
+    () => keyJoin(fieldConst.category.IMG_IDS, fieldConst.image.IMG_PATH),
+    [fieldConst.category.IMG_IDS, fieldConst.image.IMG_PATH]
+  );
+
+  const CATEGORY_IMGIDS_IMGNAME = useMemo(
+    () => keyJoin(fieldConst.category.IMG_IDS, fieldConst.image.IMG_NAME),
+    [fieldConst.category.IMG_IDS, fieldConst.image.IMG_NAME]
+  );
 
   // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成するための設定
   const toObjConfig: BuildListTableFormObjConfig = {
@@ -282,14 +297,11 @@ const ListTable = () => {
         },
       },
       {
-        name: keyJoin(fieldConst.category.IMG_IDS, fieldConst.category.IMG_ID),
+        name: CATEGORY_IMGIDS_IMGID,
         table: {
           head: '画像ID',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name =
-              names[
-                keyJoin(fieldConst.category.IMG_IDS, fieldConst.category.IMG_ID)
-              ];
+            const name = names[CATEGORY_IMGIDS_IMGID];
             const value = props.getFieldProps(name).value;
             return {
               element: (
@@ -313,21 +325,11 @@ const ListTable = () => {
                             setImage={(image) => {
                               props.setFieldValue(name, image.imgId);
                               props.setFieldValue(
-                                names[
-                                  keyJoin(
-                                    fieldConst.category.IMG_IDS,
-                                    fieldConst.image.IMG_PATH
-                                  )
-                                ],
+                                names[CATEGORY_IMGIDS_IMGPATH],
                                 image.imgPath
                               );
                               props.setFieldValue(
-                                names[
-                                  keyJoin(
-                                    fieldConst.category.IMG_IDS,
-                                    fieldConst.image.IMG_NAME
-                                  )
-                                ],
+                                names[CATEGORY_IMGIDS_IMGNAME],
                                 image.imgName
                               );
                             }}
@@ -393,50 +395,26 @@ const ListTable = () => {
               element: (
                 // 他の入力項目から変更されることがある項目のためFastFieldではなくFieldを使用
                 <Field name={name}>
-                  {({ field, meta }: FieldProps<string>) => {
+                  {({ field, meta }: FieldProps<File>) => {
                     return (
-                      <FileBoxAndImg
+                      <ImageBox
                         name={field.name}
+                        value={field.value}
                         validate
                         error={meta.error}
                         dirty={props.dirty}
-                        accept="image/*"
-                        path={
-                          props.getFieldProps(
-                            names[
-                              keyJoin(
-                                fieldConst.category.IMG_IDS,
-                                fieldConst.image.IMG_PATH
-                              )
-                            ]
-                          ).value
+                        initialPath={
+                          props.getFieldProps(names[CATEGORY_IMGIDS_IMGPATH])
+                            .value
                         }
-                        fileName={
-                          props.getFieldProps(
-                            names[
-                              keyJoin(
-                                fieldConst.category.IMG_IDS,
-                                fieldConst.image.IMG_NAME
-                              )
-                            ]
-                          ).value
+                        initialFileName={
+                          props.getFieldProps(names[CATEGORY_IMGIDS_IMGNAME])
+                            .value
                         }
-                        onChange={getSetInputFileFunc(
-                          props.setFieldValue,
-                          name,
-                          names[
-                            keyJoin(
-                              fieldConst.category.IMG_IDS,
-                              fieldConst.image.IMG_PATH
-                            )
-                          ],
-                          names[
-                            keyJoin(
-                              fieldConst.category.IMG_IDS,
-                              fieldConst.image.IMG_NAME
-                            )
-                          ]
-                        )}
+                        onChange={(e) =>
+                          props.setFieldValue(name, getInputFile(e))
+                        }
+                        showPreview
                         isOnClickEditable
                       />
                     );
@@ -444,7 +422,7 @@ const ListTable = () => {
                 </Field>
               ),
               value: value,
-              textValue: getFileBoxAndImageTextValue(),
+              textValue: getImageBoxTextValue(),
             };
           },
         },

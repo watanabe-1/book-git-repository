@@ -38,7 +38,8 @@ const ImageIcon: React.FC<ImageIconProps> = ({
 
   // file に値がある場合がpathよりも優先して表示
   useEffect(() => {
-    if (file) {
+    if (file && file?.type?.startsWith('image/')) {
+      // 画像ファイルのみ読みこみ処理を行う
       setIsLoading(true);
 
       const reader = new FileReader();

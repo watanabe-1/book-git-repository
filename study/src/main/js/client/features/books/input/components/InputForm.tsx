@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row';
 import { ErrorResults } from '../../../../../@types/studyUtilType';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
-import { getSetInputFileFunc } from '../../../../../study/util/studyFormUtil';
+import { getInputFile } from '../../../../../study/util/studyFormUtil';
 import { fetchPost } from '../../../../../study/util/studyUtil';
 import SubmitButton from '../../../../components/elements/button/SubmitButton';
 import AutoValidateToken from '../../../../components/form/AutoValidateToken';
@@ -125,10 +125,12 @@ const InputForm = (props: { handleNext: () => void }) => {
                     validate
                     error={errors.booksFile}
                     accept=".csv"
-                    onChange={getSetInputFileFunc(
-                      props.setFieldValue,
-                      fieldConst.books.BOOKS_FILE
-                    )}
+                    onChange={(e) =>
+                      props.setFieldValue(
+                        fieldConst.books.BOOKS_FILE,
+                        getInputFile(e)
+                      )
+                    }
                   />
                 </Col>
               </Row>

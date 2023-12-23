@@ -11,7 +11,7 @@ import {
   downloadFile,
   getFilenameFromResponse,
 } from '../../../../../study/util/studyFileUtil';
-import { getSetInputFileFunc } from '../../../../../study/util/studyFormUtil';
+import { getInputFile } from '../../../../../study/util/studyFormUtil';
 import { fetchPost } from '../../../../../study/util/studyUtil';
 import SubmitButton from '../../../../components/elements/button/SubmitButton';
 import AutoValidateToken from '../../../../components/form/AutoValidateToken';
@@ -117,10 +117,12 @@ const ConvertForm = () => {
                     validate
                     error={errors.file}
                     accept="*.*"
-                    onChange={getSetInputFileFunc(
-                      props.setFieldValue,
-                      fieldConst.booksConvert.FILE
-                    )}
+                    onChange={(e) =>
+                      props.setFieldValue(
+                        fieldConst.booksConvert.FILE,
+                        getInputFile(e)
+                      )
+                    }
                   />
                 </Col>
               </Row>

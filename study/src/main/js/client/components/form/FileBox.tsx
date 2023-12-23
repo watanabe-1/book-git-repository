@@ -5,21 +5,21 @@ import FormControl from './formControl/FormControl';
 import { simpleTrim } from '../../../study/util/studyStringUtil';
 
 type FileBoxProps = {
-  /** テキストボックスのタイトル */
+  /** ファイルボックスのタイトル */
   title?: string;
-  /** テキストボックスの名前 */
+  /** ファイルボックスの名前 */
   name: string;
-  /** テキストボックスの値 */
-  value?: string | number | string[];
+  /** ファイルボックスの値 */
+  value?: File;
   /** テキストとして表示する値 */
   textValue?: string;
   /** 選択できるデフォルトファイルタイプ */
   accept: string;
-  /** テキストボックスの値が変更されたときのハンドラ関数 */
+  /** ファイルボックスの値が変更されたときのハンドラ関数 */
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
+  /** ファイルボックスからフォーカスが外れた時のハンドラ関数 */
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
-  /** テキストボックスを非表示にするかどうか */
+  /** ファイルボックスを非表示にするかどうか */
   hidden?: boolean;
   /** バリデーションを行うかどうかを示すフラグ */
   validate?: boolean;

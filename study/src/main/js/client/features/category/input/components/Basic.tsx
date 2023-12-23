@@ -8,12 +8,12 @@ import { Context } from './Content';
 import { ErrorResults, Category } from '../../../../../@types/studyUtilType';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
-import { getSetInputFileFunc } from '../../../../../study/util/studyFormUtil';
+import { getInputFile } from '../../../../../study/util/studyFormUtil';
 import { fetchPost } from '../../../../../study/util/studyUtil';
 import SubmitButton from '../../../../components/elements/button/SubmitButton';
 import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import CheckBox from '../../../../components/form/CheckBox';
-import FileBox from '../../../../components/form/FileBox';
+import ImageBox from '../../../../components/form/ImageBox';
 import RadioBtn from '../../../../components/form/RadioBtn';
 import SelectBox from '../../../../components/form/SelectBox';
 import TextArea from '../../../../components/form/TextArea';
@@ -181,16 +181,17 @@ const Basic: React.FC<BasicProps> = (props) => {
               <hr className="my-4" />
               <Row g="3">
                 <Col sm="12">
-                  <FileBox
+                  <ImageBox
                     title="アイコンのアップロード"
                     name={fieldConst.category.CAT_ICON}
                     validate
                     error={errors.catIcon}
-                    accept="image/*"
-                    onChange={getSetInputFileFunc(
-                      props.setFieldValue,
-                      fieldConst.category.CAT_ICON
-                    )}
+                    onChange={(e) =>
+                      props.setFieldValue(
+                        fieldConst.category.CAT_ICON,
+                        getInputFile(e)
+                      )
+                    }
                   />
                 </Col>
               </Row>

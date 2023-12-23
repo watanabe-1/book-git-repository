@@ -6,7 +6,7 @@ export type FormControlProps = {
   /** テキストボックスの名前 */
   name: string;
   /** テキストボックスの値 */
-  value: string | number | string[];
+  value: string | number | string[] | File;
   /** テキストとして表示する値 */
   textValue?: string;
   /** テキストの最大桁数 */
@@ -62,7 +62,7 @@ export type FormControlChildrenProps = {
   /** テキストボックスの名前 */
   name: string;
   /** テキストボックスの値 */
-  value: string | number | string[];
+  value: string | number | string[] | File;
   /** テキストボックスの値が変更されたときのハンドラ関数 */
   onChange: (event: React.ChangeEvent<FormControlHTMLElement>) => void;
   /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
