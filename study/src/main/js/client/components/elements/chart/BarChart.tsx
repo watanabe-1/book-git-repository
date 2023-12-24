@@ -12,7 +12,7 @@ import {
   Plugin,
 } from 'chart.js';
 import { fontString } from 'chart.js/helpers';
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { AnyObject } from 'yup';

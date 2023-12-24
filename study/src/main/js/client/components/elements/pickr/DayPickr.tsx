@@ -1,5 +1,5 @@
-import endOfMonth from 'date-fns/endOfMonth';
-import startOfMonth from 'date-fns/startOfMonth';
+import { endOfMonth } from 'date-fns/endOfMonth';
+import { startOfMonth } from 'date-fns/startOfMonth';
 import { BaseOptions } from 'flatpickr/dist/types/options';
 import React, { forwardRef } from 'react';
 import Flatpickr from 'react-flatpickr';

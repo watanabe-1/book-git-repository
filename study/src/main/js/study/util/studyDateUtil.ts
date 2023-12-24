@@ -1,8 +1,8 @@
-import addMonths from 'date-fns/addMonths';
-import getMonth from 'date-fns/getMonth';
-import parse from 'date-fns/parse';
-import startOfMonth from 'date-fns/startOfMonth';
-import subMonths from 'date-fns/subMonths';
+import { addMonths } from 'date-fns/addMonths';
+import { getMonth } from 'date-fns/getMonth';
+import { ParseOptions, parse } from 'date-fns/parse';
+import { startOfMonth } from 'date-fns/startOfMonth';
+import { subMonths } from 'date-fns/subMonths';
 
 /**
  * date型文字列をパーズする
@@ -15,13 +15,7 @@ import subMonths from 'date-fns/subMonths';
 export function parseDate(
   dateString: string,
   formatString: string,
-  options?: {
-    locale?: Locale;
-    weekStartsOn?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-    firstWeekContainsDate?: 1 | 2 | 3 | 4 | 5 | 6 | 7;
-    useAdditionalWeekYearTokens?: boolean;
-    useAdditionalDayOfYearTokens?: boolean;
-  }
+  options?: ParseOptions
 ): Date {
   return parse(dateString, formatString, new Date(), options);
 }

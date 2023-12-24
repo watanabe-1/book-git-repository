@@ -42,7 +42,7 @@ public class BooksConvertHelper {
       PDFTextStripper stripper = new PDFTextStripper() {
         // 数値は後ろ、文字列は前の位置を指定
         // 先頭から、後ろ、後ろ、前、前、前、前、後ろ、後ろの順で値が入っている
-        private List<Float> expectedXs =
+        private final List<Float> expectedXs =
             Arrays.asList((float) 163.0, (float) 190.0, (float) 212.5, (float) 263.8,
                 (float) 326.44,
                 (float) 376.84, (float) 462.5, (float) 531.5359);

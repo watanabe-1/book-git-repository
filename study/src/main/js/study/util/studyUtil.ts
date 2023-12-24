@@ -110,7 +110,7 @@ export function getContextPath(): string {
 /**
  * 画像がない場合の画像パスを取得
  *
- * @return urlのコンテキストパス
+ * @return 画像がない場合の画像パス
  */
 export function getNoImagePath(): string {
   return pathJoin(getContextPath(), '/images/no_image.png');
