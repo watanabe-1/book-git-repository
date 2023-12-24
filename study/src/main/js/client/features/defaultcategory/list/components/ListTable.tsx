@@ -1,15 +1,11 @@
-import { FastField, FieldProps, FormikProps } from 'formik';
-import React, { useMemo, useState } from 'react';
+import { FastField, FieldProps } from 'formik';
+import React, { useMemo } from 'react';
 
 import InputAllButton from './InputAllButton';
-import {
-  ErrorResults,
-  BuildListTableFormObjConfig,
-} from '../../../../../@types/studyUtilType';
+import { BuildListTableFormObjConfig } from '../../../../../@types/studyUtilType';
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
-import { getValueObj } from '../../../../../study/util/studyFormUtil';
 import { fetchPost } from '../../../../../study/util/studyUtil';
 import {
   objArrayToObj,
@@ -29,6 +25,7 @@ import TextBox, {
   getTextBoxTextValue,
   modifierTextBox,
 } from '../../../../components/form/TextBox';
+import { useErrData } from '../../../../hooks/useCommon';
 import {
   useDefaultCategoryInfoSWR,
   useDefaultCategoryListSWR,
@@ -49,10 +46,7 @@ const ListTable = () => {
   } = useDefaultCategoryListSWR();
   // const { data: imageList, initScript: initlImageListScript } =
   //   useImageListSWR();
-  const [errData, setErrData] = useState() as [
-    ErrorResults,
-    React.Dispatch<React.SetStateAction<unknown>>
-  ];
+  const [errData, setErrData] = useErrData();
 
   /**
    * 送信ボタン
@@ -130,10 +124,9 @@ const ListTable = () => {
         modifier: modifierCheckBox,
         table: {
           head: '削除',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.defaultCategory.DELETE];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }) => {
             const flag = info.delete;
+
             return {
               element: (
                 <FastField name={name}>
@@ -163,9 +156,7 @@ const ListTable = () => {
         name: fieldConst.defaultCategory.BOOKS_TYPE,
         table: {
           head: '家計簿タイプ',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.defaultCategory.BOOKS_TYPE];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             const typeList = info.booksTypes;
 
             // console.log(`${name}:${getInitialValue(props, name)}`);
@@ -208,10 +199,7 @@ const ListTable = () => {
         name: fieldConst.defaultCategory.BOOKS_PLACE,
         table: {
           head: '名称',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.defaultCategory.BOOKS_PLACE];
-
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             return {
               element: (
                 <FastField name={name}>
@@ -245,9 +233,7 @@ const ListTable = () => {
         name: fieldConst.defaultCategory.BOOKS_METHOD,
         table: {
           head: '決済方法',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.defaultCategory.BOOKS_METHOD];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             return {
               element: (
                 <FastField name={name}>
@@ -282,9 +268,7 @@ const ListTable = () => {
         modifier: modifierTextBox,
         table: {
           head: '金額(最小)',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.defaultCategory.BOOKS_AMMOUNT_MIN];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             return {
               element: (
                 <FastField name={name}>
@@ -319,9 +303,7 @@ const ListTable = () => {
         modifier: modifierTextBox,
         table: {
           head: '金額(最大)',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.defaultCategory.BOOKS_AMMOUNT_MAX];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             return {
               element: (
                 <FastField name={name}>
@@ -355,10 +337,9 @@ const ListTable = () => {
         name: fieldConst.defaultCategory.CAT_CODE,
         table: {
           head: 'カテゴリー',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.defaultCategory.CAT_CODE];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             const typeList = info.categories;
+
             return {
               element: (
                 <FastField name={name}>
@@ -397,9 +378,7 @@ const ListTable = () => {
         modifier: modifierTextBox,
         table: {
           head: '優先度',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.defaultCategory.PRIORITY];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             return {
               element: (
                 <FastField name={name}>
@@ -434,10 +413,9 @@ const ListTable = () => {
         modifier: modifierCheckBox,
         table: {
           head: '正規表現',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.defaultCategory.REGEX_ENABLED];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             const flag = info.regexEnabled;
+
             return {
               element: (
                 <FastField name={name}>

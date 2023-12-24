@@ -236,9 +236,34 @@ export type BuildListTableFormObjConfig = {
     modifier?: (value?: unknown) => unknown;
     table: {
       head: string;
+      /**
+       * cellを取得
+       *
+       * @param cellField cellに関係する値
+       * @param cellForm  form全体に関係する値
+       * @returns
+       */
       getCell: (
-        props: FormikProps<?>,
-        names: unknown
+        cellField: {
+          /**cellの値 */
+          value;
+          /** cellの値の初期値 */
+          initialValue;
+          /** cellのname */
+          name: string;
+        },
+        cellForm: {
+          /** formikのプロップス */
+          props: FormikProps<?>;
+          /** listのindexに応じたnameをつめたオブジェクト */
+          names: unknown;
+          /**
+           * names(listのindexに応じたname)から特定のnameを取得
+           *
+           * @param key
+           */
+          getName: (key: string) => string;
+        }
       ) => {
         element: JSX.Element;
         value: unknown;

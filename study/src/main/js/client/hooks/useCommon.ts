@@ -4,7 +4,7 @@ import useSWR, { SWRConfiguration, mutate, unstable_serialize } from 'swr';
 import { v4 as uuidv4 } from 'uuid';
 
 import { OnServerApi } from '../../@types/studyApi';
-import { CommonUi } from '../../@types/studyUtilType';
+import { CommonUi, ErrorResults } from '../../@types/studyUtilType';
 import { urlConst } from '../../constant/urlConstant';
 import { fetchGet } from '../../study/util/studyUtil';
 import { onServer } from '../on-server';
@@ -158,4 +158,16 @@ export const useWindowSize = () => {
   }, []);
 
   return size;
+};
+
+/**
+ * エラーデータ用state
+ *
+ * @returns
+ */
+export const useErrData = () => {
+  return useState() as [
+    ErrorResults,
+    React.Dispatch<React.SetStateAction<unknown>>
+  ];
 };

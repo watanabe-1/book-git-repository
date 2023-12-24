@@ -4,7 +4,6 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 
-import { ErrorResults } from '../../../../../@types/studyUtilType';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import {
@@ -16,6 +15,7 @@ import SubmitButton from '../../../../components/elements/button/SubmitButton';
 import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import SelectBox from '../../../../components/form/SelectBox';
 import { useDownloadtInfoSWR } from '../../../../hooks/useBooks';
+import { useErrData } from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
 
 /**
@@ -28,10 +28,7 @@ export type BooksDownloadForm = {
 
 const InputForm = () => {
   const { data: info, initScript } = useDownloadtInfoSWR();
-  const [errData, setErrData] = useState() as [
-    ErrorResults,
-    React.Dispatch<React.SetStateAction<unknown>>
-  ];
+  const [errData, setErrData] = useErrData();
   const [isResultLoading, setResultLoading] = useState(false);
 
   /**

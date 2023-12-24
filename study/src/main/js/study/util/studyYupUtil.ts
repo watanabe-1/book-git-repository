@@ -1,6 +1,7 @@
 import { FormikProps } from 'formik/dist/types';
 import { array, object } from 'yup/index';
 
+import { getValueObj } from './studyFormUtil';
 import { isObjEmpty, keyJoin } from './studyUtil';
 import {
   ErrorResults,
@@ -539,7 +540,27 @@ export function buildListTableFormObj(
             // console.log(v.name);
             // console.log(names);
             // console.log(props.getFieldProps(names[v.name]).value);
-            const cellObj = v.table.getCell(props, names);
+
+            /**
+             * names(listのindexに応じたname)から特定のnameを取得
+             *
+             * @param key
+             */
+            const getName = (key: string) => {
+              return names[key];
+            };
+
+            const name = getName(v.name);
+            const { value, initialValue } = getValueObj(props, v.name);
+            const cellField = { value, initialValue, name };
+
+            const cellForm = {
+              props,
+              names,
+              getName,
+            };
+
+            const cellObj = v.table.getCell(cellField, cellForm);
 
             return {
               name: v.name,

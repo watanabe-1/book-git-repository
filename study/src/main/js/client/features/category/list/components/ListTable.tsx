@@ -1,17 +1,11 @@
-import { FastField, Field, FieldProps, FormikProps } from 'formik';
-import React, { useMemo, useState } from 'react';
+import { FastField, Field, FieldProps } from 'formik';
+import React, { useMemo } from 'react';
 
-import {
-  ErrorResults,
-  BuildListTableFormObjConfig,
-} from '../../../../../@types/studyUtilType';
+import { BuildListTableFormObjConfig } from '../../../../../@types/studyUtilType';
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
-import {
-  getInputFile,
-  getValueObj,
-} from '../../../../../study/util/studyFormUtil';
+import { getInputFile } from '../../../../../study/util/studyFormUtil';
 import { fetchPost, keyJoin } from '../../../../../study/util/studyUtil';
 import {
   objArrayToObj,
@@ -47,6 +41,7 @@ import {
   useCategoryListSWR,
   useImageListSWR,
 } from '../../../../hooks/useCategory';
+import { useErrData } from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
 
 /**
@@ -62,10 +57,7 @@ const ListTable = () => {
   } = useCategoryListSWR();
   const { data: imageList, initScript: initlImageListScript } =
     useImageListSWR();
-  const [errData, setErrData] = useState() as [
-    ErrorResults,
-    React.Dispatch<React.SetStateAction<unknown>>
-  ];
+  const [errData, setErrData] = useErrData();
 
   /**
    * 送信ボタン
@@ -125,9 +117,7 @@ const ListTable = () => {
         modifier: modifierCheckBox,
         table: {
           head: '削除',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.category.DELETE];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }) => {
             const flag = info.delete;
             return {
               element: (
@@ -169,9 +159,7 @@ const ListTable = () => {
         name: fieldConst.category.CAT_NAME,
         table: {
           head: 'カテゴリー名',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.category.CAT_NAME];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             return {
               element: (
                 <FastField name={name}>
@@ -206,10 +194,9 @@ const ListTable = () => {
         name: fieldConst.category.CAT_TYPE,
         table: {
           head: 'カテゴリータイプ',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.category.CAT_TYPE];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             const typeList = info.catTypes;
+
             return {
               element: (
                 <FastField name={name}>
@@ -242,9 +229,7 @@ const ListTable = () => {
         modifier: modifierTextBox,
         table: {
           head: 'メモ',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.category.NOTE];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             return {
               element: (
                 <FastField name={name}>
@@ -272,10 +257,9 @@ const ListTable = () => {
         name: fieldConst.category.IMG_TYPE,
         table: {
           head: '画像タイプ',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.category.IMG_TYPE];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             const typeList = info.imgTypes;
+
             return {
               element: (
                 <FastField name={name}>
@@ -308,9 +292,7 @@ const ListTable = () => {
         name: CATEGORY_IMGIDS_IMGID,
         table: {
           head: '画像ID',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[CATEGORY_IMGIDS_IMGID];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props, getName }) => {
             return {
               element: (
                 <>
@@ -334,11 +316,11 @@ const ListTable = () => {
                             setImage={(image) => {
                               props.setFieldValue(name, image.imgId);
                               props.setFieldValue(
-                                names[CATEGORY_IMGIDS_IMGPATH],
+                                getName(CATEGORY_IMGIDS_IMGPATH),
                                 image.imgPath
                               );
                               props.setFieldValue(
-                                names[CATEGORY_IMGIDS_IMGNAME],
+                                getName(CATEGORY_IMGIDS_IMGNAME),
                                 image.imgName
                               );
                             }}
@@ -360,10 +342,9 @@ const ListTable = () => {
         modifier: modifierCheckBox,
         table: {
           head: 'アクティブフラグ',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.category.ACTIVE];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             const flag = info.active;
+
             return {
               element: (
                 <FastField name={name}>
@@ -398,9 +379,7 @@ const ListTable = () => {
         name: fieldConst.category.CAT_ICON,
         table: {
           head: '画像',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.category.CAT_ICON];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props, getName }) => {
             return {
               element: (
                 // 他の入力項目から変更されることがある項目のためFastFieldではなくFieldを使用
@@ -415,11 +394,11 @@ const ListTable = () => {
                         error={meta.error}
                         dirty={props.dirty}
                         initialPath={
-                          props.getFieldProps(names[CATEGORY_IMGIDS_IMGPATH])
+                          props.getFieldProps(getName(CATEGORY_IMGIDS_IMGPATH))
                             .value
                         }
                         initialFileName={
-                          props.getFieldProps(names[CATEGORY_IMGIDS_IMGNAME])
+                          props.getFieldProps(getName(CATEGORY_IMGIDS_IMGNAME))
                             .value
                         }
                         onChange={(e) =>

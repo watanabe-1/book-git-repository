@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 
 import { Context } from './Content';
-import { ErrorResults, Category } from '../../../../../@types/studyUtilType';
+import { Category } from '../../../../../@types/studyUtilType';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import { getInputFile } from '../../../../../study/util/studyFormUtil';
@@ -19,6 +19,7 @@ import SelectBox from '../../../../components/form/SelectBox';
 import TextArea from '../../../../components/form/TextArea';
 import TextBox from '../../../../components/form/TextBox';
 import { useCategoryInfoSWR } from '../../../../hooks/useCategory';
+import { useErrData } from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
 
 type BasicProps = {
@@ -28,10 +29,7 @@ type BasicProps = {
 
 const Basic: React.FC<BasicProps> = (props) => {
   const { data: info, initScript } = useCategoryInfoSWR();
-  const [errData, setErrData] = useState() as [
-    ErrorResults,
-    React.Dispatch<React.SetStateAction<unknown>>
-  ];
+  const [errData, setErrData] = useErrData();
   const [isConfirmLoading, setConfirmLoading] = useState(false);
   // コンテキストに保存しておきたいデータ
   const { currentState, setCurrentState } = useContext(Context);

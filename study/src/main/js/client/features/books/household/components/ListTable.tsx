@@ -1,16 +1,14 @@
-import { FastField, FieldProps, FormikProps } from 'formik';
-import React, { useMemo, useState } from 'react';
+import { FastField, FieldProps } from 'formik';
+import React, { useMemo } from 'react';
 import Container from 'react-bootstrap/Container';
 
 import {
   Books,
   BuildListTableFormObjConfig,
-  ErrorResults,
 } from '../../../../../@types/studyUtilType';
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
-import { getValueObj } from '../../../../../study/util/studyFormUtil';
 import {
   fetchPost,
   keyJoin,
@@ -41,7 +39,7 @@ import {
   useHouseholdDataSWR,
   useHouseholdChartInfoStaticKeySWR,
 } from '../../../../hooks/useBooks';
-import { useCommonInfoSWR } from '../../../../hooks/useCommon';
+import { useCommonInfoSWR, useErrData } from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
 import { buildDataParam, buildInfoParam } from '../functions/param';
 import { useDateParam } from '../hooks/useParam';
@@ -78,10 +76,7 @@ const ListTable: React.FC<ListTableProps> = ({
 
   const { mutate: setChartInfoStaticKey } = useHouseholdChartInfoStaticKeySWR();
 
-  const [errData, setErrData] = useState() as [
-    ErrorResults,
-    React.Dispatch<React.SetStateAction<unknown>>
-  ];
+  const [errData, setErrData] = useErrData();
 
   const booksList = pbooksList ? pbooksList : booksFormList.booksDataList;
 
@@ -169,9 +164,7 @@ const ListTable: React.FC<ListTableProps> = ({
         modifier: modifierCheckBox,
         table: {
           head: '削除',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.books.DELETE];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }) => {
             const flag = info.delete;
             return {
               element: (
@@ -207,15 +200,13 @@ const ListTable: React.FC<ListTableProps> = ({
         name: fieldConst.books.BOOKS_DATE,
         table: {
           head: '日付',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.books.BOOKS_DATE];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props, getName }) => {
             return {
               element: (
                 <FastField name={name}>
                   {({ field, meta }: FieldProps<string>) => {
                     const dateFormat = props.getFieldProps(
-                      names[fieldConst.books.BOOKS_DATE_FORMAT]
+                      getName(fieldConst.books.BOOKS_DATE_FORMAT)
                     ).value;
                     return (
                       <DayPickrBox
@@ -248,9 +239,7 @@ const ListTable: React.FC<ListTableProps> = ({
         name: fieldConst.books.BOOKS_PLACE,
         table: {
           head: '名称',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.books.BOOKS_PLACE];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             return {
               element: (
                 <FastField name={name}>
@@ -295,15 +284,7 @@ const ListTable: React.FC<ListTableProps> = ({
         name: keyJoin(fieldConst.books.CAT_CODES, fieldConst.category.CAT_CODE),
         table: {
           head: 'カテゴリー',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name =
-              names[
-                keyJoin(
-                  fieldConst.books.CAT_CODES,
-                  fieldConst.category.CAT_CODE
-                )
-              ];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props, getName }) => {
             const typeList = info.categoryTypes;
             return {
               element: (
@@ -332,7 +313,7 @@ const ListTable: React.FC<ListTableProps> = ({
                             onBlur={(e) => {
                               // どちらを更新したか紛らわしいので、両方更新
                               props.setFieldValue(
-                                names[fieldConst.books.CAT_CODE],
+                                getName(fieldConst.books.CAT_CODE),
                                 e.target.value
                               );
                               field.onChange(e);
@@ -367,9 +348,7 @@ const ListTable: React.FC<ListTableProps> = ({
         name: fieldConst.books.BOOKS_METHOD,
         table: {
           head: '決済方法',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.books.BOOKS_METHOD];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             return {
               element: (
                 <FastField name={name}>
@@ -404,9 +383,7 @@ const ListTable: React.FC<ListTableProps> = ({
         modifier: modifierTextBox,
         table: {
           head: '金額',
-          getCell: (props: FormikProps<unknown>, names: unknown) => {
-            const name = names[fieldConst.books.BOOKS_AMMOUNT];
-            const { value, initialValue } = getValueObj(props, name);
+          getCell: ({ value, initialValue, name }, { props }) => {
             return {
               element: (
                 <FastField name={name}>

@@ -5,7 +5,6 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 
-import { ErrorResults } from '../../../../../@types/studyUtilType';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import { getInputFile } from '../../../../../study/util/studyFormUtil';
@@ -15,6 +14,7 @@ import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import FileBox from '../../../../components/form/FileBox';
 import SelectBox from '../../../../components/form/SelectBox';
 import { useUploadtInfoSWR } from '../../../../hooks/useBooks';
+import { useErrData } from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
 
 /**
@@ -27,10 +27,7 @@ export type BooksUplodeForm = {
 
 const InputForm = (props: { handleNext: () => void }) => {
   const { data: info, initScript } = useUploadtInfoSWR();
-  const [errData, setErrData] = useState() as [
-    ErrorResults,
-    React.Dispatch<React.SetStateAction<unknown>>
-  ];
+  const [errData, setErrData] = useErrData();
   const [isResultLoading, setResultLoading] = useState(false);
   //const [validated, setValidated] = useState(false);
   const buttonElement = useRef<HTMLButtonElement>(null);
