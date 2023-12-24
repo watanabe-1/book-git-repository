@@ -11,6 +11,8 @@ type ImageBoxProps = {
   name: string;
   /** ファイルボックスの値 */
   value?: File;
+  /** 初期値(valueとの比較用) */
+  initialValue?: string | number | string;
   /** 選択できるデフォルトファイルタイプ */
   accept?: string;
   /** imageパス */
@@ -52,6 +54,7 @@ const ImageBox: React.FC<ImageBoxProps> = ({
   title = null,
   name,
   value = null,
+  initialValue,
   accept = 'image/*',
   initialPath = null,
   initialFileName = null,
@@ -82,6 +85,7 @@ const ImageBox: React.FC<ImageBoxProps> = ({
         name={name}
         accept={accept}
         value={value}
+        initialValue={initialValue}
         textValue={textValue}
         onChange={onChange}
         onBlur={onBlur}

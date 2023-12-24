@@ -9,6 +9,7 @@ import {
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
+import { getValueObj } from '../../../../../study/util/studyFormUtil';
 import { fetchPost } from '../../../../../study/util/studyUtil';
 import {
   objArrayToObj,
@@ -131,7 +132,7 @@ const ListTable = () => {
           head: '削除',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.DELETE];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             const flag = info.delete;
             return {
               element: (
@@ -141,6 +142,7 @@ const ListTable = () => {
                       <CheckBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         flag={flag}
                         onChange={field.onChange}
                       />
@@ -163,8 +165,12 @@ const ListTable = () => {
           head: '家計簿タイプ',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.BOOKS_TYPE];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             const typeList = info.booksTypes;
+
+            // console.log(`${name}:${getInitialValue(props, name)}`);
+            // console.log(props.initialValues);
+
             return {
               element: (
                 <FastField name={name}>
@@ -173,6 +179,7 @@ const ListTable = () => {
                       <SelectBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -204,7 +211,7 @@ const ListTable = () => {
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.BOOKS_PLACE];
 
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -213,6 +220,7 @@ const ListTable = () => {
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -239,7 +247,7 @@ const ListTable = () => {
           head: '決済方法',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.BOOKS_METHOD];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -248,6 +256,7 @@ const ListTable = () => {
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -275,7 +284,7 @@ const ListTable = () => {
           head: '金額(最小)',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.BOOKS_AMMOUNT_MIN];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -284,6 +293,7 @@ const ListTable = () => {
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -311,7 +321,7 @@ const ListTable = () => {
           head: '金額(最大)',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.BOOKS_AMMOUNT_MAX];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -320,6 +330,7 @@ const ListTable = () => {
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -346,7 +357,7 @@ const ListTable = () => {
           head: 'カテゴリー',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.CAT_CODE];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             const typeList = info.categories;
             return {
               element: (
@@ -356,6 +367,7 @@ const ListTable = () => {
                       <SelectBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -387,7 +399,7 @@ const ListTable = () => {
           head: '優先度',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.PRIORITY];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -396,6 +408,7 @@ const ListTable = () => {
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -423,7 +436,7 @@ const ListTable = () => {
           head: '正規表現',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.defaultCategory.REGEX_ENABLED];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             const flag = info.regexEnabled;
             return {
               element: (
@@ -433,6 +446,7 @@ const ListTable = () => {
                       <CheckBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         flag={flag}
                         dirty={props.dirty}
                         onChange={field.onChange}

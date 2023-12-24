@@ -86,7 +86,14 @@ const InputForm = () => {
         }
       >
         {(props: FormikProps<BooksDownloadForm>) => {
-          const { values, touched, errors, handleChange, handleSubmit } = props;
+          const {
+            values,
+            initialValues,
+            touched,
+            errors,
+            handleChange,
+            handleSubmit,
+          } = props;
           return (
             <Form noValidate onSubmit={handleSubmit}>
               <Row g="3">
@@ -95,6 +102,7 @@ const InputForm = () => {
                     title="収入or支出"
                     name={fieldConst.books.BOOKS_TYPE}
                     value={values.booksType}
+                    initialValue={initialValues.booksType}
                     typeList={info.booksTypes}
                     validate
                     error={errors.booksType}
@@ -109,6 +117,7 @@ const InputForm = () => {
                     title="出力年選択"
                     name={fieldConst.books.BOOKS_YEAR}
                     value={values.booksYear}
+                    initialValue={initialValues.booksYear}
                     typeList={info.booksYears}
                     validate
                     error={errors.booksYear}

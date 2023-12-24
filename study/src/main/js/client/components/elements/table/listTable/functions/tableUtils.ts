@@ -42,8 +42,8 @@ export const filterRows = (
 ) => {
   if (!isFilter) return rows;
 
-  return rows.map((row) => {
-    row.hidden = !columns.every((column) => {
+  return rows.filter((row) => {
+    return columns.every((column) => {
       if (column.filterValue === '') {
         return true;
       }
@@ -72,8 +72,6 @@ export const filterRows = (
 
       return rowValue.includes(colValaue);
     });
-
-    return row;
   });
 };
 
@@ -142,7 +140,6 @@ export const filterSuggestions = (
 
   return (
     rows
-      .filter((row) => !row.hidden)
       .map((row) => findCell(row, column.name).textValue)
       // 重複除外
       .filter((textValue, index, self) => self.indexOf(textValue) === index)

@@ -12,6 +12,8 @@ type RadioBtnProps = {
   name: string;
   /** テキストボックスの値 */
   value: string;
+  /** 初期値(valueとの比較用) */
+  initialValue: string | number | string;
   /** 選択肢のリスト */
   typeList: Type[] | string[];
   /** テキストボックスの値が変更されたときのハンドラ関数 */
@@ -64,6 +66,7 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
   title = null,
   name,
   value,
+  initialValue,
   typeList,
   onChange,
   onBlur,
@@ -85,6 +88,7 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
       titleBr={titleBr}
       name={name}
       value={value || ''}
+      initialValue={initialValue || ''}
       textValue={textValue ? textValue : ''}
       onChange={onChange}
       onBlur={onBlur}

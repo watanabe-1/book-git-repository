@@ -31,14 +31,17 @@ const SimpleText: React.FC<SimpleTextProps> = ({
   textMaxLength = 30,
 }) => {
   const str = String(value);
-  const text =
-    textMaxLength && value && str.length > textMaxLength
-      ? str.substring(0, textMaxLength) + '…'
-      : value;
+  const isTruncated = textMaxLength && value && str.length > textMaxLength;
+  const text = isTruncated ? str.substring(0, textMaxLength) + '…' : value;
   const divClass = cn('text-fit', 'text-wrap', textColorClass);
 
   return (
-    <div onClick={onClick} onMouseDown={onMouseDown}>
+    <div
+      onClick={onClick}
+      onMouseDown={onMouseDown}
+      title={isTruncated ? str : undefined}
+      aria-label={str}
+    >
       {title && <label>{title}</label>}
       <div hidden={hidden} id={name} className={divClass}>
         {text}

@@ -113,7 +113,14 @@ const Basic: React.FC<BasicProps> = (props) => {
         }
       >
         {(props: FormikProps<Category>) => {
-          const { values, touched, errors, handleChange, handleSubmit } = props;
+          const {
+            values,
+            touched,
+            errors,
+            handleChange,
+            handleSubmit,
+            initialValues,
+          } = props;
           return (
             <Form noValidate onSubmit={handleSubmit}>
               <Row g="3">
@@ -122,6 +129,7 @@ const Basic: React.FC<BasicProps> = (props) => {
                     title="カテゴリーコード"
                     name={fieldConst.category.CAT_CODE}
                     value={values.catCode}
+                    initialValue={initialValues.catCode}
                     validate
                     touched={touched.catCode}
                     error={errors.catCode}
@@ -133,6 +141,7 @@ const Basic: React.FC<BasicProps> = (props) => {
                     title="カテゴリー名"
                     name={fieldConst.category.CAT_NAME}
                     value={values.catName}
+                    initialValue={initialValues.catName}
                     validate
                     touched={touched.catName}
                     error={errors.catName}
@@ -144,6 +153,7 @@ const Basic: React.FC<BasicProps> = (props) => {
                     title="メモ"
                     name={fieldConst.category.NOTE}
                     value={values.note}
+                    initialValue={initialValues.note}
                     onChange={handleChange}
                   />
                 </Col>
@@ -152,6 +162,7 @@ const Basic: React.FC<BasicProps> = (props) => {
                     title="画像タイプ"
                     name={fieldConst.category.IMG_TYPE}
                     value={values.imgType}
+                    initialValue={initialValues.imgType}
                     typeList={info.imgTypes}
                     onChange={handleChange}
                   />
@@ -164,6 +175,7 @@ const Basic: React.FC<BasicProps> = (props) => {
                     title="カテゴリータイプ"
                     name={fieldConst.category.CAT_TYPE}
                     value={values.catType}
+                    initialValue={initialValues.catType}
                     typeList={info.catTypes}
                     onChange={handleChange}
                   />
@@ -172,6 +184,7 @@ const Basic: React.FC<BasicProps> = (props) => {
                   <CheckBox
                     name={fieldConst.category.ACTIVE}
                     value={values.active}
+                    initialValue={initialValues.active}
                     flag={info.active}
                     onChange={handleChange}
                     isLabelTextValue={false}

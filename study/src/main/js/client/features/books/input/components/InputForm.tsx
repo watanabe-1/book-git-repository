@@ -94,6 +94,7 @@ const InputForm = (props: { handleNext: () => void }) => {
         {(props: FormikProps<BooksUplodeForm>) => {
           const {
             values,
+            initialValues,
             touched,
             errors,
             handleChange,
@@ -108,6 +109,7 @@ const InputForm = (props: { handleNext: () => void }) => {
                     title="収入or支出"
                     name={fieldConst.books.BOOKS_TYPE}
                     value={values.booksType}
+                    initialValue={initialValues.booksType}
                     typeList={info.booksTypes}
                     validate
                     error={errors.booksType}

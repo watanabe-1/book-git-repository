@@ -11,6 +11,8 @@ type TextAreaProps = {
   name: string;
   /** テキストボックスの値 */
   value: string | number | string[];
+  /** 初期値(valueとの比較用) */
+  initialValue: string | number | string;
   /** テキストボックスの値が変更されたときのハンドラ関数 */
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
@@ -54,6 +56,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   title = null,
   name,
   value,
+  initialValue,
   onChange,
   onBlur,
   hidden = false,
@@ -71,6 +74,7 @@ const TextArea: React.FC<TextAreaProps> = ({
       title={title}
       name={name}
       value={value || ''}
+      initialValue={initialValue || ''}
       textValue={textValue}
       onChange={onChange}
       onBlur={onBlur}

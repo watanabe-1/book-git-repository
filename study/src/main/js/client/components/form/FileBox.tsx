@@ -11,6 +11,8 @@ type FileBoxProps = {
   name: string;
   /** ファイルボックスの値 */
   value?: File;
+  /** 初期値(valueとの比較用) */
+  initialValue?: string | number | string;
   /** テキストとして表示する値 */
   textValue?: string;
   /** 選択できるデフォルトファイルタイプ */
@@ -59,6 +61,7 @@ const FileBox: React.FC<FileBoxProps> = ({
   name,
   accept,
   value = null,
+  initialValue = null,
   textValue: pTextValue,
   onChange,
   onBlur,
@@ -77,7 +80,8 @@ const FileBox: React.FC<FileBoxProps> = ({
     <FormControl
       title={title}
       name={name}
-      value={value || ''}
+      value={value}
+      initialValue={initialValue}
       textValue={textValue}
       onChange={onChange}
       onBlur={onBlur}
@@ -88,6 +92,7 @@ const FileBox: React.FC<FileBoxProps> = ({
       dirty={dirty}
       isOnClickEditable={isOnClickEditable}
       isReadonly={isReadonly}
+      isNotSetValue
     >
       <Form.Control type={type} accept={accept} />
     </FormControl>

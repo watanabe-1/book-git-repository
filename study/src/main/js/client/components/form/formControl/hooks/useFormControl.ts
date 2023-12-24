@@ -1,4 +1,11 @@
-import React, { useState, useEffect, useRef, useMemo, ReactNode } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useMemo,
+  ReactNode,
+  useCallback,
+} from 'react';
 import isEqual from 'react-fast-compare';
 
 import { TextColor } from '../../../../../@types/studyBootstrap';
@@ -13,6 +20,7 @@ import {
 export const useFormControl = ({
   name,
   value,
+  initialValue,
   textValue,
   onChange,
   onBlur,
@@ -25,10 +33,10 @@ export const useFormControl = ({
   dirty,
   isOnClickEditable,
   isReadonly,
+  isNotSetValue,
   children,
 }: FormControlProps) => {
   const [text, setText] = useState(value);
-  const [initialValue, setInitialValue] = useState(value);
   const [isEditing, setIsEditing] = useState(!isReadonly && !isOnClickEditable);
   const [hasChanges, setHasChanges] = useState(false);
   const [isInitialByOnEditable, setIsInitialByOnEditable] = useState(false);
@@ -62,28 +70,37 @@ export const useFormControl = ({
     [childArray]
   );
 
-  const handleSetIsEditing = (value: boolean) => {
-    setIsEditing(value);
-    // 初めて編集可能になったときのみ
-    if (value && !isInitialByOnEditable) {
-      setIsInitialByOnEditable(true);
-    }
-  };
+  const handleSetIsEditing = useCallback(
+    (value: boolean) => {
+      setIsEditing(value);
+      // 初めて編集可能になったときのみ
+      if (value && !isInitialByOnEditable) {
+        setIsInitialByOnEditable(true);
+      }
+    },
+    [isInitialByOnEditable]
+  );
 
-  const handleSetHasChanges = (value: boolean) => {
-    setHasChanges(value);
-    // 初めて対象が変更になったときのみ
-    if (value && !isInitialByOnEditable) {
-      setIsInitialByOnEditable(true);
-    }
-  };
+  const handleSetHasChanges = useCallback(
+    (value: boolean) => {
+      setHasChanges(value);
+      // 初めて対象が変更になったときのみ
+      if (value && !isInitialByOnEditable) {
+        setIsInitialByOnEditable(true);
+      }
+    },
+    [isInitialByOnEditable]
+  );
 
-  const handleChange = (event: React.ChangeEvent<FormControlHTMLElement>) => {
-    setText(event.target.value);
-    onChange?.(event);
-  };
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<FormControlHTMLElement>) => {
+      setText(event.target.value);
+      onChange?.(event);
+    },
+    [onChange]
+  );
 
-  const handleFocus = () => {
+  const handleFocus = useCallback(() => {
     // handleFocus関数が猶予時間内に呼ばれた場合
     // (猶予時間内にchildrenからchildrenに
     // フォーカスが移った時)
@@ -92,48 +109,51 @@ export const useFormControl = ({
       clearTimeout(blurTimeoutRef.current);
     }
     //console.log('call handleFocus');
-  };
+  }, [isOnClickEditable, blurTimeoutRef]);
 
-  const handleBlur = (
-    event: React.FocusEvent<FormControlHTMLElement, Element>
-  ) => {
-    if (isOnClickEditable) {
-      // razioボタンのようなchildrenが複数存在
-      // するときに、childrenからchildrenに
-      // フォーカスを移したとき
-      // (片側のchildrenにフォーカスが当たっている
-      // ときに、もう片側のchildrenにフォーカスを
-      // クリックなどで移したとき)
-      // はisEditing→falseにしたくないため
-      // 猶予時間を設ける
-      // handleFocus関数が猶予時間内に呼ばれた場合
-      // (猶予時間内にchildrenからchildrenに
-      // フォーカスが移った時)
-      // はisEditing→falseに更新しない
-      blurTimeoutRef.current = setTimeout(() => {
-        //console.log('call blurTimeoutRef.current');
-        handleSetIsEditing(false);
-      }, 100);
-    }
-    onBlur?.(event);
-  };
+  const handleBlur = useCallback(
+    (event: React.FocusEvent<FormControlHTMLElement, Element>) => {
+      if (isOnClickEditable) {
+        // razioボタンのようなchildrenが複数存在
+        // するときに、childrenからchildrenに
+        // フォーカスを移したとき
+        // (片側のchildrenにフォーカスが当たっている
+        // ときに、もう片側のchildrenにフォーカスを
+        // クリックなどで移したとき)
+        // はisEditing→falseにしたくないため
+        // 猶予時間を設ける
+        // handleFocus関数が猶予時間内に呼ばれた場合
+        // (猶予時間内にchildrenからchildrenに
+        // フォーカスが移った時)
+        // はisEditing→falseに更新しない
+        blurTimeoutRef.current = setTimeout(() => {
+          //console.log('call blurTimeoutRef.current');
+          handleSetIsEditing(false);
+        }, 100);
+      }
+      onBlur?.(event);
+    },
+    [isOnClickEditable, blurTimeoutRef, handleSetIsEditing, onBlur]
+  );
 
-  const handleTextClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    //console.log('call handleTextClick');
-    if (!isEditing && isOnClickEditable && !isReadonly) {
-      handleSetIsEditing(isOnClickEditable);
-    }
-    onTextClick?.(event);
-  };
+  const handleTextClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      //console.log('call handleTextClick');
+      if (!isEditing && isOnClickEditable && !isReadonly) {
+        handleSetIsEditing(isOnClickEditable);
+      }
+      onTextClick?.(event);
+    },
+    [isEditing, isOnClickEditable, isReadonly, handleSetIsEditing, onTextClick]
+  );
 
-  const handleChildClick = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    //console.log('call handleChildClick');
-    onClick?.(event, elementRefs);
-  };
+  const handleChildClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      //console.log('call handleChildClick');
+      onClick?.(event, elementRefs);
+    },
+    [onClick]
+  );
 
   /**
    * 速度改善のため
@@ -144,10 +164,13 @@ export const useFormControl = ({
    * @param callBack レンダリング対象
    * @returns
    */
-  const renderInitialByOnEditable = (callBack: () => ReactNode) =>
-    !isInitialByOnEditable && (isOnClickEditable || isReadonly)
-      ? null
-      : callBack();
+  const renderInitialByOnEditable = useCallback(
+    (callBack: () => ReactNode) =>
+      !isInitialByOnEditable && (isOnClickEditable || isReadonly)
+        ? null
+        : callBack(),
+    [isInitialByOnEditable, isOnClickEditable, isReadonly]
+  );
 
   useEffect(() => {
     // console.log(`name:${name}`);
@@ -188,15 +211,13 @@ export const useFormControl = ({
     if (!dirty) {
       // 編集済み判定フラグをリセット
       handleSetHasChanges(false);
-      // 初期値を更新
-      setInitialValue(value);
     }
   }, [dirty]);
 
   const isValid = validate && touched && !error;
   const isInvalid = validate && !!error;
   const trimText = simpleTrim(textValue);
-  const trimValue = simpleTrim(value.toString());
+  const trimValue = simpleTrim(value?.toString());
   const trimTextBase = trimText || trimValue;
   // 基本的には必ずTextValueには値が入る想定だが、ない場合も考慮して一応変換
   const simpleTextValue = trimTextBase || '値がありません';
@@ -219,7 +240,7 @@ export const useFormControl = ({
     style: { display: isEditing ? '' : 'none' },
   } as FormControlChildrenProps;
 
-  if (!isArrayChildren) {
+  if (!isArrayChildren && !isNotSetValue) {
     childrenProps.value = text;
   }
 

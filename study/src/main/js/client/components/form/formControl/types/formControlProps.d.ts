@@ -7,6 +7,8 @@ export type FormControlProps = {
   name: string;
   /** テキストボックスの値 */
   value: string | number | string[] | File;
+  /** 初期値(valueとの比較用) */
+  initialValue: string | number | string[] | File;
   /** テキストとして表示する値 */
   textValue?: string;
   /** テキストの最大桁数 */
@@ -50,6 +52,8 @@ export type FormControlProps = {
   isOnClickEditable?: boolean;
   /** 読み取り専用にするか */
   isReadonly?: boolean;
+  /** valueをセットしない */
+  isNotSetValue?: boolean;
   /** 子コンポーネント react bootstrap form elementを想定 */
   children: React.ReactElement | React.ReactElement[];
 };

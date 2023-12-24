@@ -12,6 +12,8 @@ type SelectBoxProps = {
   name: string;
   /** テキストボックスの値 */
   value: string;
+  /** 初期値(valueとの比較用) */
+  initialValue: string | number | string;
   /** 選択肢のリスト */
   typeList: Type[] | string[];
   /** 選択肢の先頭に空の選択肢を追加するかどうか */
@@ -79,6 +81,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
   title = null,
   name,
   value,
+  initialValue,
   typeList,
   isUnshiftEmpty = false,
   onChange,
@@ -99,6 +102,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
       title={title}
       name={name}
       value={value || ''}
+      initialValue={initialValue || ''}
       textValue={textValue}
       onChange={onChange}
       onBlur={onBlur}

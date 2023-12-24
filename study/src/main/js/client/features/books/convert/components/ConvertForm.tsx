@@ -91,7 +91,14 @@ const ConvertForm = () => {
         }
       >
         {(props: FormikProps<BooksConvertForm>) => {
-          const { values, touched, errors, handleChange, handleSubmit } = props;
+          const {
+            values,
+            initialValues,
+            touched,
+            errors,
+            handleChange,
+            handleSubmit,
+          } = props;
           return (
             <Form noValidate onSubmit={handleSubmit}>
               <Row g="3">
@@ -100,6 +107,7 @@ const ConvertForm = () => {
                     title="変換するファイルの種類を選択"
                     name={fieldConst.booksConvert.FILE_TYPE}
                     value={values.fileType}
+                    initialValue={initialValues.fileType}
                     typeList={info.fileTypes}
                     validate
                     error={errors.fileType}

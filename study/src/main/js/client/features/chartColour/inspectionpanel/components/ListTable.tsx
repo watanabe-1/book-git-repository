@@ -10,6 +10,7 @@ import {
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
+import { getValueObj } from '../../../../../study/util/studyFormUtil';
 import { fetchPost } from '../../../../../study/util/studyUtil';
 import {
   buildListTableFormObj,
@@ -148,7 +149,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '削除',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.chartColour.DELETE];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             const flag = info.delete;
             return {
               element: (
@@ -158,6 +159,7 @@ const ListTable: React.FC<ListTableProps> = ({
                       <CheckBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         flag={flag}
                         onChange={field.onChange}
                         isReadonly={readonly}
@@ -182,7 +184,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '名称',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.chartColour.TEMPLATE_NAME];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -191,6 +193,7 @@ const ListTable: React.FC<ListTableProps> = ({
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -219,7 +222,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '設定',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.chartColour.ACTIVE];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             const flag = info.active;
             return {
               element: (
@@ -229,6 +232,7 @@ const ListTable: React.FC<ListTableProps> = ({
                       <CheckBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         flag={flag}
                         dirty={props.dirty}
                         onChange={field.onChange}
@@ -252,7 +256,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: 'シード値係数(R)',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.chartColour.SEED_COEFF_R];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -261,6 +265,7 @@ const ListTable: React.FC<ListTableProps> = ({
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -288,7 +293,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: 'シード値係数(G)',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.chartColour.SEED_COEFF_G];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -297,6 +302,7 @@ const ListTable: React.FC<ListTableProps> = ({
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -324,7 +330,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: 'シード値係数(B)',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.chartColour.SEED_COEFF_B];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -333,6 +339,7 @@ const ListTable: React.FC<ListTableProps> = ({
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -360,7 +367,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: 'ユーザー',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.chartColour.USER_ID];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -369,6 +376,7 @@ const ListTable: React.FC<ListTableProps> = ({
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}

@@ -15,6 +15,7 @@ const FormControl: React.FC<FormControlProps> = ({
   titleBr = false,
   name,
   value,
+  initialValue,
   textValue = null,
   textMaxLength = 30,
   onChange,
@@ -29,6 +30,7 @@ const FormControl: React.FC<FormControlProps> = ({
   dirty = false,
   isOnClickEditable = false,
   isReadonly = false,
+  isNotSetValue = false,
   children,
 }) => {
   const {
@@ -43,6 +45,7 @@ const FormControl: React.FC<FormControlProps> = ({
   } = useFormControl({
     name,
     value,
+    initialValue,
     textValue,
     onChange,
     onBlur,
@@ -56,6 +59,7 @@ const FormControl: React.FC<FormControlProps> = ({
     isOnClickEditable,
     isReadonly,
     children,
+    isNotSetValue,
   });
   const uuid = useInitialUUID();
 

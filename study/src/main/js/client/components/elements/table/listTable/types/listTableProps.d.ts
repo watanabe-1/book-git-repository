@@ -11,6 +11,8 @@ export type ListTableProps = {
   isFilter?: boolean;
   /** サジェストをフィルター用検索ボックスに表示するか*/
   isSuggestions?: boolean;
+  /** バーチャルスクロールを行うか */
+  isVirtualScroll?: boolean;
   /** サジェストの表示件数 -数値を指定で全件表示*/
   maxSuggestions?: number;
   /** 正規化してから絞り込みをかけるか(主に半角、全角を区別なく検索できるようにするために使用する想定) */
@@ -19,4 +21,6 @@ export type ListTableProps = {
   caseSensitiveBeforeFilter?: boolean;
   /** ひらがなとかたかなを区別して絞り込みをかけるか*/
   separateHiraganaKatakanaBeforeFilter?: boolean;
+  /** テーブルの行の高さ */
+  rowHight?: number;
 };

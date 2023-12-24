@@ -10,6 +10,7 @@ import {
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
+import { getValueObj } from '../../../../../study/util/studyFormUtil';
 import {
   fetchPost,
   keyJoin,
@@ -170,7 +171,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '削除',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.books.DELETE];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             const flag = info.delete;
             return {
               element: (
@@ -185,6 +186,7 @@ const ListTable: React.FC<ListTableProps> = ({
                       <CheckBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         flag={flag}
                         onChange={field.onChange}
                       />
@@ -207,7 +209,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '日付',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.books.BOOKS_DATE];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -219,6 +221,7 @@ const ListTable: React.FC<ListTableProps> = ({
                       <DayPickrBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         dateFormat={dateFormat}
                         onlyValueMonth
                         validate
@@ -247,7 +250,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '名称',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.books.BOOKS_PLACE];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -267,6 +270,7 @@ const ListTable: React.FC<ListTableProps> = ({
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -299,7 +303,7 @@ const ListTable: React.FC<ListTableProps> = ({
                   fieldConst.category.CAT_CODE
                 )
               ];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             const typeList = info.categoryTypes;
             return {
               element: (
@@ -319,6 +323,7 @@ const ListTable: React.FC<ListTableProps> = ({
                           <SelectBox
                             name={field.name}
                             value={field.value}
+                            initialValue={initialValue}
                             validate
                             touched={meta.touched}
                             error={meta.error}
@@ -364,7 +369,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '決済方法',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.books.BOOKS_METHOD];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -373,6 +378,7 @@ const ListTable: React.FC<ListTableProps> = ({
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}
@@ -400,7 +406,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '金額',
           getCell: (props: FormikProps<unknown>, names: unknown) => {
             const name = names[fieldConst.books.BOOKS_AMMOUNT];
-            const value = props.getFieldProps(name).value;
+            const { value, initialValue } = getValueObj(props, name);
             return {
               element: (
                 <FastField name={name}>
@@ -409,6 +415,7 @@ const ListTable: React.FC<ListTableProps> = ({
                       <TextBox
                         name={field.name}
                         value={field.value}
+                        initialValue={initialValue}
                         validate
                         touched={meta.touched}
                         error={meta.error}

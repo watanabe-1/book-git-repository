@@ -12,6 +12,8 @@ type CheckBoxProps = {
   name: string;
   /** テキストボックスの値 */
   value: string;
+  /** 初期値(valueとの比較用) */
+  initialValue: string | number | string;
   /** フラグ */
   flag: Flag;
   /** テキストボックスの値が変更されたときのハンドラ関数 */
@@ -86,6 +88,7 @@ export const getCheckBoxLabelValue = (
 const CheckBox: React.FC<CheckBoxProps> = ({
   name,
   value,
+  initialValue,
   flag,
   onChange,
   onBlur,
@@ -109,6 +112,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({
     <FormControl
       name={name}
       value={value}
+      initialValue={initialValue}
       textValue={text}
       onChange={onChange}
       onBlur={onBlur}

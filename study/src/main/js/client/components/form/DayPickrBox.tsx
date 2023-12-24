@@ -13,6 +13,8 @@ type DayPickrBoxProps = {
   name: string;
   /** テキストボックスの値 */
   value: string;
+  /** 初期値(valueとの比較用) */
+  initialValue: string | number | string;
   /** テキストボックスの値が変更されたときのハンドラ関数 */
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
@@ -44,6 +46,7 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
   title = null,
   name,
   value: pvalue,
+  initialValue,
   dateFormat,
   onChange,
   onBlur,
@@ -77,6 +80,7 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
         title={title}
         name={name}
         value={value}
+        initialValue={initialValue}
         onChange={onChange}
         onBlur={onBlur}
         onEditing={(refs) => {
