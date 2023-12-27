@@ -103,12 +103,14 @@ module.exports = {
       {
         // 拡張子が.tsで終わるファイルに対して、TypeScriptコンパイラを適用する
         test: /\.ts|tsx$/,
+        // testファイルは除外
+        exclude: /(\.test\.ts?|\.test\.tsx?)$/,
         loader: 'ts-loader',
       },
       {
         // .js は babel を通してブラウザーで動作する JavaScript に変換
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        exclude: /node_modules|(\.test\.js?|\.test\.jsx?)$/,
         use: [
           {
             loader: 'babel-loader',

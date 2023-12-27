@@ -145,6 +145,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '削除',
           getCell: ({ value, initialValue, name }) => {
             const flag = info.delete;
+
             return {
               element: (
                 <FastField name={name}>

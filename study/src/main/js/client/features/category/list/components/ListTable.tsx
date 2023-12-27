@@ -301,6 +301,7 @@ const ListTable = () => {
                       const startIndex = imageList.findIndex(
                         (image) => image.imgId === field.value
                       );
+
                       return (
                         <>
                           <TextBox

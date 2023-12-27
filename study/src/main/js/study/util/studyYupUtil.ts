@@ -1,5 +1,5 @@
 import { FormikProps } from 'formik/dist/types';
-import { array, object } from 'yup/index';
+import { AnyObject, ArraySchema, array, object } from 'yup/index';
 
 import { getValueObj } from './studyFormUtil';
 import { isObjEmpty, keyJoin } from './studyUtil';
@@ -187,54 +187,40 @@ export function extractAndDeleteServerErrMsg(errData: ErrorResult) {
 //   return format(escapeListItemId, args);
 // }
 
+type NestedObject = Record<string, unknown>;
+
 /**
  * オブジェクトの並列探索を行いFormDataに変換
- *
- * @param obj 対象
+ * @param obj 変換対象オブジェクト
  * @return FormData
  */
-export function objToFormData(obj: object) {
-  const data = new FormData();
-  const stack = [];
+export function objToFormData(obj: NestedObject): FormData {
+  const formData = new FormData();
+  //console.log(obj);
 
-  const test = {};
-
-  stack.push(obj);
-
-  while (stack.length) {
-    for (const j in stack[0]) {
-      if (
-        stack[0][j] &&
-        stack[0][j].constructor === Object &&
-        !stack[0][j].length
-      ) {
-        // console.log(`pushu側${j} : ${stack[0][j]}`);
-        const childStack = {};
-        for (const k in stack[0][j]) {
-          // 再帰的に検索する場合key情報を引き継ぐ
-          childStack[keyJoin(j, k)] = stack[0][j][k];
-        }
-        // 取得結果がobjectの場合は再帰的に探索するため対象に改めて追加
-        stack.push(childStack);
-      } else {
-        // console.log(`${j} : ${stack[0][j]}`);
-        // buildEscapeListItemIdメソッドでkeyを作成していたら変換
-        // const formattedKey = formatEscapeListItemId(j);
-        // console.log('formatted:' + formattedKey);
-        // 中身がないものはおくらない
-        if (stack[0][j]) {
-          // console.log('type:' + Object.prototype.toString.call(stack[0][j]));
-          // かぶりは上書き(基本的にかぶりはない想定)
-          test[j] = stack[0][j];
-          data.set(j, stack[0][j]);
-        }
-      }
+  function processKey(parentKey: string, value: unknown): void {
+    if (value && value.constructor === Object && !Array.isArray(value)) {
+      //console.log(`parentKey:${parentKey} value:${value}`);
+      Object.keys(value).forEach((key) => {
+        // console.log(`parentKey[key]:${parentKey}[${key}]`);
+        processKey(keyJoin(parentKey, key), value[key]);
+      });
+    } else if (value !== undefined && value !== null) {
+      // console.log(`parentKey:${parentKey} value:${value}`);
+      formData.set(parentKey, value as string | Blob);
     }
-    stack.shift();
+    // else {
+    //   console.log(`parentKey:${parentKey} value:${value}`);
+    // }
   }
-  // console.log('formDatatest');
-  // console.log(test);
-  return data;
+
+  Object.keys(obj).forEach((key) => {
+    //console.log(`key:${key} obj[key]:${obj[key]}`);
+    processKey(key, obj[key]);
+  });
+
+  //console.log(formData);
+  return formData;
 }
 
 /**
@@ -244,48 +230,33 @@ export function objToFormData(obj: object) {
  * @param arrayName 配列名
  * @return {}
  */
-export function objArrayToObj(objArray: object[], arrayName: string) {
+export function objArrayToObj(
+  objArray: NestedObject[],
+  arrayName: string
+): NestedObject | undefined {
   if (isObjEmpty(objArray)) return;
-  const data = {};
+
+  const data: NestedObject = {};
+
+  function processObject(obj: NestedObject, parentKey: string): void {
+    Object.keys(obj).forEach((key) => {
+      const fullKey = keyJoin(parentKey, key);
+      if (
+        obj[key] &&
+        obj[key].constructor === Object &&
+        !Array.isArray(obj[key])
+      ) {
+        processObject(obj[key] as NestedObject, fullKey);
+      } else if (obj[key] !== undefined && obj[key] !== null) {
+        data[fullKey] = obj[key];
+      }
+    });
+  }
 
   objArray.forEach((obj, index) => {
-    const stack = [];
-
-    stack.push(obj);
-
-    while (stack.length) {
-      for (const j in stack[0]) {
-        if (
-          stack[0][j] &&
-          stack[0][j].constructor === Object &&
-          !stack[0][j].length
-        ) {
-          // console.log(`pushu側${j} : ${stack[0][j]}`);
-          const childStack = {};
-          for (const k in stack[0][j]) {
-            // 再帰的に検索する場合key情報を引き継ぐ
-            childStack[keyJoin(j, k)] = stack[0][j][k];
-          }
-          // 取得結果がobjectの場合は再帰的に探索するため対象に改めて追加
-          stack.push(childStack);
-        } else {
-          // console.log(`${j} : ${stack[0][j]}`);
-          // buildEscapeListItemIdメソッドでkeyを作成していたら変換
-          // const formattedKey = formatEscapeListItemId(j);
-          // console.log('formatted:' + formattedKey);
-          // 中身がないものはおくらない
-          if (stack[0][j]) {
-            // console.log('type:' + Object.prototype.toString.call(stack[0][j]));
-            // かぶりは上書き(基本的にかぶりはない想定)
-            data[keyJoin(`${arrayName}[${index}]`, j)] = stack[0][j];
-          }
-        }
-      }
-      stack.shift();
-    }
+    processObject(obj, `${arrayName}[${index}]`);
   });
-  // console.log('objarray→obj');
-  // console.log(data);
+
   return data;
 }
 
@@ -454,22 +425,23 @@ export function objArrayToObj(objArray: object[], arrayName: string) {
  * @returns ビルドしたオブジェクト
  */
 export function buildListTableFormObj(
-  objArray: object[],
+  objArray: NestedObject[],
   config: BuildListTableFormObjConfig
 ) {
   // //yupで使用するスキーマの設定
-  const arrayadditions = {};
-  config.list.forEach((v) => {
+  const arrayAdditions = config.list.reduce((acc, v) => {
     if (v.addition) {
-      arrayadditions[v.name] = v.addition.yup;
+      acc[v.name] = v.addition.yup;
     }
-  });
-  const additions = {};
-  additions[config.className] = array().of(object().shape(arrayadditions));
+    return acc;
+  }, {});
+
+  const additions = {
+    [config.className]: array().of(object().shape(arrayAdditions)),
+  } as Record<string, ArraySchema<Record<string, never>[], AnyObject, '', ''>>;
 
   // 初期値
-  const initialValues = {};
-  initialValues[config.className] = objArray;
+  const initialValues = { [config.className]: objArray };
 
   // リスト表示用一意の識別名称
   const nameList: object[] = [];
