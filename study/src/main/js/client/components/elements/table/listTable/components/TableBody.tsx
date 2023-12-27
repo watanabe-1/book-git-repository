@@ -21,7 +21,7 @@ const TableBody: React.FC<TableBodyProps> = ({
   const totalSize = rowVirtualizer.getTotalSize();
   const virtualRows = rowVirtualizer.getVirtualItems();
 
-  // console.log(virtualRows);
+  //console.log(filteredAndSortedRows);
 
   const paddingTop = virtualRows.length > 0 ? virtualRows[0]?.start ?? 0 : 0;
   const paddingBottom =

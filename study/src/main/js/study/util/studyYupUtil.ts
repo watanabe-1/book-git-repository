@@ -523,7 +523,7 @@ export function buildListTableFormObj(
             };
 
             const name = getName(v.name);
-            const { value, initialValue } = getValueObj(props, v.name);
+            const { value, initialValue } = getValueObj(props, name);
             const cellField = { value, initialValue, name };
 
             const cellForm = {
@@ -533,6 +533,8 @@ export function buildListTableFormObj(
             };
 
             const cellObj = v.table.getCell(cellField, cellForm);
+
+            //console.log(cellField);
 
             return {
               name: v.name,

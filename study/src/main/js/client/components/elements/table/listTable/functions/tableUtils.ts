@@ -42,6 +42,8 @@ export const filterRows = (
 ) => {
   if (!isFilter) return rows;
 
+  //console.log(columns);
+
   return rows.filter((row) => {
     return columns.every((column) => {
       if (column.filterValue === '') {
@@ -92,6 +94,8 @@ export const sortRows = (
 ) => {
   if (!(sortColumn && isSort)) return rows;
 
+  //console.log(`sortColumn:${sortColumn} sortDirection:${sortDirection}`);
+
   // sortは自身を変更してしまう破壊的な関数なため、浅いコピーに対してsortを実行するようにする
   return [...rows].sort((aRow, bRow) => {
     const aCell = findCell(aRow, sortColumn);
@@ -137,6 +141,9 @@ export const filterSuggestions = (
   const column = columns.find((column) => column.showSuggestions);
   // columnが見つからないときは、どのボックスもサジェスト対象になっていないとき
   if (!column) return [];
+
+  //console.log(column);
+  //console.log(rows);
 
   return (
     rows
