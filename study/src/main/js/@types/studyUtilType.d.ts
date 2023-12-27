@@ -231,50 +231,52 @@ export type FormConfirmData = {
 export type BuildListTableFormObjConfig = {
   className: string;
   primaryKey: string | string[];
-  list: {
-    name: string;
-    modifier?: (value?: unknown) => unknown;
-    table: {
-      head: string;
-      /**
-       * cellを取得
-       *
-       * @param cellField cellに関係する値
-       * @param cellForm  form全体に関係する値
-       * @returns
-       */
-      getCell: (
-        cellField: {
-          /**cellの値 */
-          value;
-          /** cellの値の初期値 */
-          initialValue;
-          /** cellのname */
-          name: string;
-        },
-        cellForm: {
-          /** formikのプロップス */
-          props: FormikProps<?>;
-          /** listのindexに応じたnameをつめたオブジェクト */
-          names: unknown;
-          /**
-           * names(listのindexに応じたname)から特定のnameを取得
-           *
-           * @param key
-           */
-          getName: (key: string) => string;
-        }
-      ) => {
-        element: JSX.Element;
-        value: unknown;
-        textValue: string;
-      };
-      hidden?: boolean;
+  list: BuildListTableFormObjConfigItem[];
+};
+
+export type BuildListTableFormObjConfigItem = {
+  name: string;
+  modifier?: (value?: unknown) => unknown;
+  table: {
+    head: string;
+    /**
+     * cellを取得
+     *
+     * @param cellField cellに関係する値
+     * @param cellForm  form全体に関係する値
+     * @returns
+     */
+    getCell: (
+      cellField: {
+        /**cellの値 */
+        value;
+        /** cellの値の初期値 */
+        initialValue;
+        /** cellのname */
+        name: string;
+      },
+      cellForm: {
+        /** formikのプロップス */
+        props: FormikProps<?>;
+        /** listのindexに応じたnameをつめたオブジェクト */
+        names: unknown;
+        /**
+         * names(listのindexに応じたname)から特定のnameを取得
+         *
+         * @param key
+         */
+        getName: (key: string) => string;
+      }
+    ) => {
+      element: JSX.Element;
+      value: unknown;
+      textValue: string;
     };
-    addition?: {
-      yup: RequiredStringSchema<string, AnyObject>;
-    };
-  }[];
+    hidden?: boolean;
+  };
+  addition?: {
+    yup: RequiredStringSchema<string, AnyObject>;
+  };
 };
 
 /**

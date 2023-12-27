@@ -1,3 +1,4 @@
+import { getIn, setIn } from 'formik';
 import { FormikProps } from 'formik/dist/types';
 import { AnyObject, ArraySchema, array, object } from 'yup/index';
 
@@ -8,7 +9,24 @@ import {
   BuildListTableFormObjConfig,
   ErrorResult,
   TableColumn,
+  BuildListTableFormObjConfigItem,
 } from '../../@types/studyUtilType';
+
+type NestedObject = Record<string, unknown>;
+
+type ListTableFormCell = {
+  name: string;
+  value: string;
+  textValue: string;
+  element: JSX.Element;
+  hidden: boolean;
+};
+
+type ListTableFormRow = {
+  primaryKey: string;
+  cells: ListTableFormCell[];
+  hidden: boolean;
+};
 
 // /**
 //  * サーバーでバリデーションを行った結果を反映するようの関数をyupにセット
@@ -186,8 +204,6 @@ export function extractAndDeleteServerErrMsg(errData: ErrorResult) {
 //   // console.log('format:' + j);
 //   return format(escapeListItemId, args);
 // }
-
-type NestedObject = Record<string, unknown>;
 
 /**
  * オブジェクトの並列探索を行いFormDataに変換
@@ -418,6 +434,221 @@ export function objArrayToObj(
 // }
 
 /**
+ * buildListTableFormObj用
+ * nameをつめたListを作成
+ *
+ * @param objArray オブジェクト配列
+ * @param config 設定
+ * @returns
+ */
+function createNameList(
+  objArray: NestedObject[],
+  config: BuildListTableFormObjConfig
+): NestedObject[] {
+  function processObject(
+    obj: NestedObject,
+    parentKey: string,
+    index: number,
+    names: NestedObject
+  ): void {
+    Object.keys(obj).forEach((key) => {
+      const fullKey = keyJoin(parentKey, key);
+      //console.log(fullKey);
+      if (
+        obj[key] &&
+        obj[key].constructor === Object &&
+        !Array.isArray(obj[key])
+      ) {
+        processObject(obj[key] as NestedObject, fullKey, index, names);
+      } else {
+        names[fullKey] = keyJoin(`${config.className}[${index}]`, fullKey);
+      }
+    });
+  }
+
+  return objArray.map((obj, index) => {
+    const names = {};
+    processObject(obj, '', index, names);
+
+    return names;
+  });
+}
+
+/**
+ * buildListTableFormObj用
+ * 初期値を設定
+ *
+ * @param objArray オブジェクト配列
+ * @param config 設定
+ * @returns
+ */
+function createInitialValues(
+  objArray: NestedObject[],
+  config: BuildListTableFormObjConfig,
+  nameList: NestedObject[]
+) {
+  let initialValues = { [config.className]: objArray } as NestedObject;
+
+  nameList.forEach((names) => {
+    config.list.forEach((v) => {
+      const name = names[v.name] as string;
+      if (name && v.modifier) {
+        const initialValue = getIn(initialValues, name);
+        // console.log(name);
+        // console.log(initialValue);
+        // console.log(v.modifier(initialValue));
+        initialValues = setIn(initialValues, name, v.modifier(initialValue));
+      }
+    });
+  });
+
+  //console.log(initialValues);
+
+  return initialValues;
+}
+
+/**
+ * buildListTableFormObj用
+ * yupバリデーション用Additions(LIST)の作成
+ *
+ * @param config 設定
+ * @returns
+ */
+function createAdditions(config: BuildListTableFormObjConfig) {
+  const arrayAdditions = config.list.reduce((acc, v) => {
+    if (v.addition) {
+      acc[v.name] = v.addition.yup;
+    }
+    return acc;
+  }, {});
+
+  return {
+    [config.className]: array().of(object().shape(arrayAdditions)),
+  } as Record<string, ArraySchema<Record<string, never>[], AnyObject, '', ''>>;
+}
+
+/**
+ * buildListTableFormObj用
+ * tableformの行を一位に区別するkeyの作成
+ *
+ * @param primaryKeyName primaryKeyを指定したname
+ * @param names nameが詰められたオブジェクト
+ * @param props FormikProps
+ * @returns
+ */
+function getPrimaryKey(
+  primaryKeyName: string | string[],
+  names: object,
+  props: FormikProps<unknown>
+): string {
+  return typeof primaryKeyName === 'string'
+    ? props.getFieldProps(names[primaryKeyName] as string).value
+    : primaryKeyName.reduce(
+        (ret, primaryKey) =>
+          ret + props.getFieldProps(names[primaryKey] as string).value,
+        ''
+      );
+}
+
+/**
+ * buildListTableFormObj用
+ * form tableのcellの作成
+ *
+ * @param props FormikProps
+ * @param items table form 用の行定義オブジェクト
+ * @param names nameが詰められたオブジェクト
+ * @returns
+ */
+function createCells(
+  props: FormikProps<unknown>,
+  items: BuildListTableFormObjConfigItem[],
+  names: NestedObject
+): ListTableFormCell[] {
+  return items.map((item) => {
+    // console.log('cells');
+    // console.log(item.name);
+    // console.log(names);
+    // console.log(props.getFieldProps(names[item.name]).value);
+
+    /**
+     * names(listのindexに応じたname)から特定のnameを取得
+     *
+     * @param key
+     */
+    const getName = (key: string) => {
+      return names[key] as string;
+    };
+
+    const name = getName(item.name);
+    const { value, initialValue } = getValueObj(props, name);
+    const cellField = { value, initialValue, name };
+
+    const cellForm = {
+      props,
+      names,
+      getName,
+    };
+
+    const cellObj = item.table.getCell(cellField, cellForm);
+
+    //console.log(cellField);
+
+    return {
+      name: item.name,
+      value: cellObj.value as string,
+      textValue: cellObj.textValue,
+      element: cellObj.element,
+      hidden: item.table.hidden,
+    };
+  });
+}
+
+/**
+ * buildListTableFormObj用
+ * form tableのrowの作成
+ *
+ * @param props FormikProps
+ * @param nameList nameがつめられたnamesオブジェクトのリスト
+ * @param config 設定
+ * @returns
+ */
+function createRow(
+  props: FormikProps<unknown>,
+  nameList: NestedObject[],
+  config: BuildListTableFormObjConfig
+): ListTableFormRow[] {
+  return nameList.map((names) => {
+    const primaryKey = getPrimaryKey(config.primaryKey, names, props);
+
+    return {
+      primaryKey: primaryKey,
+      cells: createCells(props, config.list, names),
+      hidden: false,
+    };
+  });
+}
+
+/**
+ * buildListTableFormObj用
+ * form tableのヘッダーの作成
+ *
+ * @param config 設定
+ * @returns
+ */
+function createColumns(config: BuildListTableFormObjConfig): TableColumn[] {
+  return config.list.map((v) => {
+    return {
+      name: v.name,
+      value: v.table.head,
+      filterValue: '',
+      hidden: v.table.hidden,
+      showSuggestions: false,
+      activeSuggestionIndex: 0,
+    };
+  });
+}
+
+/**
  * リストテーブルフォーム画面用にobj[]からobjに変換し、必要な情報を定義したオブジェクトを作成
  *
  * @param objArray オブジェクト配列
@@ -429,135 +660,23 @@ export function buildListTableFormObj(
   config: BuildListTableFormObjConfig
 ) {
   // //yupで使用するスキーマの設定
-  const arrayAdditions = config.list.reduce((acc, v) => {
-    if (v.addition) {
-      acc[v.name] = v.addition.yup;
-    }
-    return acc;
-  }, {});
-
-  const additions = {
-    [config.className]: array().of(object().shape(arrayAdditions)),
-  } as Record<string, ArraySchema<Record<string, never>[], AnyObject, '', ''>>;
-
-  // 初期値
-  const initialValues = { [config.className]: objArray };
-
+  const additions = createAdditions(config);
   // リスト表示用一意の識別名称
-  const nameList: object[] = [];
-  objArray.forEach((obj, index) => {
-    const names = {};
-    const stack = [];
-
-    stack.push(obj);
-
-    while (stack.length) {
-      for (const j in stack[0]) {
-        // 設定を取得
-        // const mutchconfig = config.list.find((v) => v.name === j);
-        if (
-          stack[0][j] &&
-          stack[0][j].constructor === Object &&
-          !stack[0][j].length
-        ) {
-          // console.log(`pushu側${j} : ${stack[0][j]}`);
-          const childStack = {};
-          for (const k in stack[0][j]) {
-            // 再帰的に検索する場合key情報を引き継ぐ
-            childStack[keyJoin(j, k)] = stack[0][j][k];
-          }
-          // 取得結果がobjectの場合は再帰的に探索するため対象に改めて追加
-          stack.push(childStack);
-        } else {
-          // console.log(j);
-          //names[j] = buildEscapeListItemId(config.className, j, index);
-          names[j] = keyJoin(`${config.className}[${index}]`, j);
-
-          // 設定を取得
-          const mutchconfig = config.list.find((v) => v.name === j);
-          // 値の加工用ファンクションが設定されていたら加工を行う
-          if (mutchconfig?.modifier) {
-            const initialValue = initialValues[config.className][index][j];
-            initialValues[config.className][index][j] =
-              mutchconfig.modifier(initialValue);
-          }
-        }
-      }
-      stack.shift();
-    }
-    nameList[index] = names;
-  });
+  const nameList = createNameList(objArray, config);
+  // 初期値
+  const initialValues = createInitialValues(objArray, config, nameList);
   // console.log('nameList');
   // console.log(nameList);
+  const columns = createColumns(config);
 
   const result = {
     additions: additions,
     initialValues: initialValues,
     rowName: config.className,
     getRows: (props: FormikProps<unknown>) => {
-      return nameList.map((names) => {
-        const primaryKey =
-          typeof config.primaryKey === 'string'
-            ? props.getFieldProps(names[config.primaryKey]).value
-            : config.primaryKey.reduce(
-                (ret, primaryKey) =>
-                  ret + props.getFieldProps(names[primaryKey]).value,
-                ''
-              );
-
-        return {
-          primaryKey: primaryKey,
-          cells: config.list.map((v) => {
-            // console.log('cells');
-            // console.log(v.name);
-            // console.log(names);
-            // console.log(props.getFieldProps(names[v.name]).value);
-
-            /**
-             * names(listのindexに応じたname)から特定のnameを取得
-             *
-             * @param key
-             */
-            const getName = (key: string) => {
-              return names[key];
-            };
-
-            const name = getName(v.name);
-            const { value, initialValue } = getValueObj(props, name);
-            const cellField = { value, initialValue, name };
-
-            const cellForm = {
-              props,
-              names,
-              getName,
-            };
-
-            const cellObj = v.table.getCell(cellField, cellForm);
-
-            //console.log(cellField);
-
-            return {
-              name: v.name,
-              value: cellObj.value as string,
-              textValue: cellObj.textValue,
-              element: cellObj.element,
-              hidden: v.table.hidden,
-            };
-          }),
-          hidden: false,
-        };
-      });
+      return createRow(props, nameList, config);
     },
-    columns: config.list.map((v) => {
-      return {
-        name: v.name,
-        value: v.table.head,
-        filterValue: '',
-        hidden: v.table.hidden,
-        showSuggestions: false,
-        activeSuggestionIndex: 0,
-      } as TableColumn;
-    }),
+    columns: columns,
   };
 
   // console.log('nakami');

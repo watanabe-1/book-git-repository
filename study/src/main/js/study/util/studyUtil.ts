@@ -82,9 +82,9 @@ export function joinBase(base: string, add: string, separator: string): string {
   // 末尾
   const baseFoot = base ? base.slice(-len) : '';
 
-  if (!addHead) return baseFoot;
+  if (!addHead) return base;
 
-  if (!baseFoot) return addHead;
+  if (!baseFoot) return add;
 
   if (baseFoot === separator) {
     return addHead === separator ? base.slice(0, -len) + add : base + add;
