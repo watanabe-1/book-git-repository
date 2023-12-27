@@ -79,10 +79,11 @@ export function joinBase(base: string, add: string, separator: string): string {
   const len = separator.length;
   // 先頭
   const addHead = add ? add.slice(0, len) : '';
-  // 末尾
-  const baseFoot = base ? base.slice(-len) : '';
 
   if (!addHead) return base;
+
+  // 末尾
+  const baseFoot = base ? base.slice(-len) : '';
 
   if (!baseFoot) return add;
 

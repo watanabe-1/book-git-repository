@@ -487,24 +487,27 @@ function createInitialValues(
   config: BuildListTableFormObjConfig,
   nameList: NestedObject[]
 ) {
-  let initialValues = { [config.className]: objArray } as NestedObject;
+  return nameList.reduce(
+    (accumulatedValues, names) => {
+      config.list.forEach((v) => {
+        const name = names[v.name] as string;
+        if (name && v.modifier) {
+          const initialValue = getIn(accumulatedValues, name);
+          // console.log(name);
+          // console.log(initialValue);
+          // console.log(v.modifier(initialValue));
+          accumulatedValues = setIn(
+            accumulatedValues,
+            name,
+            v.modifier(initialValue)
+          );
+        }
+      });
 
-  nameList.forEach((names) => {
-    config.list.forEach((v) => {
-      const name = names[v.name] as string;
-      if (name && v.modifier) {
-        const initialValue = getIn(initialValues, name);
-        // console.log(name);
-        // console.log(initialValue);
-        // console.log(v.modifier(initialValue));
-        initialValues = setIn(initialValues, name, v.modifier(initialValue));
-      }
-    });
-  });
-
-  //console.log(initialValues);
-
-  return initialValues;
+      return accumulatedValues;
+    },
+    { [config.className]: objArray } as NestedObject
+  );
 }
 
 /**
