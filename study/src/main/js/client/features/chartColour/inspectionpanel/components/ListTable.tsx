@@ -17,7 +17,7 @@ import CheckBox, {
   getCheckBoxTextValue,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
-import SortAndFilterFormTable from '../../../../components/form/formTable/FormTable';
+import FormTable from '../../../../components/form/formTable/FormTable';
 import TextBox, {
   getTextBoxTextValue,
 } from '../../../../components/form/TextBox';
@@ -387,7 +387,7 @@ const ListTable: React.FC<ListTableProps> = ({
 
   return (
     <Container>
-      <SortAndFilterFormTable
+      <FormTable
         objArray={chartColourList}
         tableFormConfig={toObjConfig}
         handlePushSubmit={handlePushData}

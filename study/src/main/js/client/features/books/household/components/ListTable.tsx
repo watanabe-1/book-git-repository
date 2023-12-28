@@ -23,7 +23,7 @@ import CheckBox, {
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
 import DayPickrBox from '../../../../components/form/DayPickrBox';
-import SortAndFilterFormTable from '../../../../components/form/formTable/FormTable';
+import FormTable from '../../../../components/form/formTable/FormTable';
 import SelectBox, {
   getSelectBoxTextValue,
   getSelectBoxTypeList,
@@ -418,7 +418,7 @@ const ListTable: React.FC<ListTableProps> = ({
 
   return (
     <Container>
-      <SortAndFilterFormTable
+      <FormTable
         objArray={booksList}
         tableFormConfig={toObjConfig}
         handlePushSubmit={handlePushData}

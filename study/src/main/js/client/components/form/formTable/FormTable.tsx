@@ -11,7 +11,7 @@ import AutoValidateToken from '../AutoValidateToken';
  * ソート、フィルター可能なフォームテーブル
  * @returns フォームテーブル
  */
-const SortAndFilterFormTable: React.FC<FormTableProps> = ({
+const FormTable: React.FC<FormTableProps> = ({
   objArray,
   tableFormConfig,
   handleFormSubmit,
@@ -108,4 +108,4 @@ const SortAndFilterFormTable: React.FC<FormTableProps> = ({
   );
 };
 
-export default SortAndFilterFormTable;
+export default FormTable;

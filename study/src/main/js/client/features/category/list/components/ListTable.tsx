@@ -17,7 +17,7 @@ import CheckBox, {
   getCheckBoxTextValue,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
-import SortAndFilterFormTable from '../../../../components/form/formTable/FormTable';
+import FormTable from '../../../../components/form/formTable/FormTable';
 import ImageBox, {
   getImageBoxTextValue,
 } from '../../../../components/form/ImageBox';
@@ -435,7 +435,7 @@ const ListTable = () => {
 
   return (
     <div className="container">
-      <SortAndFilterFormTable
+      <FormTable
         objArray={list.catDataList}
         tableFormConfig={toObjConfig}
         handleFormSubmit={handleSubmit}

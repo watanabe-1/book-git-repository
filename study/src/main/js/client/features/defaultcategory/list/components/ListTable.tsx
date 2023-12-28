@@ -16,7 +16,7 @@ import CheckBox, {
   getCheckBoxTextValue,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
-import SortAndFilterFormTable from '../../../../components/form/formTable/FormTable';
+import FormTable from '../../../../components/form/formTable/FormTable';
 import SelectBox, {
   getSelectBoxTextValue,
   getSelectBoxTypeList,
@@ -446,7 +446,7 @@ const ListTable = () => {
 
   return (
     <div className="container">
-      <SortAndFilterFormTable
+      <FormTable
         objArray={list.defCatDataList}
         tableFormConfig={toObjConfig}
         handlePushSubmit={handlePushData}
