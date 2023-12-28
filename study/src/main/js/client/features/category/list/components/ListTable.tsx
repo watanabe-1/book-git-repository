@@ -1,22 +1,23 @@
 import { FastField, Field, FieldProps } from 'formik';
 import React, { useMemo } from 'react';
 
-import { BuildListTableFormObjConfig } from '../../../../../@types/studyUtilType';
+import {
+  BuildListTableFormObjConfig,
+  NestedObject,
+} from '../../../../../@types/studyUtilType';
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import { getInputFile } from '../../../../../study/util/studyFormUtil';
 import { fetchPost, keyJoin } from '../../../../../study/util/studyUtil';
-import {
-  objArrayToObj,
-  buildListTableFormObj,
-} from '../../../../../study/util/studyYupUtil';
+import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import ModalSlider from '../../../../components/elements/slider/ModalSlider';
 import CheckBox, {
   getCheckBoxLabelValue,
   getCheckBoxTextValue,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
+import SortAndFilterFormTable from '../../../../components/form/formTable/FormTable';
 import ImageBox, {
   getImageBoxTextValue,
 } from '../../../../components/form/ImageBox';
@@ -28,7 +29,6 @@ import SelectBox, {
   getSelectBoxTextValue,
   getSelectBoxTypeList,
 } from '../../../../components/form/SelectBox';
-import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
 import TextArea, {
   getTextAreaTextValue,
 } from '../../../../components/form/TextArea';
@@ -63,9 +63,12 @@ const ListTable = () => {
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form: unknown) => {
+  const handleSubmit = async (form: NestedObject) => {
     const res = await fetchUpdListData(
-      objArrayToObj(form[classConst.CAT_DATA_LIST], classConst.CAT_DATA_LIST)
+      objArrayToObj(
+        form[classConst.CAT_DATA_LIST] as NestedObject[],
+        classConst.CAT_DATA_LIST
+      )
     );
     const json = await res.json();
     // console.log('soushinkekka');
@@ -82,7 +85,7 @@ const ListTable = () => {
   /**
    * リストデータ更新
    */
-  const fetchUpdListData = async (form) => {
+  const fetchUpdListData = async (form: NestedObject) => {
     return await fetchPost(urlConst.category.LIST_DATA_UPDATE, form);
   };
 
@@ -164,6 +167,12 @@ const ListTable = () => {
               element: (
                 <FastField name={name}>
                   {({ field, meta }: FieldProps<string>) => {
+                    console.log(
+                      `name:${name} value:${value} initialValue:${initialValue} fieldDirty:${
+                        value !== initialValue
+                      }`
+                    );
+
                     return (
                       <TextBox
                         name={field.name}
@@ -423,16 +432,12 @@ const ListTable = () => {
       },
     ],
   };
-  // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成
-  const listTableFormObj = useMemo(
-    () => buildListTableFormObj(list.catDataList, toObjConfig),
-    [list.catDataList, toObjConfig]
-  );
 
   return (
     <div className="container">
       <SortAndFilterFormTable
-        tableFormConfig={listTableFormObj}
+        objArray={list.catDataList}
+        tableFormConfig={toObjConfig}
         handleFormSubmit={handleSubmit}
         hiddenPushButton
         errData={errData}

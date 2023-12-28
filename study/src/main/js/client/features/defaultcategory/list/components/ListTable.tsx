@@ -1,26 +1,26 @@
 import { FastField, FieldProps } from 'formik';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import InputAllButton from './InputAllButton';
-import { BuildListTableFormObjConfig } from '../../../../../@types/studyUtilType';
+import {
+  BuildListTableFormObjConfig,
+  NestedObject,
+} from '../../../../../@types/studyUtilType';
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import { fetchPost } from '../../../../../study/util/studyUtil';
-import {
-  objArrayToObj,
-  buildListTableFormObj,
-} from '../../../../../study/util/studyYupUtil';
+import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import CheckBox, {
   getCheckBoxLabelValue,
   getCheckBoxTextValue,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
+import SortAndFilterFormTable from '../../../../components/form/formTable/FormTable';
 import SelectBox, {
   getSelectBoxTextValue,
   getSelectBoxTypeList,
 } from '../../../../components/form/SelectBox';
-import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
 import TextBox, {
   getTextBoxTextValue,
   modifierTextBox,
@@ -75,10 +75,10 @@ const ListTable = () => {
    * 送信ボタン(新規)
    * @param form 送信パラメータ
    */
-  const handlePushData = async (form: unknown) => {
+  const handlePushData = async (form: NestedObject) => {
     const res = await fetchPushData(
       objArrayToObj(
-        form[classConst.DEF_CAT_DATA_LIST],
+        form[classConst.DEF_CAT_DATA_LIST] as NestedObject[],
         classConst.DEF_CAT_DATA_LIST
       )
     );
@@ -104,7 +104,7 @@ const ListTable = () => {
   /**
    * 新規リストデータ追加
    */
-  const fetchPushData = async (form: object) => {
+  const fetchPushData = async (form: NestedObject) => {
     return await fetchPost(urlConst.defaultCategory.LIST_DATA_PUSH, form);
   };
 
@@ -443,16 +443,12 @@ const ListTable = () => {
       },
     ],
   };
-  // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成
-  const listTableFormObj = useMemo(
-    () => buildListTableFormObj(list.defCatDataList, toObjConfig),
-    [list.defCatDataList, toObjConfig]
-  );
 
   return (
     <div className="container">
       <SortAndFilterFormTable
-        tableFormConfig={listTableFormObj}
+        objArray={list.defCatDataList}
+        tableFormConfig={toObjConfig}
         handlePushSubmit={handlePushData}
         handleFormSubmit={handleSubmit}
         errData={errData}

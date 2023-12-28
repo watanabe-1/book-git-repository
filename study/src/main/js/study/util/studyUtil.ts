@@ -1,5 +1,5 @@
 import { objToFormData } from './studyYupUtil';
-import { Type } from '../../@types/studyUtilType';
+import { NestedObject, Type } from '../../@types/studyUtilType';
 
 /**
  * 文字列の中の正規表現などをエスケープする
@@ -234,7 +234,7 @@ export async function fetchGet(
  */
 export async function fetchPost(
   baseurl: string,
-  params = {}
+  params: NestedObject = {}
 ): Promise<Response> {
   const headers = () => {
     const headers = {};

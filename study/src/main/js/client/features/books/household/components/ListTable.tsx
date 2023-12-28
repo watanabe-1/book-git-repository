@@ -5,6 +5,7 @@ import Container from 'react-bootstrap/Container';
 import {
   Books,
   BuildListTableFormObjConfig,
+  NestedObject,
 } from '../../../../../@types/studyUtilType';
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
@@ -14,10 +15,7 @@ import {
   keyJoin,
   pathJoin,
 } from '../../../../../study/util/studyUtil';
-import {
-  buildListTableFormObj,
-  objArrayToObj,
-} from '../../../../../study/util/studyYupUtil';
+import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import ImageIcon from '../../../../components/elements/icon/ImageIcon';
 import CheckBox, {
   getCheckBoxLabelValue,
@@ -25,11 +23,11 @@ import CheckBox, {
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
 import DayPickrBox from '../../../../components/form/DayPickrBox';
+import SortAndFilterFormTable from '../../../../components/form/formTable/FormTable';
 import SelectBox, {
   getSelectBoxTextValue,
   getSelectBoxTypeList,
 } from '../../../../components/form/SelectBox';
-import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
 import TextBox, {
   getTextBoxTextValue,
   modifierTextBox,
@@ -108,10 +106,10 @@ const ListTable: React.FC<ListTableProps> = ({
    * 送信ボタン(新規)
    * @param form 送信パラメータ
    */
-  const handlePushData = async (form: unknown) => {
+  const handlePushData = async (form: NestedObject) => {
     const res = await fetchPushData(
       objArrayToObj(
-        form[classConst.BOOKS_DATA_LIST],
+        form[classConst.BOOKS_DATA_LIST] as NestedObject[],
         classConst.BOOKS_DATA_LIST
       )
     );
@@ -131,18 +129,19 @@ const ListTable: React.FC<ListTableProps> = ({
   /**
    * リストデータ更新
    */
-  const fetchUpdListData = async (form: object) => {
+  const fetchUpdListData = async (form: NestedObject) => {
     const param = {
       ...form,
       ...buildDataParam(paramDate, commonInfo.dateFormat, booksType),
     };
+
     return await fetchPost(urlConst.books.LIST_DATA_UPDATE, param);
   };
 
   /**
    * 新規リストデータ追加
    */
-  const fetchPushData = async (form: object) => {
+  const fetchPushData = async (form: NestedObject) => {
     const param = {
       ...form,
       ...buildDataParam(
@@ -151,6 +150,7 @@ const ListTable: React.FC<ListTableProps> = ({
         booksType
       ),
     };
+
     return await fetchPost(urlConst.books.LIST_DATA_PUSH, param);
   };
 
@@ -416,16 +416,11 @@ const ListTable: React.FC<ListTableProps> = ({
     ],
   };
 
-  // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成
-  const listTableFormObj = useMemo(
-    () => buildListTableFormObj(booksList, toObjConfig),
-    [booksList, toObjConfig]
-  );
-
   return (
     <Container>
       <SortAndFilterFormTable
-        tableFormConfig={listTableFormObj}
+        objArray={booksList}
+        tableFormConfig={toObjConfig}
         handlePushSubmit={handlePushData}
         handleFormSubmit={handleSubmit}
         errData={errData}

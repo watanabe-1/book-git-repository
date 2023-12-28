@@ -1,25 +1,23 @@
 import { FastField, FieldProps } from 'formik';
-import React, { useMemo } from 'react';
+import React from 'react';
 import Container from 'react-bootstrap/Container';
 
 import {
   BuildListTableFormObjConfig,
   ChartColour,
+  NestedObject,
 } from '../../../../../@types/studyUtilType';
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import { fetchPost } from '../../../../../study/util/studyUtil';
-import {
-  buildListTableFormObj,
-  objArrayToObj,
-} from '../../../../../study/util/studyYupUtil';
+import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import CheckBox, {
   getCheckBoxLabelValue,
   getCheckBoxTextValue,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
-import SortAndFilterFormTable from '../../../../components/form/SortAndFilterFormTable';
+import SortAndFilterFormTable from '../../../../components/form/formTable/FormTable';
 import TextBox, {
   getTextBoxTextValue,
 } from '../../../../components/form/TextBox';
@@ -71,10 +69,10 @@ const ListTable: React.FC<ListTableProps> = ({
    * 送信ボタン(更新)
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form: unknown) => {
+  const handleSubmit = async (form: NestedObject) => {
     const res = await fetchUpdListData(
       objArrayToObj(
-        form[classConst.CHART_COLOUR_DATA_LIST],
+        form[classConst.CHART_COLOUR_DATA_LIST] as NestedObject[],
         classConst.CHART_COLOUR_DATA_LIST
       )
     );
@@ -94,10 +92,10 @@ const ListTable: React.FC<ListTableProps> = ({
    * 送信ボタン(新規)
    * @param form 送信パラメータ
    */
-  const handlePushData = async (form: unknown) => {
+  const handlePushData = async (form: NestedObject) => {
     const res = await fetchPushData(
       objArrayToObj(
-        form[classConst.CHART_COLOUR_DATA_LIST],
+        form[classConst.CHART_COLOUR_DATA_LIST] as NestedObject[],
         classConst.CHART_COLOUR_DATA_LIST
       )
     );
@@ -116,7 +114,7 @@ const ListTable: React.FC<ListTableProps> = ({
   /**
    * リストデータ更新
    */
-  const fetchUpdListData = async (form: object) => {
+  const fetchUpdListData = async (form: NestedObject) => {
     const param = {
       ...form,
     };
@@ -385,17 +383,13 @@ const ListTable: React.FC<ListTableProps> = ({
     ],
   };
 
-  // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成
-  const listTableFormObj = useMemo(
-    () => buildListTableFormObj(chartColourList, toObjConfig),
-    [chartColourList, toObjConfig]
-  );
   const hiddenButton = readonly;
 
   return (
     <Container>
       <SortAndFilterFormTable
-        tableFormConfig={listTableFormObj}
+        objArray={chartColourList}
+        tableFormConfig={toObjConfig}
         handlePushSubmit={handlePushData}
         handleFormSubmit={handleSubmit}
         errData={errData}

@@ -321,3 +321,8 @@ export type TableRow = {
   cells: TableCell[];
   hidden: boolean;
 };
+
+/**
+ * ネスト可能オブジェクト
+ */
+export type NestedObject = Record<string, unknown>;

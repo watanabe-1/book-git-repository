@@ -5,6 +5,5 @@ interface Window {
   api: OnServerApi;
   isServer: boolean;
   serverData: object;
-  ssrFlags: object;
   contextPath: string;
 }
