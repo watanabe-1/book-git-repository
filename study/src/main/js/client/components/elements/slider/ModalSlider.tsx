@@ -35,8 +35,8 @@ const ModalSlider: React.FC<ModalSliderChartProps> = ({
 
   const [show, setShow] = useState(false);
 
-  const handleClose = useCallback(() => setShow(false), [setShow]);
-  const handleShow = () => useCallback(() => setShow(true), [setShow]);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
 
   const handleSelect = useCallback(() => {
     setImage?.(imageList[index]);
