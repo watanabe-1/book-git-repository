@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import FileBox from './FileBox';
-import { pathJoin } from '../../../study/util/studyUtil';
+import { pathJoin } from '../../../study/util/studyStringUtil';
 import ImageIcon from '../elements/icon/ImageIcon';
 
 type ImageBoxProps = {

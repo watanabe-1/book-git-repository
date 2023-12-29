@@ -9,7 +9,8 @@ import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import { getInputFile } from '../../../../../study/util/studyFormUtil';
-import { fetchPost, keyJoin } from '../../../../../study/util/studyUtil';
+import { keyJoin } from '../../../../../study/util/studyStringUtil';
+import { fetchPost } from '../../../../../study/util/studyUtil';
 import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import ModalSlider from '../../../../components/elements/slider/ModalSlider';
 import CheckBox, {

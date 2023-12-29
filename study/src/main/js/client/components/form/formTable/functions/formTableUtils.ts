@@ -9,7 +9,8 @@ import {
   TableColumn,
 } from '../../../../../@types/studyUtilType';
 import { getValueObj } from '../../../../../study/util/studyFormUtil';
-import { isObjEmpty, keyJoin } from '../../../../../study/util/studyUtil';
+import { keyJoin } from '../../../../../study/util/studyStringUtil';
+import { isObjEmpty } from '../../../../../study/util/studyUtil';
 
 type ListTableFormCell = {
   name: string;

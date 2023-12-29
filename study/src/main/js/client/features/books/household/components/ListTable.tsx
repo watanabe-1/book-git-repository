@@ -10,11 +10,9 @@ import {
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
-import {
-  fetchPost,
-  keyJoin,
-  pathJoin,
-} from '../../../../../study/util/studyUtil';
+import { keyJoin } from '../../../../../study/util/studyStringUtil';
+import { pathJoin } from '../../../../../study/util/studyStringUtil';
+import { fetchPost } from '../../../../../study/util/studyUtil';
 import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import ImageIcon from '../../../../components/elements/icon/ImageIcon';
 import CheckBox, {

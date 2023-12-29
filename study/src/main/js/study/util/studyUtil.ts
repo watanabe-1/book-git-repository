@@ -1,15 +1,6 @@
+import { pathJoin } from './studyStringUtil';
 import { objToFormData } from './studyYupUtil';
 import { NestedObject, Type } from '../../@types/studyUtilType';
-
-/**
- * 文字列の中の正規表現などをエスケープする
- *
- * @param {string} string - エスケープ対象
- * @return エスケープ後の文字列
- */
-export function escapeRegExp(str: string): string {
-  return str.replace(/[.*+?^=!:${}()|[\]/\\]/g, '\\$&'); // $&はマッチした部分文字列全体を意味します
-}
 
 /**
  * urlのプロトコルからホストまでを取得
@@ -27,71 +18,6 @@ export function getBaseUrl(): string {
  */
 export function addContextPath(url: string): string {
   return pathJoin(getContextPath(), url);
-}
-
-/**
- * パスを結合
- *
- * @param base ベース
- * @param adds 追加対象
- * @return 結合したパス
- */
-export function pathJoin(base: string, ...adds: string[]): string {
-  return joinBases(base, adds, '/');
-}
-
-/**
- * keyを結合
- *
- * @param base ベース
- * @param adds 追加対象
- * @return 結合したパス
- */
-export function keyJoin(base: string, ...adds: string[]): string {
-  return joinBases(base, adds, '.');
-}
-
-/**
- * 区切り文字で結合
- *
- * @param base ベース
- * @param adds 追加する対象
- * @param separator 区切り文字1文字
- * @return 結合したもの
- */
-export function joinBases(
-  base: string,
-  adds: string[],
-  separator: string
-): string {
-  return adds.reduce((result, add) => joinBase(result, add, separator), base);
-}
-
-/**
- * 区切り文字で結合
- *
- * @param base ベース
- * @param add 追加す対象
- * @param separator 区切り文字1文字
- * @return 結合したもの
- */
-export function joinBase(base: string, add: string, separator: string): string {
-  const len = separator.length;
-  // 先頭
-  const addHead = add ? add.slice(0, len) : '';
-
-  if (!addHead) return base;
-
-  // 末尾
-  const baseFoot = base ? base.slice(-len) : '';
-
-  if (!baseFoot) return add;
-
-  if (baseFoot === separator) {
-    return addHead === separator ? base.slice(0, -len) + add : base + add;
-  } else {
-    return addHead === separator ? base + add : base + separator + add;
-  }
 }
 
 /**

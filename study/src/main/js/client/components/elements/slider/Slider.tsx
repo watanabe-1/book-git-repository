@@ -2,7 +2,8 @@ import React, { useCallback, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 
 import { Image } from '../../../../@types/studyUtilType';
-import { getContextPath, pathJoin } from '../../../../study/util/studyUtil';
+import { pathJoin } from '../../../../study/util/studyStringUtil';
+import { getContextPath } from '../../../../study/util/studyUtil';
 
 type SliderProps = {
   /** 画像リスト */
