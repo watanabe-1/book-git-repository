@@ -12,7 +12,7 @@ type ImageBoxProps = {
   /** ファイルボックスの値 */
   value?: File;
   /** 初期値(valueとの比較用) */
-  initialValue?: string | number | string;
+  initialValue?: File;
   /** 選択できるデフォルトファイルタイプ */
   accept?: string;
   /** imageパス */
@@ -75,7 +75,7 @@ const ImageBox: React.FC<ImageBoxProps> = ({
       ? pathJoin(initialPath, initialFileName)
       : initialPath;
   }, [initialPath, initialFileName]);
-  const textValue = getImageBoxTextValue();
+  const textValue = useMemo(() => getImageBoxTextValue(), []);
 
   return (
     <>

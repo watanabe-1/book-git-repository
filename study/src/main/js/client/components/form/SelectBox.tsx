@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Form from 'react-bootstrap/Form';
 
 import FormControl from './formControl/FormControl';
@@ -13,7 +13,7 @@ type SelectBoxProps = {
   /** テキストボックスの値 */
   value: string;
   /** 初期値(valueとの比較用) */
-  initialValue: string | number | string;
+  initialValue: string;
   /** 選択肢のリスト */
   typeList: Type[] | string[];
   /** 選択肢の先頭に空の選択肢を追加するかどうか */
@@ -45,7 +45,7 @@ type SelectBoxProps = {
  * @param isUnshiftEmpty 選択肢の先頭に空の選択肢を追加するかどうか
  * @returns
  */
-export const getSelectBoxTypeList = (
+const getSelectBoxTypeList = (
   baseList: Type[] | string[],
   isUnshiftEmpty: boolean = false
 ) => {
@@ -67,10 +67,28 @@ export const getSelectBoxTypeList = (
  * @param typeList 選択肢のリスト
  * @param code 取得したい選択肢のコード
  */
-export const getSelectBoxTextValue = (typeList: Type[], code) => {
+const getSelectBoxTextValue = (typeList: Type[], code) => {
   const textValue = typeList.find((type) => type.code === code)?.name;
 
-  return textValue ? textValue : '値がありません';
+  return textValue || '値がありません';
+};
+
+/**
+ * セレクトボックス詳細を取得
+ * @param baseList 選択肢のリスト
+ * @param isUnshiftEmpty 選択肢の先頭に空の選択肢を追加するかどうか
+ * @param code 取得したい選択肢のコード
+ * @returns
+ */
+export const getSelectBoxDetails = (
+  baseList: Type[] | string[],
+  code: string,
+  isUnshiftEmpty: boolean = false
+) => {
+  const typeList = getSelectBoxTypeList(baseList, isUnshiftEmpty);
+  const textValue = getSelectBoxTextValue(typeList, code);
+
+  return { textValue, typeList };
 };
 
 /**
@@ -82,7 +100,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
   name,
   value,
   initialValue,
-  typeList,
+  typeList: ptypeList,
   isUnshiftEmpty = false,
   onChange,
   onBlur,
@@ -94,8 +112,10 @@ const SelectBox: React.FC<SelectBoxProps> = ({
   isOnClickEditable = false,
   isReadonly = false,
 }) => {
-  const newTypeList = getSelectBoxTypeList(typeList, isUnshiftEmpty);
-  const textValue = getSelectBoxTextValue(newTypeList, value);
+  const { textValue, typeList } = useMemo(
+    () => getSelectBoxDetails(ptypeList, value, isUnshiftEmpty),
+    [ptypeList, value, isUnshiftEmpty]
+  );
 
   return (
     <FormControl
@@ -115,7 +135,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
       isReadonly={isReadonly}
     >
       <Form.Select>
-        {newTypeList.map((type) => (
+        {typeList.map((type) => (
           <option
             key={type.code}
             //reactはselected非推奨なため使用しない

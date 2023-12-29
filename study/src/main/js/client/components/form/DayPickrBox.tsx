@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Form from 'react-bootstrap/Form';
 import DatePicker from 'react-flatpickr';
 
@@ -14,7 +14,7 @@ type DayPickrBoxProps = {
   /** テキストボックスの値 */
   value: string;
   /** 初期値(valueとの比較用) */
-  initialValue: string | number | string;
+  initialValue: string;
   /** テキストボックスの値が変更されたときのハンドラ関数 */
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
@@ -59,20 +59,27 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
   isOnClickEditable = false,
   isReadonly = false,
 }) => {
+  const DAY_PICKR_KEY = 'dayPickr';
   const value = pvalue || '';
-  const dayPickrKey = 'dayPickr';
-  const openFp = (refs: FormControlChildrenRefs) => {
-    const fp = refs?.current[dayPickrKey] as DatePicker;
-    //console.log(fp);
-    if (!fp?.flatpickr) return;
-    // カレンダーの表示基準元が存在しない場合、
-    // カレンダーの表示位置がバグってしまうため、
-    // カレンダーの表示元が描画された後に動くよう
-    // に少し実施を遅らせる
-    setTimeout(() => {
-      fp?.flatpickr?.open();
-    }, 100);
-  };
+
+  const openFp = useCallback(
+    (refs: FormControlChildrenRefs) => {
+      if (isReadonly) return;
+
+      const fp = refs?.current[DAY_PICKR_KEY] as DatePicker;
+      //console.log(fp);
+
+      if (!fp?.flatpickr) return;
+      // カレンダーの表示基準元が存在しない場合、
+      // カレンダーの表示位置がバグってしまうため、
+      // カレンダーの表示元が描画された後に動くよう
+      // に少し実施を遅らせる
+      setTimeout(() => {
+        fp.flatpickr?.open();
+      }, 100);
+    },
+    [isReadonly]
+  );
 
   return (
     <div>
@@ -83,15 +90,9 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
         initialValue={initialValue}
         onChange={onChange}
         onBlur={onBlur}
-        onEditing={(refs) => {
-          if (!isReadonly) {
-            openFp(refs);
-          }
-        }}
+        onEditing={openFp}
         onClick={(_, refs) => {
-          if (!isReadonly) {
-            openFp(refs);
-          }
+          openFp(refs);
         }}
         hidden={hidden}
         validate={validate}
@@ -108,7 +109,7 @@ const DayPickrBox: React.FC<DayPickrBoxProps> = ({
           value={value}
           dateFormat={dateFormat}
           onlyValueMonth={onlyValueMonth}
-          key={dayPickrKey}
+          key={DAY_PICKR_KEY}
         />
       </FormControl>
     </div>

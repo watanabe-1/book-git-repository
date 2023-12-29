@@ -13,8 +13,7 @@ import { fetchPost, keyJoin } from '../../../../../study/util/studyUtil';
 import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import ModalSlider from '../../../../components/elements/slider/ModalSlider';
 import CheckBox, {
-  getCheckBoxLabelValue,
-  getCheckBoxTextValue,
+  getCheckBoxDetails,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
 import FormTable from '../../../../components/form/formTable/FormTable';
@@ -22,12 +21,10 @@ import ImageBox, {
   getImageBoxTextValue,
 } from '../../../../components/form/ImageBox';
 import RadioBtn, {
-  getRadioBtnTextValue,
-  getRadioBtnTypeList,
+  getRadioBtnDetails,
 } from '../../../../components/form/RadioBtn';
 import SelectBox, {
-  getSelectBoxTextValue,
-  getSelectBoxTypeList,
+  getSelectBoxDetails,
 } from '../../../../components/form/SelectBox';
 import TextArea, {
   getTextAreaTextValue,
@@ -122,6 +119,7 @@ const ListTable = () => {
           head: '削除',
           getCell: ({ value, initialValue, name }) => {
             const flag = info.delete;
+
             return {
               element: (
                 <FastField name={name}>
@@ -150,10 +148,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: getCheckBoxLabelValue(
-                flag,
-                getCheckBoxTextValue(flag, value)
-              ),
+              textValue: getCheckBoxDetails(flag, value).textValue,
             };
           },
         },
@@ -167,11 +162,11 @@ const ListTable = () => {
               element: (
                 <FastField name={name}>
                   {({ field, meta }: FieldProps<string>) => {
-                    console.log(
-                      `name:${name} value:${value} initialValue:${initialValue} fieldDirty:${
-                        value !== initialValue
-                      }`
-                    );
+                    // console.log(
+                    //   `name:${name} value:${value} initialValue:${initialValue} fieldDirty:${
+                    //     value !== initialValue
+                    //   }`
+                    // );
 
                     return (
                       <TextBox
@@ -225,10 +220,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: getRadioBtnTextValue(
-                getRadioBtnTypeList(typeList),
-                value
-              ),
+              textValue: getRadioBtnDetails(typeList, value).textValue,
             };
           },
         },
@@ -289,10 +281,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: getSelectBoxTextValue(
-                getSelectBoxTypeList(typeList),
-                value
-              ),
+              textValue: getSelectBoxDetails(typeList, value).textValue,
             };
           },
         },
@@ -354,6 +343,7 @@ const ListTable = () => {
           head: 'アクティブフラグ',
           getCell: ({ value, initialValue, name }, { props }) => {
             const flag = info.active;
+            const noLabel = true;
 
             return {
               element: (
@@ -364,6 +354,7 @@ const ListTable = () => {
                     //     field.value
                     //   )} type:${typeof field.value}`
                     // );
+
                     return (
                       <CheckBox
                         name={field.name}
@@ -373,14 +364,14 @@ const ListTable = () => {
                         dirty={props.dirty}
                         onChange={field.onChange}
                         isOnClickEditable
-                        noLabel
+                        noLabel={noLabel}
                       />
                     );
                   }}
                 </FastField>
               ),
               value: value,
-              textValue: getCheckBoxTextValue(flag, value),
+              textValue: getCheckBoxDetails(flag, value, noLabel).textValue,
             };
           },
         },

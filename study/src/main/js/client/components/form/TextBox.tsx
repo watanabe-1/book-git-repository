@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Form from 'react-bootstrap/Form';
 
 import FormControl from './formControl/FormControl';
@@ -12,7 +12,7 @@ type TextBoxProps = {
   /** テキストボックスの値 */
   value: string | number | string[];
   /** 初期値(valueとの比較用) */
-  initialValue: string | number | string;
+  initialValue: string | number | string[];
   /** テキストボックスの値が変更されたときのハンドラ関数 */
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   /** テキストボックスからフォーカスが外れた時のハンドラ関数 */
@@ -83,7 +83,7 @@ const TextBox: React.FC<TextBoxProps> = ({
   isReadonly = false,
 }) => {
   const type = hidden ? 'hidden' : 'text';
-  const textValue = getTextBoxTextValue(value);
+  const textValue = useMemo(() => getTextBoxTextValue(value), [value]);
 
   return (
     <FormControl

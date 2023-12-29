@@ -12,14 +12,12 @@ import { urlConst } from '../../../../../constant/urlConstant';
 import { fetchPost } from '../../../../../study/util/studyUtil';
 import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import CheckBox, {
-  getCheckBoxLabelValue,
-  getCheckBoxTextValue,
+  getCheckBoxDetails,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
 import FormTable from '../../../../components/form/formTable/FormTable';
 import SelectBox, {
-  getSelectBoxTextValue,
-  getSelectBoxTypeList,
+  getSelectBoxDetails,
 } from '../../../../components/form/SelectBox';
 import TextBox, {
   getTextBoxTextValue,
@@ -144,10 +142,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: getCheckBoxLabelValue(
-                flag,
-                getCheckBoxTextValue(flag, value)
-              ),
+              textValue: getCheckBoxDetails(flag, value).textValue,
             };
           },
         },
@@ -184,10 +179,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: getSelectBoxTextValue(
-                getSelectBoxTypeList(typeList),
-                value
-              ),
+              textValue: getSelectBoxDetails(typeList, value).textValue,
             };
           },
         },
@@ -362,10 +354,7 @@ const ListTable = () => {
                 </FastField>
               ),
               value: value,
-              textValue: getSelectBoxTextValue(
-                getSelectBoxTypeList(typeList),
-                value
-              ),
+              textValue: getSelectBoxDetails(typeList, value).textValue,
             };
           },
         },
@@ -415,6 +404,7 @@ const ListTable = () => {
           head: '正規表現',
           getCell: ({ value, initialValue, name }, { props }) => {
             const flag = info.regexEnabled;
+            const noLabel = true;
 
             return {
               element: (
@@ -429,14 +419,14 @@ const ListTable = () => {
                         dirty={props.dirty}
                         onChange={field.onChange}
                         isOnClickEditable
-                        noLabel
+                        noLabel={noLabel}
                       />
                     );
                   }}
                 </FastField>
               ),
               value: value,
-              textValue: getCheckBoxTextValue(flag, value),
+              textValue: getCheckBoxDetails(flag, value, noLabel).textValue,
             };
           },
         },

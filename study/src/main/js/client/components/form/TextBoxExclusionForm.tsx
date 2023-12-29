@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Form from 'react-bootstrap/Form';
 
 type TextBoxExclusionFormProps = {
@@ -44,10 +44,13 @@ const TextBoxExclusionForm: React.FC<TextBoxExclusionFormProps> = ({
    * inputに値をセット
    * @param e event
    */
-  const handleChange = async (e) => {
-    onChange?.(e);
-    setinputValue(e.target.value);
-  };
+  const handleChange = useCallback(
+    async (e) => {
+      onChange?.(e);
+      setinputValue(e.target.value);
+    },
+    [onChange, setinputValue]
+  );
 
   return (
     <Form.Group>

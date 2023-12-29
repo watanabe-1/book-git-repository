@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Form from 'react-bootstrap/Form';
 
 import FormControl from './formControl/FormControl';
@@ -13,7 +13,7 @@ type CheckBoxProps = {
   /** テキストボックスの値 */
   value: string;
   /** 初期値(valueとの比較用) */
-  initialValue: string | number | string;
+  initialValue: string;
   /** フラグ */
   flag: Flag;
   /** テキストボックスの値が変更されたときのハンドラ関数 */
@@ -60,7 +60,7 @@ export const modifierCheckBox = (value: string) => {
  * @param flag チェック選択フラグ
  * @param code 取得したい選択肢のコード
  */
-export const getCheckBoxTextValue = (flag: Flag, code) => {
+const getCheckBoxTextValue = (flag: Flag, code) => {
   return getConfirmMessage(code, typeConst.col.CHECK, {
     typeList: null,
     flag: flag,
@@ -68,17 +68,42 @@ export const getCheckBoxTextValue = (flag: Flag, code) => {
 };
 
 /**
- * 選択肢の表示値を取得
+ * ラベルの値を取得
  *
  * @param flag チェック選択フラグ
- * @param code 取得したい選択肢のコード
+ * @param text テキスト
+ * @param isLabelTextValue ラベルにテキストバリューを使用するか
+ * @returns
  */
-export const getCheckBoxLabelValue = (
+const getCheckBoxLabelValue = (
   flag: Flag,
   text: string,
   isLabelTextValue = true
 ) => {
   return isLabelTextValue ? text : flag.name;
+};
+
+/**
+ * テキストとラベルの値を取得
+ *
+ * @param flag チェック選択フラグ
+ * @param value 値
+ * @param noLabel ラベルを表示するか
+ * @param isLabelTextValue  * @param isLabelTextValue ラベルにテキストバリューを使用するか
+ * @returns
+ */
+export const getCheckBoxDetails = (
+  flag: Flag,
+  value: string,
+  noLabel: boolean = false,
+  isLabelTextValue: boolean = true
+) => {
+  const textValue = getCheckBoxTextValue(flag, value);
+  const label = noLabel
+    ? null
+    : getCheckBoxLabelValue(flag, textValue, isLabelTextValue);
+
+  return { textValue, label };
 };
 
 /**
@@ -102,10 +127,10 @@ const CheckBox: React.FC<CheckBoxProps> = ({
   noLabel = false,
   isLabelTextValue = true,
 }) => {
-  const text = getCheckBoxTextValue(flag, value);
-  const label = noLabel
-    ? null
-    : getCheckBoxLabelValue(flag, text, isLabelTextValue);
+  const { textValue, label } = useMemo(
+    () => getCheckBoxDetails(flag, value, noLabel, isLabelTextValue),
+    [flag, value, noLabel]
+  );
   // console.log(`${name}-${value}`);
 
   return (
@@ -113,7 +138,7 @@ const CheckBox: React.FC<CheckBoxProps> = ({
       name={name}
       value={value}
       initialValue={initialValue}
-      textValue={text}
+      textValue={textValue}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}

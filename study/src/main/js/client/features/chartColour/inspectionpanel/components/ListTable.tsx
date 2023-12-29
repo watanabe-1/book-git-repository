@@ -13,8 +13,7 @@ import { urlConst } from '../../../../../constant/urlConstant';
 import { fetchPost } from '../../../../../study/util/studyUtil';
 import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import CheckBox, {
-  getCheckBoxLabelValue,
-  getCheckBoxTextValue,
+  getCheckBoxDetails,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
 import FormTable from '../../../../components/form/formTable/FormTable';
@@ -162,10 +161,7 @@ const ListTable: React.FC<ListTableProps> = ({
                 </FastField>
               ),
               value: value,
-              textValue: getCheckBoxLabelValue(
-                flag,
-                getCheckBoxTextValue(flag, value)
-              ),
+              textValue: getCheckBoxDetails(flag, value).textValue,
             };
           },
           hidden: readonly,
@@ -213,6 +209,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: '設定',
           getCell: ({ value, initialValue, name }, { props }) => {
             const flag = info.active;
+            const noLabel = true;
 
             return {
               element: (
@@ -227,7 +224,7 @@ const ListTable: React.FC<ListTableProps> = ({
                         dirty={props.dirty}
                         onChange={field.onChange}
                         isOnClickEditable
-                        noLabel
+                        noLabel={noLabel}
                         isReadonly={readonly}
                       />
                     );
@@ -235,7 +232,7 @@ const ListTable: React.FC<ListTableProps> = ({
                 </FastField>
               ),
               value: value,
-              textValue: getCheckBoxTextValue(flag, value),
+              textValue: getCheckBoxDetails(flag, value, noLabel).textValue,
             };
           },
         },

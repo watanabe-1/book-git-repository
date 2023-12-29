@@ -13,7 +13,7 @@ type RadioBtnProps = {
   /** テキストボックスの値 */
   value: string;
   /** 初期値(valueとの比較用) */
-  initialValue: string | number | string;
+  initialValue: string;
   /** 選択肢のリスト */
   typeList: Type[] | string[];
   /** テキストボックスの値が変更されたときのハンドラ関数 */
@@ -37,25 +37,32 @@ type RadioBtnProps = {
 };
 
 /**
- * typeListの取得
- *
- * @param baseList 選択肢のリスト
- * @returns
- */
-export const getRadioBtnTypeList = (baseList: Type[] | string[]) => {
-  return ToTypeArrayIfIsStringArray(baseList);
-};
-
-/**
  * 選択肢の表示値を取得
  *
  * @param typeList 選択肢のリスト
  * @param code 取得したい選択肢のコード
  */
-export const getRadioBtnTextValue = (typeList: Type[], code) => {
+const getRadioBtnTextValue = (typeList: Type[], code) => {
   const textValue = typeList.find((type) => type.code === code)?.name;
 
   return textValue ? textValue : '値がありません';
+};
+
+/**
+ * ラジオボタン詳細を取得
+ *
+ * @param baseList 選択肢のリスト
+ * @param code 取得したい選択肢のコード
+ * @returns
+ */
+export const getRadioBtnDetails = (baseList: Type[] | string[], code) => {
+  const typeList = ToTypeArrayIfIsStringArray(baseList);
+  const textValue = getRadioBtnTextValue(typeList, code);
+
+  return {
+    textValue,
+    typeList,
+  };
 };
 
 /**
@@ -67,7 +74,7 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
   name,
   value,
   initialValue,
-  typeList,
+  typeList: pTypeList,
   onChange,
   onBlur,
   hidden = false,
@@ -78,9 +85,8 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
   isOnClickEditable = false,
   isReadonly = false,
 }) => {
-  const newTypeList = getRadioBtnTypeList(typeList);
-  const textValue = getRadioBtnTextValue(newTypeList, value);
   const titleBr = !!title;
+  const { typeList, textValue } = getRadioBtnDetails(pTypeList, value);
 
   return (
     <FormControl
@@ -89,7 +95,7 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
       name={name}
       value={value || ''}
       initialValue={initialValue || ''}
-      textValue={textValue ? textValue : ''}
+      textValue={textValue || ''}
       onChange={onChange}
       onBlur={onBlur}
       hidden={hidden}
@@ -100,7 +106,7 @@ const RadioBtn: React.FC<RadioBtnProps> = ({
       isOnClickEditable={isOnClickEditable}
       isReadonly={isReadonly}
     >
-      {newTypeList.map((type, index) => {
+      {typeList.map((type, index) => {
         const id = `${name}-${index}`;
 
         return (

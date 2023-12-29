@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -35,13 +35,13 @@ const ModalSlider: React.FC<ModalSliderChartProps> = ({
 
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = useCallback(() => setShow(false), [setShow]);
+  const handleShow = () => useCallback(() => setShow(true), [setShow]);
 
-  const handleSelect = () => {
-    if (setImage) setImage(imageList[index]);
+  const handleSelect = useCallback(() => {
+    setImage?.(imageList[index]);
     handleClose();
-  };
+  }, [setImage, handleClose]);
 
   return (
     <>

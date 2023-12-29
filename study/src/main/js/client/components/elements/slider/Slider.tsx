@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 
 import { Image } from '../../../../@types/studyUtilType';
@@ -31,15 +31,13 @@ const Slider: React.FC<SliderProps> = ({
 }) => {
   const [index, setIndex] = useState(startIndex);
 
-  const handleSelect = (
-    selectedIndex: number,
-    event: Record<string, unknown>
-  ) => {
-    setIndex(selectedIndex);
-    if (onSelect) {
-      onSelect(selectedIndex, event);
-    }
-  };
+  const handleSelect = useCallback(
+    (selectedIndex: number, event: Record<string, unknown>) => {
+      setIndex(selectedIndex);
+      onSelect?.(selectedIndex, event);
+    },
+    [setIndex, onSelect]
+  );
 
   return (
     <Carousel

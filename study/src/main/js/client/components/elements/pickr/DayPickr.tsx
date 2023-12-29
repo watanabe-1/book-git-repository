@@ -1,7 +1,6 @@
 import { endOfMonth } from 'date-fns/endOfMonth';
 import { startOfMonth } from 'date-fns/startOfMonth';
-import { BaseOptions } from 'flatpickr/dist/types/options';
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useCallback, useMemo } from 'react';
 import Flatpickr from 'react-flatpickr';
 
 import { iconConst } from '../../../../constant/iconConstant';
@@ -51,28 +50,38 @@ export const DayPickr = forwardRef<DatePickerCallBackRef, DayPickrProps>(
     },
     ref
   ) => {
-    const date = parseDate(value, pdateFormat);
-    const dateFormat = convertToFlatpickrFormat(pdateFormat);
+    const date = useMemo(() => parseDate(value, pdateFormat), [value]);
+    const dateFormat = useMemo(
+      () => convertToFlatpickrFormat(pdateFormat),
+      [pdateFormat]
+    );
 
-    const buildEventObject = (value: string) => {
-      return {
-        target: {
-          type: 'text',
-          name: name,
-          value: value,
-        },
-      } as unknown;
-    };
+    const buildEventObject = useCallback(
+      (value: string) => {
+        return {
+          target: {
+            type: 'text',
+            name: name,
+            value: value,
+          },
+        } as unknown;
+      },
+      [name]
+    );
 
-    const options: Partial<BaseOptions> = {
-      locale: flatpickrLocale,
-      dateFormat: dateFormat,
-      defaultDate: value,
-    };
-    if (onlyValueMonth) {
-      options.minDate = startOfMonth(date);
-      options.maxDate = endOfMonth(date);
-    }
+    const options = useMemo(
+      () => ({
+        locale: flatpickrLocale,
+        dateFormat: dateFormat,
+        defaultDate: value,
+        ...(onlyValueMonth && {
+          minDate: startOfMonth(date),
+          maxDate: endOfMonth(date),
+        }),
+      }),
+      [flatpickrLocale, dateFormat, value, onlyValueMonth, date]
+    );
+
     return (
       <div className="flatpickr" hidden={hidden}>
         <Flatpickr

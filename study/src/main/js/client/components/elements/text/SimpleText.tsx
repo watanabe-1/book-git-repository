@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { TextColor } from '../../../../@types/studyBootstrap';
 
@@ -31,14 +31,37 @@ const SimpleText: React.FC<SimpleTextProps> = ({
   textMaxLength = 30,
 }) => {
   const str = String(value);
-  const isTruncated = textMaxLength && value && str.length > textMaxLength;
-  const text = isTruncated ? str.substring(0, textMaxLength) + '…' : value;
-  const divClass = cn('text-fit', 'text-wrap', textColorClass);
+  const isTruncated = useMemo(
+    () => textMaxLength && value && str.length > textMaxLength,
+    [textMaxLength, value, str.length]
+  );
+  const text = useMemo(
+    () => (isTruncated ? str.substring(0, textMaxLength) + '…' : value),
+    [isTruncated, str, textMaxLength, value]
+  );
+  const divClass = useMemo(
+    () => cn('text-fit', 'text-wrap', textColorClass),
+    [textColorClass]
+  );
+
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      onClick?.(event);
+    },
+    [onClick]
+  );
+
+  const handleMouseDown = useCallback(
+    (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      onMouseDown?.(event);
+    },
+    [onMouseDown]
+  );
 
   return (
     <div
-      onClick={onClick}
-      onMouseDown={onMouseDown}
+      onClick={handleClick}
+      onMouseDown={handleMouseDown}
       title={isTruncated ? str : undefined}
       aria-label={str}
     >

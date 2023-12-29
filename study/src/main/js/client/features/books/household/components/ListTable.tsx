@@ -18,15 +18,13 @@ import {
 import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import ImageIcon from '../../../../components/elements/icon/ImageIcon';
 import CheckBox, {
-  getCheckBoxLabelValue,
-  getCheckBoxTextValue,
+  getCheckBoxDetails,
   modifierCheckBox,
 } from '../../../../components/form/CheckBox';
 import DayPickrBox from '../../../../components/form/DayPickrBox';
 import FormTable from '../../../../components/form/formTable/FormTable';
 import SelectBox, {
-  getSelectBoxTextValue,
-  getSelectBoxTypeList,
+  getSelectBoxDetails,
 } from '../../../../components/form/SelectBox';
 import TextBox, {
   getTextBoxTextValue,
@@ -188,10 +186,7 @@ const ListTable: React.FC<ListTableProps> = ({
                 </FastField>
               ),
               value: value,
-              textValue: getCheckBoxLabelValue(
-                flag,
-                getCheckBoxTextValue(flag, value)
-              ),
+              textValue: getCheckBoxDetails(flag, value).textValue,
             };
           },
         },
@@ -286,6 +281,7 @@ const ListTable: React.FC<ListTableProps> = ({
           head: 'カテゴリー',
           getCell: ({ value, initialValue, name }, { props, getName }) => {
             const typeList = info.categoryTypes;
+
             return {
               element: (
                 <div>
@@ -333,10 +329,7 @@ const ListTable: React.FC<ListTableProps> = ({
                 </div>
               ),
               value: value,
-              textValue: getSelectBoxTextValue(
-                getSelectBoxTypeList(typeList),
-                value
-              ),
+              textValue: getSelectBoxDetails(typeList, value).textValue,
             };
           },
         },

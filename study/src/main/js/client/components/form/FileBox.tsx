@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Form from 'react-bootstrap/Form';
 
 import FormControl from './formControl/FormControl';
@@ -12,7 +12,7 @@ type FileBoxProps = {
   /** ファイルボックスの値 */
   value?: File;
   /** 初期値(valueとの比較用) */
-  initialValue?: string | number | string;
+  initialValue?: File;
   /** テキストとして表示する値 */
   textValue?: string;
   /** 選択できるデフォルトファイルタイプ */
@@ -74,7 +74,10 @@ const FileBox: React.FC<FileBoxProps> = ({
   isReadonly = false,
 }) => {
   const type = hidden ? 'hidden' : 'file';
-  const textValue = pTextValue ? pTextValue : getFileBoxTextValue(value);
+  const textValue = useMemo(
+    () => pTextValue || getFileBoxTextValue(value),
+    [pTextValue, value]
+  );
 
   return (
     <FormControl

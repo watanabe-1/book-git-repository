@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
 
 import BodysLodingSpinner from '../spinner/BodysLodingSpinner';
@@ -28,10 +28,13 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   onClick = null,
   disabled = false,
 }) => {
-  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (event) => {
-    //console.log('call handleTextClick');
-    onClick?.(event);
-  };
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = useCallback(
+    (event) => {
+      //console.log('call handleTextClick');
+      onClick?.(event);
+    },
+    [onClick]
+  );
 
   return isLoading ? (
     <Button variant="outline-primary" disabled hidden={hidden}>
