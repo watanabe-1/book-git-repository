@@ -6,9 +6,7 @@ import { FormikProps, getIn } from 'formik';
  * @returns ファイル
  */
 export function getInputFile(event: React.ChangeEvent<HTMLInputElement>) {
-  return event.currentTarget.files !== null
-    ? event.currentTarget.files[0]
-    : null;
+  return event.currentTarget.files[0] || null;
 }
 
 /**
