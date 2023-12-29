@@ -1,5 +1,5 @@
 import { Formik, FormikProps } from 'formik';
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -36,30 +36,33 @@ const InputForm = (props: { handleNext: () => void }) => {
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form: BooksUplodeForm) => {
-    const res = await fetchResult(form);
+  const handleSubmit = useCallback(
+    async (form: BooksUplodeForm) => {
+      const res = await fetchResult(form);
 
-    if (res.ok) {
-      // 完了画面へ
-      props.handleNext();
-    } else {
-      setErrData(await res.json());
-    }
-  };
+      if (res.ok) {
+        // 完了画面へ
+        props.handleNext();
+      } else {
+        setErrData(await res.json());
+      }
+    },
+    [setErrData]
+  );
 
   /**
    * 登録
    */
-  const fetchResult = async (form: {
-    booksType?: string;
-    booksFile?: File;
-  }) => {
-    setResultLoading(true);
-    const response = await fetchPost(urlConst.books.RESULT, form);
-    setResultLoading(false);
+  const fetchResult = useCallback(
+    async (form: { booksType?: string; booksFile?: File }) => {
+      setResultLoading(true);
+      const response = await fetchPost(urlConst.books.RESULT, form);
+      setResultLoading(false);
 
-    return response;
-  };
+      return response;
+    },
+    [setResultLoading]
+  );
 
   //console.log(info);
 

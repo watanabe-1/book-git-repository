@@ -7,7 +7,7 @@ import { getDate } from 'date-fns/getDate';
 import { getDay } from 'date-fns/getDay';
 import { getMonth } from 'date-fns/getMonth';
 import { startOfMonth } from 'date-fns/startOfMonth';
-import React, { useMemo, useState, useTransition } from 'react';
+import React, { useCallback, useMemo, useState, useTransition } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -84,23 +84,21 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
    * @param {Date} date 日付け 比較対象
    * @return {boolean} 判定結果
    */
-  const equalsYearMonthDay = (
-    year: number,
-    month: number,
-    day: number,
-    date: Date
-  ) => {
-    // console.log(`year:${year}`);
-    // console.log(`month:${month}`);
-    // console.log(`day:${day}`);
-    // console.log(`date:${date}`);
+  const equalsYearMonthDay = useCallback(
+    (year: number, month: number, day: number, date: Date) => {
+      // console.log(`year:${year}`);
+      // console.log(`month:${month}`);
+      // console.log(`day:${day}`);
+      // console.log(`date:${date}`);
 
-    return (
-      year === date.getFullYear() &&
-      month === date.getMonth() + 1 &&
-      day === date.getDate()
-    );
-  };
+      return (
+        year === date.getFullYear() &&
+        month === date.getMonth() + 1 &&
+        day === date.getDate()
+      );
+    },
+    []
+  );
 
   /**
    * 選択された日付けかどうか
@@ -110,13 +108,16 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
    * @param {number} day 日
    * @return {boolean} 判定結果
    */
-  const isSelectday = (year: number, month: number, day: number): boolean => {
-    // console.log(`year:${year}`);
-    // console.log(`month:${month}`);
-    // console.log(`day:${day}`);
-    // console.log(`date:${date}`);
-    return equalsYearMonthDay(year, month, day, selectDay);
-  };
+  const isSelectday = useCallback(
+    (year: number, month: number, day: number): boolean => {
+      // console.log(`year:${year}`);
+      // console.log(`month:${month}`);
+      // console.log(`day:${day}`);
+      // console.log(`date:${date}`);
+      return equalsYearMonthDay(year, month, day, selectDay);
+    },
+    [selectDay, equalsYearMonthDay]
+  );
 
   /**
    * 土曜日かどうか
@@ -124,9 +125,9 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
    * @param {number} weekCnt 週(日を0とし、月が1……と続き、土の6で終わる数値)
    * @return {boolean} 判定結果
    */
-  const isSaturday = (weekCnt: number) => {
+  const isSaturday = useCallback((weekCnt: number) => {
     return weekCnt === 6;
-  };
+  }, []);
 
   /**
    * 日曜日かどうか
@@ -134,9 +135,9 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
    * @param {number} weekCnt 週(日を0とし、月が1……と続き、土の6で終わる数値)
    * @return {boolean} 判定結果
    */
-  const isSunday = (weekCnt: number) => {
+  const isSunday = useCallback((weekCnt: number) => {
     return weekCnt === 0;
-  };
+  }, []);
 
   /**
    * 祝日かどうか
@@ -144,9 +145,9 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
    * @param {Syukujits} holiday 祝日
    * @return {boolean} 判定結果
    */
-  const isHoliday = (holiday: Syukujits) => {
-    return holiday ? true : false;
-  };
+  const isHoliday = useCallback((holiday: Syukujits) => {
+    return !!holiday;
+  }, []);
 
   /**
    * 金額が存在する日付けかどうか
@@ -154,9 +155,12 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
    * @param {number[]} amountDayList 金額のリスト
    * @return {boolean} 判定結果
    */
-  const isAmountDay = (amountDayList: number[]) => {
-    return !isObjEmpty(amountList) && amountDayList.length != 0;
-  };
+  const isAmountDay = useCallback(
+    (amountDayList: number[]) => {
+      return !isObjEmpty(amountList) && amountDayList.length != 0;
+    },
+    [amountList]
+  );
 
   /**
    * 祝日を取得
@@ -166,16 +170,21 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
    * @param {number} day 日
    * @return 祝日
    */
-  const getHoliday = (year: number, month: number, day: number) => {
-    if (isObjEmpty(syukujitsuList)) return null;
-    return syukujitsuList.find((syukujitsu) => {
-      // console.log(
-      //   `syukujitsu.dateFormatPattern:${syukujitsu.dateFormat}`
-      // );
-      const holiday = parseDate(syukujitsu.date, syukujitsu.dateFormat);
-      return equalsYearMonthDay(year, month, day, holiday);
-    });
-  };
+  const getHoliday = useCallback(
+    (year: number, month: number, day: number) => {
+      if (isObjEmpty(syukujitsuList)) return null;
+
+      return syukujitsuList.find((syukujitsu) => {
+        // console.log(
+        //   `syukujitsu.dateFormatPattern:${syukujitsu.dateFormat}`
+        // );
+        const holiday = parseDate(syukujitsu.date, syukujitsu.dateFormat);
+
+        return equalsYearMonthDay(year, month, day, holiday);
+      });
+    },
+    [syukujitsuList, equalsYearMonthDay]
+  );
 
   /**
    * 金額のリストを取得
@@ -185,24 +194,29 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
    * @param {number} day 日
    * @return 金額
    */
-  const getAmountDayList = (year: number, month: number, day: number) => {
-    if (isObjEmpty(amountList)) return [];
-    return amountList
-      .filter((books) => {
-        const amountday = parseDate(books.booksDate, books.booksDateFormat);
-        return equalsYearMonthDay(year, month, day, amountday);
-      })
-      .map((books) => books.booksAmmount);
-  };
+  const getAmountDayList = useCallback(
+    (year: number, month: number, day: number) => {
+      if (isObjEmpty(amountList)) return [];
+
+      return amountList
+        .filter((books) => {
+          const amountday = parseDate(books.booksDate, books.booksDateFormat);
+          return equalsYearMonthDay(year, month, day, amountday);
+        })
+        .map((books) => books.booksAmmount);
+    },
+    [amountList, equalsYearMonthDay]
+  );
 
   /**
    * 選択されている家計簿リストを取得
    *
    * @return 選択されている家計簿リストを取得
    */
-  const getSelectedamountByDayList = () => {
+  const getSelectedamountByDayList = useCallback(() => {
     // console.log(`selectDay:${selectDay}`);
     if (isObjEmpty(amountList)) return [];
+
     const selectedList = amountList.filter((books) => {
       const amountday = parseDate(books.booksDate, books.booksDateFormat);
       // console.log(`booksDate:${books.booksDate}`);
@@ -215,28 +229,30 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
       );
     });
     // console.log(`selectedList:${JSON.stringify(selectedList)}`);
+
     return selectedList;
-  };
+  }, [amountList, equalsYearMonthDay]);
 
   /**
    * カレンダー用の配列作成
    * @param date
    * @returns
    */
-  const getCalendarArray = (date) => {
+  const getCalendarArray = useCallback((date) => {
     const sundays = eachWeekOfInterval({
       start: startOfMonth(date),
       end: endOfMonth(date),
     });
+
     return sundays.map((sunday) =>
       eachDayOfInterval({ start: sunday, end: endOfWeek(sunday) })
     );
-  };
+  }, []);
 
   //週の定義
   const weekByCalendar: string[] = ['日', '月', '火', '水', '木', '金', '土'];
-  const calendar = getCalendarArray(date);
-  const dateOfMonth = getMonth(date);
+  const calendar = useMemo(() => getCalendarArray(date), [date]);
+  const dateOfMonth = useMemo(() => getMonth(date), [date]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
 
 import { urlConst } from '../../../../../constant/urlConstant';
@@ -7,9 +7,9 @@ import { addContextPath } from '../../../../../study/util/studyUtil';
 const Result = (props: {
   handleBack: React.MouseEventHandler<HTMLButtonElement>;
 }) => {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     window.location.href = addContextPath(urlConst.books.HOUSEHOLD);
-  };
+  }, [window.location.href]);
 
   return (
     <div>

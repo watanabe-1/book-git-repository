@@ -1,5 +1,5 @@
 import { FastField, FieldProps } from 'formik';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Container from 'react-bootstrap/Container';
 
 import {
@@ -77,83 +77,93 @@ const ListTable: React.FC<ListTableProps> = ({
   const booksList = pbooksList ? pbooksList : booksFormList.booksDataList;
 
   /**
+   * リストデータ更新
+   */
+  const fetchUpdListData = useCallback(
+    async (form: NestedObject) => {
+      const param = {
+        ...form,
+        ...buildDataParam(paramDate, commonInfo.dateFormat, booksType),
+      };
+
+      return await fetchPost(urlConst.books.LIST_DATA_UPDATE, param);
+    },
+    [paramDate, commonInfo.dateFormat, booksType]
+  );
+
+  /**
+   * 新規リストデータ追加
+   */
+  const fetchPushData = useCallback(
+    async (form: NestedObject) => {
+      const param = {
+        ...form,
+        ...buildDataParam(
+          booksDate ? booksDate : paramDate,
+          commonInfo.dateFormat,
+          booksType
+        ),
+      };
+
+      return await fetchPost(urlConst.books.LIST_DATA_PUSH, param);
+    },
+    [booksDate, paramDate, commonInfo.dateFormat, booksType]
+  );
+
+  const executeSubmit = useCallback(
+    async (
+      fetch: (form: NestedObject) => Promise<Response>,
+      form: unknown,
+      listname: string
+    ) => {
+      const res = await fetch(objArrayToObj(form[listname], listname));
+      const json = await res.json();
+      // console.log('soushinkekka');
+      // console.log(json);
+      if (res.ok) {
+        setList(json);
+        setChartInfoStaticKey((chartInfoStaticKey) => chartInfoStaticKey + 1);
+      } else {
+        setErrData(json);
+      }
+
+      return res;
+    },
+    [setList, setChartInfoStaticKey, setErrData]
+  );
+
+  /**
    * 送信ボタン(更新)
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form: unknown) => {
-    const res = await fetchUpdListData(
-      objArrayToObj(
-        form[classConst.BOOKS_DATA_LIST],
+  const handleSubmit = useCallback(
+    async (form: unknown) => {
+      return await executeSubmit(
+        fetchUpdListData,
+        form,
         classConst.BOOKS_DATA_LIST
-      )
-    );
-    const json = await res.json();
-    // console.log('soushinkekka');
-    // console.log(json);
-    if (res.ok) {
-      setList(json);
-      setChartInfoStaticKey((chartInfoStaticKey) => chartInfoStaticKey + 1);
-    } else {
-      setErrData(json);
-    }
-
-    return res;
-  };
+      );
+    },
+    [executeSubmit, fetchUpdListData]
+  );
 
   /**
    * 送信ボタン(新規)
    * @param form 送信パラメータ
    */
-  const handlePushData = async (form: NestedObject) => {
-    const res = await fetchPushData(
-      objArrayToObj(
-        form[classConst.BOOKS_DATA_LIST] as NestedObject[],
+  const handlePushData = useCallback(
+    async (form: NestedObject) => {
+      return await executeSubmit(
+        fetchPushData,
+        form,
         classConst.BOOKS_DATA_LIST
-      )
-    );
-    const json = await res.json();
-    // console.log('soushinkekka');
-    // console.log(json);
-    if (res.ok) {
-      setList(json);
-      setChartInfoStaticKey((chartInfoStaticKey) => chartInfoStaticKey + 1);
-    } else {
-      setErrData(json);
-    }
-
-    return res;
-  };
-
-  /**
-   * リストデータ更新
-   */
-  const fetchUpdListData = async (form: NestedObject) => {
-    const param = {
-      ...form,
-      ...buildDataParam(paramDate, commonInfo.dateFormat, booksType),
-    };
-
-    return await fetchPost(urlConst.books.LIST_DATA_UPDATE, param);
-  };
-
-  /**
-   * 新規リストデータ追加
-   */
-  const fetchPushData = async (form: NestedObject) => {
-    const param = {
-      ...form,
-      ...buildDataParam(
-        booksDate ? booksDate : paramDate,
-        commonInfo.dateFormat,
-        booksType
-      ),
-    };
-
-    return await fetchPost(urlConst.books.LIST_DATA_PUSH, param);
-  };
+      );
+    },
+    [executeSubmit, fetchPushData]
+  );
 
   // console.log(JSON.stringify(booksList));
-  const toObjConfig: BuildListTableFormObjConfig = {
+  const tableFormConfig: BuildListTableFormObjConfig = {
     className: classConst.BOOKS_DATA_LIST,
     primaryKey: fieldConst.books.BOOKS_ID,
     list: [
@@ -413,7 +423,7 @@ const ListTable: React.FC<ListTableProps> = ({
     <Container>
       <FormTable
         objArray={booksList}
-        tableFormConfig={toObjConfig}
+        tableFormConfig={tableFormConfig}
         handlePushSubmit={handlePushData}
         handleFormSubmit={handleSubmit}
         errData={errData}

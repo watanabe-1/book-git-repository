@@ -1,5 +1,5 @@
 import { Formik, FormikProps } from 'formik';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -32,31 +32,37 @@ const InputForm = () => {
   const [isResultLoading, setResultLoading] = useState(false);
 
   /**
+   * 登録
+   */
+  const fetchResult = useCallback(
+    async (form: BooksDownloadForm) => {
+      setResultLoading(true);
+      const response = await fetchPost(urlConst.books.DOWNLOAD, form);
+      setResultLoading(false);
+
+      return response;
+    },
+    [setResultLoading]
+  );
+
+  /**
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form: BooksDownloadForm) => {
-    const res = await fetchResult(form);
+  const handleSubmit = useCallback(
+    async (form: BooksDownloadForm) => {
+      const res = await fetchResult(form);
 
-    if (res.ok) {
-      // ファイルダウンロード
-      const blob = await res.blob();
-      downloadFile(blob, getFilenameFromResponse(res));
-    } else {
-      setErrData(await res.json());
-    }
-  };
-
-  /**
-   * 登録
-   */
-  const fetchResult = async (form: BooksDownloadForm) => {
-    setResultLoading(true);
-    const response = await fetchPost(urlConst.books.DOWNLOAD, form);
-    setResultLoading(false);
-
-    return response;
-  };
+      if (res.ok) {
+        // ファイルダウンロード
+        const blob = await res.blob();
+        downloadFile(blob, getFilenameFromResponse(res));
+      } else {
+        setErrData(await res.json());
+      }
+    },
+    [fetchResult, setErrData]
+  );
 
   //console.log({ ...info });
 

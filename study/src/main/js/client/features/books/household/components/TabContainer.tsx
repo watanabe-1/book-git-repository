@@ -1,5 +1,5 @@
 import { format } from 'date-fns/format';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
@@ -9,12 +9,10 @@ import { useNavigate, useLocation, createSearchParams } from 'react-router-dom';
 import Calendar from './Calendar';
 import Chart from './Chart';
 import ListTable from './ListTable';
-import { Books, HouseholdUi } from '../../../../../@types/studyUtilType';
 import {
   parseDate,
   getNextMonthDate,
   getPreviousMonthDate,
-  createDate,
 } from '../../../../../study/util/studyDateUtil';
 import MonthPickr from '../../../../components/elements/pickr/MonthPickr';
 import {
@@ -23,17 +21,9 @@ import {
   useHouseholdInfoSWR,
 } from '../../../../hooks/useBooks';
 import { useCommonInfoSWR } from '../../../../hooks/useCommon';
+import { infoToDate, sumAmount } from '../functions/booksUtils';
 import { buildDataParam, buildInfoParam } from '../functions/param';
 import { useDateParam, useTabParam } from '../hooks/useParam';
-
-/**
- * HouseholdUiからDateを取得
- *
- * @param data HouseholdUi
- * @return Date
- */
-const infoToDate = (data: HouseholdUi) =>
-  createDate(data.year, data.month, data.day);
 
 const TabContainer = () => {
   const { data: commonInfo, initScript: initCommonScript } = useCommonInfoSWR();
@@ -69,52 +59,13 @@ const TabContainer = () => {
   const paramTab = useTabParam();
 
   const tab = paramTab ? paramTab : info.tab;
-  const date = paramDate
-    ? parseDate(paramDate, commonInfo.dateFormat)
-    : infoToDate(info);
-
-  /**
-   * 家計簿データの金額の合計を取得する
-   *
-   * @param booksList 家計簿データの配列
-   */
-  const sumAmount = (booksList: Books[]) => {
-    return booksList.reduce(
-      (sum, books) => sum + Number(books.booksAmmount),
-      0
-    );
-  };
-
-  /**
-   * 次月のページに遷移
-   */
-  const pushNextHistory = () => {
-    pushHistory(getNextMonthDate(date), tab);
-  };
-
-  /**
-   * 前月のページに遷移
-   */
-  const pushPreviousHistory = () => {
-    pushHistory(getPreviousMonthDate(date), tab);
-  };
-
-  /**
-   * 指定の日付のページに繊維
-   *
-   * @param date
-   */
-  const pushJumpHistory = (date: Date) => {
-    pushHistory(date, tab);
-  };
-
-  /**
-   * 指定のタブに繊維
-   *
-   */
-  const pushTabHistory = (tab: string) => {
-    pushHistory(date, tab);
-  };
+  const date = useMemo(
+    () =>
+      paramDate
+        ? parseDate(paramDate, commonInfo.dateFormat)
+        : infoToDate(info),
+    [paramDate, commonInfo.dateFormat, info]
+  );
 
   /**
    * uelの書き換えを行い、ページ遷移する
@@ -122,16 +73,57 @@ const TabContainer = () => {
    * @param date 日付け
    * @param tab タブ
    */
-  const pushHistory = (date: Date, tab: string) => {
-    // navigateを使用してページ遷移を行う
-    navigate({
-      pathname: location.pathname,
-      search: createSearchParams({
-        date: format(date, commonInfo.dateFormat),
-        tab: tab,
-      }).toString(),
-    });
-  };
+  const pushHistory = useCallback(
+    (date: Date, tab: string) => {
+      // navigateを使用してページ遷移を行う
+      navigate({
+        pathname: location.pathname,
+        search: createSearchParams({
+          date: format(date, commonInfo.dateFormat),
+          tab: tab,
+        }).toString(),
+      });
+    },
+    [navigate, location.pathname, commonInfo.dateFormat]
+  );
+
+  /**
+   * 次月のページに遷移
+   */
+  const pushNextHistory = useCallback(() => {
+    pushHistory(getNextMonthDate(date), tab);
+  }, [pushHistory, date, tab]);
+
+  /**
+   * 前月のページに遷移
+   */
+  const pushPreviousHistory = useCallback(() => {
+    pushHistory(getPreviousMonthDate(date), tab);
+  }, [pushHistory, date, tab]);
+
+  /**
+   * 指定の日付のページに繊維
+   *
+   * @param date
+   */
+  const pushJumpHistory = useCallback(
+    (date: Date) => {
+      pushHistory(date, tab);
+    },
+    [tab]
+  );
+
+  /**
+   * 指定のタブに繊維
+   *
+   */
+  const pushTabHistory = useCallback(
+    (tab: string) => {
+      pushHistory(date, tab);
+    },
+    [date]
+  );
+
   // console.log(info);
   // console.log(tab);
   // console.log(date);
