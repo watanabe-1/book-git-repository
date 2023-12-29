@@ -1,5 +1,6 @@
 /**
  * 正規化を行う
+ *
  * @param str 正規化対象
  * @param form 正規化レベル 省略時 NFKC
  * @returns 正規化後
@@ -13,6 +14,7 @@ export function normalizeString(
 
 /**
  * ひらがなからカタカナに変換
+ *
  * @param str 変換対象
  * @returns
  */
@@ -25,6 +27,7 @@ export function hiraToKata(str: string) {
 
 /**
  * カタカナからひらがなに変換
+ *
  * @param str 変換対象
  * @returns
  */
@@ -37,6 +40,7 @@ export function kataToHira(str: string) {
 
 /**
  * オブジェクトをtrimする
+ *
  * @param str
  * @returns 判定結果
  */
