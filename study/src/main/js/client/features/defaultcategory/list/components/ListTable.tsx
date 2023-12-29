@@ -1,5 +1,5 @@
 import { FastField, FieldProps } from 'formik';
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import InputAllButton from './InputAllButton';
 import {
@@ -47,64 +47,74 @@ const ListTable = () => {
   const [errData, setErrData] = useErrData();
 
   /**
+   * リストデータ更新
+   */
+  const fetchUpdListData = useCallback(async (form) => {
+    return await fetchPost(urlConst.defaultCategory.LIST_DATA_UPDATE, form);
+  }, []);
+
+  /**
+   * 新規リストデータ追加
+   */
+  const fetchPushData = useCallback(async (form: NestedObject) => {
+    return await fetchPost(urlConst.defaultCategory.LIST_DATA_PUSH, form);
+  }, []);
+
+  /**
+   * 送信実行
+   *
+   * @param fetch 送信関数
+   * @param form 送信データ
+   * @param listname 送信対象リスト名
+   */
+  const executeSubmit = useCallback(
+    async (
+      fetch: (form: NestedObject) => Promise<Response>,
+      form: NestedObject,
+      listname: string
+    ) => {
+      const res = await fetch(
+        objArrayToObj(form[listname] as NestedObject[], listname)
+      );
+      const json = await res.json();
+      // console.log('soushinkekka');
+      // console.log(json);
+      if (res.ok) {
+        setList(json);
+      } else {
+        setErrData(json);
+      }
+
+      return res;
+    },
+    [setList, setErrData]
+  );
+
+  /**
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form: unknown) => {
-    const res = await fetchUpdListData(
-      objArrayToObj(
-        form[classConst.DEF_CAT_DATA_LIST],
+  const handleSubmit = useCallback(
+    async (form: NestedObject) => {
+      return await executeSubmit(
+        fetchUpdListData,
+        form,
         classConst.DEF_CAT_DATA_LIST
-      )
-    );
-    const json = await res.json();
-    // console.log('soushinkekka');
-    // console.log(json);
-    if (res.ok) {
-      setList(json);
-    } else {
-      setErrData(json);
-    }
-
-    return res;
-  };
+      );
+    },
+    [executeSubmit, fetchUpdListData]
+  );
 
   /**
    * 送信ボタン(新規)
    * @param form 送信パラメータ
    */
-  const handlePushData = async (form: NestedObject) => {
-    const res = await fetchPushData(
-      objArrayToObj(
-        form[classConst.DEF_CAT_DATA_LIST] as NestedObject[],
-        classConst.DEF_CAT_DATA_LIST
-      )
-    );
-    const json = await res.json();
-    // console.log('soushinkekka');
-    // console.log(json);
-    if (res.ok) {
-      setList(json);
-    } else {
-      setErrData(json);
-    }
-
-    return res;
-  };
-
-  /**
-   * リストデータ更新
-   */
-  const fetchUpdListData = async (form) => {
-    return await fetchPost(urlConst.defaultCategory.LIST_DATA_UPDATE, form);
-  };
-
-  /**
-   * 新規リストデータ追加
-   */
-  const fetchPushData = async (form: NestedObject) => {
-    return await fetchPost(urlConst.defaultCategory.LIST_DATA_PUSH, form);
-  };
+  const handlePushData = useCallback(
+    async (form: NestedObject) => {
+      return await executeSubmit(fetchPushData, form, classConst.CAT_DATA_LIST);
+    },
+    [executeSubmit, fetchUpdListData]
+  );
 
   // console.log({ ...info });
   // console.log({ ...list });
@@ -113,7 +123,7 @@ const ListTable = () => {
   // console.log(list);
 
   // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成するための設定
-  const toObjConfig: BuildListTableFormObjConfig = {
+  const tableFormConfig: BuildListTableFormObjConfig = {
     className: classConst.DEF_CAT_DATA_LIST,
     primaryKey: fieldConst.defaultCategory.DEFAULT_CATEGORY_ID,
     list: [
@@ -438,7 +448,7 @@ const ListTable = () => {
     <div className="container">
       <FormTable
         objArray={list.defCatDataList}
-        tableFormConfig={toObjConfig}
+        tableFormConfig={tableFormConfig}
         handlePushSubmit={handlePushData}
         handleFormSubmit={handleSubmit}
         errData={errData}

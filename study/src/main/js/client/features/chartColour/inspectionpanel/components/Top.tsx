@@ -22,7 +22,10 @@ const Top = () => {
   const { data: chartData, initScript: chartDataScript } =
     useActiveChartDataSWR(chartParam);
 
-  const date = parseDate(info.date, info.dateFormat);
+  const date = useMemo(
+    () => parseDate(info.date, info.dateFormat),
+    [info.date, info.dateFormat]
+  );
 
   return (
     <>

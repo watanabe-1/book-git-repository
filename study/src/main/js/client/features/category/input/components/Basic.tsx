@@ -1,5 +1,5 @@
 import { Formik, FormikProps } from 'formik';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useCallback } from 'react';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -35,36 +35,42 @@ const Basic: React.FC<BasicProps> = (props) => {
   const { currentState, setCurrentState } = useContext(Context);
 
   /**
+   * 確認画面情報取得
+   */
+  const fetchConfirm = useCallback(
+    async (form: Category) => {
+      setConfirmLoading(true);
+      const response = await fetchPost(urlConst.category.CONFIRM, form);
+      setConfirmLoading(false);
+
+      return response;
+    },
+    [setConfirmLoading]
+  );
+
+  /**
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form: Category) => {
-    const res = await fetchConfirm(form);
+  const handleSubmit = useCallback(
+    async (form: Category) => {
+      const res = await fetchConfirm(form);
 
-    if (res.ok) {
-      //コンテキストにform,confirmDataデータをセット
-      setCurrentState({
-        ...currentState,
-        form: form,
-        info: info,
-      });
-      // 確認画面へ
-      props.handleNext();
-    } else {
-      setErrData(await res.json());
-    }
-  };
-
-  /**
-   * 確認画面情報取得
-   */
-  const fetchConfirm = async (form: Category) => {
-    setConfirmLoading(true);
-    const response = await fetchPost(urlConst.category.CONFIRM, form);
-    setConfirmLoading(false);
-
-    return response;
-  };
+      if (res.ok) {
+        //コンテキストにform,confirmDataデータをセット
+        setCurrentState({
+          ...currentState,
+          form: form,
+          info: info,
+        });
+        // 確認画面へ
+        props.handleNext();
+      } else {
+        setErrData(await res.json());
+      }
+    },
+    [fetchConfirm, setCurrentState, props.handleNext, setErrData]
+  );
 
   console.log(info);
 

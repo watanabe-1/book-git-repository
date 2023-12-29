@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Col from 'react-bootstrap/Col';
 import Nav from 'react-bootstrap/Nav';
 import Row from 'react-bootstrap/Row';
@@ -28,28 +28,34 @@ const TabContainer = () => {
   const tab = paramTab ? paramTab : info.tab;
 
   /**
-   * 指定のタブに繊維
-   *
-   */
-  const pushTabHistory = (tab: string) => {
-    pushHistory(tab);
-  };
-
-  /**
    * uelの書き換えを行い、ページ遷移する
    *
    * @param date 日付け
    * @param tab タブ
    */
-  const pushHistory = (tab: string) => {
-    // navigateを使用してページ遷移を行う
-    navigate({
-      pathname: location.pathname,
-      search: createSearchParams({
-        tab: tab,
-      }).toString(),
-    });
-  };
+  const pushHistory = useCallback(
+    (tab: string) => {
+      // navigateを使用してページ遷移を行う
+      navigate({
+        pathname: location.pathname,
+        search: createSearchParams({
+          tab: tab,
+        }).toString(),
+      });
+    },
+    [navigate, location.pathname]
+  );
+
+  /**
+   * 指定のタブに繊維
+   *
+   */
+  const pushTabHistory = useCallback(
+    (tab: string) => {
+      pushHistory(tab);
+    },
+    [pushHistory]
+  );
 
   // tabとtabで呼び出す画面の間に共通の項目を表示したいためTabsは使用せずカスタムtabを使用
   return (

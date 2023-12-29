@@ -110,13 +110,22 @@ const ListTable: React.FC<ListTableProps> = ({
     [booksDate, paramDate, commonInfo.dateFormat, booksType]
   );
 
+  /**
+   * 送信実行
+   *
+   * @param fetch 送信関数
+   * @param form 送信データ
+   * @param listname 送信対象リスト名
+   */
   const executeSubmit = useCallback(
     async (
       fetch: (form: NestedObject) => Promise<Response>,
-      form: unknown,
+      form: NestedObject,
       listname: string
     ) => {
-      const res = await fetch(objArrayToObj(form[listname], listname));
+      const res = await fetch(
+        objArrayToObj(form[listname] as NestedObject[], listname)
+      );
       const json = await res.json();
       // console.log('soushinkekka');
       // console.log(json);
@@ -137,7 +146,7 @@ const ListTable: React.FC<ListTableProps> = ({
    * @param form 送信パラメータ
    */
   const handleSubmit = useCallback(
-    async (form: unknown) => {
+    async (form: NestedObject) => {
       return await executeSubmit(
         fetchUpdListData,
         form,

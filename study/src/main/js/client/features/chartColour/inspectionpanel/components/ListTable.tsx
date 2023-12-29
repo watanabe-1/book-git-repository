@@ -1,5 +1,5 @@
 import { FastField, FieldProps } from 'formik';
-import React from 'react';
+import React, { useCallback, useMemo } from 'react';
 import Container from 'react-bootstrap/Container';
 
 import {
@@ -52,86 +52,105 @@ const ListTable: React.FC<ListTableProps> = ({
   const { data: chartColourFormList, mutate: setList } =
     useChartColourListSWR();
 
-  let chartColourList = pchartColourList
-    ? pchartColourList
-    : chartColourFormList.chartColourDataList;
+  const chartColourListBase =
+    pchartColourList || chartColourFormList.chartColourDataList;
 
-  if (onlyActive) {
-    chartColourList = chartColourList.filter(
-      (chartColour) => chartColour.active == info.active.value
-    );
-  }
+  const chartColourList = useMemo(
+    () =>
+      onlyActive
+        ? chartColourListBase.filter(
+            (chartColour) => chartColour.active == info.active.value
+          )
+        : chartColourListBase,
+    [onlyActive, chartColourListBase, info.active.value]
+  );
 
   const [errData, setErrData] = useErrData();
 
   /**
-   * 送信ボタン(更新)
+   * リストデータ更新
+   */
+  const fetchUpdListData = useCallback(async (form: NestedObject) => {
+    const param = {
+      ...form,
+    };
+
+    return await fetchPost(urlConst.chartColour.LIST_DATA_UPDATE, param);
+  }, []);
+
+  /**
+   * 新規リストデータ追加
+   */
+  const fetchPushData = useCallback(async (form: object) => {
+    const param = {
+      ...form,
+    };
+
+    return await fetchPost(urlConst.chartColour.LIST_DATA_PUSH, param);
+  }, []);
+
+  /**
+   * 送信実行
+   *
+   * @param fetch 送信関数
+   * @param form 送信データ
+   * @param listname 送信対象リスト名
+   */
+  const executeSubmit = useCallback(
+    async (
+      fetch: (form: NestedObject) => Promise<Response>,
+      form: NestedObject,
+      listname: string
+    ) => {
+      const res = await fetch(
+        objArrayToObj(form[listname] as NestedObject[], listname)
+      );
+      const json = await res.json();
+      // console.log('soushinkekka');
+      // console.log(json);
+      if (res.ok) {
+        setList(json);
+      } else {
+        setErrData(json);
+      }
+
+      return res;
+    },
+    [setList, setErrData]
+  );
+
+  /**
+   * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form: NestedObject) => {
-    const res = await fetchUpdListData(
-      objArrayToObj(
-        form[classConst.CHART_COLOUR_DATA_LIST] as NestedObject[],
+  const handleSubmit = useCallback(
+    async (form: NestedObject) => {
+      return await executeSubmit(
+        fetchUpdListData,
+        form,
         classConst.CHART_COLOUR_DATA_LIST
-      )
-    );
-    const json = await res.json();
-    // console.log('soushinkekka');
-    // console.log(json);
-    if (res.ok) {
-      setList(json);
-    } else {
-      setErrData(json);
-    }
-
-    return res;
-  };
+      );
+    },
+    [executeSubmit, fetchUpdListData]
+  );
 
   /**
    * 送信ボタン(新規)
    * @param form 送信パラメータ
    */
-  const handlePushData = async (form: NestedObject) => {
-    const res = await fetchPushData(
-      objArrayToObj(
-        form[classConst.CHART_COLOUR_DATA_LIST] as NestedObject[],
+  const handlePushData = useCallback(
+    async (form: NestedObject) => {
+      return await executeSubmit(
+        fetchPushData,
+        form,
         classConst.CHART_COLOUR_DATA_LIST
-      )
-    );
-    const json = await res.json();
-    // console.log('soushinkekka');
-    // console.log(json);
-    if (res.ok) {
-      setList(json);
-    } else {
-      setErrData(json);
-    }
-
-    return res;
-  };
-
-  /**
-   * リストデータ更新
-   */
-  const fetchUpdListData = async (form: NestedObject) => {
-    const param = {
-      ...form,
-    };
-    return await fetchPost(urlConst.chartColour.LIST_DATA_UPDATE, param);
-  };
-
-  /**
-   * 新規リストデータ追加
-   */
-  const fetchPushData = async (form: object) => {
-    const param = {
-      ...form,
-    };
-    return await fetchPost(urlConst.chartColour.LIST_DATA_PUSH, param);
-  };
+      );
+    },
+    [executeSubmit, fetchUpdListData]
+  );
 
   // console.log(JSON.stringify(chartColourList));
-  const toObjConfig: BuildListTableFormObjConfig = {
+  const tableFormConfig: BuildListTableFormObjConfig = {
     className: classConst.CHART_COLOUR_DATA_LIST,
     primaryKey: fieldConst.chartColour.TEMPLATE_ID,
     list: [
@@ -386,7 +405,7 @@ const ListTable: React.FC<ListTableProps> = ({
     <Container>
       <FormTable
         objArray={chartColourList}
-        tableFormConfig={toObjConfig}
+        tableFormConfig={tableFormConfig}
         handlePushSubmit={handlePushData}
         handleFormSubmit={handleSubmit}
         errData={errData}

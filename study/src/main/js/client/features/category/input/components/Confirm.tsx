@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 
 import { Context } from './Content';
@@ -21,19 +21,18 @@ type ConfirmProps = {
   handleBack: () => void;
 };
 
+type Item = {
+  key: {
+    name: string;
+    type: string;
+    convert: { typeList: Type[]; flag: Flag };
+    confirmType: string;
+  };
+};
+
 const Confirm: React.FC<ConfirmProps> = (props) => {
   const { currentState } = useContext(Context);
-  const form = currentState.form;
-  const info = currentState.info;
-
-  type Item = {
-    key: {
-      name: string;
-      type: string;
-      convert: { typeList: Type[]; flag: Flag };
-      confirmType: string;
-    };
-  };
+  const { form, info } = currentState;
 
   const item = {} as Item;
   item[fieldConst.category.CAT_CODE] = {
@@ -90,7 +89,7 @@ const Confirm: React.FC<ConfirmProps> = (props) => {
     });
   }
 
-  const onSubmit = async () => {
+  const onSubmit = useCallback(async () => {
     //alert(JSON.stringify(currentState));
     const res = await fetchPost(urlConst.category.RESULT, currentState.form);
     if (res.ok) {
@@ -99,7 +98,7 @@ const Confirm: React.FC<ConfirmProps> = (props) => {
     } else {
       props.handleBack();
     }
-  };
+  }, [currentState.form, props.handleNext, props.handleBack]);
 
   return (
     <div>

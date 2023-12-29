@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
 
 import { urlConst } from '../../../../../constant/urlConstant';
@@ -10,10 +10,10 @@ type ResultProps = {
 };
 
 const Result: React.FC<ResultProps> = (props) => {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     // 同一タブ内で遷移
     window.location.href = addContextPath(urlConst.category.LIST);
-  };
+  }, [window.location.href]);
 
   return (
     <div>

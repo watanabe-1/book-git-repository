@@ -1,5 +1,5 @@
 import { useFormikContext } from 'formik';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { KeyedMutator } from 'swr';
 
 import { DefaultCategoryFormList } from '../../../../../@types/studyUtilType';
@@ -22,34 +22,35 @@ const InputAllButton: React.FC<InputAllButtonProps> = ({ setList }) => {
   const { resetForm, dirty } = useFormikContext();
 
   /**
+   * リストデータ登録
+   */
+  const fetchInputAll = useCallback(async () => {
+    return await fetchPost(urlConst.defaultCategory.INPUT_ALL);
+  }, []);
+
+  /**
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = async (
-    event
-  ) => {
-    // from送信処理の停止
-    event.preventDefault();
-    setSubmitLoading(true);
-    const res = await fetchInputAll();
-    setSubmitLoading(false);
-    const json = await res.json();
-    // console.log('soushinkekka');
-    // console.log(json);
-    if (res && res.ok) {
-      setList(json);
-      resetForm({ values: json });
-    }
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = useCallback(
+    async (event) => {
+      // from送信処理の停止
+      event.preventDefault();
+      setSubmitLoading(true);
+      const res = await fetchInputAll();
+      setSubmitLoading(false);
+      const json = await res.json();
+      // console.log('soushinkekka');
+      // console.log(json);
+      if (res && res.ok) {
+        setList(json);
+        resetForm({ values: json });
+      }
 
-    return res;
-  };
-
-  /**
-   * リストデータ登録
-   */
-  const fetchInputAll = async () => {
-    return await fetchPost(urlConst.defaultCategory.INPUT_ALL);
-  };
+      return res;
+    },
+    [fetchInputAll, setSubmitLoading, setList, resetForm]
+  );
 
   return (
     <SubmitButton

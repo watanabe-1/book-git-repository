@@ -1,5 +1,5 @@
 import { FastField, Field, FieldProps } from 'formik';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import {
   BuildListTableFormObjConfig,
@@ -57,37 +57,59 @@ const ListTable = () => {
   const [errData, setErrData] = useErrData();
 
   /**
+   * リストデータ更新
+   */
+  const fetchUpdListData = useCallback(async (form: NestedObject) => {
+    return await fetchPost(urlConst.category.LIST_DATA_UPDATE, form);
+  }, []);
+
+  /**
+   * 送信実行
+   *
+   * @param fetch 送信関数
+   * @param form 送信データ
+   * @param listname 送信対象リスト名
+   */
+  const executeSubmit = useCallback(
+    async (
+      fetch: (form: NestedObject) => Promise<Response>,
+      form: NestedObject,
+      listname: string
+    ) => {
+      const res = await fetch(
+        objArrayToObj(form[listname] as NestedObject[], listname)
+      );
+      const json = await res.json();
+      // console.log('soushinkekka');
+      // console.log(json);
+      if (res.ok) {
+        setList(json);
+      } else {
+        setErrData(json);
+      }
+
+      return res;
+    },
+    [setList, setErrData]
+  );
+
+  /**
    * 送信ボタン
    * @param form 送信パラメータ
    */
-  const handleSubmit = async (form: NestedObject) => {
-    const res = await fetchUpdListData(
-      objArrayToObj(
-        form[classConst.CAT_DATA_LIST] as NestedObject[],
+  const handleSubmit = useCallback(
+    async (form: NestedObject) => {
+      return await executeSubmit(
+        fetchUpdListData,
+        form,
         classConst.CAT_DATA_LIST
-      )
-    );
-    const json = await res.json();
-    // console.log('soushinkekka');
-    // console.log(json);
-    if (res.ok) {
-      setList(json);
-    } else {
-      setErrData(json);
-    }
+      );
+    },
+    [executeSubmit, fetchUpdListData]
+  );
 
-    return res;
-  };
-
-  /**
-   * リストデータ更新
-   */
-  const fetchUpdListData = async (form: NestedObject) => {
-    return await fetchPost(urlConst.category.LIST_DATA_UPDATE, form);
-  };
-
-  console.log({ ...info });
-  console.log({ ...list });
+  // console.log({ ...info });
+  // console.log({ ...list });
 
   // console.log(info);
   // console.log(list);
@@ -108,7 +130,7 @@ const ListTable = () => {
   );
 
   // obj[]からobjに変換し、必要な情報を定義したオブジェクトを作成するための設定
-  const toObjConfig: BuildListTableFormObjConfig = {
+  const tableFormConfig: BuildListTableFormObjConfig = {
     className: classConst.CAT_DATA_LIST,
     primaryKey: fieldConst.category.CAT_CODE,
     list: [
@@ -428,7 +450,7 @@ const ListTable = () => {
     <div className="container">
       <FormTable
         objArray={list.catDataList}
-        tableFormConfig={toObjConfig}
+        tableFormConfig={tableFormConfig}
         handleFormSubmit={handleSubmit}
         hiddenPushButton
         errData={errData}

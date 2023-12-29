@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useCallback, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 
 import InputForm from './InputForm';
@@ -36,15 +36,17 @@ const getStepContent = (
 
 const Content = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  };
-  const handleBack = () => {
+  }, [setActiveStep]);
+
+  const handleBack = useCallback(() => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-  const handleReset = () => {
+  }, [setActiveStep]);
+
+  const handleReset = useCallback(() => {
     setActiveStep(0);
-  };
+  }, [setActiveStep]);
 
   return (
     <div>
