@@ -1,5 +1,5 @@
 import '../../common/common';
-import { switchClass } from '../../study/util/studyUtil';
+import { switchClass } from '../util/studyUtil';
 
 // CSS script ボタンクリック時にクラスがなかったら付与あったら削除することで、出し入れを行う
 const menu_btn: HTMLAnchorElement = document.querySelector(

@@ -54,7 +54,7 @@
     "bootstrap": "^5.3.2",
     "bootstrap-icons": "^1.11.2",
     "chart.js": "^4.4.1",
-    "classnames": "^2.5.0",
+    "classnames": "^2.5.1",
     "core-js-pure": "^3.35.0",
     "date-fns": "^3.0.6",
     "flatpickr": "^4.6.13",
