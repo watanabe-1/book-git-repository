@@ -1,5 +1,6 @@
 import { addMonths } from 'date-fns/addMonths';
 import { getMonth } from 'date-fns/getMonth';
+import { isValid } from 'date-fns/isValid';
 import { ParseOptions, parse } from 'date-fns/parse';
 import { startOfMonth } from 'date-fns/startOfMonth';
 import { subMonths } from 'date-fns/subMonths';
@@ -22,8 +23,7 @@ export function parseDate(
 
 /**
  * 年、月、日、時、分、秒を元にDateオブジェクトを作成する
- * new Date()で作成したときと違い存在しない日付の場合は
- * invalid date が返却される
+ * 存在しない日付の場合はエラーとなる
  *
  * @param year 年
  * @param month 月 (1-12)。
@@ -42,63 +42,28 @@ export function createDate(
   minutes?: number | string,
   seconds?: number | string
 ): Date {
-  //console.log('call createDate');
-  const TOP_DELIM = '-';
-  const LOWER_DELIM = ':';
-  const topParts: (number | string)[] = [];
-  const lowerParts: (number | string)[] = [];
+  // パラメーターのデフォルト値を設定
+  month = month ?? 1;
+  day = day ?? 1;
+  hours = hours ?? 0;
+  minutes = minutes ?? 0;
+  seconds = seconds ?? 0;
 
-  if (year) topParts.push(year);
-  if (month) topParts.push(month);
-  if (day) topParts.push(day);
+  // 日付の文字列を作成
+  const dateString = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
-  if (hours) lowerParts.push(hours);
-  if (minutes) lowerParts.push(minutes);
-  if (seconds) lowerParts.push(seconds);
+  // 日付を解析するフォーマットを定義
+  const formatString = 'yyyy-MM-dd HH:mm:ss';
 
-  const topString = topParts.join(TOP_DELIM);
-  const lowerString = lowerParts.join(LOWER_DELIM);
-  const middleString = lowerString ? ' ' : '';
-  const dateString = `${topString}${middleString}${lowerString}`;
-  const formatString = determineFormatString(
-    dateString,
-    TOP_DELIM,
-    LOWER_DELIM
-  );
-
-  //console.log(`dateString:${dateString} formatString:${formatString}`);
+  // 日付を解析
   const date = parseDate(dateString, formatString);
-  //console.log(`date:${date} `);
-  return date;
-}
 
-/**
- * 提供された日時文字列の構造に基づいてフォーマット文字列を決定する
- *
- * @param dateString 分析する日時文字列
- * @returns 日付をパースするためのフォーマット文字列
- * @throws 日時文字列の構造が無効な場合にエラー
- */
-export function determineFormatString(
-  dateString: string,
-  topDelim: string,
-  lowerDelim?: string
-): string {
-  const parts = dateString.split(new RegExp(`[${topDelim}${lowerDelim}]`));
-
-  if (parts.length === 6) {
-    return `yyyy${topDelim}MM${topDelim}dd HH${lowerDelim}mm${lowerDelim}ss`;
-  } else if (parts.length === 5) {
-    return `yyyy${topDelim}MM${topDelim}dd HH${lowerDelim}mm`;
-  } else if (parts.length === 3) {
-    return `yyyy${topDelim}MM${topDelim}dd`;
-  } else if (parts.length === 2) {
-    return `yyyy${topDelim}MM`;
-  } else if (parts.length === 1) {
-    return 'yyyy';
-  } else {
-    throw new Error('Invalid date string');
+  // 日付の妥当性をチェック
+  if (!isValid(date)) {
+    throw new Error('Invalid date');
   }
+
+  return date;
 }
 
 /**

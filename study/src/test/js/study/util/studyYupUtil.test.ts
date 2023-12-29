@@ -1,7 +1,73 @@
 import {
+  ErrorResult,
+  ErrorResults,
+} from '../../../../main/js/@types/studyUtilType';
+import {
   objToFormData,
   objArrayToObj,
+  getServerErr,
+  extractAndDeleteServerErrMsg,
 } from '../../../../main/js/study/util/studyYupUtil';
+
+describe('getServerErr function', () => {
+  const mockErrorResults: ErrorResults = {
+    errorResults: [
+      { code: 'ERR01', message: 'Error 1', itemPath: 'field1', isError: true },
+      { code: 'ERR02', message: 'Error 2', itemPath: 'field2', isError: true },
+      { code: 'ERR03', message: 'Error 3', itemPath: 'field3', isError: true },
+    ],
+  };
+
+  it('should return the correct error object for a given key', () => {
+    const error = getServerErr(mockErrorResults, 'field2');
+    expect(error).toEqual({
+      code: 'ERR02',
+      message: 'Error 2',
+      itemPath: 'field2',
+      isError: true,
+    });
+  });
+
+  it('should return undefined if no error matches the key', () => {
+    const error = getServerErr(mockErrorResults, 'field4');
+    expect(error).toBeUndefined();
+  });
+
+  it('should return undefined if the errorResults array is empty', () => {
+    const error = getServerErr({ errorResults: [] }, 'field1');
+    expect(error).toBeUndefined();
+  });
+
+  it('should return undefined if errData is undefined', () => {
+    const error = getServerErr(undefined, 'field1');
+    expect(error).toBeUndefined();
+  });
+});
+
+describe('extractAndDeleteServerErrMsg function', () => {
+  it('should return the correct error message and modify the itemPath', () => {
+    const errData: ErrorResult = {
+      code: 'ERR01',
+      message: 'Error message',
+      itemPath: 'field1',
+      isError: true,
+    };
+    const message = extractAndDeleteServerErrMsg(errData);
+
+    expect(message).toBe('Error message');
+    expect(errData.itemPath).toBe('');
+  });
+
+  it('should return a default error message if errData is undefined', () => {
+    const message = extractAndDeleteServerErrMsg(undefined);
+    expect(message).toBe('エラーです');
+  });
+
+  it('should return a default error message if errData is null', () => {
+    const message = extractAndDeleteServerErrMsg(null);
+    expect(message).toBe('エラーです');
+  });
+});
 
 describe('objToFormData', () => {
   it('converts an object with various types of values to FormData', () => {
