@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
@@ -18,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -37,15 +40,14 @@ public class BooksConvertHelper {
     // PDFからテキストを抽出。
     StringBuffer result = new StringBuffer();
     try (InputStream in = pdf.getInputStream();
-        PDDocument doc = PDDocument.load(in)) {
+        PDDocument doc = Loader.loadPDF(in.readAllBytes())) {
       int totalPages = doc.getNumberOfPages();
       PDFTextStripper stripper = new PDFTextStripper() {
         // 数値は後ろ、文字列は前の位置を指定
         // 先頭から、後ろ、後ろ、前、前、前、前、後ろ、後ろの順で値が入っている
-        private final List<Float> expectedXs =
-            Arrays.asList((float) 163.0, (float) 190.0, (float) 212.5, (float) 263.8,
-                (float) 326.44,
-                (float) 376.84, (float) 462.5, (float) 531.5359);
+        private final List<Float> expectedXs = Arrays.asList((float) 163.0, (float) 190.0, (float) 212.5, (float) 263.8,
+            (float) 326.44,
+            (float) 376.84, (float) 462.5, (float) 531.5359);
         private int lastIndex = 0;
         private float lastY = 0;
 
@@ -135,9 +137,8 @@ public class BooksConvertHelper {
         // pdf出力日(下から4行目)
         String strDate = lines[dayLine].split(wordSeparator)[0];
         String strDateArray[] = strDate.split("/");
-        LocalDate day =
-            LocalDate.of(Integer.parseInt(strDateArray[0]), Integer.parseInt(strDateArray[1]),
-                Integer.parseInt(strDateArray[2]));
+        LocalDate day = LocalDate.of(Integer.parseInt(strDateArray[0]), Integer.parseInt(strDateArray[1]),
+            Integer.parseInt(strDateArray[2]));
 
         // 前後4行分を除いて取り出す
         for (int i = startLine; i <= endLine; i++) {
@@ -196,6 +197,5 @@ public class BooksConvertHelper {
         })
         .collect(Collectors.toList());
   }
-
 
 }

@@ -1,8 +1,10 @@
 package org.book.app.common.config;
 
 import java.io.IOException;
+
+import javax.sql.DataSource;
+
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.aspectj.lang.annotation.Aspect;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -29,7 +31,6 @@ import org.springframework.transaction.interceptor.TransactionInterceptor;
 @Configuration
 @PropertySource("classpath:config/properties/database.properties")
 @MapperScan("org.book.app.study.mapper")
-@Aspect
 public class DbConfig {
 
   /**
@@ -40,41 +41,42 @@ public class DbConfig {
    */
   @Bean
   @ConfigurationProperties(prefix = "jdbc")
-  BasicDataSource dataSource() {
+  public DataSource dataSource() {
     return new BasicDataSource();
   }
 
   /**
-   * MyBatis マッピング設定<br/>
-   * 
-   * @return dataSource
-   * @throws IOException
-   */
+  * MyBatis マッピング設定<br/>
+  * 
+  * @param dataSource the data source
+  * @return sqlSessionFactory
+  * @throws IOException
+  */
   @Bean
-  SqlSessionFactoryBean sqlSessionFactory() throws IOException {
+  public SqlSessionFactoryBean sqlSessionFactory(DataSource dataSource) throws IOException {
     SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-    ResourcePatternResolver resolver = ResourcePatternUtils.getResourcePatternResolver(new DefaultResourceLoader());
-    org.apache.ibatis.session.Configuration conf = new org.apache.ibatis.session.Configuration();
-    conf.setMapUnderscoreToCamelCase(true);
+    sqlSessionFactoryBean.setDataSource(dataSource);
 
-    sqlSessionFactoryBean.setDataSource(dataSource());
-    sqlSessionFactoryBean
-        .setMapperLocations(
-            resolver.getResources("classpath:config/mappers/**/*.xml"));
-    sqlSessionFactoryBean.setConfiguration(conf);
+    ResourcePatternResolver resolver = ResourcePatternUtils.getResourcePatternResolver(new DefaultResourceLoader());
+    sqlSessionFactoryBean.setMapperLocations(resolver.getResources("classpath:config/mappers/**/*.xml"));
+
+    org.apache.ibatis.session.Configuration myBatisConfig = new org.apache.ibatis.session.Configuration();
+    myBatisConfig.setMapUnderscoreToCamelCase(true);
+    sqlSessionFactoryBean.setConfiguration(myBatisConfig);
 
     return sqlSessionFactoryBean;
   }
 
   /**
-   * アノテーションでトランザクションを制御 <br/>
-   * 
-   * @return DataSourceTransactionManager
-   */
+  * トランザクションマネージャーの設定<br/>
+  * 
+  * @param dataSource the data source
+  * @return transactionManager
+  */
   @Bean
-  DataSourceTransactionManager transactionManager() {
+  public DataSourceTransactionManager transactionManager(DataSource dataSource) {
     DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
-    transactionManager.setDataSource(dataSource());
+    transactionManager.setDataSource(dataSource);
 
     return transactionManager;
   }
