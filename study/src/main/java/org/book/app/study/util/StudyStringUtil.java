@@ -4,8 +4,10 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -27,6 +29,11 @@ public class StudyStringUtil {
   public static final char SEPARATOR_BY_TSV = '\t';
 
   /**
+  * tsvの区切り文字
+  */
+  public static final String SEPARATOR_BY_PATH = "/";
+
+  /**
    * null、もしくは空文字の判断を行う
    * 
    * @param value チェック対象
@@ -37,21 +44,63 @@ public class StudyStringUtil {
   }
 
   /**
-   * ベースのパスと追加のパスを結合し返却する
-   * 
-   * @param basePath ベースとなるパス
-   * @param addPath 追加したいパス
-   * @return String 結合したパス
+  * 区切り文字で結合
+  *
+  * @param separator 区切り文字1文字
+  * @param base ベース
+  * @param add 追加す対象
+  * @return 結合したもの
    */
-  public static String pathJoin(String basePath, String addPath) {
-    final String SLASH = "/";
-    final String ENMARK = "\\";
-    StringBuffer sb = new StringBuffer();
+  public static String joinBase(String separator, String base, String add) {
+    Boolean isNullOrEmptyAdd = isNullOrEmpty(add);
 
-    // 「/」が文字列の先頭にあった場合そのまま結合、なければ「/」をはさんで結合
-    return addPath.indexOf(SLASH) == 0 || addPath.indexOf(ENMARK) == 0
-        ? sb.append(basePath).append(addPath).toString()
-        : sb.append(basePath).append(SLASH).append(addPath).toString();
+    if (isNullOrEmptyAdd) {
+      return base;
+    }
+
+    Boolean isNullOrEmptyBase = isNullOrEmpty(base);
+
+    if (isNullOrEmptyBase) {
+      return add;
+    }
+
+    int len = separator.length();
+
+    // 先頭
+    String addHead = !isNullOrEmptyAdd ? add.substring(0, Math.min(len, add.length())) : "";
+
+    if (addHead.isEmpty()) {
+      return base;
+    }
+
+    // 末尾
+    String baseFoot = !isNullOrEmptyBase ? base.substring(Math.max(0, base.length() - len)) : "";
+
+    if (baseFoot.isEmpty()) {
+      return add;
+    }
+
+    if (baseFoot.equals(separator)) {
+      return addHead.equals(separator) ? base.substring(0, base.length() - len) + add : base + add;
+    } else {
+      return addHead.equals(separator) ? base + add : base + separator + add;
+    }
+  }
+
+  /**
+  * 区切り文字で結合
+  
+  * @param separator 区切り文字1文字
+  * @param base ベース
+  * @param adds 追加する対象のリスト
+  * @return 結合したもの
+  */
+  public static String joinBases(String separator, String base, String... adds) {
+    String result = base;
+    for (String add : adds) {
+      result = joinBase(separator, result, add);
+    }
+    return result;
   }
 
   /**
@@ -62,12 +111,7 @@ public class StudyStringUtil {
    * @return String 結合したパス
    */
   public static String pathJoin(String basePath, String... addPaths) {
-    String result = basePath;
-    for (String addaPath : addPaths) {
-      result = pathJoin(result, addaPath);
-    }
-
-    return result;
+    return joinBases(SEPARATOR_BY_PATH, basePath, addPaths);
   }
 
   /**
@@ -79,9 +123,7 @@ public class StudyStringUtil {
    * @return String 置換結果
    */
   public static String replaceFirstOneLeft(String str, String target, String replaceMent) {
-    // 置換対象が文字列の先頭ににあった場合のみ置換、それ以外は置換せずに返却
-    return Objects.equals(target.indexOf(replaceMent), 0) ? str.replaceFirst(target, replaceMent)
-        : str;
+    return str.indexOf(target) == 0 ? str.replaceFirst(target, replaceMent) : str;
   }
 
   /**
@@ -94,10 +136,11 @@ public class StudyStringUtil {
    */
   public static String replaceFirstOneRight(String str, String target, String replaceMent) {
     // 置換対象が文字列の最後尾ににあった場合のみ置換、それ以外は置換せずに返却
-    return Objects.equals(target.lastIndexOf(replaceMent), target.length())
-        ? replaceLast(str, target, replaceMent)
-        : str;
-
+    int lastIndex = str.lastIndexOf(target);
+    if (lastIndex != -1 && lastIndex + target.length() == str.length()) {
+      return replaceLast(str, target, replaceMent);
+    }
+    return str;
   }
 
   /**
