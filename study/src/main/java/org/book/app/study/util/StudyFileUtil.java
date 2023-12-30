@@ -10,12 +10,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.apache.commons.io.FilenameUtils;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
+
 import lombok.extern.slf4j.XSlf4j;
 
 /**
@@ -57,6 +59,10 @@ public class StudyFileUtil {
    * @return 拡張子を追加したファイル名
    */
   public static String addExtension(String fileName, String extension) {
+    if (fileName == null) {
+      return null;
+    }
+
     return FilenameUtils.isExtension(fileName, extension)
         ? fileName
         : new StringBuffer().append(fileName).append(".").append(extension).toString();

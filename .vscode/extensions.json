@@ -14,6 +14,7 @@
     "esbenp.prettier-vscode",
     "redhat.vscode-xml",
     "dotjoshjohnson.xml",
-    "mosapride.zenkaku"
+    "mosapride.zenkaku",
+    "mechatroner.rainbow-csv"
   ]
 }
