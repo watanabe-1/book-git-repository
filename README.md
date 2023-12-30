@@ -2,14 +2,10 @@
 
 ## java spring framework の勉強用に自分用家計簿の作成
 
+本プロジェクトは下記内容を参考に家計簿アプリを作成しています。
 現在は thymeleaf を使用して作成した画面を勉強もかねて react を使用して同じように作成し直している途中です。
-
-カテゴリー系画面、家計簿系画面が thymeleaf→react でだいたい作成完了しています。
-それ以外の画面は thymeleaf を使用して作成されています。
 もともと作成していた thymeleaf での画面は旧メニューから確認出来ます。
 以下が本プロジェクトの説明になります。
-
-本プロジェクトは下記内容を参考に家計簿アプリを作成しています。
 
 - 家計簿の表示内容は楽天家計簿を参考に作成 →[楽天家計簿](https://support.rakuten-card.jp/faq/show/127262?category_id=886&return_path=%2Fcategory%2Fshow%2F886%3Fpage%3D1%26site_domain%3Dguest%26site_domain%3Dguest%26sort%3Dsort_access%26sort_order%3Ddesc&site_domain=guest)
 - 家計簿データの取り込み csv 形式も楽天家計簿で出力される形式に合わせている
@@ -67,6 +63,18 @@
    - book-git-repository\study で `gradlew bootrun` コマンドを実施(もしくは book-git-repository\bat\commond\bootrun.bat を実行)することでビルドとサーバの起動が実行される
    - サーバー起動後 admin/admin でシステム管理者としてログイン可能
 
+### 開発環境(Java - Visual Studio Code)
+
+1. gradle を使用し eclips プロジェクトの作成
+   - book-git-repository\study で`gradlew eclips`コマンドを実施
+2. プロジェクトを Visual Studio Code で開く
+3. 推奨される拡張機能の install
+
+### デバッグ(Java - Visual Studio Code)
+
+1. サーバーを起動した状態で [実行とデバッグ] -> [Debug (Attach) - Gradle] からポート:7778 にアクセス
+   - 通常のデバッグと同じくブレイクポイントなどが使用可能
+
 ### 開発環境(Java - eclips)
 
 1. gradle を使用し eclips プロジェクトの作成
@@ -78,18 +86,6 @@
 ### デバッグ(Java - eclips)
 
 1. サーバーを起動した状態で [実行の構成] -> [リモート Java アプリケーション] からポート:7778 にアクセス
-   - 通常のデバッグと同じくブレイクポイントなどが使用可能
-
-### 開発環境(Java - Visual Studio Code)
-
-1. gradle を使用し eclips プロジェクトの作成
-   - book-git-repository\study で`gradlew eclips`コマンドを実施
-2. プロジェクトを Visual Studio Code で開く
-3. 推奨される拡張機能の install
-
-### デバッグ(Java - Visual Studio Code)
-
-1. サーバーを起動した状態で [実行とデバッグ] -> [Debug (Attach) - Gradle] からポート:7778 にアクセス
    - 通常のデバッグと同じくブレイクポイントなどが使用可能
 
 ### 開発環境(js(ts) - Visual Studio Code)
