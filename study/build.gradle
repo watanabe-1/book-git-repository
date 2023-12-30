@@ -124,11 +124,11 @@ repositories {
 dependencyManagement {
     dependencies {
         // org.graalvm.sdk version
-        dependencySet(group: "org.graalvm.sdk", version: "22.3.2") {
+        dependencySet(group: "org.graalvm.sdk", version: "23.0.2") {
             entry "graal-sdk"
         }
         // org.graalvm.js version
-        dependencySet(group: "org.graalvm.js", version: "22.3.2") {
+        dependencySet(group: "org.graalvm.js", version: "23.0.2") {
             entry "js"
             entry "js-scriptengine"
         }
