@@ -24,6 +24,7 @@
 - JavaScript のパッケージ管理システムとして node.js 、 npm を使用 → [node.js](https://nodejs.org/ja/)
   - gradel から利用するため node.js をインストールしていなくても実行可能
 - db は PostgreSQL を使用 → [PostgreSQL](https://www.enterprisedb.com/downloads/postgres-postgresql-downloads)
+- java の formatter として[styleguide eclipse-java-google-style.xml](https://github.com/google/styleguide)を使用
 
 ### pull 後の流れ
 
@@ -72,14 +73,26 @@
    - book-git-repository\study で`gradlew eclips`コマンドを実施
 2. eclips に gradle プロジェクトとして book-git-repository\study 配下を import
    - サーバーが起動されている状態で compile を行うと、内容がサーバーに反映される
-   - java の formatter は google が公開しているものを使用して作成している → [google-java-format](https://github.com/google/google-java-format)
+   - java の formatter は google が公開しているものを使用して作成している → [styleguide eclipse-java-google-style.xml](https://github.com/google/styleguide)
 
 ### デバッグ(Java - eclips)
 
 1. サーバーを起動した状態で [実行の構成] -> [リモート Java アプリケーション] からポート:7778 にアクセス
    - 通常のデバッグと同じくブレイクポイントなどが使用可能
 
-### 開発環境(js)
+### 開発環境(Java - Visual Studio Code)
+
+1. gradle を使用し eclips プロジェクトの作成
+   - book-git-repository\study で`gradlew eclips`コマンドを実施
+2. プロジェクトを Visual Studio Code で開く
+3. 推奨される拡張機能の install
+
+### デバッグ(Java - Visual Studio Code)
+
+1. サーバーを起動した状態で [実行とデバッグ] -> [Debug (Attach) - Gradle] からポート:7778 にアクセス
+   - 通常のデバッグと同じくブレイクポイントなどが使用可能
+
+### 開発環境(js(ts) - Visual Studio Code)
 
 1. `gradlew --no-daemon watch` コマンド (もしくは book-git-repository\bat\commond\daemonwatch.bat) を起動することで js のファイル監視が可能
 
@@ -89,12 +102,15 @@
    - react で作成してある画面は画面にアクセス時に url パラメータに ssr="ssr"を渡すことで、SSR が可能
      - 例 <http://localhost:8080/study/books/household?ssr="ssr">
 
-### デバッグ(js)
+2. プロジェクトを Visual Studio Code で開く
+3. 推奨される拡張機能の install
+
+### デバッグ(js(ts))
 
 1. js もソースマップが出力されているため、ブラウザなどでデバッグ可能
    - react のデバッグは右記 Chrome 拡張機能で可能 →[React Developer Tools](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=ja)
 
-### js のみビルドしたい場合
+### js(ts) のみビルドしたい場合
 
 1. ライブラリのインストール(更新)
    - book-git-repository\study で`gradlew npmInstall`コマンドを実施

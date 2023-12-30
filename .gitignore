@@ -20,7 +20,10 @@ db_config.txt
 eclipse-formatter.xml
 
 # vscode
-.vscode
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/launch.json
 
 # Idea
 .idea

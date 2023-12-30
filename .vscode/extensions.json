@@ -1,0 +1,19 @@
+{
+  "recommendations": [
+    "vscjava.vscode-java-pack",
+    "vmware.vscode-boot-dev-pack",
+    "formulahendry.auto-close-tag",
+    "wmaurer.change-case",
+    "oouo-diogo-perdigao.docthis",
+    "cschlosser.doxdocgen",
+    "dbaeumer.vscode-eslint",
+    "vincaslt.highlight-matching-tag",
+    "zignd.html-css-class-completion",
+    "davidanson.vscode-markdownlint",
+    "christian-kohler.path-intellisense",
+    "esbenp.prettier-vscode",
+    "redhat.vscode-xml",
+    "dotjoshjohnson.xml",
+    "mosapride.zenkaku"
+  ]
+}
