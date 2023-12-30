@@ -8,7 +8,9 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
 import javax.script.ScriptException;
+
 import org.book.app.study.api.js.ServerApi;
 import org.book.app.study.form.Form;
 import org.graalvm.polyglot.Context;
@@ -16,7 +18,9 @@ import org.graalvm.polyglot.HostAccess;
 import org.springframework.web.servlet.ModelAndView;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
+
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
+
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.XSlf4j;
 
@@ -46,6 +50,16 @@ public class StudyJsUtil {
    * reactjs用view-script
    */
   public static final String VIEW_SCRIPT = "jsScript";
+
+  /**
+   * depens.bundle.jsのパス
+   */
+  private static final String DEPENS_BUNDLE_PATH = "/static/js/depens.bundle.js";
+
+  /**
+   * webapi.bundle.jsのパス
+   */
+  private static final String WEBAPI_BUNDLE_PATH = "/static/js/webapi.bundle.js";
 
   /**
    * js実行テンプレートのセット
@@ -266,10 +280,10 @@ public class StudyJsUtil {
         engine.eval("window.api = api");
       }
 
-      engine.eval(readJsFile("/static/js/depens.bundle.js"));
+      engine.eval(readJsFile(DEPENS_BUNDLE_PATH));
       // TextEncoderがwebapi(ブラウザで用意されているapi)のため別で読み込みしなおす
       // text-encoding-polyfill
-      engine.eval(readJsFile("/static/js/webapi.bundle.js"));
+      engine.eval(readJsFile(WEBAPI_BUNDLE_PATH));
       engine.eval("TextEncoder = window.TextEncoder");
       engine.eval("setTimeout = window.setTimeout");
       engine.eval(readJsFile(scriptPath));
