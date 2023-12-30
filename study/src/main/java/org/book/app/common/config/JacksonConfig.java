@@ -1,8 +1,9 @@
 package org.book.app.common.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 
@@ -10,31 +11,31 @@ import com.fasterxml.jackson.databind.util.StdDateFormat;
  * Jacksonの設定クラス
  *
  */
+@Configuration
 public class JacksonConfig {
 
   /**
-   * jsonMessageConverter<br/>
-   * 
-   * @return MappingJackson2HttpMessageConverter
-   */
+  * ObjectMapperをカスタマイズしてBeanとして提供する。
+  * 
+  * @return カスタマイズされたObjectMapper
+  */
   @Bean
-  ObjectMapper objectMapper() {
-    Jackson2ObjectMapperFactoryBean Jackson2ObjectMapperFactoryBean = new Jackson2ObjectMapperFactoryBean();
-    Jackson2ObjectMapperFactoryBean.setDateFormat(new StdDateFormat());
-
-    return Jackson2ObjectMapperFactoryBean.getObject();
+  public ObjectMapper objectMapper() {
+    ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.setDateFormat(new StdDateFormat());
+    return objectMapper;
   }
 
   /**
-   * jsonMessageConverter<br/>
+   * カスタマイズされたObjectMapperを使用して、
+   * MappingJackson2HttpMessageConverterをBeanとして提供する。
    * 
-   * @return MappingJackson2HttpMessageConverter
+   * @return カスタマイズされたMappingJackson2HttpMessageConverter
    */
   @Bean
-  MappingJackson2HttpMessageConverter jsonMessageConverter() {
-    MappingJackson2HttpMessageConverter mapJaksonMstConver = new MappingJackson2HttpMessageConverter();
-    mapJaksonMstConver.setObjectMapper(objectMapper());
-
-    return mapJaksonMstConver;
+  public MappingJackson2HttpMessageConverter jsonMessageConverter() {
+    MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+    converter.setObjectMapper(objectMapper());
+    return converter;
   }
 }

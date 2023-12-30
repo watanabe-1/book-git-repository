@@ -15,6 +15,7 @@
     "redhat.vscode-xml",
     "dotjoshjohnson.xml",
     "mosapride.zenkaku",
-    "mechatroner.rainbow-csv"
+    "mechatroner.rainbow-csv",
+    "vscjava.vscode-gradle"
   ]
 }
