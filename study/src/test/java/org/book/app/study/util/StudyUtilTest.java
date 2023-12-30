@@ -1,8 +1,13 @@
 package org.book.app.study.util;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import java.util.Date;
+
 import org.book.app.study.entity.Account;
 import org.book.app.study.service.AppUserDetails;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,8 +48,7 @@ class StudyUtilTest {
 
   @Test
   void getLoginUser_WithDifferentPrincipalType_ThrowsClassCastException() {
-    Authentication authentication =
-        new UsernamePasswordAuthenticationToken("notAppUserDetails", null);
+    Authentication authentication = new UsernamePasswordAuthenticationToken("notAppUserDetails", null);
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
     assertThrows(ClassCastException.class, () -> {

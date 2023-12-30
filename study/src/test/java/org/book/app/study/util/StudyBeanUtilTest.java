@@ -1,9 +1,17 @@
 package org.book.app.study.util;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
 import org.book.app.study.controller.BooksController;
 import org.book.app.study.entity.Books;
 import org.book.app.study.form.BooksForm;
@@ -62,20 +70,22 @@ class StudyBeanUtilTest {
   }
 
   @Test
-  void createInstanceFromBean_CopiesProperties() {
-    BooksForm source = new BooksForm();
-    source.setBooksId("value");
+  public void testSetStudyEntityListPropertiesNull() {
+    Books mockEntity1 = mock(Books.class);
+    Books mockEntity2 = mock(Books.class);
+    List<Books> entities = Arrays.asList(mockEntity1, mockEntity2);
 
-    Books target = StudyBeanUtil.createInstanceFromBean(source, Books.class);
+    StudyBeanUtil.setStudyEntityListPropertiesNull(entities);
 
-    assertEquals("value", target.getBooksId());
-  }
+    verify(mockEntity1).setInsUser(null);
+    verify(mockEntity1).setInsDate(null);
+    verify(mockEntity1).setUpdUser(null);
+    verify(mockEntity1).setUpdDate(null);
 
-  @Test
-  void createInstanceFromBean_ThrowsExceptionForInaccessibleConstructor() {
-    assertThrows(BusinessException.class, () -> {
-      StudyBeanUtil.createInstanceFromBean(new Books(), BooksController.class);
-    });
+    verify(mockEntity2).setInsUser(null);
+    verify(mockEntity2).setInsDate(null);
+    verify(mockEntity2).setUpdUser(null);
+    verify(mockEntity2).setUpdDate(null);
   }
 
   @Test
@@ -94,6 +104,23 @@ class StudyBeanUtilTest {
     entities.forEach(entity -> {
       assertNull(entity.getInsUser());
       assertNull(entity.getInsDate());
+    });
+  }
+
+  @Test
+  void createInstanceFromBean_CopiesProperties() {
+    BooksForm source = new BooksForm();
+    source.setBooksId("value");
+
+    Books target = StudyBeanUtil.createInstanceFromBean(source, Books.class);
+
+    assertEquals("value", target.getBooksId());
+  }
+
+  @Test
+  void createInstanceFromBean_ThrowsExceptionForInaccessibleConstructor() {
+    assertThrows(BusinessException.class, () -> {
+      StudyBeanUtil.createInstanceFromBean(new Books(), BooksController.class);
     });
   }
 
