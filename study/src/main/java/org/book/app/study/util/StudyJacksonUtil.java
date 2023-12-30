@@ -5,8 +5,10 @@ import java.io.InputStream;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
+
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
@@ -103,7 +105,6 @@ public class StudyJacksonUtil {
    * @param isQuote 文字列にダブルクオートをつけるか
    * @return List
    */
-
   public static <T> List<T> objectToListByCsvMapper(Object obj, String charsetName,
       Class<T> pojoType, char sep, boolean isHeader, boolean isQuote) {
     CsvMapper mapper = createCsvMapper(isQuote);
