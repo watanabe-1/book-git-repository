@@ -1,6 +1,8 @@
 package org.book.app.common.config;
 
 import java.nio.charset.StandardCharsets;
+
+import org.book.app.common.logging.TraceReauestInterceptor;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.MessageSource;
@@ -12,7 +14,6 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.terasoluna.gfw.web.logging.TraceLoggingInterceptor;
 
 @Configuration
 public class AppConfig implements WebMvcConfigurer {
@@ -79,23 +80,13 @@ public class AppConfig implements WebMvcConfigurer {
   }
 
   /**
-   * org.terasoluna.gfw.web.logging.TraceLoggingInterceptorは、<br/>
-   * Controllerの処理開始、終了をログ出力するHandlerInterceptorである。<br/>
-   * 終了時にはControllerが返却したView名とModelに追加された属性、<br/>
-   * およびControllerの処理に要した時間も出力する。<br/>
-   * spring-mvc.xmlの<mvc:interceptors>内に以下のようにTraceLoggingInterceptorを追加する。<br/>
-   * デフォルトでは、Controllerの処理に3秒以上かかった場合にWARNログを出力する。<br/>
-   * この閾値を変える場合は、warnHandlingNanosプロパティにナノ秒単位で指定する<br/>
-   * 閾値を10秒(10 * 1000 * 1000 * 1000 ナノ秒)に変更したい場合は以下のように設定すればよい。<br/>
-   * このとき、10秒（10000000000ナノ秒）のようにint型の範囲を超える閾値を設定する場合は、<br/>
-   * long型で値を設定する点に留意されたい。 <property name="warnHandlingNanos"<br/>
-   * value="#{10L * 1000L 1000L * 1000L}"
+   * リクエストのトレースログ用
    * 
-   * @return TraceLoggingInterceptor
+   * @return
    */
   @Bean
-  TraceLoggingInterceptor TraceLoggingInterceptor() {
-    return new TraceLoggingInterceptor();
+  TraceReauestInterceptor TraceReauestInterceptor() {
+    return new TraceReauestInterceptor();
   }
 
   /**
@@ -104,7 +95,7 @@ public class AppConfig implements WebMvcConfigurer {
    */
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(TraceLoggingInterceptor()).addPathPatterns("/**")
+    registry.addInterceptor(TraceReauestInterceptor()).addPathPatterns("/**")
         .excludePathPatterns("/resources/**");
   }
 

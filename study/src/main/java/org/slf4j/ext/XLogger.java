@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Locale;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.NoSuchMessageException;
@@ -27,8 +28,7 @@ public class XLogger {
   /**
    * MessageSourceでログメッセージを取得する
    */
-  private static ReloadableResourceBundleMessageSource messageSource =
-      new ReloadableResourceBundleMessageSource();
+  private static ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
 
   // staticイニシャライザにてMessageSourceを生成する
   static {
@@ -60,6 +60,15 @@ public class XLogger {
    */
   public boolean isDebugEnabled() {
     return logger.isDebugEnabled();
+  }
+
+  /**
+  * TRACEレベルのログ出力を許可しているか、判定する。
+  * 
+  * @return 判定結果
+  */
+  public boolean isTraceEnabled() {
+    return logger.isTraceEnabled();
   }
 
   /**

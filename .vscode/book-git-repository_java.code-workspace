@@ -43,6 +43,8 @@
     "files.autoGuessEncoding": true,
     "java.configuration.updateBuildConfiguration": "interactive",
     "java.format.settings.url": "./study/eclipse-java-google-style.xml",
+    "java.autobuild.enabled": true,
+    "java.completion.enabled": true,
     "[java]": {
       "editor.formatOnPaste": true,
       "editor.formatOnSave": true,
