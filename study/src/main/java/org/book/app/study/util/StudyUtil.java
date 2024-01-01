@@ -1,6 +1,7 @@
 package org.book.app.study.util;
 
 import java.util.Date;
+
 import org.book.app.study.service.AppUserDetails;
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -15,8 +16,7 @@ public class StudyUtil {
    * @return String ログインユーザーId
    */
   public static String getLoginUser() {
-    AppUserDetails userDetails =
-        (AppUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    AppUserDetails userDetails = (AppUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
     // ログインユーザーのユーザーIDを取得
     return userDetails.getAccount().getUserId();

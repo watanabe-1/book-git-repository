@@ -16,6 +16,7 @@
     "dotjoshjohnson.xml",
     "mosapride.zenkaku",
     "mechatroner.rainbow-csv",
-    "vscjava.vscode-gradle"
+    "vscjava.vscode-gradle",
+    "oderwat.indent-rainbow"
   ]
 }

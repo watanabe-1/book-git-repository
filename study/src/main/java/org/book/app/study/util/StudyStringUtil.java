@@ -29,9 +29,19 @@ public class StudyStringUtil {
   public static final char SEPARATOR_BY_TSV = '\t';
 
   /**
-  * tsvの区切り文字
+  * パスの区切り文字
   */
-  public static final String SEPARATOR_BY_PATH = "/";
+  public static final String SEPARATOR_BY_PATH = System.getProperty("file.separator");
+
+  /**
+  * キーの区切り文字
+  */
+  public static final String SEPARATOR_BY_KEY = ".";
+
+  /**
+  * スネークケースの区切り文字
+  */
+  public static final String SEPARATOR_BY_SNAKE = "_";
 
   /**
    * null、もしくは空文字の判断を行う
@@ -52,39 +62,44 @@ public class StudyStringUtil {
   * @return 結合したもの
    */
   public static String joinBase(String separator, String base, String add) {
-    Boolean isNullOrEmptyAdd = isNullOrEmpty(add);
-
-    if (isNullOrEmptyAdd) {
+    // 'add'がnullまたは空かどうかをチェック
+    if (isNullOrEmpty(add)) {
       return base;
     }
 
-    Boolean isNullOrEmptyBase = isNullOrEmpty(base);
-
-    if (isNullOrEmptyBase) {
+    // 'base'がnullまたは空かどうかをチェック
+    if (isNullOrEmpty(base)) {
       return add;
     }
 
-    int len = separator.length();
+    // セパレータの長さを取得
+    int separatorLength = separator.length();
 
-    // 先頭
-    String addHead = !isNullOrEmptyAdd ? add.substring(0, Math.min(len, add.length())) : "";
+    // 'add'の先頭からセパレータの長さまでの部分を抽出
+    String addHead = add.substring(0, Math.min(separatorLength, add.length()));
 
-    if (addHead.isEmpty()) {
-      return base;
+    // 'base'の末尾からセパレータの長さまでの部分を抽出
+    String baseFoot = base.substring(Math.max(0, base.length() - separatorLength));
+
+    // 文字列連結用
+    StringBuffer sb = new StringBuffer(base);
+
+    // 'base'の末尾と'add'の先頭がセパレータと一致する場合、一方のセパレータを削除
+    if (baseFoot.equals(separator) && addHead.startsWith(separator)) {
+      sb.setLength(sb.length() - separatorLength); // 'base'の末尾からセパレータを削除
+      sb.append(add);
+    }
+    // 'base'がセパレータで終わるか、'add'がセパレータで始まる場合、そのまま連結
+    else if (baseFoot.equals(separator) || addHead.startsWith(separator)) {
+      sb.append(add);
+    }
+    // それ以外の場合、'base'と'add'の間にセパレータを追加
+    else {
+      sb.append(separator);
+      sb.append(add);
     }
 
-    // 末尾
-    String baseFoot = !isNullOrEmptyBase ? base.substring(Math.max(0, base.length() - len)) : "";
-
-    if (baseFoot.isEmpty()) {
-      return add;
-    }
-
-    if (baseFoot.equals(separator)) {
-      return addHead.equals(separator) ? base.substring(0, base.length() - len) + add : base + add;
-    } else {
-      return addHead.equals(separator) ? base + add : base + separator + add;
-    }
+    return sb.toString();
   }
 
   /**
@@ -112,6 +127,28 @@ public class StudyStringUtil {
    */
   public static String pathJoin(String basePath, String... addPaths) {
     return joinBases(SEPARATOR_BY_PATH, basePath, addPaths);
+  }
+
+  /**
+  * ベースのキーと追加のキー(複数可)を結合し返却する
+  * 
+  * @param baseKey ベースとなるキー
+  * @param addkeys 追加したいキー
+  * @return String 結合したキー
+  */
+  public static String keyJoin(String baseKey, String... addkeys) {
+    return joinBases(SEPARATOR_BY_KEY, baseKey, addkeys);
+  }
+
+  /**
+  * ベースの文字列と追加の文字列(複数可)を結合し返却する
+  * 
+  * @param baseStr ベースとなる文字列
+  * @param addStrs 追加したい文字列
+  * @return String 結合した文字列
+  */
+  public static String snakeJoin(String baseStr, String... addStrs) {
+    return joinBases(SEPARATOR_BY_SNAKE, baseStr, addStrs);
   }
 
   /**

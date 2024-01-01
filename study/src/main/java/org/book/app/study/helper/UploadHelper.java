@@ -2,9 +2,9 @@ package org.book.app.study.helper;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.UUID;
+
 import org.apache.commons.io.FileUtils;
 import org.book.app.study.dto.dir.Dir;
 import org.book.app.study.entity.Image;
@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.terasoluna.gfw.common.exception.BusinessException;
 import org.terasoluna.gfw.common.message.ResultMessages;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -107,9 +108,7 @@ public class UploadHelper {
   public void saveImageFile(String uploadDirPath, String baseNameCode, String imgId, String ImgExt,
       String ingType) {
     String uploadIconDir = StudyStringUtil.replaceFirstOneLeft(uploadDirPath, "/", "");
-    StringBuffer sb = new StringBuffer();
-    String newImgName = sb.append(baseNameCode).append("_").append(uploadIconDir).append("_")
-        .append(imgId).append(".").append(ImgExt).toString();
+    String newImgName = String.format("%s_%s_%s.%s", baseNameCode, uploadIconDir, imgId, ImgExt);
 
     // 仮保存していた画像を本保存
     String newImgFilePath = moveTemporaryFileToImagesFolder(newImgName, imgId, uploadIconDir);
@@ -154,22 +153,18 @@ public class UploadHelper {
    */
   public String moveTemporaryFileToImagesFolder(String newFileName, String uploadTmpFileId,
       String addFilePath) {
-    File newFile = null;
-    String newFilePath = null;
     // 追加ファイルパスがnullもしくは空文字の場合
-    if (StudyStringUtil.isNullOrEmpty(addFilePath)) {
-      newFile = uploadImgDefDir;
-      newFilePath = uploadImgDefDirPath;
-    } else {
-      newFile = new File(uploadImgDefDir, addFilePath);
-      newFilePath = StudyStringUtil.pathJoin(uploadImgDefDirPath, addFilePath);
-    }
+    boolean addPathIsNullOrEmpty = StudyStringUtil.isNullOrEmpty(addFilePath);
+    File destinationDir = addPathIsNullOrEmpty ? uploadImgDefDir
+        : new File(uploadImgDefDir, addFilePath);
+    String newFilePath = addPathIsNullOrEmpty ? uploadImgDefDirPath
+        : StudyStringUtil.pathJoin(uploadImgDefDirPath, addFilePath);
 
-    File file = getFileDir(uploadTmpDir, uploadTmpFileId);
-    File fileToMove = getFileDir(newFile, newFileName);
+    File tempFile = getFileDir(uploadTmpDir, uploadTmpFileId);
+    File newFile = getFileDir(destinationDir, newFileName);
 
     try {
-      FileUtils.moveFile(file, fileToMove);
+      FileUtils.moveFile(tempFile, newFile);
     } catch (IOException e) {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
@@ -186,18 +181,13 @@ public class UploadHelper {
    * @param String アップロードされたファイルの拡張子
    * @return String
    */
-  public String encodeBase64(MultipartFile multipartFile, String expand) {
-    StringBuffer data = new StringBuffer();
-    String base64 = null;
+  public String encodeBase64(MultipartFile multipartFile, String extension) {
     try {
-      base64 = new String(Base64.getEncoder().encode(multipartFile.getBytes()),
-          StandardCharsets.UTF_8.name());
+      String base64 = Base64.getEncoder().encodeToString(multipartFile.getBytes());
+      return String.format("data:image/%s;base64,%s", extension, base64);
     } catch (IOException e) {
       throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
     }
-    data.append("data:image/").append(expand).append(";base64,").append(base64);
-
-    return data.toString();
   }
 
   /**
