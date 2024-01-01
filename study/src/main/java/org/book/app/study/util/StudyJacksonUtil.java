@@ -74,12 +74,12 @@ public class StudyJacksonUtil {
       ObjectReader objectReader = mapper.readerFor(pojoType).with(schema);
       MappingIterator<T> objectMappingIterator;
 
-      if (obj instanceof InputStream) {
-        objectMappingIterator = objectReader.readValues((InputStream) obj);
-      } else if (obj instanceof Reader) {
-        objectMappingIterator = objectReader.readValues((Reader) obj);
-      } else if (obj instanceof String) {
-        objectMappingIterator = objectReader.readValues((String) obj);
+      if (obj instanceof InputStream src) {
+        objectMappingIterator = objectReader.readValues(src);
+      } else if (obj instanceof Reader src) {
+        objectMappingIterator = objectReader.readValues(src);
+      } else if (obj instanceof String json) {
+        objectMappingIterator = objectReader.readValues(json);
       } else {
         throw new BusinessException("1.01.01.1009", "readValuesで指定できる型ではないため");
       }

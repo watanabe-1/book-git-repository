@@ -44,13 +44,12 @@ public class TraceReauestInterceptor implements HandlerInterceptor {
         if (!log.isTraceEnabled()) {
             return;
         }
-        if (handler instanceof HandlerMethod) {
+        if (handler instanceof HandlerMethod handlerMethod) {
             long startTime = request.getAttribute(START_TIME) != null ? (Long) request.getAttribute(START_TIME) : 0;
             long endTime = System.nanoTime();
             long duration = endTime - startTime;
             request.removeAttribute(START_TIME);
 
-            HandlerMethod handlerMethod = (HandlerMethod) handler;
             String methodParams = getMethodParams(handlerMethod);
             String viewName = modelAndView != null ? modelAndView.getViewName() : "null";
             String model = modelAndView != null ? modelAndView.getModel().toString() : "{}";
