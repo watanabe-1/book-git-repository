@@ -33,14 +33,20 @@ public class StudyStringUtilTest {
 
     @Test
     public void testPathJoinWithTwoParameters() {
-        assertEquals("base/path", StudyStringUtil.pathJoin("base", "path"));
-        assertEquals("base/path", StudyStringUtil.pathJoin("base/", "path"));
-        assertEquals("base/path", StudyStringUtil.pathJoin("base", "/path"));
+        assertEquals(String.format("base%spath", StudyStringUtil.SEPARATOR_BY_PATH),
+                StudyStringUtil.pathJoin("base", "path"));
+        assertEquals(String.format("base%spath", StudyStringUtil.SEPARATOR_BY_PATH),
+                StudyStringUtil.pathJoin("base" + StudyStringUtil.SEPARATOR_BY_PATH, "path"));
+        assertEquals(String.format("base%spath", StudyStringUtil.SEPARATOR_BY_PATH),
+                StudyStringUtil.pathJoin("base", StudyStringUtil.SEPARATOR_BY_PATH + "path"));
     }
 
     @Test
     public void testPathJoinWithMultipleParameters() {
-        assertEquals("base/path/to/resource", StudyStringUtil.pathJoin("base", "path", "to", "resource"));
+        assertEquals(
+                String.format("base%spath%sto%sresource", StudyStringUtil.SEPARATOR_BY_PATH,
+                        StudyStringUtil.SEPARATOR_BY_PATH, StudyStringUtil.SEPARATOR_BY_PATH),
+                StudyStringUtil.pathJoin("base", "path", "to", "resource"));
     }
 
     @Test

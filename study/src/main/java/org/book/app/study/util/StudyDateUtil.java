@@ -10,8 +10,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
+
+import org.book.app.common.exception.BusinessException;
 
 /**
  * 日付けを扱うutilクラス
@@ -183,14 +183,12 @@ public class StudyDateUtil {
     } else if (Objects.equals(Calendar.MINUTE, dateType)) {
       field = Calendar.SECOND;
     } else {
-      throw new BusinessException(
-          ResultMessages.error().add("1.01.01.1001", "dateTypeにはCalendar.YEARなどを利用して指定ください"));
+      throw new BusinessException("1.01.01.1008", "dateTypeにはCalendar.YEARなどを利用して指定されていないため");
     }
 
     Calendar cal = dateToCalendar(date);
     // 初もしくは末の値を取得
-    int value =
-        Objects.equals(START, type) ? cal.getActualMinimum(field) : cal.getActualMaximum(field);
+    int value = Objects.equals(START, type) ? cal.getActualMinimum(field) : cal.getActualMaximum(field);
     // 取得した値をセット
     cal.set(field, value);
 
@@ -338,7 +336,6 @@ public class StudyDateUtil {
     return date.toInstant().atZone(timeZone).toLocalDate();
   }
 
-
   /**
    * LocalDateからDateに変換
    * 
@@ -376,8 +373,8 @@ public class StudyDateUtil {
     try {
       date = sdFormat.parse(str);
     } catch (ParseException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1002",
-          new StringBuffer().append(str).append(":").append(fmtPattern).toString()));
+      throw new BusinessException("1.01.01.1008",
+          new StringBuffer().append(str).append(":").append(fmtPattern).toString());
     }
 
     return date;

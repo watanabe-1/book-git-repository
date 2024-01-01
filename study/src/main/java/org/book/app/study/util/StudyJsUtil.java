@@ -11,13 +11,12 @@ import java.util.stream.Collectors;
 
 import javax.script.ScriptException;
 
+import org.book.app.common.exception.BusinessException;
 import org.book.app.study.api.js.ServerApi;
 import org.book.app.study.form.Form;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
 import org.springframework.web.servlet.ModelAndView;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
 
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 
@@ -139,8 +138,7 @@ public class StudyJsUtil {
           .toString();
     } catch (ScriptException e) {
       log.error("", e, "");
-      throw new BusinessException(
-          ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1010", e.getMessage());
     }
     return new StringBuffer()
         .append(addRoute(ret))
@@ -289,7 +287,7 @@ public class StudyJsUtil {
       engine.eval(readJsFile(scriptPath));
     } catch (ScriptException e) {
       log.error("", e, "");
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1010", e.getMessage());
     }
 
     return engine;

@@ -6,6 +6,7 @@ import java.util.Base64;
 import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
+import org.book.app.common.exception.BusinessException;
 import org.book.app.study.dto.dir.Dir;
 import org.book.app.study.entity.Image;
 import org.book.app.study.form.CategoryForm;
@@ -16,8 +17,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
 
 import lombok.RequiredArgsConstructor;
 
@@ -77,7 +76,7 @@ public class UploadHelper {
     try {
       FileUtils.copyInputStreamToFile(multipartFile.getInputStream(), uploadTemporaryFile);
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1004", e.getMessage());
     }
 
     return uploadTemporaryFile;
@@ -129,7 +128,7 @@ public class UploadHelper {
     } catch (DuplicateKeyException e) {
       // result.addError(new FieldError(result.getObjectName(), "imgId",
       // "採番された画像IDは既に登録されています。"));
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1005", e.getMessage());
     }
   }
 
@@ -166,7 +165,7 @@ public class UploadHelper {
     try {
       FileUtils.moveFile(tempFile, newFile);
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1004", e.getMessage());
     }
 
     // 抽象パスを返却
@@ -186,7 +185,7 @@ public class UploadHelper {
       String base64 = Base64.getEncoder().encodeToString(multipartFile.getBytes());
       return String.format("data:image/%s;base64,%s", extension, base64);
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1006", e.getMessage());
     }
   }
 

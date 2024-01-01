@@ -1,6 +1,8 @@
 package org.book.app.study.api;
 
 import java.util.Locale;
+
+import org.book.app.common.exception.BusinessException;
 import org.book.app.study.dto.error.ErrorResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -13,8 +15,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.exception.ResultMessagesNotificationException;
+
 import lombok.extern.slf4j.XSlf4j;
 
 /**
@@ -74,9 +75,9 @@ public class ApiController {
   @ExceptionHandler(BusinessException.class)
   @ResponseStatus(value = HttpStatus.CONFLICT)
   @ResponseBody
-  public ErrorResults handleBusinessException(BusinessException e) {
+  public ErrorResults handleBusinessException(BusinessException e, Locale locale) {
     ErrorResults errorResults = new ErrorResults();
-    addErrResult(e, errorResults);
+    addErrResult(e, locale, errorResults);
     log.debug("BusinessException:", e);
 
     return errorResults;
@@ -157,13 +158,10 @@ public class ApiController {
    * @param locale ロケール
    * @param errorResults セット対象
    */
-  private void addErrResult(ResultMessagesNotificationException e, ErrorResults errorResults) {
-    e.getResultMessages().getList().stream().forEach((resultMessage) -> {
-      String msg = resultMessage.getText();
-      String code = resultMessage.getCode();
-
-      errorResults.add(true, code, msg, code);
-      log.debug(msg);
-    });
+  private void addErrResult(BusinessException e, Locale locale, ErrorResults errorResults) {
+    String code = e.getMessageKey();
+    String msg = messageSource.getMessage(code, e.getArgs(), locale);
+    errorResults.add(true, code, msg, code);
+    log.debug(msg);
   }
 }

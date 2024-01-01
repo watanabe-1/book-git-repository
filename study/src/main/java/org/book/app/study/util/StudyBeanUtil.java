@@ -8,10 +8,9 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.book.app.common.exception.BusinessException;
 import org.book.app.study.entity.Entity;
 import org.springframework.beans.BeanUtils;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
 
 /**
  * java beanのUtilクラスを作成
@@ -111,8 +110,7 @@ public class StudyBeanUtil {
     } catch (NoSuchMethodException | SecurityException | InstantiationException
         | IllegalAccessException | IllegalArgumentException
         | InvocationTargetException e) {
-      throw new BusinessException(
-          ResultMessages.error().add("1.01.01.1001", "インスタンス作成に失敗しました"));
+      throw new BusinessException("1.01.01.1007", e.getMessage());
 
     }
   }

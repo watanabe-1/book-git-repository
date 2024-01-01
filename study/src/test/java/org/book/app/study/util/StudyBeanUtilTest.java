@@ -12,13 +12,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.book.app.common.exception.BusinessException;
 import org.book.app.study.controller.BooksController;
 import org.book.app.study.entity.Books;
 import org.book.app.study.form.BooksForm;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import org.terasoluna.gfw.common.exception.BusinessException;
 
 class StudyBeanUtilTest {
 

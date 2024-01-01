@@ -5,14 +5,15 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+
+import org.book.app.common.exception.BusinessException;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
+
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
@@ -48,7 +49,6 @@ public class DownloadHelper {
     response.setContentType(ContentType);
   }
 
-
   /**
    * CONTENT_DISPOSITIONの作成
    * 
@@ -73,14 +73,7 @@ public class DownloadHelper {
       try {
         outputStream.write(sbyte[i]);
       } catch (IOException e) {
-        throw new BusinessException(
-            ResultMessages
-                .error()
-                .add("1.01.01.1001",
-                    new StringBuffer()
-                        .append("FileDownload Failed with writeResponseStream(). cause message is ")
-                        .append(e.getMessage())
-                        .toString()));
+        throw new BusinessException("1.01.01.1003", e.getMessage());
       }
     }
   }

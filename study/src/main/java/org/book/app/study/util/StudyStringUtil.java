@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
+import org.book.app.common.exception.BusinessException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -242,7 +241,7 @@ public class StudyStringUtil {
     try {
       json = mapper.writeValueAsString(target);
     } catch (JsonProcessingException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1011", e.getMessage());
     }
 
     return json;
@@ -292,7 +291,7 @@ public class StudyStringUtil {
     try {
       result = mapper.writer(schema).writeValueAsString(target);
     } catch (JsonProcessingException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1011", e.getMessage());
     }
 
     return result;
@@ -344,7 +343,7 @@ public class StudyStringUtil {
     try (ByteArrayInputStream in = new ByteArrayInputStream(str.getBytes());) {
       charsetName = StudyFileUtil.detectFileEncoding(in);
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1011", e.getMessage());
     }
 
     return StudyJacksonUtil.objectToListByCsvMapper(str, charsetName, pojoType, sep, isHeader,

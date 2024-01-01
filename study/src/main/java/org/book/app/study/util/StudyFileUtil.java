@@ -12,11 +12,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FilenameUtils;
+import org.book.app.common.exception.BusinessException;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
 
 import lombok.extern.slf4j.XSlf4j;
 
@@ -116,7 +115,7 @@ public class StudyFileUtil {
       result = StudyJacksonUtil.objectToListByCsvMapper(br, charsetName, pojoType, sep, isHeader,
           isQuote);
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1009", e.getMessage());
     }
 
     return result;
@@ -134,7 +133,7 @@ public class StudyFileUtil {
     try (InputStream fis = file.getInputStream()) {
       result = detectFileEncoding(fis);
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1009", e.getMessage());
     }
 
     return result;
@@ -152,7 +151,7 @@ public class StudyFileUtil {
     try (InputStream fis = new FileInputStream(file)) {
       result = detectFileEncoding(fis);
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1009", e.getMessage());
     }
 
     return result;
@@ -178,7 +177,7 @@ public class StudyFileUtil {
       result = detector.getDetectedCharset();
       detector.reset();
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1009", e.getMessage());
     }
 
     // 文字コード判定に失敗した場合はutf8を指定
@@ -211,7 +210,7 @@ public class StudyFileUtil {
       ret = br.lines().collect(Collectors.joining());
       log.info("", new StringBuffer().append(path).append(" file loaded."));
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1009", e.getMessage());
     }
 
     return ret;

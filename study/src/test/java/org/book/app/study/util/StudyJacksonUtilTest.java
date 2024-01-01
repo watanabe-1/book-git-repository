@@ -15,8 +15,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 
+import org.book.app.common.exception.BusinessException;
 import org.junit.jupiter.api.Test;
-import org.terasoluna.gfw.common.exception.BusinessException;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;

@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
+
+import org.book.app.common.exception.BusinessException;
 import org.book.app.study.dto.data.BooksChartData;
 import org.book.app.study.dto.data.BooksChartDatasets;
 import org.book.app.study.entity.TemplateChartcolour;
@@ -23,8 +25,7 @@ import org.book.app.study.util.StudyCodeUtil;
 import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyUtil;
 import org.springframework.stereotype.Component;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -169,8 +170,7 @@ public class ChartColourHelper {
   public List<TemplateChartcolour> getLoginUsersAllTempColours(TemplateChartcolour activeColour) {
     String commonUserId = StudyUtil.getCommonUser();
     // ログインユーザーが作成したテンプレートを取得
-    List<TemplateChartcolour> allTempColours =
-        templateChartcolourService.findByUserId(StudyUtil.getLoginUser());
+    List<TemplateChartcolour> allTempColours = templateChartcolourService.findByUserId(StudyUtil.getLoginUser());
 
     // 現在設定しているテンプレートが共通かどうか
     if (Objects.equals(activeColour.getUserId(), commonUserId)) {
@@ -256,8 +256,8 @@ public class ChartColourHelper {
     Random rand = new Random();
 
     if (transparency < 0 || transparency > 1) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1002",
-          "透明度は0から1の範囲内で指定してください。"));
+      throw new BusinessException("1.01.01.1002",
+          "透明度は0から1の範囲内で指定してください。");
     }
 
     // シード値を固定にすることによりこのメソッドの返す結果を固定にしている

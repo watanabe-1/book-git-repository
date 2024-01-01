@@ -6,8 +6,7 @@ import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
+import org.book.app.common.exception.BusinessException;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
@@ -82,13 +81,12 @@ public class StudyJacksonUtil {
       } else if (obj instanceof String) {
         objectMappingIterator = objectReader.readValues((String) obj);
       } else {
-        throw new BusinessException(
-            ResultMessages.error().add("1.01.01.1001", "readValuesで指定できる型ではありません"));
+        throw new BusinessException("1.01.01.1009", "readValuesで指定できる型ではないため");
       }
 
       result = objectMappingIterator.readAll();
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1009", e.getMessage());
     }
 
     return result;

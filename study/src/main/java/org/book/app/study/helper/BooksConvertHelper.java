@@ -12,14 +12,13 @@ import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
+import org.book.app.common.exception.BusinessException;
 import org.book.app.study.dto.file.BooksColumn;
 import org.book.app.study.dto.file.SuicaColumn;
 import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
 
 import lombok.RequiredArgsConstructor;
 
@@ -160,7 +159,7 @@ public class BooksConvertHelper {
         result.append(modifiedText.toString());
       }
     } catch (IOException e) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", e.getMessage()));
+      throw new BusinessException("1.01.01.1001", e.getMessage());
     }
 
     return StudyStringUtil.tsvStrToList(result.toString(), SuicaColumn.class, false);

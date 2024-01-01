@@ -3,6 +3,9 @@ package org.book.app.study.controller;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import org.book.app.common.exception.BusinessException;
+import org.book.app.study.form.HogeForm;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -11,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import org.terasoluna.gfw.common.exception.BusinessException;
-import org.terasoluna.gfw.common.message.ResultMessages;
-import org.book.app.study.form.HogeForm;
 
 @Controller
 public class HogeController {
@@ -53,7 +53,7 @@ public class HogeController {
 
     // エラー画面遷移確認用
     if (Objects.equals(name, ISJAERR) || Objects.equals(name.toUpperCase(), ISEAERR)) {
-      throw new BusinessException(ResultMessages.error().add("1.01.01.1001", "エラーです"));
+      throw new BusinessException("1.01.01.1001", "エラーです");
     }
 
     return model;
