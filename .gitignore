@@ -24,6 +24,8 @@ eclipse-formatter.xml
 !.vscode/settings.json
 !.vscode/extensions.json
 !.vscode/launch.json
+!.vscode/book-git-repository_js.code-workspace
+!.vscode/book-git-repository_java.code-workspace
 
 # Idea
 .idea

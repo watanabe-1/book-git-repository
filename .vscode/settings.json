@@ -33,7 +33,6 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   //"prettier.singleQuote": true,
   //xml
-  "xml.java.home": "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath",
   "[xml]": {
     "editor.defaultFormatter": "DotJoshJohnson.xml"
   },
