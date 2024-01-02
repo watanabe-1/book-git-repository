@@ -1,5 +1,5 @@
 import { Formik, FormikProps } from 'formik';
-import React, { useState, useContext, useCallback } from 'react';
+import React, { useCallback, useContext, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
@@ -94,7 +94,11 @@ const Basic: React.FC<BasicProps> = (props) => {
     .notRequired()
     .nullable();
   additions[fieldConst.category.ACTIVE] = yup.array().notRequired().nullable();
-  additions[fieldConst.category.CAT_ICON] = yup.mixed().server(errData);
+  additions[fieldConst.category.CAT_ICON] = yup
+    .mixed()
+    .notRequired()
+    .nullable()
+    .server(errData);
   const schema = yup.object().shape(additions);
 
   return (
@@ -104,15 +108,15 @@ const Basic: React.FC<BasicProps> = (props) => {
         onSubmit={handleSubmit}
         initialValues={
           {
-            catCode: currentState.form ? currentState.form.catCode : '',
-            catName: currentState.form ? currentState.form.catName : '',
-            note: currentState.form ? currentState.form.note : '',
+            catCode: currentState?.form.catCode || '',
+            catName: currentState?.form.catName || '',
+            note: currentState?.form.note || '',
             imgType: currentState.form
               ? currentState.form.imgType
               : info.imgTypes[0].code,
-            catType: currentState.form ? currentState.form.catType : '',
-            active: currentState.form ? currentState.form.active : [],
-            catIcon: currentState.form ? currentState.form.catIcon : '',
+            catType: currentState?.form.catType || '',
+            active: currentState?.form.active || [],
+            catIcon: currentState?.form.catIcon || null,
           } as Category
         }
       >

@@ -1,11 +1,13 @@
 package org.book.app.study.form;
 
 import java.io.Serializable;
+
 import org.book.app.common.validation.UploadFileMaxSize;
 import org.book.app.common.validation.UploadFileMediaType;
 import org.book.app.common.validation.UploadFileNotEmpty;
 import org.book.app.study.util.StudyStringUtil;
 import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;

@@ -15,8 +15,8 @@
     "editor.formatOnType": true, // 文字入力行の自動フォーマット有効
     "editor.codeActionsOnSave": {
       "source.addMissingImports": "explicit",
-      "source.fixAll.eslint": "explicit",
-      "source.organizeImports": "explicit"
+      "source.fixAll.eslint": "explicit"
+      // "source.organizeImports": "explicit"
     },
     "[javascript]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode"
