@@ -2,7 +2,8 @@ package org.book.app.common.config;
 
 import java.nio.charset.StandardCharsets;
 
-import org.book.app.common.logging.TraceReauestInterceptor;
+import org.book.app.common.logging.HttpSessionEventLoggingListener;
+import org.book.app.common.logging.ReauestLoggingListener;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.MessageSource;
@@ -85,8 +86,17 @@ public class AppConfig implements WebMvcConfigurer {
    * @return
    */
   @Bean
-  TraceReauestInterceptor TraceReauestInterceptor() {
-    return new TraceReauestInterceptor();
+  ReauestLoggingListener TraceReauestInterceptor() {
+    return new ReauestLoggingListener();
+  }
+
+  /**
+   * セッションのトレースログ用
+   * @return
+   */
+  @Bean
+  public HttpSessionEventLoggingListener httpSessionEventLoggingListener() {
+    return new HttpSessionEventLoggingListener();
   }
 
   /**

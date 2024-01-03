@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.XSlf4j;
 
 /**
@@ -56,11 +57,11 @@ public class ApiController {
   @ExceptionHandler(BindException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   @ResponseBody
-  public ErrorResults handleBindException(BindException e, Locale locale) {
+  public ErrorResults handleBindException(BindException e, HttpServletRequest request, Locale locale) {
+    logError("e.ex.fw.7002", e, request.getRequestURL().toString());
     // エラー情報を返却するためのJavaBeanを生成し、返却
     ErrorResults errorResults = new ErrorResults();
     addErrResult(e, locale, errorResults);
-    log.debug("BindException:", e);
 
     return errorResults;
   }
@@ -75,10 +76,10 @@ public class ApiController {
   @ExceptionHandler(BusinessException.class)
   @ResponseStatus(value = HttpStatus.CONFLICT)
   @ResponseBody
-  public ErrorResults handleBusinessException(BusinessException e, Locale locale) {
+  public ErrorResults handleBusinessException(BusinessException e, HttpServletRequest request, Locale locale) {
+    logError("e.ex.fw.8001", e, request.getRequestURL().toString());
     ErrorResults errorResults = new ErrorResults();
     addErrResult(e, locale, errorResults);
-    log.debug("BusinessException:", e);
 
     return errorResults;
   }
@@ -96,10 +97,11 @@ public class ApiController {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   @ResponseBody
   public ErrorResults handleMethodArgumentNotValidException(MethodArgumentNotValidException e,
+      HttpServletRequest request,
       Locale locale) {
+    logError("e.ex.fw.7001", e, request.getRequestURL().toString());
     ErrorResults errorResults = new ErrorResults();
     addErrResult(e, locale, errorResults);
-    log.debug("MethodArgumentNotValidException:", e);
 
     return errorResults;
   }
@@ -118,11 +120,14 @@ public class ApiController {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   @ResponseBody
   public ErrorResults handleHttpMessageNotReadableException(HttpMessageNotReadableException e,
+      HttpServletRequest request,
       Locale locale) {
-    ErrorResults errorResults = new ErrorResults();
+    final String code = "e.ex.fw.7001";
+    logError(code, e, request.getRequestURL().toString());
 
-    // addErrResult(e, locale, errorResults);
-    log.debug("HttpMessageNotReadableException:", e);
+    ErrorResults errorResults = new ErrorResults();
+    Object[] args = new Object[] { request.getRequestURL().toString() };
+    addErrResult(e, code, args, locale, errorResults);
 
     return errorResults;
   }
@@ -140,14 +145,14 @@ public class ApiController {
 
       errorResults.add(true, fieldError.getCode(), msg,
           fieldError.getField());
-      log.debug(msg);
+      log.trace(fieldError.getCode(), fieldError.getField());
     });
     e.getBindingResult().getGlobalErrors().forEach(objectError -> {
       String msg = messageSource.getMessage(objectError, locale);
 
       errorResults.add(true, objectError.getCode(), msg,
           objectError.getObjectName());
-      log.debug(msg);
+      log.trace(objectError.getCode(), objectError.getObjectName());
     });
   }
 
@@ -162,6 +167,30 @@ public class ApiController {
     String code = e.getMessageKey();
     String msg = messageSource.getMessage(code, e.getArgs(), locale);
     errorResults.add(true, code, msg, code);
-    log.debug(msg);
+    log.trace(code, e.getArgs());
+  }
+
+  /**
+  * BindExceptionのエラー結果をエラー保持用javabeenにセットを行う
+  * 
+  * @param e BindException
+  * @param locale ロケール
+  * @param errorResults セット対象
+  */
+  private void addErrResult(RuntimeException e, String code, Object[] args, Locale locale,
+      ErrorResults errorResults) {
+    String msg = messageSource.getMessage(code, args, locale);
+    errorResults.add(true, code, msg, code);
+    log.trace(code, args);
+  }
+
+  /**
+  * エラーログを出力する
+  * @param messageId メッセージID
+  * @param ex 例外
+  * @param url url
+  */
+  private void logError(String messageId, Throwable ex, String url) {
+    log.error(messageId, ex, url);
   }
 }

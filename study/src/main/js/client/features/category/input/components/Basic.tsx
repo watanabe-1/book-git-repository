@@ -108,15 +108,15 @@ const Basic: React.FC<BasicProps> = (props) => {
         onSubmit={handleSubmit}
         initialValues={
           {
-            catCode: currentState?.form.catCode || '',
-            catName: currentState?.form.catName || '',
-            note: currentState?.form.note || '',
-            imgType: currentState.form
-              ? currentState.form.imgType
+            catCode: currentState?.form?.catCode || '',
+            catName: currentState?.form?.catName || '',
+            note: currentState?.form?.note || '',
+            imgType: currentState?.form
+              ? currentState.form?.imgType
               : info.imgTypes[0].code,
-            catType: currentState?.form.catType || '',
-            active: currentState?.form.active || [],
-            catIcon: currentState?.form.catIcon || null,
+            catType: currentState?.form?.catType || '',
+            active: currentState?.form?.active || [],
+            catIcon: currentState?.form?.catIcon || null,
           } as Category
         }
       >

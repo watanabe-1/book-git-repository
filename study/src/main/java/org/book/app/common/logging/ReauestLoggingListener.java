@@ -2,7 +2,9 @@ package org.book.app.common.logging;
 
 import java.util.Arrays;
 
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.MethodParameter;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -14,7 +16,8 @@ import lombok.extern.slf4j.XSlf4j;
 
 @Component
 @XSlf4j
-public class TraceReauestInterceptor implements HandlerInterceptor {
+@PropertySource("classpath:config/properties/logger.properties")
+public class ReauestLoggingListener implements HandlerInterceptor {
 
     private String START_TIME = "startTime";
 
@@ -40,7 +43,7 @@ public class TraceReauestInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
-            ModelAndView modelAndView) throws Exception {
+            @Nullable ModelAndView modelAndView) throws Exception {
         if (!log.isTraceEnabled()) {
             return;
         }

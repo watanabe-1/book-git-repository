@@ -54,7 +54,7 @@
 
 	<!-- Application Loggers -->
 	<logger name="org.book.app">
-		<!-- ロガー名は、com.example.sample以下のロガーが、debugレベル以上のログを出力するように設定する。 -->
+		<!-- ロガー名は、com.book.app以下のロガーが、debugレベル以上のログを出力するように設定する。 -->
 		<level value="debug" />
 	</logger>
 
@@ -64,22 +64,13 @@
 	</logger>
 
 	<!-- リクエストのトレースログをトレースレベルで出力 -->
-	<logger name="org.book.app.common.logging.TraceReauestInterceptor">
+	<logger name="org.book.app.common.logging.ReauestLoggingListener">
 		<level value="trace" />
 	</logger>
 
-	<!-- TERASOLUNA -->
-	<logger name="org.terasoluna.gfw">
-		<level value="info" />
-	</logger>
-	<logger name="org.terasoluna.gfw.common.exception.ExceptionLogger">
-		<level value="info" />
-	</logger>
-	<logger name="org.terasoluna.gfw.common.exception.ExceptionLogger.Monitoring" additivity="false">
-		<!-- 監視ログの設定を行う -->
-		<!-- 監視ログは3つのアペンダー(MONITORING_LOG_FILE、STDOUT、APPLICATION_LOG_FILE)によって出力される。 -->
-		<level value="error" />
-		<appender-ref ref="MONITORING_LOG_FILE" />
+	<!-- セッションのトレースログをトレースレベルで出力 -->
+	<logger name="org.book.app.common.logging.HttpSessionEventLoggingListener">
+		<level value="trace" />
 	</logger>
 
 	<!-- 3rdparty Loggers -->
@@ -98,19 +89,6 @@
 	<logger name="org.springframework.jdbc.core.JdbcTemplate">
 		<level value="debug" />
 	</logger>
-
-	<!-- org.terasoluna.gfw.web.logging.HttpSessionEventLoggingListenerは、 セッションの生成・破棄・活性・非活性、セッションへの属性の追加・削除のタイミングで
-		debugログを出力するためのリスナークラスである。 logback.xmlには、以下のようにorg.terasoluna.gfw.web.logging.HttpSessionEventLoggingListenerを、
-		debugレベルで設定する。 -->
-	<logger name="org.terasoluna.gfw.web.logging.HttpSessionEventLoggingListener">
-		<level value="debug" />
-	</logger>
-
-	<!-- REMOVE THIS LINE IF YOU USE JPA <logger name="org.hibernate.SQL" additivity="true">
-		<level value="debug" /> </logger> <logger name="org.hibernate.type"> <level value="trace" /> </logger> <logger name="org.hibernate.engine.transaction">
-		<level value="debug" /> </logger> REMOVE THIS LINE IF YOU USE JPA -->
-	<!-- REMOVE THIS LINE IF YOU USE MyBatis3 <logger name="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<level value="debug" /> </logger> REMOVE THIS LINE IF YOU USE MyBatis3 -->
 
 	<root level="warn">
 		<!-- <logger>の指定が無いロガーが、warnレベル以上のログを出力するように設定する。  デフォルトでConsoleAppender,RollingFileAppender(アプリケーションログ)が使用されるように設定する。 -->

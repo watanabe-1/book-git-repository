@@ -132,11 +132,6 @@ dependencyManagement {
             entry "js"
             entry "js-scriptengine"
         }
-        // terasoluna-gfw version
-        dependencySet(group: "org.terasoluna.gfw", version: "5.8.1.RELEASE") {
-            entry "terasoluna-gfw-web"
-            entry "terasoluna-gfw-common"
-        }
         // MyBatis version
         dependencySet(group: "org.mybatis.spring.boot", version: "3.0.3") {
             entry "mybatis-spring-boot-starter"
@@ -191,9 +186,6 @@ dependencies {
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
     // apache pdfbox(PDF読み込み用)
     implementation 'org.apache.pdfbox:pdfbox'
-    // ntt terasoluna
-    implementation 'org.terasoluna.gfw:terasoluna-gfw-web'
-    implementation 'org.terasoluna.gfw:terasoluna-gfw-common'
     // spring test
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
