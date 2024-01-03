@@ -86,6 +86,7 @@ export const useFormTable = ({
       executeSubmit,
       filterRowValues,
       setSubmitLoading,
+      initialValues,
       rowName,
       submitModifiedRowsOnly,
       submitButtonName,

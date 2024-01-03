@@ -41,7 +41,7 @@ type TextBoxProps = {
  * @param value 値
  * @returns
  */
-export const modifierTextBox = (value: unknown) => {
+export const modifierTextBox = (value: string | number | string[]) => {
   if (value == 0 || value) {
     return simpleTrim(String(value));
   }
@@ -54,7 +54,7 @@ export const modifierTextBox = (value: unknown) => {
  *
  * @param value 値
  */
-export const getTextBoxTextValue = (value: unknown) => {
+export const getTextBoxTextValue = (value: string | number | string[]) => {
   const trimValue = simpleTrim(String(value));
 
   if (trimValue) {

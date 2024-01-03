@@ -36,7 +36,7 @@ export const useFormControl = ({
   isNotSetValue,
   children,
 }: FormControlProps) => {
-  const [text, setText] = useState(value);
+  const [currentValue, setCurrentValue] = useState(value);
   const [isEditing, setIsEditing] = useState(!isReadonly && !isOnClickEditable);
   const [hasChanges, setHasChanges] = useState(false);
   const [isInitialByOnEditable, setIsInitialByOnEditable] = useState(false);
@@ -94,7 +94,7 @@ export const useFormControl = ({
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<FormControlHTMLElement>) => {
-      setText(event.target.value);
+      setCurrentValue(event.target.value);
       onChange?.(event);
     },
     [onChange]
@@ -241,7 +241,7 @@ export const useFormControl = ({
   } as FormControlChildrenProps;
 
   if (!isArrayChildren && !isNotSetValue) {
-    childrenProps.value = text;
+    childrenProps.value = currentValue;
   }
 
   return {
