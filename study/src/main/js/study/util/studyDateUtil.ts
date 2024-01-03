@@ -143,3 +143,29 @@ export function convertToFlatpickrFormat(inputFormat: string) {
 
   return flatpickrFormat;
 }
+
+/**
+ * 年月日が同じかどうか比較
+ * @param {number} year 年
+ * @param {number} month 月
+ * @param {number} day 日
+ * @param {Date} date 日付け 比較対象
+ * @return {boolean} 判定結果
+ */
+export function equalsYearMonthDay(
+  year: number,
+  month: number,
+  day: number,
+  date: Date
+) {
+  // console.log(`year:${year}`);
+  // console.log(`month:${month}`);
+  // console.log(`day:${day}`);
+  // console.log(`date:${date}`);
+
+  return (
+    year === date.getFullYear() &&
+    month === date.getMonth() + 1 &&
+    day === date.getDate()
+  );
+}

@@ -7,7 +7,7 @@ import { getDate } from 'date-fns/getDate';
 import { getDay } from 'date-fns/getDay';
 import { getMonth } from 'date-fns/getMonth';
 import { startOfMonth } from 'date-fns/startOfMonth';
-import React, { useCallback, useMemo, useState, useTransition } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -15,7 +15,11 @@ import Table from 'react-bootstrap/table';
 
 import ListTable from './ListTable';
 import { Syukujits } from '../../../../../@types/studyUtilType';
-import { createDate, parseDate } from '../../../../../study/util/studyDateUtil';
+import {
+  createDate,
+  equalsYearMonthDay,
+  parseDate,
+} from '../../../../../study/util/studyDateUtil';
 import { isObjEmpty } from '../../../../../study/util/studyUtil';
 import {
   useHouseholdCalendarInfoSWR,
@@ -44,7 +48,6 @@ type CalendarProps = {
 };
 
 const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
-  const [, startTransition] = useTransition();
   const { data: commonInfo } = useCommonInfoSWR();
   const paramDate = useDateParam();
 
@@ -73,32 +76,10 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
 
   const { syukujitsuList } = calendarData;
   const amountList = booksFormList.booksDataList;
+  console.log(`selectDay:${selectDay}`);
 
   // console.log('calendardata');
   // console.log(calendarData);
-  /**
-   * 年月日が同じかどうか比較
-   * @param {number} year 年
-   * @param {number} month 月
-   * @param {number} day 日
-   * @param {Date} date 日付け 比較対象
-   * @return {boolean} 判定結果
-   */
-  const equalsYearMonthDay = useCallback(
-    (year: number, month: number, day: number, date: Date) => {
-      // console.log(`year:${year}`);
-      // console.log(`month:${month}`);
-      // console.log(`day:${day}`);
-      // console.log(`date:${date}`);
-
-      return (
-        year === date.getFullYear() &&
-        month === date.getMonth() + 1 &&
-        day === date.getDate()
-      );
-    },
-    []
-  );
 
   /**
    * 選択された日付けかどうか
@@ -116,7 +97,7 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
       // console.log(`date:${date}`);
       return equalsYearMonthDay(year, month, day, selectDay);
     },
-    [selectDay, equalsYearMonthDay]
+    [selectDay]
   );
 
   /**
@@ -183,7 +164,7 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
         return equalsYearMonthDay(year, month, day, holiday);
       });
     },
-    [syukujitsuList, equalsYearMonthDay]
+    [syukujitsuList]
   );
 
   /**
@@ -205,33 +186,8 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
         })
         .map((books) => books.booksAmmount);
     },
-    [amountList, equalsYearMonthDay]
+    [amountList]
   );
-
-  /**
-   * 選択されている家計簿リストを取得
-   *
-   * @return 選択されている家計簿リストを取得
-   */
-  const getSelectedamountByDayList = useCallback(() => {
-    // console.log(`selectDay:${selectDay}`);
-    if (isObjEmpty(amountList)) return [];
-
-    const selectedList = amountList.filter((books) => {
-      const amountday = parseDate(books.booksDate, books.booksDateFormat);
-      // console.log(`booksDate:${books.booksDate}`);
-      // console.log(`amountday:${amountday}`);
-      return equalsYearMonthDay(
-        selectDay.getFullYear(),
-        selectDay.getMonth() + 1,
-        selectDay.getDate(),
-        amountday
-      );
-    });
-    // console.log(`selectedList:${JSON.stringify(selectedList)}`);
-
-    return selectedList;
-  }, [amountList, equalsYearMonthDay]);
 
   /**
    * カレンダー用の配列作成
@@ -348,9 +304,7 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
                                 target.getAttribute('data-value')
                               );
                               // console.log(`day:${clickDay}`);
-                              startTransition(() => {
-                                setSelectDay(createDate(year, month, clickDay));
-                              });
+                              setSelectDay(createDate(year, month, clickDay));
                             }}
                           >
                             <div className="text-start">{weekDateOfDate}</div>
@@ -378,8 +332,8 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
         <Row>
           <Col sm="12">
             <ListTable
-              booksList={getSelectedamountByDayList()}
-              booksDate={selectDay}
+              //booksList={getSelectedamountByDayList()}
+              filterDate={selectDay}
               booksType={booksType}
             />
           </Col>

@@ -10,6 +10,10 @@ import {
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
+import {
+  equalsYearMonthDay,
+  parseDate,
+} from '../../../../../study/util/studyDateUtil';
 import { keyJoin } from '../../../../../study/util/studyStringUtil';
 import { pathJoin } from '../../../../../study/util/studyStringUtil';
 import { fetchPost } from '../../../../../study/util/studyUtil';
@@ -39,33 +43,27 @@ import { buildDataParam, buildInfoParam } from '../functions/param';
 import { useDateParam } from '../hooks/useParam';
 
 type ListTableProps = {
-  /** 家計簿データ */
-  booksList?: Books[];
-  /** 新規データ作成時用基準の日付 */
-  booksDate?: Date;
+  /** 家計簿データをフィルターする場合用 */
+  filterDate?: Date;
   /** 家計簿タイプ */
   booksType: string;
 };
 
-const ListTable: React.FC<ListTableProps> = ({
-  booksList: pbooksList,
-  booksDate,
-  booksType,
-}) => {
+const ListTable: React.FC<ListTableProps> = ({ filterDate, booksType }) => {
   const { data: commonInfo } = useCommonInfoSWR();
   const paramDate = useDateParam();
-  const date = booksDate || paramDate;
-  //console.log(`paramDate:${paramDate} booksDate:${booksDate} date:${date}`);
 
+  // swrのキーをすべて他のコンポーネントと同じにすることで、セットした場合、同じキーを使用しているたのコンポーネントもすべて再描画される
+  // そのため、useswrの引数に渡す日付はすべて「paramDate(他のhouseholdコンポーネントもこれ)」で統一
   const infoParam = useMemo(
-    () => buildInfoParam(date, commonInfo.dateFormat),
-    [date, commonInfo.dateFormat]
+    () => buildInfoParam(paramDate, commonInfo.dateFormat),
+    [paramDate, commonInfo.dateFormat]
   );
   const { data: info } = useHouseholdInfoSWR(infoParam);
 
   const dataParam = useMemo(
-    () => buildDataParam(date, commonInfo.dateFormat, booksType),
-    [date, commonInfo.dateFormat, booksType]
+    () => buildDataParam(paramDate, commonInfo.dateFormat, booksType),
+    [paramDate, commonInfo.dateFormat, booksType]
   );
   const { data: booksFormList, mutate: setList } =
     useHouseholdDataSWR(dataParam);
@@ -73,8 +71,34 @@ const ListTable: React.FC<ListTableProps> = ({
   const { mutate: setChartInfoStaticKey } = useHouseholdChartInfoStaticKeySWR();
 
   const [errData, setErrData] = useErrData();
+  /**
+   * firterする
+   *
+   * @param booksList filter対象
+   */
+  const filterBooksList = useCallback(
+    (booksList: Books[]) => {
+      if (!filterDate) return booksList;
+      return booksList.filter((books) => {
+        const amountday = parseDate(books.booksDate, books.booksDateFormat);
+        // console.log(`booksDate:${books.booksDate}`);
+        // console.log(`amountday:${amountday}`);
 
-  const booksList = pbooksList || booksFormList.booksDataList;
+        return equalsYearMonthDay(
+          filterDate.getFullYear(),
+          filterDate.getMonth() + 1,
+          filterDate.getDate(),
+          amountday
+        );
+      });
+    },
+    [filterDate]
+  );
+
+  const booksList = filterBooksList(booksFormList.booksDataList);
+  // 送信用の日付(カレンダーから呼ばれた場合にfilterDateを送信日付として用いる)
+  const submitDate = filterDate || paramDate;
+
   /**
    * リストデータ更新
    */
@@ -82,12 +106,12 @@ const ListTable: React.FC<ListTableProps> = ({
     async (form: NestedObject) => {
       const param = {
         ...form,
-        ...buildDataParam(date, commonInfo.dateFormat, booksType),
+        ...buildDataParam(submitDate, commonInfo.dateFormat, booksType),
       };
 
       return await fetchPost(urlConst.books.LIST_DATA_UPDATE, param);
     },
-    [date, commonInfo.dateFormat, booksType]
+    [submitDate, commonInfo.dateFormat, booksType]
   );
 
   /**
@@ -97,12 +121,12 @@ const ListTable: React.FC<ListTableProps> = ({
     async (form: NestedObject) => {
       const param = {
         ...form,
-        ...buildDataParam(date, commonInfo.dateFormat, booksType),
+        ...buildDataParam(submitDate, commonInfo.dateFormat, booksType),
       };
 
       return await fetchPost(urlConst.books.LIST_DATA_PUSH, param);
     },
-    [date, commonInfo.dateFormat, booksType]
+    [submitDate, commonInfo.dateFormat, booksType]
   );
 
   /**
