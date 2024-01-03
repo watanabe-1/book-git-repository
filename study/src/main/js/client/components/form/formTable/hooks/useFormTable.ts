@@ -33,6 +33,23 @@ export const useFormTable = ({
   const schema = useMemo(() => yup.object().shape(additions), [yup, additions]);
 
   /**
+   * 送信処理の実行
+   *
+   * @param submitButtonName 送信する種類
+   * @param submitValues 送信する値
+   */
+  const executeSubmit = useCallback(
+    async (submitButtonName: string, submitValues: NestedObject) => {
+      if (submitButtonName === UPDATE_BUTTON_NAME) {
+        return await handleFormSubmit(submitValues);
+      } else if (submitButtonName === INSERT_BUTTON_NAME) {
+        return await handlePushSubmit(submitValues);
+      }
+    },
+    [handleFormSubmit, handlePushSubmit]
+  );
+
+  /**
    *  送信制御関数
    * @param props formikのprops
    * @param onSubmit 送信関数
@@ -66,29 +83,13 @@ export const useFormTable = ({
       }
     },
     [
+      executeSubmit,
       filterRowValues,
       setSubmitLoading,
       rowName,
       submitModifiedRowsOnly,
       submitButtonName,
     ]
-  );
-
-  /**
-   * 送信処理の実行
-   *
-   * @param submitButtonName 送信する種類
-   * @param submitValues 送信する値
-   */
-  const executeSubmit = useCallback(
-    async (submitButtonName: string, submitValues: NestedObject) => {
-      if (submitButtonName === UPDATE_BUTTON_NAME) {
-        return await handleFormSubmit(submitValues);
-      } else if (submitButtonName === INSERT_BUTTON_NAME) {
-        return await handlePushSubmit(submitValues);
-      }
-    },
-    []
   );
 
   /**

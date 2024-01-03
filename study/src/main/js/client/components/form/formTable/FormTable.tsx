@@ -75,7 +75,7 @@ const FormTable: React.FC<FormTableProps> = ({
               hidden={hiddenSubmitButton}
               disabled={!formik.dirty || isSubmitLoading}
               onClick={() => {
-                console.log(UPDATE_BUTTON_NAME);
+                // console.log(UPDATE_BUTTON_NAME);
                 setSubmitButtonName(UPDATE_BUTTON_NAME);
               }}
             />

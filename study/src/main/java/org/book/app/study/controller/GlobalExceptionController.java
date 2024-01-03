@@ -32,7 +32,7 @@ import lombok.extern.slf4j.XSlf4j;
 public class GlobalExceptionController {
 
     /**
-     * BusinessExceptionが発生した場合のハンドリングを行います
+     * BusinessExceptionが発生した場合のハンドリングを行う
      *
      * @param ex 発生した例外
      * @param request リクエスト情報
@@ -51,7 +51,7 @@ public class GlobalExceptionController {
     // 他の例外ハンドラーを以下に追加
 
     /**
-     * HttpRequestMethodNotSupportedExceptionが発生した場合のハンドリングを行います
+     * HttpRequestMethodNotSupportedExceptionが発生した場合のハンドリングを行う
      *
      * @param ex 発生した例外
      * @param request リクエスト情報
@@ -69,7 +69,7 @@ public class GlobalExceptionController {
     }
 
     /**
-     * HttpMediaTypeNotSupportedExceptionが発生した場合のハンドリングを行います
+     * HttpMediaTypeNotSupportedExceptionが発生した場合のハンドリングを行う
      *
      * @param ex 発生した例外
      * @param request リクエスト情報
@@ -87,8 +87,8 @@ public class GlobalExceptionController {
     }
 
     /**
-     * MethodArgumentNotValidExceptionを処理します。
-     * 主にバリデーションエラー時に発生する例外です。
+     * MethodArgumentNotValidExceptionを処理する
+     * 主にバリデーションエラー時に発生する例外
      *
      * @param ex 発生した例外
      * @param request リクエスト情報
@@ -103,8 +103,8 @@ public class GlobalExceptionController {
     }
 
     /**
-     * BindExceptionを処理します。
-     * フォームオブジェクトへのバインド失敗時に発生する例外です。
+     * BindExceptionを処理する
+     * フォームオブジェクトへのバインド失敗時に発生する例外
      *
      * @param ex 発生した例外
      * @param request リクエスト情報
@@ -118,8 +118,8 @@ public class GlobalExceptionController {
     }
 
     /**
-     * JsonParseExceptionを処理します。
-     * JSONの解析に失敗した際に発生する例外です。
+     * JsonParseExceptionを処理する
+     * JSONの解析に失敗した際に発生する例外
      *
      * @param ex 発生した例外
      * @param request リクエスト情報
@@ -133,8 +133,8 @@ public class GlobalExceptionController {
     }
 
     /**
-     * UnrecognizedPropertyExceptionを処理します。
-     * JSON内に認識されないプロパティが存在する場合に発生する例外です。
+     * UnrecognizedPropertyExceptionを処理する
+     * JSON内に認識されないプロパティが存在する場合に発生する例外
      *
      * @param ex 発生した例外
      * @param request リクエスト情報
@@ -149,8 +149,8 @@ public class GlobalExceptionController {
     }
 
     /**
-     * JsonMappingExceptionを処理します。
-     * JSONのオブジェクトマッピングに失敗した際に発生する例外です。
+     * JsonMappingExceptionを処理する
+     * JSONのオブジェクトマッピングに失敗した際に発生する例外
      *
      * @param ex 発生した例外
      * @param request リクエスト情報
@@ -164,8 +164,8 @@ public class GlobalExceptionController {
     }
 
     /**
-     * TypeMismatchExceptionを処理します。
-     * リクエストパラメータの型が期待される型と異なる場合に発生する例外です。
+     * TypeMismatchExceptionを処理する
+     * リクエストパラメータの型が期待される型と異なる場合に発生する例外
      *
      * @param ex 発生した例外
      * @param request リクエスト情報
@@ -179,8 +179,8 @@ public class GlobalExceptionController {
     }
 
     /**
-     * OptimisticLockingFailureExceptionを処理します。
-     * 楽観的ロックによるデータアクセス処理の失敗を示す例外です。
+     * OptimisticLockingFailureExceptionを処理する
+     * 楽観的ロックによるデータアクセス処理の失敗を示す例外
      *
      * @param ex 発生した例外
      * @param request リクエスト情報
@@ -195,8 +195,8 @@ public class GlobalExceptionController {
     }
 
     /**
-     * PessimisticLockingFailureExceptionを処理します。
-     * 悲観的ロックによるデータアクセス処理の失敗を示す例外です。
+     * PessimisticLockingFailureExceptionを処理する
+     * 悲観的ロックによるデータアクセス処理の失敗を示す例外
      *
      * @param ex 発生した例外
      * @param request リクエスト情報
@@ -211,8 +211,8 @@ public class GlobalExceptionController {
     }
 
     /**
-     * DataAccessExceptionを処理します。
-     * データアクセス層で発生した一般的な例外です。
+     * DataAccessExceptionを処理する
+     * データアクセス層で発生した一般的な例外
      *
      * @param ex 発生した例外
      * @param request リクエスト情報
@@ -226,7 +226,7 @@ public class GlobalExceptionController {
     }
 
     /**
-     * 一般的なExceptionが発生した場合のハンドリングを行います
+     * 一般的なExceptionが発生した場合のハンドリングを行う
      * 特にマッピングされていない例外タイプに対応する
      *
      * @param ex 発生した例外

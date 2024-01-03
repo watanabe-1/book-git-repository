@@ -54,16 +54,18 @@ const ListTable: React.FC<ListTableProps> = ({
 }) => {
   const { data: commonInfo } = useCommonInfoSWR();
   const paramDate = useDateParam();
+  const date = booksDate || paramDate;
+  //console.log(`paramDate:${paramDate} booksDate:${booksDate} date:${date}`);
 
   const infoParam = useMemo(
-    () => buildInfoParam(paramDate, commonInfo.dateFormat),
-    [paramDate, commonInfo.dateFormat]
+    () => buildInfoParam(date, commonInfo.dateFormat),
+    [date, commonInfo.dateFormat]
   );
   const { data: info } = useHouseholdInfoSWR(infoParam);
 
   const dataParam = useMemo(
-    () => buildDataParam(paramDate, commonInfo.dateFormat, booksType),
-    [paramDate, commonInfo.dateFormat, booksType]
+    () => buildDataParam(date, commonInfo.dateFormat, booksType),
+    [date, commonInfo.dateFormat, booksType]
   );
   const { data: booksFormList, mutate: setList } =
     useHouseholdDataSWR(dataParam);
@@ -72,8 +74,7 @@ const ListTable: React.FC<ListTableProps> = ({
 
   const [errData, setErrData] = useErrData();
 
-  const booksList = pbooksList ? pbooksList : booksFormList.booksDataList;
-
+  const booksList = pbooksList || booksFormList.booksDataList;
   /**
    * リストデータ更新
    */
@@ -81,12 +82,12 @@ const ListTable: React.FC<ListTableProps> = ({
     async (form: NestedObject) => {
       const param = {
         ...form,
-        ...buildDataParam(paramDate, commonInfo.dateFormat, booksType),
+        ...buildDataParam(date, commonInfo.dateFormat, booksType),
       };
 
       return await fetchPost(urlConst.books.LIST_DATA_UPDATE, param);
     },
-    [paramDate, commonInfo.dateFormat, booksType]
+    [date, commonInfo.dateFormat, booksType]
   );
 
   /**
@@ -96,16 +97,12 @@ const ListTable: React.FC<ListTableProps> = ({
     async (form: NestedObject) => {
       const param = {
         ...form,
-        ...buildDataParam(
-          booksDate ? booksDate : paramDate,
-          commonInfo.dateFormat,
-          booksType
-        ),
+        ...buildDataParam(date, commonInfo.dateFormat, booksType),
       };
 
       return await fetchPost(urlConst.books.LIST_DATA_PUSH, param);
     },
-    [booksDate, paramDate, commonInfo.dateFormat, booksType]
+    [date, commonInfo.dateFormat, booksType]
   );
 
   /**
