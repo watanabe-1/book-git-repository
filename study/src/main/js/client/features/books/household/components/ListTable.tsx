@@ -16,7 +16,6 @@ import {
 } from '../../../../../study/util/studyDateUtil';
 import { keyJoin } from '../../../../../study/util/studyStringUtil';
 import { pathJoin } from '../../../../../study/util/studyStringUtil';
-import { fetchPost } from '../../../../../study/util/studyUtil';
 import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import ImageIcon from '../../../../components/elements/icon/ImageIcon';
 import CheckBox, {
@@ -37,7 +36,11 @@ import {
   useHouseholdDataSWR,
   useHouseholdChartInfoStaticKeySWR,
 } from '../../../../hooks/useBooks';
-import { useCommonInfoSWR, useErrData } from '../../../../hooks/useCommon';
+import {
+  useCommonInfoSWR,
+  useErrData,
+  useFetch,
+} from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
 import { buildDataParam, buildInfoParam } from '../functions/param';
 import { useDateParam } from '../hooks/useParam';
@@ -71,6 +74,8 @@ const ListTable: React.FC<ListTableProps> = ({ filterDate, booksType }) => {
   const { mutate: setChartInfoStaticKey } = useHouseholdChartInfoStaticKeySWR();
 
   const [errData, setErrData] = useErrData();
+  const { secureFetchPost } = useFetch();
+
   /**
    * firterする
    *
@@ -109,7 +114,7 @@ const ListTable: React.FC<ListTableProps> = ({ filterDate, booksType }) => {
         ...buildDataParam(submitDate, commonInfo.dateFormat, booksType),
       };
 
-      return await fetchPost(urlConst.books.LIST_DATA_UPDATE, param);
+      return await secureFetchPost(urlConst.books.LIST_DATA_UPDATE, param);
     },
     [submitDate, commonInfo.dateFormat, booksType]
   );
@@ -124,7 +129,7 @@ const ListTable: React.FC<ListTableProps> = ({ filterDate, booksType }) => {
         ...buildDataParam(submitDate, commonInfo.dateFormat, booksType),
       };
 
-      return await fetchPost(urlConst.books.LIST_DATA_PUSH, param);
+      return await secureFetchPost(urlConst.books.LIST_DATA_PUSH, param);
     },
     [submitDate, commonInfo.dateFormat, booksType]
   );

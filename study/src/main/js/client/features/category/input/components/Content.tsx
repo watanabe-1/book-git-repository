@@ -1,5 +1,6 @@
 import React, { useState, createContext, Suspense, useCallback } from 'react';
 import Col from 'react-bootstrap/Col';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import Basic from './Basic';
 import Confirm from './Confirm';
@@ -9,6 +10,7 @@ import {
   FormConfirmData,
   CategoryUi,
 } from '../../../../../@types/studyUtilType';
+import ErrorModal from '../../../../components/elements/modal/ErrorModal';
 import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import Stepper from '../../../../components/elements/stepper/Stepper';
 import BodysHead from '../../../../components/layout/BodysHead';
@@ -87,11 +89,13 @@ const Content = () => {
       <BodysHead title={steps[activeStep]} />
       <Col md="7" lg="8">
         <Stepper steps={steps} activeStep={activeStep}></Stepper>
-        <Suspense fallback={<BodysLodingSpinner />}>
-          <Context.Provider value={value}>
-            {getStepContent(activeStep, handleNext, handleBack, handleReset)}
-          </Context.Provider>
-        </Suspense>
+        <ErrorBoundary FallbackComponent={ErrorModal}>
+          <Suspense fallback={<BodysLodingSpinner />}>
+            <Context.Provider value={value}>
+              {getStepContent(activeStep, handleNext, handleBack, handleReset)}
+            </Context.Provider>
+          </Suspense>
+        </ErrorBoundary>
       </Col>
     </div>
   );

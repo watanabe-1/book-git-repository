@@ -8,13 +8,12 @@ import Row from 'react-bootstrap/Row';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import { getInputFile } from '../../../../../study/util/studyFormUtil';
-import { fetchPost } from '../../../../../study/util/studyUtil';
 import SubmitButton from '../../../../components/elements/button/SubmitButton';
 import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import FileBox from '../../../../components/form/FileBox';
 import SelectBox from '../../../../components/form/SelectBox';
 import { useUploadtInfoSWR } from '../../../../hooks/useBooks';
-import { useErrData } from '../../../../hooks/useCommon';
+import { useErrData, useFetch } from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
 
 /**
@@ -31,6 +30,7 @@ const InputForm = (props: { handleNext: () => void }) => {
   const [isResultLoading, setResultLoading] = useState(false);
   //const [validated, setValidated] = useState(false);
   const buttonElement = useRef<HTMLButtonElement>(null);
+  const { secureFetchPost } = useFetch();
 
   /**
    * 送信ボタン
@@ -56,7 +56,7 @@ const InputForm = (props: { handleNext: () => void }) => {
   const fetchResult = useCallback(
     async (form: { booksType?: string; booksFile?: File }) => {
       setResultLoading(true);
-      const response = await fetchPost(urlConst.books.RESULT, form);
+      const response = await secureFetchPost(urlConst.books.RESULT, form);
       setResultLoading(false);
 
       return response;

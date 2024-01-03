@@ -4,8 +4,8 @@ import { KeyedMutator } from 'swr';
 
 import { DefaultCategoryFormList } from '../../../../../@types/studyUtilType';
 import { urlConst } from '../../../../../constant/urlConstant';
-import { fetchPost } from '../../../../../study/util/studyUtil';
 import SubmitButton from '../../../../components/elements/button/SubmitButton';
+import { useFetch } from '../../../../hooks/useCommon';
 
 type InputAllButtonProps = {
   /** デフォルトカテゴリーリスト セッター */
@@ -20,12 +20,13 @@ const InputAllButton: React.FC<InputAllButtonProps> = ({ setList }) => {
   const [isSubmitLoading, setSubmitLoading] = useState(false);
   // formik リセットフォーム
   const { resetForm, dirty } = useFormikContext();
+  const { secureFetchPost } = useFetch();
 
   /**
    * リストデータ登録
    */
   const fetchInputAll = useCallback(async () => {
-    return await fetchPost(urlConst.defaultCategory.INPUT_ALL);
+    return await secureFetchPost(urlConst.defaultCategory.INPUT_ALL);
   }, []);
 
   /**

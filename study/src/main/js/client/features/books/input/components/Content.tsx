@@ -1,8 +1,10 @@
 import React, { Suspense, useCallback, useState } from 'react';
 import Col from 'react-bootstrap/Col';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import InputForm from './InputForm';
 import Result from './Result';
+import ErrorModal from '../../../../components/elements/modal/ErrorModal';
 import BodysLodingSpinner from '../../../../components/elements/spinner/BodysLodingSpinner';
 import Stepper from '../../../../components/elements/stepper/Stepper';
 import BodysHead from '../../../../components/layout/BodysHead';
@@ -53,9 +55,11 @@ const Content = () => {
       <BodysHead title={steps[activeStep]} />
       <Col md="7" lg="8">
         <Stepper steps={steps} activeStep={activeStep}></Stepper>
-        <Suspense fallback={<BodysLodingSpinner />}>
-          {getStepContent(activeStep, handleNext, handleBack, handleReset)}
-        </Suspense>
+        <ErrorBoundary FallbackComponent={ErrorModal}>
+          <Suspense fallback={<BodysLodingSpinner />}>
+            {getStepContent(activeStep, handleNext, handleBack, handleReset)}
+          </Suspense>
+        </ErrorBoundary>
       </Col>
     </div>
   );

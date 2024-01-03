@@ -1,6 +1,7 @@
 import { pathJoin } from './studyStringUtil';
 import { objToFormData } from './studyYupUtil';
 import { NestedObject, Type } from '../../@types/studyUtilType';
+import { FetchError } from '../../error/studyError';
 
 /**
  * urlのプロトコルからホストまでを取得
@@ -85,7 +86,28 @@ export function isObjEmpty(obj: object) {
 }
 
 /**
+ * 認証期限切れか判定する
+ *
+ * @param res レスポンス
+ * @returns
+ */
+export function isLoggedIn(res: Response) {
+  return res?.status === 401;
+}
+
+/**
+ * 認証期限切れエラーか判定する
+ *
+ * @param err エラー
+ * @returns
+ */
+export function isLoggedInError(err: FetchError) {
+  return isLoggedIn(err.response);
+}
+
+/**
  * get通信を行う
+ *
  * @param baseurl 通信先
  * @param params パラメータ
  * @returns 通信結果
@@ -109,7 +131,19 @@ export async function fetchGet(
   console.log(res);
 
   if (!res.ok) {
-    throw new Error(`unexpected status: ${res.status}`);
+    if (isLoggedIn(res)) {
+      // 認証エラーの場合、カスタムエラーをスローする
+      throw new FetchError(
+        'Unauthorized: Access is denied due to invalid credentials.',
+        res
+      );
+    } else {
+      // その他の一般的なHTTPエラー
+      throw new FetchError(
+        `An error occurred: ${res.status} ${res.statusText}`,
+        res
+      );
+    }
   }
 
   return res;
@@ -117,6 +151,7 @@ export async function fetchGet(
 
 /**
  * post通信を行う
+ *
  * @param baseurl 通信先
  * @param params 送付パラム
  * @returns 通信結果
@@ -152,9 +187,16 @@ export async function fetchPost(
   console.log('call post response:');
   console.log(res);
 
-  // if (!res.ok) {
-  //   throw new Error(`unexpected status: ${res.status}`);
-  // }
+  if (!res.ok) {
+    if (isLoggedIn(res)) {
+      // 認証エラーの場合、カスタムエラーをスローする
+      throw new FetchError(
+        'Unauthorized: Access is denied due to invalid credentials.',
+        res
+      );
+    }
+    // 認証エラー以外はスローしない(formのバリデーションエラーの時もあるため)
+  }
   // const json = await res.json();
   // console.log(json);
 

@@ -13,7 +13,6 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Table from 'react-bootstrap/table';
 
-import ListTable from './ListTable';
 import { Syukujits } from '../../../../../@types/studyUtilType';
 import {
   createDate,
@@ -29,6 +28,7 @@ import {
 import { useCommonInfoSWR } from '../../../../hooks/useCommon';
 import { buildDataParam, buildInfoParam } from '../functions/param';
 import { useDateParam } from '../hooks/useParam';
+import ListTable from './ListTable';
 
 import '../../../../../../css/view/calendar/calendar.css';
 
@@ -76,7 +76,7 @@ const Calendar: React.FC<CalendarProps> = ({ booksType }) => {
 
   const { syukujitsuList } = calendarData;
   const amountList = booksFormList.booksDataList;
-  console.log(`selectDay:${selectDay}`);
+  // console.log(`selectDay:${selectDay}`);
 
   // console.log('calendardata');
   // console.log(calendarData);

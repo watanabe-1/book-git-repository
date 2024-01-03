@@ -11,13 +11,12 @@ import {
   getFilenameFromResponse,
 } from '../../../../../study/util/studyFileUtil';
 import { getInputFile } from '../../../../../study/util/studyFormUtil';
-import { fetchPost } from '../../../../../study/util/studyUtil';
 import SubmitButton from '../../../../components/elements/button/SubmitButton';
 import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import FileBox from '../../../../components/form/FileBox';
 import SelectBox from '../../../../components/form/SelectBox';
 import { useConvertInfoSWR } from '../../../../hooks/useBooks';
-import { useErrData } from '../../../../hooks/useCommon';
+import { useErrData, useFetch } from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
 
 /**
@@ -32,14 +31,17 @@ const ConvertForm = () => {
   const { data: info, initScript } = useConvertInfoSWR();
   const [errData, setErrData] = useErrData();
   const [isResultLoading, setResultLoading] = useState(false);
+  const { secureFetchPost } = useFetch();
 
   /**
    * 登録
+   *
+   * @param form 送信パラメータ
    */
   const fetchConvertFile = useCallback(
     async (form: BooksConvertForm) => {
       setResultLoading(true);
-      const response = await fetchPost(urlConst.books.CONVERT_FILE, form);
+      const response = await secureFetchPost(urlConst.books.CONVERT_FILE, form);
       setResultLoading(false);
 
       return response;
@@ -49,6 +51,7 @@ const ConvertForm = () => {
 
   /**
    * 送信ボタン
+   *
    * @param form 送信パラメータ
    */
   const handleSubmit = useCallback(

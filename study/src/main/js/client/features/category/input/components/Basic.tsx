@@ -9,7 +9,6 @@ import { Category } from '../../../../../@types/studyUtilType';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import { getInputFile } from '../../../../../study/util/studyFormUtil';
-import { fetchPost } from '../../../../../study/util/studyUtil';
 import SubmitButton from '../../../../components/elements/button/SubmitButton';
 import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import CheckBox from '../../../../components/form/CheckBox';
@@ -19,7 +18,7 @@ import SelectBox from '../../../../components/form/SelectBox';
 import TextArea from '../../../../components/form/TextArea';
 import TextBox from '../../../../components/form/TextBox';
 import { useCategoryInfoSWR } from '../../../../hooks/useCategory';
-import { useErrData } from '../../../../hooks/useCommon';
+import { useErrData, useFetch } from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
 
 type BasicProps = {
@@ -33,6 +32,7 @@ const Basic: React.FC<BasicProps> = (props) => {
   const [isConfirmLoading, setConfirmLoading] = useState(false);
   // コンテキストに保存しておきたいデータ
   const { currentState, setCurrentState } = useContext(Context);
+  const { secureFetchPost } = useFetch();
 
   /**
    * 確認画面情報取得
@@ -40,7 +40,7 @@ const Basic: React.FC<BasicProps> = (props) => {
   const fetchConfirm = useCallback(
     async (form: Category) => {
       setConfirmLoading(true);
-      const response = await fetchPost(urlConst.category.CONFIRM, form);
+      const response = await secureFetchPost(urlConst.category.CONFIRM, form);
       setConfirmLoading(false);
 
       return response;

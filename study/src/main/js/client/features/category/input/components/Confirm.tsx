@@ -11,8 +11,8 @@ import { fieldConst } from '../../../../../constant/fieldConstant';
 import { typeConst } from '../../../../../constant/typeConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import { getConfirmMessage } from '../../../../../study/util/studyMessageUtil';
-import { fetchPost } from '../../../../../study/util/studyUtil';
 import ConfirmList from '../../../../components/form/ConfirmList';
+import { useFetch } from '../../../../hooks/useCommon';
 
 type ConfirmProps = {
   /** 次画面へ */
@@ -33,6 +33,7 @@ type Item = {
 const Confirm: React.FC<ConfirmProps> = (props) => {
   const { currentState } = useContext(Context);
   const { form, info } = currentState;
+  const { secureFetchPost } = useFetch();
 
   const item = {} as Item;
   item[fieldConst.category.CAT_CODE] = {
@@ -91,7 +92,10 @@ const Confirm: React.FC<ConfirmProps> = (props) => {
 
   const onSubmit = useCallback(async () => {
     //alert(JSON.stringify(currentState));
-    const res = await fetchPost(urlConst.category.RESULT, currentState.form);
+    const res = await secureFetchPost(
+      urlConst.category.RESULT,
+      currentState.form
+    );
     if (res.ok) {
       // 確認画面へ
       props.handleNext();

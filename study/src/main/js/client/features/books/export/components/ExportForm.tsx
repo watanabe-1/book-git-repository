@@ -10,12 +10,11 @@ import {
   downloadFile,
   getFilenameFromResponse,
 } from '../../../../../study/util/studyFileUtil';
-import { fetchPost } from '../../../../../study/util/studyUtil';
 import SubmitButton from '../../../../components/elements/button/SubmitButton';
 import AutoValidateToken from '../../../../components/form/AutoValidateToken';
 import SelectBox from '../../../../components/form/SelectBox';
 import { useDownloadtInfoSWR } from '../../../../hooks/useBooks';
-import { useErrData } from '../../../../hooks/useCommon';
+import { useErrData, useFetch } from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
 
 /**
@@ -30,14 +29,17 @@ const InputForm = () => {
   const { data: info, initScript } = useDownloadtInfoSWR();
   const [errData, setErrData] = useErrData();
   const [isResultLoading, setResultLoading] = useState(false);
+  const { secureFetchPost } = useFetch();
 
   /**
    * 登録
+   *
+   * @param form 送信パラメータ
    */
   const fetchResult = useCallback(
     async (form: BooksDownloadForm) => {
       setResultLoading(true);
-      const response = await fetchPost(urlConst.books.DOWNLOAD, form);
+      const response = await secureFetchPost(urlConst.books.DOWNLOAD, form);
       setResultLoading(false);
 
       return response;
@@ -47,6 +49,7 @@ const InputForm = () => {
 
   /**
    * 送信ボタン
+   *
    * @param form 送信パラメータ
    */
   const handleSubmit = useCallback(

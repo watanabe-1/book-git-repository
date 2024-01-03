@@ -1,5 +1,6 @@
 import { FormikHelpers, useFormik } from 'formik';
 import { useCallback, useMemo, useState } from 'react';
+import { useErrorBoundary } from 'react-error-boundary';
 
 import { NestedObject } from '../../../../../@types/studyUtilType';
 import yup from '../../../../locale/yup.locale';
@@ -27,6 +28,7 @@ export const useFormTable = ({
     [objArray, tableFormConfig]
   );
   const [submitButtonName, setSubmitButtonName] = useState('');
+  const { showBoundary } = useErrorBoundary();
 
   // console.log(`initialValuesです。\n ${JSON.stringify(initialValues)}`);
   // スキーマにセット
@@ -77,6 +79,9 @@ export const useFormTable = ({
         }
       } catch (error) {
         console.error('Error occurred during submission:', error);
+        // 非同期実行のため普通にスローしてもerror-boundary側でキャッチできない
+        // そのためshowBoundaryを使用してerror-boundaryにエラーを連携する
+        throw error;
       } finally {
         //console.log('handleSubmit が完了しました');
         setSubmitLoading(false);

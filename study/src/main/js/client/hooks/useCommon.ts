@@ -1,38 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useErrorBoundary } from 'react-error-boundary';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import useSWR, { SWRConfiguration, mutate, unstable_serialize } from 'swr';
 import { v4 as uuidv4 } from 'uuid';
 
 import { OnServerApi } from '../../@types/studyApi';
-import { CommonUi, ErrorResults } from '../../@types/studyUtilType';
+import {
+  CommonUi,
+  ErrorResults,
+  NestedObject,
+} from '../../@types/studyUtilType';
 import { urlConst } from '../../constant/urlConstant';
-import { fetchGet } from '../../study/util/studyUtil';
+import { fetchGet, fetchPost } from '../../study/util/studyUtil';
 import { onServer } from '../on-server';
-
-const get = async (
-  initialDataKey: string | [string, Record<string, string>]
-) => {
-  let url: string;
-  let token: Record<string, string> | undefined;
-
-  if (typeof initialDataKey === 'string') {
-    url = initialDataKey;
-  } else {
-    [url, token] = initialDataKey;
-  }
-
-  try {
-    const res = await fetchGet(url, token);
-
-    return await res.json();
-  } catch (error) {
-    console.error(
-      `Failed to fetch from ${url}${token ? JSON.stringify(token) : ''}`,
-      error
-    );
-    throw error;
-  }
-};
 
 export const useCommonSWR = <T>(
   apiFn: (api: OnServerApi) => string,
@@ -42,6 +22,7 @@ export const useCommonSWR = <T>(
     suspense: true,
   }
 ) => {
+  const { secureFetchGet } = useFetch();
   const [initialData, initScript] = onServer(
     apiFn,
     null,
@@ -54,6 +35,32 @@ export const useCommonSWR = <T>(
   if (initialData) {
     initialDataObj.fallbackData = initialData;
   }
+
+  const get = useCallback(
+    async (initialDataKey: string | [string, Record<string, string>]) => {
+      let url: string;
+      let token: Record<string, string> | undefined;
+
+      if (typeof initialDataKey === 'string') {
+        url = initialDataKey;
+      } else {
+        [url, token] = initialDataKey;
+      }
+
+      try {
+        const res = await secureFetchGet(url, token);
+
+        return await res.json();
+      } catch (error) {
+        console.error(
+          `Failed to fetch from ${url}${token ? JSON.stringify(token) : ''}`,
+          error
+        );
+        throw error;
+      }
+    },
+    []
+  );
 
   // useSWRはssr時も、hydrate後にデータが正しいか再度取得に行く
   // つまり再度fetchが実行される
@@ -154,6 +161,7 @@ export const useWindowSize = () => {
     };
     window.addEventListener('resize', updateSize);
     updateSize();
+
     return () => window.removeEventListener('resize', updateSize);
   }, []);
 
@@ -170,4 +178,67 @@ export const useErrData = () => {
     ErrorResults,
     React.Dispatch<React.SetStateAction<unknown>>
   ];
+};
+
+/**
+ * ErrorBoundaryにエラーを通知できるようにした
+ * 汎用fetchを返却
+ *
+ * @returns
+ */
+export const useFetch = () => {
+  const { showBoundary } = useErrorBoundary();
+
+  /**
+   * get通信を行う
+   *
+   * @param baseurl 通信先
+   * @param params パラメータ
+   * @returns 通信結果
+   */
+  const secureFetchGet = useCallback(
+    async (baseurl: string, params: Record<string, string> = {}) => {
+      try {
+        return await fetchGet(baseurl, params);
+      } catch (error) {
+        console.error('Error occurred during fetchGet:', error);
+        // 非同期実行のため普通にスローしてもerror-boundary側でキャッチできない
+        // そのためshowBoundaryを使用してerror-boundaryにエラーを連携する
+        showBoundary(error);
+        throw error;
+      } finally {
+        //console.log('secureFetchGet が完了しました');
+      }
+    },
+    []
+  );
+
+  /**
+   * post通信を行う(error-boundaryにエラーを連携する)
+   *
+   * @param baseurl 通信先
+   * @param params 送付パラム
+   * @returns 通信結果
+   */
+  const secureFetchPost = useCallback(
+    async (baseurl: string, params: NestedObject = {}) => {
+      try {
+        return await fetchPost(baseurl, params);
+      } catch (error) {
+        console.error('Error occurred during fetchPost:', error);
+        // 非同期実行のため普通にスローしてもerror-boundary側でキャッチできない
+        // そのためshowBoundaryを使用してerror-boundaryにエラーを連携する
+        showBoundary(error);
+        throw error;
+      } finally {
+        //console.log('secureFetchPost が完了しました');
+      }
+    },
+    []
+  );
+
+  return {
+    secureFetchGet,
+    secureFetchPost,
+  };
 };

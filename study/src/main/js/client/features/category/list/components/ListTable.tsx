@@ -10,7 +10,6 @@ import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
 import { getInputFile } from '../../../../../study/util/studyFormUtil';
 import { keyJoin } from '../../../../../study/util/studyStringUtil';
-import { fetchPost } from '../../../../../study/util/studyUtil';
 import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import ModalSlider from '../../../../components/elements/slider/ModalSlider';
 import CheckBox, {
@@ -39,7 +38,7 @@ import {
   useCategoryListSWR,
   useImageListSWR,
 } from '../../../../hooks/useCategory';
-import { useErrData } from '../../../../hooks/useCommon';
+import { useErrData, useFetch } from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
 
 /**
@@ -56,12 +55,13 @@ const ListTable = () => {
   const { data: imageList, initScript: initlImageListScript } =
     useImageListSWR();
   const [errData, setErrData] = useErrData();
+  const { secureFetchPost } = useFetch();
 
   /**
    * リストデータ更新
    */
   const fetchUpdListData = useCallback(async (form: NestedObject) => {
-    return await fetchPost(urlConst.category.LIST_DATA_UPDATE, form);
+    return await secureFetchPost(urlConst.category.LIST_DATA_UPDATE, form);
   }, []);
 
   /**

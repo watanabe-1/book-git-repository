@@ -5,10 +5,13 @@ import org.book.app.study.service.AppUserDetailsService;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 
 /**
  * スプリングセキュリティ設定クラス
@@ -76,7 +79,12 @@ public class WebSecurityConfig {
             // システム管理者および管理者のみ
             .requestMatchers("/admin/**")
             .hasAnyRole(AccountType.SYSTEM.getBaseRole(), AccountType.ADMIN.getBaseRole())
-            .anyRequest().authenticated());
+            .anyRequest().authenticated())
+        // ReactからのAPIリクエストに対するエラーハンドリング
+        // 認証切れの状態でのReactからのAPIリクエスト(X-Requested-With: XMLHttpRequest ヘッダーを持つ)に対してHTTPステータスコード 401（Unauthorized）を返すようにする
+        .exceptionHandling(customizer -> customizer.defaultAuthenticationEntryPointFor(
+            new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED),
+            new RequestHeaderRequestMatcher("X-Requested-With", "XMLHttpRequest")));
     return http.build();
   }
 }

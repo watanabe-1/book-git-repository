@@ -9,7 +9,6 @@ import {
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
-import { fetchPost } from '../../../../../study/util/studyUtil';
 import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import CheckBox, {
   getCheckBoxDetails,
@@ -23,7 +22,7 @@ import TextBox, {
   getTextBoxTextValue,
   modifierTextBox,
 } from '../../../../components/form/TextBox';
-import { useErrData } from '../../../../hooks/useCommon';
+import { useErrData, useFetch } from '../../../../hooks/useCommon';
 import {
   useDefaultCategoryInfoSWR,
   useDefaultCategoryListSWR,
@@ -45,19 +44,23 @@ const ListTable = () => {
   // const { data: imageList, initScript: initlImageListScript } =
   //   useImageListSWR();
   const [errData, setErrData] = useErrData();
+  const { secureFetchPost } = useFetch();
 
   /**
    * リストデータ更新
    */
   const fetchUpdListData = useCallback(async (form) => {
-    return await fetchPost(urlConst.defaultCategory.LIST_DATA_UPDATE, form);
+    return await secureFetchPost(
+      urlConst.defaultCategory.LIST_DATA_UPDATE,
+      form
+    );
   }, []);
 
   /**
    * 新規リストデータ追加
    */
   const fetchPushData = useCallback(async (form: NestedObject) => {
-    return await fetchPost(urlConst.defaultCategory.LIST_DATA_PUSH, form);
+    return await secureFetchPost(urlConst.defaultCategory.LIST_DATA_PUSH, form);
   }, []);
 
   /**

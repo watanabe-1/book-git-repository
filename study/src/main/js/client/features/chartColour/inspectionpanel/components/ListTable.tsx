@@ -10,7 +10,6 @@ import {
 import { classConst } from '../../../../../constant/classConstant';
 import { fieldConst } from '../../../../../constant/fieldConstant';
 import { urlConst } from '../../../../../constant/urlConstant';
-import { fetchPost } from '../../../../../study/util/studyUtil';
 import { objArrayToObj } from '../../../../../study/util/studyYupUtil';
 import CheckBox, {
   getCheckBoxDetails,
@@ -24,7 +23,7 @@ import {
   useChartColourListSWR,
   useInspectionPanelInfoSWR,
 } from '../../../../hooks/useChartColour';
-import { useErrData } from '../../../../hooks/useCommon';
+import { useErrData, useFetch } from '../../../../hooks/useCommon';
 import yup from '../../../../locale/yup.locale';
 
 type ListTableProps = {
@@ -66,6 +65,7 @@ const ListTable: React.FC<ListTableProps> = ({
   );
 
   const [errData, setErrData] = useErrData();
+  const { secureFetchPost } = useFetch();
 
   /**
    * リストデータ更新
@@ -75,7 +75,7 @@ const ListTable: React.FC<ListTableProps> = ({
       ...form,
     };
 
-    return await fetchPost(urlConst.chartColour.LIST_DATA_UPDATE, param);
+    return await secureFetchPost(urlConst.chartColour.LIST_DATA_UPDATE, param);
   }, []);
 
   /**
@@ -86,7 +86,7 @@ const ListTable: React.FC<ListTableProps> = ({
       ...form,
     };
 
-    return await fetchPost(urlConst.chartColour.LIST_DATA_PUSH, param);
+    return await secureFetchPost(urlConst.chartColour.LIST_DATA_PUSH, param);
   }, []);
 
   /**
