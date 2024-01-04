@@ -36,12 +36,12 @@ const FormControl: React.FC<FormControlProps> = ({
   const {
     convertedChildList,
     childrenProps,
-    isArrayChildren,
-    isEditing,
     simpleTextColor,
     simpleTextValue,
+    isArrayChildren,
+    isEditable,
+    isTextOnly,
     handleTextClick,
-    renderInitialByOnEditable,
   } = useFormControl({
     name,
     value,
@@ -72,40 +72,33 @@ const FormControl: React.FC<FormControlProps> = ({
           <Form.Label onClick={handleTextClick}>{title}</Form.Label>
         ))}
       {titleBr && <br />}
-      {renderInitialByOnEditable(() =>
+      {!isTextOnly &&
         convertedChildList.map(({ id, child, refCallbackFunction }) => {
           return cloneElement(child, {
             ...childrenProps,
             key: id,
             ref: refCallbackFunction,
           });
-        })
-      )}
-      {!isEditing && (
+        })}
+      {!isEditable && (
         <SimpleText
           name={name}
           value={simpleTextValue}
-          hidden={isEditing}
+          hidden={isEditable}
           textColorClass={simpleTextColor}
           textMaxLength={textMaxLength}
           onClick={handleTextClick}
         />
       )}
-      {renderInitialByOnEditable(
-        () =>
-          validate && (
-            <Form.Control.Feedback onClick={handleTextClick}>
-              OK!
-            </Form.Control.Feedback>
-          )
+      {!isTextOnly && validate && (
+        <Form.Control.Feedback onClick={handleTextClick}>
+          OK!
+        </Form.Control.Feedback>
       )}
-      {renderInitialByOnEditable(
-        () =>
-          validate && (
-            <Form.Control.Feedback type="invalid" onClick={handleTextClick}>
-              {error as string}
-            </Form.Control.Feedback>
-          )
+      {!isTextOnly && validate && (
+        <Form.Control.Feedback type="invalid" onClick={handleTextClick}>
+          {error as string}
+        </Form.Control.Feedback>
       )}
     </Form.Group>
   );

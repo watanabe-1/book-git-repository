@@ -4,8 +4,8 @@ package org.book.app.common.exception;
  * ビジネス例外用クラス
  */
 public class BusinessException extends RuntimeException {
-    private String messageKey;
-    private Object[] args;
+    private final String messageKey;
+    private final Object[] args;
 
     public BusinessException(String messageKey, Object... args) {
         this.messageKey = messageKey;

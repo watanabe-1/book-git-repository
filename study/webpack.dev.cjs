@@ -9,7 +9,7 @@ const common = require('./webpack.config.cjs');
  * @type {import('webpack').Configuration}
  */
 module.exports = merge(common, {
-  // mode: 'development',
+  mode: 'development',
   // ブラウザー開発者ツール用に JavaScript のソースマップを出力
   devtool: 'source-map',
   // 開発用サーバーを 9080 ポートで起動

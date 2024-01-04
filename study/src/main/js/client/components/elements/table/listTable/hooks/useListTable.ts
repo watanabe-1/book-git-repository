@@ -2,6 +2,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 import { useCallback, useMemo, useState } from 'react';
 
 import { TableColumn } from '../../../../../../@types/studyUtilType';
+import { commonConst } from '../../../../../../constant/commonConstant';
 import {
   ASCENDING,
   DESCENDING,
@@ -155,7 +156,7 @@ export const useListTable = ({
       setTimeout(() => {
         //console.log('call setTimeout handleSuggestionFocus');
         setSuggestions(column, false, 0);
-      }, 250);
+      }, commonConst.BLUR_SUGGEST_TIMEOUT_DURATION);
     },
     [isSuggestions, setSuggestions]
   );

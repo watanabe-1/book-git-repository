@@ -3,12 +3,12 @@ import React, {
   useEffect,
   useRef,
   useMemo,
-  ReactNode,
   useCallback,
 } from 'react';
 import isEqual from 'react-fast-compare';
 
 import { TextColor } from '../../../../../@types/studyBootstrap';
+import { commonConst } from '../../../../../constant/commonConstant';
 import { simpleTrim } from '../../../../../study/util/studyStringUtil';
 import {
   FormControlChildrenRefs,
@@ -27,7 +27,6 @@ export const useFormControl = ({
   onTextClick,
   onEditing,
   onClick,
-  validate,
   touched,
   error,
   dirty,
@@ -37,13 +36,15 @@ export const useFormControl = ({
   children,
 }: FormControlProps) => {
   const [currentValue, setCurrentValue] = useState(value);
-  const [isEditing, setIsEditing] = useState(!isReadonly && !isOnClickEditable);
-  const [hasChanges, setHasChanges] = useState(false);
-  const [isInitialByOnEditable, setIsInitialByOnEditable] = useState(false);
+  const [isEditable, setIsEditable] = useState(
+    !isReadonly && !isOnClickEditable
+  );
+  const [isInitialByOnEditable, setIsInitialByOnEditable] =
+    useState(isEditable);
   const elementRefs: FormControlChildrenRefs = useRef<{
     [key in string]: unknown;
   }>({});
-  const blurTimeoutRef = useRef(null);
+  const blurTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const isArrayChildren = Array.isArray(children);
   const childArray = isArrayChildren ? children : [children];
 
@@ -70,22 +71,11 @@ export const useFormControl = ({
     [childArray]
   );
 
-  const handleSetIsEditing = useCallback(
-    (value: boolean) => {
-      setIsEditing(value);
+  const handleSetIsEditable = useCallback(
+    (newEditingState: boolean) => {
+      setIsEditable(newEditingState);
       // 初めて編集可能になったときのみ
-      if (value && !isInitialByOnEditable) {
-        setIsInitialByOnEditable(true);
-      }
-    },
-    [isInitialByOnEditable]
-  );
-
-  const handleSetHasChanges = useCallback(
-    (value: boolean) => {
-      setHasChanges(value);
-      // 初めて対象が変更になったときのみ
-      if (value && !isInitialByOnEditable) {
+      if (!isInitialByOnEditable && newEditingState) {
         setIsInitialByOnEditable(true);
       }
     },
@@ -128,23 +118,29 @@ export const useFormControl = ({
         // はisEditing→falseに更新しない
         blurTimeoutRef.current = setTimeout(() => {
           //console.log('call blurTimeoutRef.current');
-          handleSetIsEditing(false);
-        }, 100);
+          handleSetIsEditable(false);
+        }, commonConst.BLUR_FORMELEMENT_TIMEOUT_DURATION);
       }
       onBlur?.(event);
     },
-    [isOnClickEditable, blurTimeoutRef, handleSetIsEditing, onBlur]
+    [isOnClickEditable, blurTimeoutRef, handleSetIsEditable, onBlur]
   );
 
   const handleTextClick = useCallback(
     (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
       //console.log('call handleTextClick');
-      if (!isEditing && isOnClickEditable && !isReadonly) {
-        handleSetIsEditing(isOnClickEditable);
+      if (!isEditable && isOnClickEditable && !isReadonly) {
+        handleSetIsEditable(isOnClickEditable);
       }
       onTextClick?.(event);
     },
-    [isEditing, isOnClickEditable, isReadonly, handleSetIsEditing, onTextClick]
+    [
+      isEditable,
+      isOnClickEditable,
+      isReadonly,
+      handleSetIsEditable,
+      onTextClick,
+    ]
   );
 
   const handleChildClick = useCallback(
@@ -155,40 +151,8 @@ export const useFormControl = ({
     [onClick]
   );
 
-  /**
-   * 速度改善のため
-   * isOnClickEditable==true
-   * もしくはreedonly==trueの時は
-   * 一度編集可能になるまで描画しない
-   *
-   * @param callBack レンダリング対象
-   * @returns
-   */
-  const renderInitialByOnEditable = useCallback(
-    (callBack: () => ReactNode) =>
-      !isInitialByOnEditable && (isOnClickEditable || isReadonly)
-        ? null
-        : callBack(),
-    [isInitialByOnEditable, isOnClickEditable, isReadonly]
-  );
-
   useEffect(() => {
-    // console.log(`name:${name}`);
-    // console.log(`value:${JSON.stringify(value)}`);
-    // console.log(`initialValue:${JSON.stringify(initialValue)}`);
-    // console.log(`value !== initialValue:${value !== initialValue}`);
-    // console.log(
-    //   `!isEqual(value, initialValue):${!isEqual(value, initialValue)}`
-    // );
-
-    // 初期値から変更されたか判定
-    // 配列が比較対象になることがあるため、react-fast-compareを使用して比較
-    // 非同期実行(useEffectの実行)のタイミングによってはdirtyがfalseの時でも、initialValueの値がdirtyトリガーのuseEffectによって更新される前に比較を実行してしまうことがあるため、必ずdirtyがtrueの時のみhasChangeがtrueになるようにする
-    handleSetHasChanges(!isEqual(value, initialValue) && dirty);
-  }, [value]);
-
-  useEffect(() => {
-    if (isEditing && isOnClickEditable) {
+    if (isEditable && isOnClickEditable) {
       // 編集可能になった場合にフォーカスが当たっているようにする
       // console.log(elementRefs?.current);
       for (const key in elementRefs?.current) {
@@ -201,21 +165,24 @@ export const useFormControl = ({
       }
       onEditing?.(elementRefs);
     }
-  }, [isEditing]);
+  }, [isEditable]);
 
-  useEffect(() => {
-    // dirtyがtrue→falseに変更されたときは送信ボタンが押されたとき(dirtyがfalseの時)
-    // console.log(`name:${name}`);
-    // console.log(`value:${JSON.stringify(value)}`);
-    // console.log(`dirty:${dirty}`);
-    if (!dirty) {
-      // 編集済み判定フラグをリセット
-      handleSetHasChanges(false);
-    }
-  }, [dirty]);
-
-  const isValid = validate && touched && !error;
-  const isInvalid = validate && !!error;
+  // 初期値から変更されたか判定
+  // 配列が比較対象になることがあるため、react-fast-compareを使用して比較
+  const hasChanges = !isEqual(value, initialValue) && dirty;
+  // 入力されたデータが有効な形式かどうか(バリデーションに引っかかるとfalseそれ以外true)
+  const isValid = touched && !error;
+  // 入力されたデータが有効な形式でないかどうか(バリデーションに引っかかるとtrueそれ以外false)
+  const isInvalid = !!error;
+  // 絶対に編集可能な状態になっていない
+  // まだ1度も編集可能な状態になっていない状態である (!isInitialByOnEditable)
+  // 編集可能か読み取り専用である (isOnClickEditable || isReadonly)
+  const isNeverEditable =
+    !isInitialByOnEditable && (isOnClickEditable || isReadonly);
+  // 速度改善のためtextのみレンダリングで問題ない状態はtrue それ以外はfalseの判定を行う
+  // 絶対に編集可能な状態になっていない(isNeverEditable)
+  // バリデーションエラーがない (!isInvalid)
+  const isTextOnly = isNeverEditable && !isInvalid;
   const trimText = simpleTrim(textValue);
   const trimValue = simpleTrim(value?.toString());
   const trimTextBase = trimText || trimValue;
@@ -235,9 +202,9 @@ export const useFormControl = ({
     onClick: handleChildClick,
     isValid,
     isInvalid,
-    hidden: !isEditing,
+    hidden: !isEditable,
     // hidden属性だけだとうまくいかないためstyleから直接非表示に
-    style: { display: isEditing ? '' : 'none' },
+    style: { display: isEditable ? '' : 'none' },
   } as FormControlChildrenProps;
 
   if (!isArrayChildren && !isNotSetValue) {
@@ -246,13 +213,12 @@ export const useFormControl = ({
 
   return {
     convertedChildList,
+    childrenProps,
     simpleTextColor,
     simpleTextValue,
     isArrayChildren,
-    childrenProps,
-    isEditing,
+    isEditable,
+    isTextOnly,
     handleTextClick,
-    handleChildClick,
-    renderInitialByOnEditable,
   };
 };
