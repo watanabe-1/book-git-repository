@@ -1,7 +1,6 @@
 package org.book.app.study.util;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,24 +39,22 @@ class StudyUtilTest {
   }
 
   @Test
-  void getLoginUser_WithNoAuthentication_ThrowsException() {
-    assertThrows(NullPointerException.class, () -> {
-      StudyUtil.getLoginUser();
-    });
+  void getLoginUser_WithNoAuthentication() {
+    String userId = StudyUtil.getLoginUser();
+    assertEquals(StudyUtil.getNoUser(), userId);
   }
 
   @Test
-  void getLoginUser_WithDifferentPrincipalType_ThrowsClassCastException() {
+  void getLoginUser_WithDifferentPrincipalType() {
     Authentication authentication = new UsernamePasswordAuthenticationToken("notAppUserDetails", null);
     SecurityContextHolder.getContext().setAuthentication(authentication);
 
-    assertThrows(ClassCastException.class, () -> {
-      StudyUtil.getLoginUser();
-    });
+    String userId = StudyUtil.getLoginUser();
+    assertEquals(StudyUtil.getNoUser(), userId);
   }
 
   @Test
-  void getLoginUser_WithNullUserId_ReturnsNull() {
+  void getLoginUser_WithNullUserId() {
     AppUserDetails userDetails = mock(AppUserDetails.class);
     Account account = mock(Account.class);
     when(userDetails.getAccount()).thenReturn(account);
@@ -68,7 +65,7 @@ class StudyUtilTest {
 
     // テストの実行
     String userId = StudyUtil.getLoginUser();
-    assertEquals(null, userId);
+    assertEquals(StudyUtil.getNoUser(), userId);
   }
 
   @Test
