@@ -58,7 +58,7 @@ public class ApiController {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   @ResponseBody
   public ErrorResults handleBindException(BindException e, HttpServletRequest request, Locale locale) {
-    logError("e.ex.fw.7002", e, request.getRequestURL().toString());
+    log.error("e.ex.fw.7002", e, () -> new Object[] { request.getRequestURL().toString() });
     // エラー情報を返却するためのJavaBeanを生成し、返却
     ErrorResults errorResults = new ErrorResults();
     addErrResult(e, locale, errorResults);
@@ -77,7 +77,7 @@ public class ApiController {
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   @ResponseBody
   public ErrorResults handleBusinessException(BusinessException e, HttpServletRequest request, Locale locale) {
-    logError("e.ex.fw.8001", e, request.getRequestURL().toString());
+    log.error("e.ex.fw.8001", e, () -> new Object[] { request.getRequestURL().toString() });
     ErrorResults errorResults = new ErrorResults();
     addErrResult(e, locale, errorResults);
 
@@ -99,7 +99,7 @@ public class ApiController {
   public ErrorResults handleMethodArgumentNotValidException(MethodArgumentNotValidException e,
       HttpServletRequest request,
       Locale locale) {
-    logError("e.ex.fw.7001", e, request.getRequestURL().toString());
+    log.error("e.ex.fw.7001", e, () -> new Object[] { request.getRequestURL().toString() });
     ErrorResults errorResults = new ErrorResults();
     addErrResult(e, locale, errorResults);
 
@@ -123,7 +123,7 @@ public class ApiController {
       HttpServletRequest request,
       Locale locale) {
     final String code = "e.ex.fw.7001";
-    logError(code, e, request.getRequestURL().toString());
+    log.error(code, e, () -> new Object[] { request.getRequestURL().toString() });
 
     ErrorResults errorResults = new ErrorResults();
     Object[] args = new Object[] { request.getRequestURL().toString() };
@@ -184,13 +184,4 @@ public class ApiController {
     log.trace(code, args);
   }
 
-  /**
-  * エラーログを出力する
-  * @param messageId メッセージID
-  * @param ex 例外
-  * @param url url
-  */
-  private void logError(String messageId, Throwable ex, String url) {
-    log.error(messageId, ex, url);
-  }
 }

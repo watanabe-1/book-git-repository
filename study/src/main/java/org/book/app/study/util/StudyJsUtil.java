@@ -94,7 +94,7 @@ public class StudyJsUtil {
     // scriptタグの抜き出し
     List<String> scriptList = readScripts(body);
     body = StudyStringUtil.delete(body, scriptList);
-    log.info("", new StringBuffer().append("置換scriptタグ数:").append(scriptList.size()));
+    log.info("1.03.01.1004", () -> new Object[] { scriptList.size() });
 
     model.addObject(VIEW_TITLE, title);
     model.addObject(VIEW_BODY, body);
@@ -137,7 +137,7 @@ public class StudyJsUtil {
       ret = engine.eval(String.format("window.renderAppOnServer('%s');", fullUrl))
           .toString();
     } catch (ScriptException e) {
-      log.error("", e, "");
+      log.error("1.03.01.1001", e);
       throw new BusinessException("1.01.01.1010", e.getMessage());
     }
     return new StringBuffer()
@@ -219,7 +219,7 @@ public class StudyJsUtil {
     while (m.find()) {
       String script = m.group();
       ret.add(script);
-      log.info("", new StringBuffer().append(cnt++).append(" 一致した部分は : ").append(script));
+      log.info("1.03.01.1005", cnt++, script);
     }
 
     // <script src= から始まるものを先頭に変更し、それ以外は昇順でソート(見栄え用)
@@ -286,7 +286,7 @@ public class StudyJsUtil {
       engine.eval("setTimeout = window.setTimeout");
       engine.eval(readJsFile(scriptPath));
     } catch (ScriptException e) {
-      log.error("", e, "");
+      log.error("1.03.01.1001", e);
       throw new BusinessException("1.01.01.1010", e.getMessage());
     }
 

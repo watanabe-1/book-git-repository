@@ -1,6 +1,5 @@
-package org.book.app.study.common;
+package common;
 
-import org.book.app.study.common.util.StudyTestUtil;
 import org.book.app.study.entity.Account;
 import org.book.app.study.enums.type.AccountType;
 import org.book.app.study.service.AppUserDetails;
@@ -9,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import common.util.StudyTestUtil;
 
 @SpringBootTest
 public class BaseTest {

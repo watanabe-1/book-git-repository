@@ -1,4 +1,4 @@
-package org.book.app.study.common.util;
+package common.util;
 
 import java.io.File;
 import java.io.IOException;

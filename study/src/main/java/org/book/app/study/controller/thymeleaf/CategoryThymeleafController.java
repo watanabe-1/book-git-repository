@@ -3,6 +3,7 @@ package org.book.app.study.controller.thymeleaf;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+
 import org.apache.commons.io.FilenameUtils;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.entity.Category;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
@@ -154,7 +156,7 @@ public class CategoryThymeleafController {
     } catch (DuplicateKeyException dke) {
       result.addError(
           new FieldError(result.getObjectName(), "catCode", "入力したカテゴリーは既に登録されています。"));
-      log.error("Exception happend!", dke);
+      log.error("1.03.01.1001", dke);
       return input(request, form, model);
     }
 

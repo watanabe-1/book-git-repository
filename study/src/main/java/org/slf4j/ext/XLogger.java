@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +55,15 @@ public class XLogger {
   }
 
   /**
+   * テストのための追加コンストラクタ
+   * 
+   * @param logger ロガー
+   */
+  public XLogger(Logger logger) {
+    this.logger = logger;
+  }
+
+  /**
    * DEBUGレベルのログ出力を許可しているか、判定する。
    * 
    * @return 判定結果
@@ -95,6 +105,24 @@ public class XLogger {
   }
 
   /**
+   * INFOレベルのログ<br/>
+   * 外部ファイルからのメッセージを読み込む
+   * 埋め込み文字引数を遅延評価する
+   * 
+   * @param id メッセージID
+   * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
+   */
+  public void info(String id, Supplier<Object[]> argsSupplier) {
+    if (!logger.isInfoEnabled()) {
+      return;
+    }
+    Object[] args = argsSupplier.get();
+    if (args != null) {
+      logger.info(createLogMessage(id, args));
+    }
+  }
+
+  /**
    * WARNレベルのログ<br/>
    * 外部ファイルからのメッセージを読み込む
    * 
@@ -108,6 +136,24 @@ public class XLogger {
   }
 
   /**
+   * WARNレベルのログ<br/>
+   * 外部ファイルからのメッセージを読み込む
+   * 埋め込み文字引数を遅延評価する
+   * 
+   * @param id メッセージID
+   * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
+  */
+  public void warn(String id, Supplier<Object[]> argsSupplier) {
+    if (!logger.isWarnEnabled()) {
+      return;
+    }
+    Object[] args = argsSupplier.get();
+    if (args != null) {
+      logger.warn(createLogMessage(id, args));
+    }
+  }
+
+  /**
    * ERRORレベルのログ<br/>
    * 外部ファイルからのメッセージを読み込む
    * 
@@ -116,6 +162,24 @@ public class XLogger {
    */
   public void error(String id, Object... args) {
     if (logger.isErrorEnabled()) {
+      logger.error(createLogMessage(id, args));
+    }
+  }
+
+  /**
+   * ERRORレベルのログ<br/>
+   * 外部ファイルからのメッセージを読み込む
+   * 埋め込み文字引数を遅延評価する
+   * 
+   * @param id メッセージID
+   * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
+  */
+  public void error(String id, Supplier<Object[]> argsSupplier) {
+    if (!logger.isErrorEnabled()) {
+      return;
+    }
+    Object[] args = argsSupplier.get();
+    if (args != null) {
       logger.error(createLogMessage(id, args));
     }
   }
@@ -136,6 +200,24 @@ public class XLogger {
   /**
    * TRACEレベルのログ<br/>
    * 外部ファイルからのメッセージを読み込む
+   * 埋め込み文字引数を遅延評価する
+   * 
+   * @param id メッセージID
+   * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
+  */
+  public void trace(String id, Supplier<Object[]> argsSupplier) {
+    if (!logger.isTraceEnabled()) {
+      return;
+    }
+    Object[] args = argsSupplier.get();
+    if (args != null) {
+      logger.trace(createLogMessage(id, args));
+    }
+  }
+
+  /**
+   * WARNレベルのログ<br/>
+   * 外部ファイルからのメッセージを読み込む
    * 
    * @param id メッセージID
    * @param t the exception (throwable) to log
@@ -143,6 +225,25 @@ public class XLogger {
    */
   public void warn(String id, Throwable t, Object... args) {
     if (logger.isWarnEnabled()) {
+      logger.warn(createLogMessage(id, args), t);
+    }
+  }
+
+  /**
+   * WARNレベルのログ<br/>
+   * 外部ファイルからのメッセージを読み込む
+   * 埋め込み文字引数を遅延評価する
+   * 
+   * @param id メッセージID
+   * @param t the exception (throwable) to log
+   * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
+  */
+  public void warn(String id, Throwable t, Supplier<Object[]> argsSupplier) {
+    if (!logger.isWarnEnabled()) {
+      return;
+    }
+    Object[] args = argsSupplier.get();
+    if (args != null) {
       logger.warn(createLogMessage(id, args), t);
     }
   }
@@ -157,6 +258,26 @@ public class XLogger {
    */
   public void error(String id, Throwable t, Object... args) {
     if (logger.isErrorEnabled()) {
+      logger.error(createLogMessage(id, args), t);
+    }
+  }
+
+  /**
+   * ERRORレベルのログ<br/>
+   * 外部ファイルからのメッセージを読み込む
+   * 埋め込み文字引数を遅延評価する
+   * 埋め込み文字引数がnullの場合ログを出力しない
+   * 
+   * @param id メッセージID
+   * @param t the exception (throwable) to log
+   * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
+  */
+  public void error(String id, Throwable t, Supplier<Object[]> argsSupplier) {
+    if (!logger.isErrorEnabled()) {
+      return;
+    }
+    Object[] args = argsSupplier.get();
+    if (args != null) {
       logger.error(createLogMessage(id, args), t);
     }
   }

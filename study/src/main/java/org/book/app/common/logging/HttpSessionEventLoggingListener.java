@@ -22,10 +22,7 @@ public class HttpSessionEventLoggingListener implements HttpSessionListener,
     */
     @Override
     public void sessionWillPassivate(HttpSessionEvent se) {
-        if (!log.isTraceEnabled()) {
-            return;
-        }
-        log.trace("1.02.01.1003", se.getSession().getId(), se.getSource());
+        log.trace("1.02.01.1003", () -> new Object[] { se.getSession().getId(), se.getSource() });
     }
 
     /**
@@ -35,10 +32,7 @@ public class HttpSessionEventLoggingListener implements HttpSessionListener,
     */
     @Override
     public void sessionDidActivate(HttpSessionEvent se) {
-        if (!log.isTraceEnabled()) {
-            return;
-        }
-        log.trace("1.02.01.1004", se.getSession().getId(), se.getSource());
+        log.trace("1.02.01.1004", () -> new Object[] { se.getSession().getId(), se.getSource() });
     }
 
     /**
@@ -48,10 +42,7 @@ public class HttpSessionEventLoggingListener implements HttpSessionListener,
     */
     @Override
     public void attributeAdded(HttpSessionBindingEvent se) {
-        if (!log.isTraceEnabled()) {
-            return;
-        }
-        log.trace("1.02.01.1005", se.getSession().getId(), se.getName(), se.getValue());
+        log.trace("1.02.01.1005", () -> new Object[] { se.getSession().getId(), se.getName(), se.getValue() });
     }
 
     /**
@@ -61,10 +52,7 @@ public class HttpSessionEventLoggingListener implements HttpSessionListener,
     */
     @Override
     public void attributeRemoved(HttpSessionBindingEvent se) {
-        if (!log.isTraceEnabled()) {
-            return;
-        }
-        log.trace("1.02.01.1006", se.getSession().getId(), se.getName(), se.getValue());
+        log.trace("1.02.01.1006", () -> new Object[] { se.getSession().getId(), se.getName(), se.getValue() });
     }
 
     /**
@@ -74,10 +62,7 @@ public class HttpSessionEventLoggingListener implements HttpSessionListener,
     */
     @Override
     public void attributeReplaced(HttpSessionBindingEvent se) {
-        if (!log.isTraceEnabled()) {
-            return;
-        }
-        log.trace("1.02.01.1007", se.getSession().getId(), se.getName(), se.getValue());
+        log.trace("1.02.01.1007", () -> new Object[] { se.getSession().getId(), se.getName(), se.getValue() });
     }
 
     /**
@@ -87,10 +72,7 @@ public class HttpSessionEventLoggingListener implements HttpSessionListener,
     */
     @Override
     public void sessionCreated(HttpSessionEvent se) {
-        if (!log.isTraceEnabled()) {
-            return;
-        }
-        log.trace("1.02.01.1008", se.getSession().getId(), se.getSource());
+        log.trace("1.02.01.1008", () -> new Object[] { se.getSession().getId(), se.getSource() });
     }
 
     /**
@@ -100,9 +82,6 @@ public class HttpSessionEventLoggingListener implements HttpSessionListener,
     */
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
-        if (!log.isTraceEnabled()) {
-            return;
-        }
-        log.trace("1.02.01.1009", se.getSession().getId(), se.getSource());
+        log.trace("1.02.01.1009", () -> new Object[] { se.getSession().getId(), se.getSource() });
     }
 }

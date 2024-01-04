@@ -182,7 +182,7 @@ public class StudyFileUtil {
 
     // 文字コード判定に失敗した場合はutf8を指定
     if (result == null) {
-      log.warn("", "!!!!!!!!文字コード判定に失敗しました!!!!!!!!");
+      log.warn("1.03.01.1002");
       result = StandardCharsets.UTF_8.name();
     }
 

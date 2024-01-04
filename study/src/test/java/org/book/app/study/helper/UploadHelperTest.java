@@ -8,8 +8,6 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 import java.io.IOException;
 
-import org.book.app.study.common.BaseTest;
-import org.book.app.study.common.util.StudyTestUtil;
 import org.book.app.study.dto.dir.Dir;
 import org.book.app.study.entity.Image;
 import org.book.app.study.form.CategoryForm;
@@ -24,6 +22,9 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import common.BaseTest;
+import common.util.StudyTestUtil;
 
 @SpringBootTest
 public class UploadHelperTest extends BaseTest {
