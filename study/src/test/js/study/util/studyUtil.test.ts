@@ -15,7 +15,6 @@ import {
   getNoImagePath,
   isNumber,
   isObjEmpty,
-  nullOrEmptyValueLogic,
   stringToType,
 } from '../../../../main/js/study/util/studyUtil';
 
@@ -372,63 +371,6 @@ describe('ToTypeArrayIfIsStringArray', () => {
     ];
     const result = ToTypeArrayIfIsStringArray(typeArray);
     expect(result).toEqual(typeArray);
-  });
-});
-
-describe('nullOrEmptyValueLogic', () => {
-  it('should replace null with the provided value', () => {
-    const result = nullOrEmptyValueLogic(null, 'replacement');
-    expect(result).toBe('replacement');
-  });
-
-  it('should replace undefined with the provided value', () => {
-    const result = nullOrEmptyValueLogic(undefined, 'replacement');
-    expect(result).toBe('replacement');
-  });
-
-  it('should replace an empty string with the provided value', () => {
-    const result = nullOrEmptyValueLogic('', 'replacement');
-    expect(result).toBe('replacement');
-  });
-
-  it('should not replace a non-empty string with the provided value', () => {
-    const result = nullOrEmptyValueLogic('non-empty', 'replacement');
-    expect(result).toBe('non-empty');
-  });
-
-  it('should not replace a non-null object with the provided value', () => {
-    const result = nullOrEmptyValueLogic({ prop: 'value' }, 'replacement');
-    expect(result).toEqual({ prop: 'value' });
-  });
-
-  it('should not replace a number with the provided value', () => {
-    const result = nullOrEmptyValueLogic(42, 'replacement');
-    expect(result).toBe(42);
-  });
-
-  it('should replace a falsy value with the provided value', () => {
-    const result = nullOrEmptyValueLogic(false, 'replacement');
-    expect(result).toBe('replacement');
-  });
-
-  it('should replace NaN with the provided value', () => {
-    const result = nullOrEmptyValueLogic(NaN, 'replacement');
-    expect(result).toBe('replacement');
-  });
-
-  it('should not replace Infinity with the provided value', () => {
-    const result = nullOrEmptyValueLogic(Infinity, 'replacement');
-    expect(result).toBe(Infinity);
-  });
-
-  it('should not replace a non-NaN number with the provided value', () => {
-    const result = nullOrEmptyValueLogic(42.5, 'replacement');
-    expect(result).toBe(42.5);
-  });
-
-  it('should not replace -Infinity with the provided value', () => {
-    const result = nullOrEmptyValueLogic(-Infinity, 'replacement');
-    expect(result).toBe(-Infinity);
   });
 });
 

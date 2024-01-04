@@ -81,6 +81,7 @@ export const useFormTable = ({
         console.error('Error occurred during submission:', error);
         // 非同期実行のため普通にスローしてもerror-boundary側でキャッチできない
         // そのためshowBoundaryを使用してerror-boundaryにエラーを連携する
+        showBoundary(error);
         throw error;
       } finally {
         //console.log('handleSubmit が完了しました');

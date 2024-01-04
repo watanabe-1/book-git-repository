@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 
 import { useFormTable } from './hooks/useFormTable';
 import SubmitButton from '../../elements/button/SubmitButton';
-import SortAndFilterTable from '../../elements/table/listTable/ListTable';
+import ListTable from '../../elements/table/listTable/ListTable';
 import AutoValidateToken from '../AutoValidateToken';
 
 /**
@@ -92,7 +92,7 @@ const FormTable: React.FC<FormTableProps> = ({
             //console.log(form.values[rowName]);
             return (
               <div>
-                <SortAndFilterTable
+                <ListTable
                   columns={columns}
                   rows={rows}
                   isSort={isSort}

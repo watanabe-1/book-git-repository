@@ -91,8 +91,18 @@ export function isObjEmpty(obj: object) {
  * @param res レスポンス
  * @returns
  */
-export function isLoggedIn(res: Response) {
+export function isAuthExpired(res: Response) {
   return res?.status === 401;
+}
+
+/**
+ * バリデーションエラーかを判定する
+ *
+ * @param res レスポンス
+ * @returns
+ */
+function isValidationError(response) {
+  return response.status === 400 || response.status === 422;
 }
 
 /**
@@ -101,8 +111,8 @@ export function isLoggedIn(res: Response) {
  * @param err エラー
  * @returns
  */
-export function isLoggedInError(err: FetchError) {
-  return isLoggedIn(err.response);
+export function isErrorAuthExpired(err: FetchError) {
+  return isAuthExpired(err.response);
 }
 
 /**
@@ -131,7 +141,7 @@ export async function fetchGet(
   console.log(res);
 
   if (!res.ok) {
-    if (isLoggedIn(res)) {
+    if (isAuthExpired(res)) {
       // 認証エラーの場合、カスタムエラーをスローする
       throw new FetchError(
         'Unauthorized: Access is denied due to invalid credentials.',
@@ -188,14 +198,22 @@ export async function fetchPost(
   console.log(res);
 
   if (!res.ok) {
-    if (isLoggedIn(res)) {
+    if (isAuthExpired(res)) {
       // 認証エラーの場合、カスタムエラーをスローする
       throw new FetchError(
-        'Unauthorized: Access is denied due to invalid credentials.',
+        `Unauthorized: Access is denied due to invalid credentials ${res.status} ${res.statusText}`,
+        res
+      );
+    } else if (isValidationError(res)) {
+      // formのバリデーションエラーはスローしない
+      console.log(`Validation error occurred ${res.status} ${res.statusText}`);
+    } else {
+      // その他の一般的なHTTPエラー
+      throw new FetchError(
+        `An error occurred: ${res.status} ${res.statusText}`,
         res
       );
     }
-    // 認証エラー以外はスローしない(formのバリデーションエラーの時もあるため)
   }
   // const json = await res.json();
   // console.log(json);
@@ -224,16 +242,6 @@ export function ToTypeArrayIfIsStringArray(array: Type[] | string[]) {
   return array.map((str) =>
     typeof str === 'string' ? stringToType(str) : (str as Type)
   );
-}
-
-/**
- * null もしくは emptyの時valueで置き換え
- * @param target  対象
- * @param value  置き換える値
- * @returns type
- */
-export function nullOrEmptyValueLogic(target: unknown, value: unknown) {
-  return target || value;
 }
 
 /**

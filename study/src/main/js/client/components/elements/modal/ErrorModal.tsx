@@ -5,7 +5,7 @@ import { FallbackProps } from 'react-error-boundary';
 
 import {
   addContextPath,
-  isLoggedInError,
+  isErrorAuthExpired,
 } from '../../../../study/util/studyUtil';
 // ErrorModal コンポーネントの props の型を定義
 interface ErrorModalProps extends FallbackProps {}
@@ -20,7 +20,7 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
   resetErrorBoundary,
 }) => {
   const [show, setShow] = useState(true);
-  const msg = isLoggedInError(error)
+  const msg = isErrorAuthExpired(error)
     ? 'ログイン情報の有効期限が切れています。再度ログインしてください。'
     : '何らかの問題が発生しました。ページをリロードするか、時間をおいて再度お試しください。';
 
@@ -31,7 +31,7 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
 
   const handleClose = () => {
     // CSRFトークンが無効または期限切れの場合、401エラーが返却される
-    if (isLoggedInError(error)) {
+    if (isErrorAuthExpired(error)) {
       // トップページに遷移
       window.location.href = addContextPath('/');
 

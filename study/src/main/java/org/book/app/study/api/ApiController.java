@@ -74,7 +74,7 @@ public class ApiController {
    * @param e BusinessException
    */
   @ExceptionHandler(BusinessException.class)
-  @ResponseStatus(value = HttpStatus.CONFLICT)
+  @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   @ResponseBody
   public ErrorResults handleBusinessException(BusinessException e, HttpServletRequest request, Locale locale) {
     logError("e.ex.fw.8001", e, request.getRequestURL().toString());
