@@ -2,6 +2,7 @@ package org.book.app.common.config;
 
 import java.nio.charset.StandardCharsets;
 
+import org.book.app.common.filter.UniqueRequestIDFilter;
 import org.book.app.common.logging.HttpSessionEventLoggingListener;
 import org.book.app.common.logging.ReauestLoggingListener;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
@@ -88,6 +89,16 @@ public class AppConfig implements WebMvcConfigurer {
   @Bean
   ReauestLoggingListener TraceReauestInterceptor() {
     return new ReauestLoggingListener();
+  }
+
+  /**
+   * リクエストに一意の値を振る
+   * 
+   * @return
+   */
+  @Bean
+  UniqueRequestIDFilter UniqueRequestIDFilter() {
+    return new UniqueRequestIDFilter();
   }
 
   /**

@@ -1,8 +1,12 @@
 package org.book.app.study.util;
 
 import java.util.Date;
+import java.util.Optional;
 
 import org.book.app.study.service.AppUserDetails;
+import org.springframework.lang.Nullable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 /**
@@ -12,14 +16,35 @@ public class StudyUtil {
 
   /**
    * ログインユーザーIdを取得する
+   * ユーザが取得できなかった時はノーユーザ(デフォルトユーザ)を返却する
    * 
    * @return String ログインユーザーId
    */
   public static String getLoginUser() {
-    AppUserDetails userDetails = (AppUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
     // ログインユーザーのユーザーIDを取得
-    return userDetails.getAccount().getUserId();
+    return Optional.ofNullable(SecurityContextHolder.getContext())
+        .map(SecurityContext::getAuthentication)
+        .map(StudyUtil::getUserIdFromAuthentication)
+        .orElseGet(() -> getNoUser());
+  }
+
+  /**
+   * ログインユーザーIdを認証情報から取得
+   * 認証情報がnullであることも考慮
+   * 
+   * @param authentication
+   * @return
+   */
+  private static String getUserIdFromAuthentication(@Nullable Authentication authentication) {
+    if (authentication == null || authentication.getPrincipal() == null) {
+      return null;
+    }
+
+    if (authentication.getPrincipal() instanceof AppUserDetails userDetails) {
+      return userDetails.getAccount().getUserId();
+    }
+
+    return null;
   }
 
   /**
@@ -29,6 +54,15 @@ public class StudyUtil {
    */
   public static String getCommonUser() {
     return "common";
+  }
+
+  /**
+  * ユーザが存在しないときのデフォルトユーザを取得する
+  * 
+  * @return String デフォルトユーザId
+  */
+  public static String getNoUser() {
+    return "no_user";
   }
 
   /**

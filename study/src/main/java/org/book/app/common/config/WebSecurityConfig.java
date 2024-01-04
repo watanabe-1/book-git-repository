@@ -2,6 +2,8 @@ package org.book.app.common.config;
 
 import org.book.app.study.enums.type.AccountType;
 import org.book.app.study.service.AppUserDetailsService;
+import org.book.app.study.util.StudyUtil;
+import org.slf4j.MDC;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +13,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 
 /**
@@ -80,6 +83,18 @@ public class WebSecurityConfig {
             .requestMatchers("/admin/**")
             .hasAnyRole(AccountType.SYSTEM.getBaseRole(), AccountType.ADMIN.getBaseRole())
             .anyRequest().authenticated())
+        // filterを使用してログ出力用情報をMDCに付与
+        .addFilterAfter((servletRequest, servletResponse, filterChain) -> {
+          final String USER_ID = "user";
+          try {
+            // useridをMDCに付与
+            // logback-sprig.xml内で%X{user}として参照できる
+            MDC.put(USER_ID, StudyUtil.getLoginUser());
+            filterChain.doFilter(servletRequest, servletResponse);
+          } finally {
+            MDC.remove(USER_ID);
+          }
+        }, SecurityContextHolderFilter.class)
         // ReactからのAPIリクエストに対するエラーハンドリング
         // 認証切れの状態でのReactからのAPIリクエスト(X-Requested-With: XMLHttpRequest ヘッダーを持つ)に対してHTTPステータスコード 401（Unauthorized）を返すようにする
         .exceptionHandling(customizer -> customizer.defaultAuthenticationEntryPointFor(

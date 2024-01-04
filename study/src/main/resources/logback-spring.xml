@@ -14,7 +14,7 @@
 		<encoder>
 			<!-- ログの出力形式を指定する。何も記述しなければ、メッセージだけが出力される。 時刻やメッセージレベルなど、業務要件に合わせて出力させる。 ここでは”ラベル:値<TAB>ラベル:値<TAB>…”形式のLTSV(Labeled Tab Separated Value)フォーマットを設定している。 -->
 			<pattern>
-				<![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tthread:%thread\tX-Track:%X{X-Track}\tlevel:%-5level\tlogger:%-48logger{48}\tmessage:%msg%n]]>
+				<![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tthread:%thread\trequestid:%X{requestid}\tlevel:%-5level\tlogger:%-48logger{48}\tmessage:%msg%n]]>
 			</pattern>
 		</encoder>
 	</appender>
@@ -24,7 +24,7 @@
 		<!-- ${<変数名>:-<デフォルト値>} という形式で、変数が定義されていなかった場合のデフォルト値を指定できる。 -->
 		<file>${user.dir}${app.log.dir:-/logs}/study-books-application.log</file>		<!-- カレントファイル名(出力中のログのファイル名)を指定する。固定のファイル名としたい場合は指定すること。 <file>ログファイル名</file>を指定しないと、下のパターンの名称で出力される。 -->
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${user.dir}${app.log.dir:-/logs}${app.log.bk:-/bk}/study-books-application-%d{yyyyMMddHH}.log</fileNamePattern>
+			<fileNamePattern>${user.dir}${app.log.dir:-/logs}${app.log.bk:-/bk}/study-books-application-%d{yyyyMMddHH}.log.zip</fileNamePattern>
 			<!-- ローテーション後のファイル名を指定する。通常は、日付か時間の形式が、多く採用される。 誤ってHHをhhと設定してしまうと、24時間表記されないため注意すること。 HHまでしていしているため1時間ごとにファイルが切り替わる -->
 			<!-- <maxHistory>25</maxHistory> ローテーションしたファイルをいくつ残すかを指定する。 今は削除されないようにコメントアウト -->
 		</rollingPolicy>
@@ -32,7 +32,7 @@
 			<!-- ログファイルの文字コードを指定する。-->
 			<charset>UTF-8</charset>
 			<pattern>
-				<![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tthread:%thread\tUSER:%X{USER}\tX-Track:%X{X-Track}\tlevel:%-5level\tlogger:%-48logger{48}\tmessage:%msg%n]]>
+				<![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tthread:%thread\tuser:%X{user:-no_user}\trequestid:%X{requestid}\tlevel:%-5level\tlogger:%-48logger{48}\tmessage:%msg%n]]>
 			</pattern>
 		</encoder>
 	</appender>
@@ -41,13 +41,13 @@
 		<!-- デフォルトでアプリケーションログが出力されるように設定する。 -->
 		<file>${user.dir}${app.log.dir:-/logs}/study-books-monitoring.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${user.dir}${app.log.dir:-/logs}${app.log.bk:-/bk}/study-books-monitoring-%d{yyyyMMdd}.log</fileNamePattern>
+			<fileNamePattern>${user.dir}${app.log.dir:-/logs}${app.log.bk:-/bk}/study-books-monitoring-%d{yyyyMMdd}.log.zip</fileNamePattern>
 			<!-- <maxHistory>7</maxHistory> -->
 		</rollingPolicy>
 		<encoder>
 			<charset>UTF-8</charset>
 			<pattern>
-				<![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tX-Track:%X{X-Track}\tlevel:%-5level\tmessage:%msg%n]]>
+				<![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\trequestid:%X{requestid}\tlevel:%-5level\tmessage:%msg%n]]>
 			</pattern>
 		</encoder>
 	</appender>

@@ -1,11 +1,10 @@
 package org.book.app.common.logging;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.MethodParameter;
 import org.springframework.lang.Nullable;
-import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -14,7 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.XSlf4j;
 
-@Component
 @XSlf4j
 @PropertySource("classpath:config/properties/logger.properties")
 public class ReauestLoggingListener implements HandlerInterceptor {
@@ -64,7 +62,8 @@ public class ReauestLoggingListener implements HandlerInterceptor {
     }
 
     private String getMethodParams(HandlerMethod handlerMethod) {
-        return Arrays.toString(Arrays.asList(handlerMethod.getMethodParameters()).stream()
-                .map(MethodParameter::getParameterType).toArray(Class[]::new));
+        return Arrays.stream(handlerMethod.getMethodParameters())
+                .map(p -> p.getParameterType().getSimpleName())
+                .collect(Collectors.joining(", "));
     }
 }
