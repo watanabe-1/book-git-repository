@@ -37,6 +37,20 @@
 		</encoder>
 	</appender>
 
+	<appender name="APPLICATION_CLIENT_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${user.dir}${app.log.dir:-/logs}/study-books-application-client.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${user.dir}${app.log.dir:-/logs}${app.log.bk:-/bk}/study-books-application-client-%d{yyyyMMddHH}.log.zip</fileNamePattern>
+			<!-- <maxHistory>25</maxHistory> ローテーションしたファイルをいくつ残すかを指定する。 今は削除されないようにコメントアウト -->
+		</rollingPolicy>
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>
+				<![CDATA[date:%d{yyyy-MM-dd HH:mm:ss}\tthread:%thread\tuser:%X{user:-no_user}\trequestid:%X{requestid}\tlevel:%-5level\tlogger:%-48logger{48}\tmessage:%msg%n]]>
+			</pattern>
+		</encoder>
+	</appender>
+
 	<appender name="MONITORING_LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<!-- デフォルトでアプリケーションログが出力されるように設定する。 -->
 		<file>${user.dir}${app.log.dir:-/logs}/study-books-monitoring.log</file>
@@ -71,6 +85,11 @@
 	<!-- セッションのトレースログをトレースレベルで出力 -->
 	<logger name="org.book.app.common.logging.HttpSessionEventLoggingListener">
 		<level value="trace" />
+	</logger>
+
+	<!-- クライアントエラーログ -->
+	<logger name="org.book.app.study.api.LogApiController" level="error" additivity="false">
+		<appender-ref ref="APPLICATION_CLIENT_LOG_FILE" />
 	</logger>
 
 	<!-- 3rdparty Loggers -->

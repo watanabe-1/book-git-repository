@@ -64,7 +64,7 @@ public class StudyMessageUtil {
    */
   public static void addError(BindingResult result, String field, String code,
       Object... arguments) {
-    addErrorOndefMsg(result, field, code, arguments, code);
+    addErrorOnDefMsg(result, field, code, arguments, code);
   }
 
   /**
@@ -76,10 +76,10 @@ public class StudyMessageUtil {
    * @param arguments エラー文字列内で参照する値
    * @param defaultMessage デフォルトメッセージ
    */
-  public static void addErrorOndefMsg(BindingResult result, String field,
+  public static void addErrorOnDefMsg(BindingResult result, String field,
       String code, Object[] arguments, String defaultMessage) {
     result.addError(
-        new FieldError(result.getObjectName(), field, null, false, new String[] {code}, arguments,
+        new FieldError(result.getObjectName(), field, null, false, new String[] { code }, arguments,
             defaultMessage));
   }
 }

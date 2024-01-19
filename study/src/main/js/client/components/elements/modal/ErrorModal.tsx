@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { FallbackProps } from 'react-error-boundary';
 
+import { urlConst } from '../../../../constant/urlConstant';
 import {
   addContextPath,
+  fetchPost,
   isErrorAuthExpired,
 } from '../../../../study/util/studyUtil';
+
 // ErrorModal コンポーネントの props の型を定義
 interface ErrorModalProps extends FallbackProps {}
 
@@ -27,9 +30,31 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
   // エラー情報をコンソールに出力
   useEffect(() => {
     console.error('An error has been detected:', error);
+    // エラー情報の送信
+    submitErrInfo(error);
   }, [error]);
 
-  const handleClose = () => {
+  /**
+   * エラー情報をサーバに送信
+   *
+   * @param error エラーオブジェクト
+   * @returns
+   */
+  const submitErrInfo = useCallback(async (error) => {
+    // error boundaryで使用される想定のため、この送信でエラーになってもerror boundaryにキャッチされないように(無限ループ防止)fetchPostを使用
+    const res = await fetchPost(urlConst.log.LOG_ERROR, {
+      error: error.toString(),
+      stackTrace: error.stack,
+    });
+    console.log(res);
+  }, []);
+
+  /**
+   * モーダルが閉じるときに実行
+   *
+   * @returns
+   */
+  const handleClose = useCallback(() => {
     // CSRFトークンが無効または期限切れの場合、401エラーが返却される
     if (isErrorAuthExpired(error)) {
       // トップページに遷移
@@ -41,7 +66,7 @@ const ErrorModal: React.FC<ErrorModalProps> = ({
 
     setShow(false);
     resetErrorBoundary();
-  };
+  }, [error]);
 
   return (
     <Modal show={show} onHide={handleClose}>

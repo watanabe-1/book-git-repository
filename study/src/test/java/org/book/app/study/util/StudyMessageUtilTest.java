@@ -61,7 +61,7 @@ public class StudyMessageUtilTest {
     @Test
     public void testAddErrorOndefMsg() {
         BeanPropertyBindingResult result = new BeanPropertyBindingResult(new Object(), "objectName");
-        StudyMessageUtil.addErrorOndefMsg(result, "field", "error_code", new Object[] { "arg1" }, "default message");
+        StudyMessageUtil.addErrorOnDefMsg(result, "field", "error_code", new Object[] { "arg1" }, "default message");
 
         assertFalse(result.getAllErrors().isEmpty());
         FieldError error = result.getFieldError("field");

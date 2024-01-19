@@ -5,6 +5,7 @@ const BASE_PATHS = {
   BOOKS: '/books',
   CHART_COLOUR: '/chartColour',
   COMMON: '/common',
+  LOG: '/log',
 };
 
 /** URL */
@@ -58,5 +59,10 @@ export const urlConst = {
   /** 共通 */
   common: {
     COMMON_INFO: `${BASE_PATHS.COMMON}/info`,
+  },
+
+  /** ログ */
+  log: {
+    LOG_ERROR: `${BASE_PATHS.LOG}/error`,
   },
 };

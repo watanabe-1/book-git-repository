@@ -76,7 +76,7 @@ public class StudyBeanUtil {
    * 
    * @param <T> ターゲットクラスの型
    * @param sourceBean プロパティコピー元
-   * @param targetClassプロパティをコピー先
+   * @param targetClass プロパティコピー先
    * @return sourceBeanからコピーされたプロパティを持つ、新しく割り当てられたtargetClassのインスタンス
    */
   public static <T> T createInstanceFromBean(Object sourceBean, Class<T> targetClass) {
@@ -88,7 +88,7 @@ public class StudyBeanUtil {
    * 
    * @param <T> ターゲットクラスの型
    * @param sourceBean プロパティコピー元
-   * @param targetClassプロパティをコピー先
+   * @param targetClass プロパティコピー先
    * @param addMapping 追加マッピング用関数
    * @return sourceBeanからコピーされたプロパティを持つ、新しく割り当てられたtargetClassのインスタンス
    */
@@ -111,7 +111,6 @@ public class StudyBeanUtil {
         | IllegalAccessException | IllegalArgumentException
         | InvocationTargetException e) {
       throw new BusinessException("1.01.01.1007", e.getMessage());
-
     }
   }
 
@@ -120,7 +119,7 @@ public class StudyBeanUtil {
    * 
    * @param <T> ターゲットクラスの型
    * @param sourceBeanList プロパティコピー元
-   * @param targetClass プロパティをコピー先
+   * @param targetClass プロパティコピー先
    * @return
    */
   public static <T, S> List<T> createInstanceFromBeanList(List<S> sourceBeanList,
@@ -133,7 +132,7 @@ public class StudyBeanUtil {
    * 
    * @param <T> ターゲットクラスの型
    * @param sourceBeanList プロパティコピー元
-   * @param targetClass プロパティをコピー先
+   * @param targetClass プロパティコピー先
    * @param customeMapping マッピングカスタム用関数
    * @return
    */
