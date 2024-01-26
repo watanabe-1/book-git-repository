@@ -16,6 +16,7 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.support.ResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionManager;
 import org.springframework.transaction.interceptor.BeanFactoryTransactionAttributeSourceAdvisor;
@@ -88,8 +89,7 @@ public class DbConfig {
    * @return
    */
   @Bean
-  BeanFactoryTransactionAttributeSourceAdvisor transactionAdvisor(
-      TransactionManager transactionManager) {
+  BeanFactoryTransactionAttributeSourceAdvisor transactionAdvisor(@NonNull TransactionManager transactionManager) {
 
     NameMatchTransactionAttributeSource source = new NameMatchTransactionAttributeSource();
     source.addTransactionalMethod("save*", new RuleBasedTransactionAttribute());

@@ -22,6 +22,7 @@ import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -142,7 +143,7 @@ public class CategoryThymeleafController {
    * @return 入力画面HTML名
    */
   @RequestMapping(value = "/thymeleaf/category/result", method = RequestMethod.POST)
-  public ModelAndView result(HttpServletRequest request, @ModelAttribute CategoryForm form,
+  public ModelAndView result(HttpServletRequest request, @ModelAttribute @NonNull CategoryForm form,
       BindingResult result,
       ModelAndView model) {
     model.setViewName("/category/result");

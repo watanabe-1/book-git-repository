@@ -1,14 +1,17 @@
 package org.book.app.common.validation;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import java.util.stream.Collectors;
+
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.MediaType;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 /**
  * ファイルの拡張子が供された拡張子であることを検証するためのバリデーションの実装<br>
@@ -34,21 +37,31 @@ public class UploadFileMediaTypeValidator
   }
 
   @Override
-  public boolean isValid(MultipartFile multipartFile, ConstraintValidatorContext context) {
+  public boolean isValid(@Nullable MultipartFile multipartFile, ConstraintValidatorContext context) {
     // Emptyなら通す。他のバリデーターで検証する
     if (multipartFile == null || multipartFile.isEmpty()) {
       return true;
     }
+
     // メディアタイプ
-    MediaType mediaType = MediaType.parseMediaType(multipartFile.getContentType());
+    String contentType = multipartFile.getContentType();
+    if (contentType == null) {
+      return false;
+    }
+    MediaType mediaType = MediaType.parseMediaType(contentType);
+
     // 拡張子
-    String ext = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
+    String originalFilename = multipartFile.getOriginalFilename();
+    String ext = (originalFilename != null) ? FilenameUtils.getExtension(originalFilename) : "";
+    if (ext == null) {
+      return false;
+    }
 
     // 引数に指定されたメディアタイプをリストに変換
-    List<MediaType> mediaTypeList = new ArrayList<>();
-    for (String mt : mediaTypes.split(",")) {
-      mediaTypeList.add(MediaType.parseMediaType(mt));
-    }
+    List<MediaType> mediaTypeList = Arrays.stream(mediaTypes.split(","))
+        .map(MediaType::parseMediaType)
+        .collect(Collectors.toList());
+
     // 引数に指定された拡張子をリストに変換
     List<String> extList = Arrays.asList(exts.split(","));
     // メディアタイプと拡張子をチェック

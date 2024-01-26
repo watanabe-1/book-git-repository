@@ -11,6 +11,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.lang.NonNull;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
@@ -26,6 +27,7 @@ public class AppConfig implements WebMvcConfigurer {
    * @return メッセージソース
    */
   @Bean
+  @NonNull
   MessageSource messageSource() {
     ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
     // ValidationMessage.propertiesを使用
@@ -43,6 +45,7 @@ public class AppConfig implements WebMvcConfigurer {
    * @return バリデータ
    */
   @Bean
+  @NonNull
   LocalValidatorFactoryBean validator() {
     LocalValidatorFactoryBean localValidatorFactoryBean = new LocalValidatorFactoryBean();
     localValidatorFactoryBean.setValidationMessageSource(messageSource());
@@ -75,7 +78,7 @@ public class AppConfig implements WebMvcConfigurer {
    * @return
    */
   @Override
-  public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+  public void configureDefaultServletHandling(@NonNull DefaultServletHandlerConfigurer configurer) {
     // デフォルトサーブレットへの転送機能を有効化
     // これを許可することによって静的コンテンツ(cssやjsなど)へのアクセスを許可
     configurer.enable();
@@ -87,6 +90,7 @@ public class AppConfig implements WebMvcConfigurer {
    * @return
    */
   @Bean
+  @NonNull
   ReauestLoggingListener TraceReauestInterceptor() {
     return new ReauestLoggingListener();
   }
@@ -115,7 +119,7 @@ public class AppConfig implements WebMvcConfigurer {
    * 複数可
    */
   @Override
-  public void addInterceptors(InterceptorRegistry registry) {
+  public void addInterceptors(@NonNull InterceptorRegistry registry) {
     registry.addInterceptor(TraceReauestInterceptor()).addPathPatterns("/**")
         .excludePathPatterns("/resources/**");
   }

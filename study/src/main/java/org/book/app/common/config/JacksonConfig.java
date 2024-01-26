@@ -3,6 +3,7 @@ package org.book.app.common.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.lang.NonNull;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.util.StdDateFormat;
@@ -20,6 +21,7 @@ public class JacksonConfig {
   * @return カスタマイズされたObjectMapper
   */
   @Bean
+  @NonNull
   public ObjectMapper objectMapper() {
     ObjectMapper objectMapper = new ObjectMapper();
     objectMapper.setDateFormat(new StdDateFormat());

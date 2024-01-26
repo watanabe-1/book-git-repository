@@ -2,10 +2,13 @@ package org.book.app.study.service;
 
 import java.util.Date;
 import java.util.List;
+
 import org.book.app.study.entity.Books;
 import org.book.app.study.mapper.BooksMapper;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -129,6 +132,7 @@ public class BooksService {
    * @param userId USER_ID(ユーザーID)
    * @return 検索結果(複数行)
    */
+  @NonNull
   public List<Books> findByBooksDateAndBooksTypeAndUserIdJoinCategory(Date start, Date end,
       String booksType, String userId) {
     return booksMapper.findByBooksDateAndBooksTypeAndUserIdJoinCategory(start, end, booksType,

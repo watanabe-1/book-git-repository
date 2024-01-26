@@ -1,6 +1,8 @@
 package org.book.app.study.util;
 
 import java.util.Map;
+
+import org.springframework.lang.NonNull;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -54,7 +56,7 @@ public class StudyModelUtil {
    * @param attributeName アトリビュート名
    * @return アトリビュート
    */
-  public static Object getAttribute(Map<String, Object> model, String attributeName) {
+  public static Object getAttribute(Map<String, Object> model, @NonNull String attributeName) {
     return getModelMap(model).getAttribute(attributeName);
   }
 

@@ -1,10 +1,13 @@
 package org.book.app.study.service;
 
 import java.util.List;
+
 import org.book.app.study.entity.Image;
 import org.book.app.study.mapper.ImageMapper;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -21,6 +24,7 @@ public class ImageService {
    * 
    * @return 検索結果(複数行)
    */
+  @NonNull
   public List<Image> findAll() {
     return imageMapper.findAll();
   }
@@ -31,6 +35,7 @@ public class ImageService {
    * @param imgId IMG_ID(画像ID)
    * @return 検索結果(1行)
    */
+  @NonNull
   public Image findOne(String imgId) {
     return imageMapper.findOne(imgId);
   }

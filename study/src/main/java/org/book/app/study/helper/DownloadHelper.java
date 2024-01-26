@@ -90,8 +90,13 @@ public class DownloadHelper {
    */
   public ResponseEntity<StreamingResponseBody> buildStreamingResponse(String fileName,
       Charset charset, String data) {
+    MediaType mediaType = MediaType.APPLICATION_OCTET_STREAM;
+    if (mediaType == null) {
+      throw new BusinessException("1.01.01.1003");
+    }
+
     return ResponseEntity.ok()
-        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+        .contentType(mediaType)
         .header(
             HttpHeaders.CONTENT_DISPOSITION,
             buildContentDisposition(fileName, charset))

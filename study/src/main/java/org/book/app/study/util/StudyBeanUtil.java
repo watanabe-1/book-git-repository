@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.book.app.common.exception.BusinessException;
 import org.book.app.study.entity.Entity;
 import org.springframework.beans.BeanUtils;
+import org.springframework.lang.NonNull;
 
 /**
  * java beanのUtilクラスを作成
@@ -23,7 +24,7 @@ public class StudyBeanUtil {
    * @param source コピー元
    * @param target コピー＆セット先
    */
-  public static void copyAndSetStudyEntityProperties(Object source, Entity target) {
+  public static void copyAndSetStudyEntityProperties(@NonNull Object source, @NonNull Entity target) {
     // 同名のフィールドにセット 引数1から2へ
     BeanUtils.copyProperties(source, target);
     setStudyEntityProperties(target);
@@ -79,7 +80,7 @@ public class StudyBeanUtil {
    * @param targetClass プロパティコピー先
    * @return sourceBeanからコピーされたプロパティを持つ、新しく割り当てられたtargetClassのインスタンス
    */
-  public static <T> T createInstanceFromBean(Object sourceBean, Class<T> targetClass) {
+  public static <T> T createInstanceFromBean(@NonNull Object sourceBean, @NonNull Class<T> targetClass) {
     return createInstanceFromBean(sourceBean, targetClass, null);
   }
 
@@ -92,7 +93,7 @@ public class StudyBeanUtil {
    * @param addMapping 追加マッピング用関数
    * @return sourceBeanからコピーされたプロパティを持つ、新しく割り当てられたtargetClassのインスタンス
    */
-  public static <T, S> T createInstanceFromBean(S sourceBean, Class<T> targetClass,
+  public static <T, S> T createInstanceFromBean(@NonNull S sourceBean, @NonNull Class<T> targetClass,
       BiFunction<S, T, T> addMapping) {
     try {
       // インスタンスを作成
@@ -100,7 +101,9 @@ public class StudyBeanUtil {
       T targetInstance = constructor.newInstance();
 
       // プロパティをコピー
-      BeanUtils.copyProperties(sourceBean, targetInstance);
+      if (targetInstance != null) {
+        BeanUtils.copyProperties(sourceBean, targetInstance);
+      }
 
       if (addMapping != null) {
         targetInstance = addMapping.apply(sourceBean, targetInstance);
@@ -122,8 +125,8 @@ public class StudyBeanUtil {
    * @param targetClass プロパティコピー先
    * @return
    */
-  public static <T, S> List<T> createInstanceFromBeanList(List<S> sourceBeanList,
-      Class<T> targetClass) {
+  public static <T, S> List<T> createInstanceFromBeanList(@NonNull List<S> sourceBeanList,
+      @NonNull Class<T> targetClass) {
     return createInstanceFromBeanList(sourceBeanList, targetClass, null);
   }
 
@@ -136,11 +139,14 @@ public class StudyBeanUtil {
    * @param customeMapping マッピングカスタム用関数
    * @return
    */
-  public static <T, S> List<T> createInstanceFromBeanList(List<S> sourceBeanList,
-      Class<T> targetClass, Function<S, T> customeMapping) {
+  public static <T, S> List<T> createInstanceFromBeanList(@NonNull List<S> sourceBeanList,
+      @NonNull Class<T> targetClass, Function<S, T> customeMapping) {
     return sourceBeanList
         .stream()
         .map(sourceBean -> {
+          if (sourceBean == null) {
+            return null;
+          }
           return customeMapping != null
               ? customeMapping.apply(sourceBean)
               : StudyBeanUtil.createInstanceFromBean(sourceBean, targetClass);

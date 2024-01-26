@@ -1,9 +1,11 @@
 package org.book.app.study.mapper;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.book.app.study.entity.Image;
+import org.springframework.lang.NonNull;
 
 /**
  * IMAGE:画像パス(画像パス保存テーブル)のmapperクラス
@@ -16,6 +18,7 @@ public interface ImageMapper {
    * 
    * @return 検索結果(複数行)
    */
+  @NonNull
   List<Image> findAll();
 
   /**
@@ -24,6 +27,7 @@ public interface ImageMapper {
    * @param imgId IMG_ID(画像ID)
    * @return 検索結果(1行)
    */
+  @NonNull
   Image findOne(@Param("imgId") String imgId);
 
   /**

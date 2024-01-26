@@ -6,10 +6,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 import org.apache.commons.io.FilenameUtils;
 import org.book.app.study.dto.data.TypeData;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.entity.Category;
+import org.book.app.study.entity.Image;
 import org.book.app.study.enums.flag.ActiveFlag;
 import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.form.CategoryForm;
@@ -20,9 +22,11 @@ import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyMessageUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -41,7 +45,6 @@ public class CategoryHelper {
    * 画像情報 Service
    */
   private final ImageService imageService;
-
 
   /**
    * ファイル保存用 Helper
@@ -203,9 +206,9 @@ public class CategoryHelper {
    * @param target 変換対象
    * @return CategoryFormList
    */
-  public List<CategoryForm> categoryListToCategoryFormList(List<Category> target) {
+  public List<CategoryForm> categoryListToCategoryFormList(@NonNull List<Category> target) {
     return StudyBeanUtil.createInstanceFromBeanList(target, CategoryForm.class,
-        cat -> categoryToCategoryForm(cat));
+        cat -> categoryToCategoryForm(cat == null ? new Category() : cat));
   }
 
   /**
@@ -214,10 +217,11 @@ public class CategoryHelper {
    * @param target 変換対象
    * @return CategoryForm
    */
-  public CategoryForm categoryToCategoryForm(Category target) {
+  public CategoryForm categoryToCategoryForm(@NonNull Category target) {
     return StudyBeanUtil.createInstanceFromBean(target, CategoryForm.class,
         (cat, catForm) -> {
-          catForm.setImgIds(imageHelper.imageToImageForm(cat.getImgIds()));
+          Image img = cat.getImgIds();
+          catForm.setImgIds(imageHelper.imageToImageForm(img == null ? new Image() : img));
           return catForm;
         });
   }

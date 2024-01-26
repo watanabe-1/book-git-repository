@@ -9,6 +9,7 @@ import org.book.app.common.exception.BusinessException;
 import org.book.app.study.helper.DownloadHelper;
 import org.book.app.study.util.StudyFileUtil;
 import org.book.app.study.util.StudyModelUtil;
+import org.springframework.lang.NonNull;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.view.AbstractView;
 
@@ -35,8 +36,9 @@ public abstract class AbstractDownloadTextFileView extends AbstractView {
    * @param response current HTTP response
    */
   @Override
-  protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request,
-      HttpServletResponse response) {
+  protected void renderMergedOutputModel(@NonNull Map<String, Object> model,
+      @NonNull HttpServletRequest request,
+      @NonNull HttpServletResponse response) {
     try (OutputStream outputStream = new BufferedOutputStream(response.getOutputStream())) {
       downloadHelper.addContentDisposition(response,
           getFileName(StudyModelUtil.getModelMap(model)), StudyFileUtil.MEDIATYPE_BY_TEXT);

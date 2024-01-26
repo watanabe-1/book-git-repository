@@ -1,10 +1,13 @@
 package org.book.app.study.helper;
 
 import java.util.List;
+
 import org.book.app.study.entity.Image;
 import org.book.app.study.form.ImageForm;
 import org.book.app.study.util.StudyBeanUtil;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -20,9 +23,9 @@ public class ImageHelper {
    * @param target 変換対象
    * @return ImageFormList
    */
-  public List<ImageForm> imageListToImageFormList(List<Image> target) {
+  public List<ImageForm> imageListToImageFormList(@NonNull List<Image> target) {
     return StudyBeanUtil.createInstanceFromBeanList(target, ImageForm.class,
-        img -> imageToImageForm(img));
+        img -> imageToImageForm(img == null ? new Image() : img));
   }
 
   /**
@@ -31,7 +34,7 @@ public class ImageHelper {
    * @param target 変換対象
    * @return ImageForm
    */
-  public ImageForm imageToImageForm(Image target) {
+  public ImageForm imageToImageForm(@NonNull Image target) {
     return StudyBeanUtil.createInstanceFromBean(target, ImageForm.class);
   }
 }

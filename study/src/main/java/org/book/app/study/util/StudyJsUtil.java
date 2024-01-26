@@ -16,6 +16,7 @@ import org.book.app.study.api.js.ServerApi;
 import org.book.app.study.form.Form;
 import org.graalvm.polyglot.Context;
 import org.graalvm.polyglot.HostAccess;
+import org.springframework.lang.NonNull;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
@@ -56,9 +57,19 @@ public class StudyJsUtil {
   private static final String DEPENS_BUNDLE_PATH = "/static/js/depens.bundle.js";
 
   /**
+  * depens.bundle.js.mapのパス
+  */
+  private static final String DEPENS_BUNDLE_MAP_PATH = "/static/js/depens.bundle.js.map";
+
+  /**
    * webapi.bundle.jsのパス
    */
   private static final String WEBAPI_BUNDLE_PATH = "/static/js/webapi.bundle.js";
+
+  /**
+  * convertlog.bundle.jsのパス
+  */
+  private static final String CONVERTLOG_BUNDLE_PATH = "/static/js/convertlog.bundle.js";
 
   /**
    * js実行テンプレートのセット
@@ -71,7 +82,7 @@ public class StudyJsUtil {
    * @param form ssr判定用兼パラメータ用
    */
   public static void setJsTemplate(ModelAndView model, String title, HttpServletRequest request,
-      String scriptPath, ServerApi serverApi, Form form) {
+      @NonNull String scriptPath, ServerApi serverApi, Form form) {
     setJsTemplate(model, title, request, scriptPath, serverApi, isSSR(form));
   }
 
@@ -86,7 +97,7 @@ public class StudyJsUtil {
    * @param isSSR jsを実行するか
    */
   public static void setJsTemplate(ModelAndView model, String title, HttpServletRequest request,
-      String scriptPath, ServerApi serverApi, boolean isSSR) {
+      @NonNull String scriptPath, ServerApi serverApi, boolean isSSR) {
     model.setViewName(VIEW_NAME);
 
     // react用bodyを作成
@@ -111,7 +122,8 @@ public class StudyJsUtil {
    * @param isSSR jsを実行するか
    * @return 実行結果
    */
-  public static String render(HttpServletRequest request, String scriptPath, ServerApi serverApi,
+  public static String render(HttpServletRequest request,
+      @NonNull String scriptPath, ServerApi serverApi,
       boolean isSSR) {
     return isSSR ? renderSSR(request, scriptPath, serverApi)
         : renderCSR(request, scriptPath);
@@ -125,7 +137,7 @@ public class StudyJsUtil {
    * @param serverApi jsに埋め込むjavaオブジェクト
    * @return 実行結果
    */
-  public static String renderSSR(HttpServletRequest request, String scriptPath,
+  public static String renderSSR(HttpServletRequest request, @NonNull String scriptPath,
       ServerApi serverApi) {
     GraalJSScriptEngine engine = initializeEngine(request, scriptPath, serverApi);
     String ret = null;
@@ -237,7 +249,7 @@ public class StudyJsUtil {
    * 
    * @param path パス
    */
-  public static String readJsFile(String path) {
+  public static String readJsFile(@NonNull String path) {
     return StudyFileUtil.readClassPathFile(path, StandardCharsets.UTF_8.name());
   }
 
@@ -249,7 +261,7 @@ public class StudyJsUtil {
    * @param serverApi jsに埋め込むjavaオブジェクト
    * @return js実行エンジン
    */
-  private static GraalJSScriptEngine initializeEngine(HttpServletRequest request, String scriptPath,
+  private static GraalJSScriptEngine initializeEngine(HttpServletRequest request, @NonNull String scriptPath,
       ServerApi serverApi) {
     // Source loadcompatibility = Source.create("js",
     // "load('nashorn:mozilla_compat.js')");
@@ -300,5 +312,27 @@ public class StudyJsUtil {
    */
   public static boolean isSSR(Form form) {
     return form != null ? !StudyStringUtil.isNullOrEmpty(form.getSsr()) : true;
+  }
+
+  /**
+   * react jsを読み込み実行する<br/>
+   * 
+   * @param request リクエスト
+   * @param scriptPath jsファイルのパス
+   * @param serverApi jsに埋め込むjavaオブジェクト
+   * @return 実行結果
+   */
+  public static String convertLog(HttpServletRequest request,
+      ServerApi serverApi, String stack) {
+    String map = readJsFile(DEPENS_BUNDLE_MAP_PATH);
+    GraalJSScriptEngine engine = initializeEngine(request, CONVERTLOG_BUNDLE_PATH, serverApi);
+    try {
+      return engine
+          .eval(String.format("window.findSourceLocation(`%s`,`%s`,`%s`);", stack, map, DEPENS_BUNDLE_PATH))
+          .toString();
+    } catch (ScriptException e) {
+      log.error("1.03.01.1001", e);
+      throw new BusinessException("1.01.01.1010", e.getMessage());
+    }
   }
 }

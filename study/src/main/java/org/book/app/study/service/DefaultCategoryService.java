@@ -1,9 +1,11 @@
 package org.book.app.study.service;
 
 import java.util.List;
+
 import org.book.app.study.entity.DefaultCategory;
 import org.book.app.study.mapper.DefaultCategoryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -110,6 +112,7 @@ public class DefaultCategoryService {
    * @param userId USER_ID(ユーザーID)
    * @return 検索結果(複数行)
    */
+  @NonNull
   public List<DefaultCategory> findByUserId(String userId) {
     return defaultcategoryMapper.findByUserId(userId);
   }
@@ -140,4 +143,3 @@ public class DefaultCategoryService {
     return defaultcategoryMapper.saveAllFromBooks(userId, listName);
   }
 }
-

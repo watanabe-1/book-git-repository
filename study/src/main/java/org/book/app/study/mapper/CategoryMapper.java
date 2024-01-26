@@ -1,9 +1,11 @@
 package org.book.app.study.mapper;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.book.app.study.entity.Category;
+import org.springframework.lang.NonNull;
 
 /**
  * CATEGORY:カテゴリー(カテゴリー定義テーブル)のmapperクラス
@@ -79,6 +81,7 @@ public interface CategoryMapper {
    * 
    * @return 検索結果(複数行)
    */
+  @NonNull
   List<Category> findAllJoinImage();
 
   /**

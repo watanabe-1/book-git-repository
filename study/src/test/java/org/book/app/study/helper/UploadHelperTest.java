@@ -54,9 +54,13 @@ public class UploadHelperTest extends BaseTest {
         // システムの一時ディレクトリを取得
         when(fileDir.getStaticFileDir()).thenReturn(StudyTestUtil.getTestTempDirPath());
         // テスト用のプロパティ値を設定
+        assertNotNull(uploadHelper, "UploadHelper is null");
         ReflectionTestUtils.setField(uploadHelper, "uploadTmpDir", new File(TEMP_DIR));
+        assertNotNull(uploadHelper, "UploadHelper is null");
         ReflectionTestUtils.setField(uploadHelper, "uploadImgDefDir", new File(TEMP_IMAGE_DIR));
+        assertNotNull(uploadHelper, "UploadHelper is null");
         ReflectionTestUtils.setField(uploadHelper, "uploadImgDefDirPath", TEMP_IMAGE_DIR);
+        assertNotNull(uploadHelper, "UploadHelper is null");
         ReflectionTestUtils.setField(uploadHelper, "uploadIconDirPath", TEMP_ICON_DIR);
     }
 

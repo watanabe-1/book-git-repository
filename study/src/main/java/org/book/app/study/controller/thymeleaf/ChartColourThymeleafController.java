@@ -2,6 +2,7 @@ package org.book.app.study.controller.thymeleaf;
 
 import java.util.List;
 import java.util.Objects;
+
 import org.book.app.study.entity.TemplateChartcolour;
 import org.book.app.study.form.TemplateChartcolourForm;
 import org.book.app.study.helper.ChartColourHelper;
@@ -9,6 +10,7 @@ import org.book.app.study.service.TemplateChartcolourService;
 import org.book.app.study.util.StudyModelUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -48,7 +51,7 @@ public class ChartColourThymeleafController {
    * @return リダイレクト先
    */
   @RequestMapping(value = "/thymeleaf/chartColour/input", method = RequestMethod.POST)
-  public ModelAndView result(@ModelAttribute @Validated TemplateChartcolourForm form,
+  public ModelAndView result(@ModelAttribute @Validated @NonNull TemplateChartcolourForm form,
       BindingResult result, ModelAndView model, RedirectAttributes redirectAttributes) {
     model.setViewName("redirect:/thymeleaf/chartColour/index");
     TemplateChartcolour newColorTemp = chartColourHelper.getTemplateChartcolourByForm(form);
@@ -145,15 +148,14 @@ public class ChartColourThymeleafController {
     // ユーザーごとに設定しているテンプレートを取得
     TemplateChartcolour activeColour = chartColourHelper.getActiveChartColorTemp();
     // ログインユーザーが作成したテンプレート(共通ユーザー分も含む)を取得
-    List<TemplateChartcolour> allTempColours =
-        chartColourHelper.getLoginUsersAllTempColours(activeColour);
+    List<TemplateChartcolour> allTempColours = chartColourHelper.getLoginUsersAllTempColours(activeColour);
 
     model.addObject("activeColour", activeColour);
     model.addObject("tempColourList", allTempColours);
     model.addObject("randomColourList",
         chartColourHelper.getRandomColourSeedCoef(chartColourHelper.getRandomCnt()));
     model.addObject("tab", tab);
-    model.addObject(tab, "active");
+    model.addObject(tab == null ? "" : tab, "active");
 
     // リダイレクトされたとき、リダイレクトもとでセットしたパラメータをセット(keyが同じ場合は上書きする)
     model.addAllObjects(modelMap);

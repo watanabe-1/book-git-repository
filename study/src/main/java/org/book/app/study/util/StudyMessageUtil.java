@@ -1,5 +1,6 @@
 package org.book.app.study.util;
 
+import org.springframework.lang.NonNull;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -19,14 +20,17 @@ public class StudyMessageUtil {
    * @param fieldNames fieldNames 対象フィールド名
    * @return
    */
+  @NonNull
   public static String getArrayFieldName(String arrayFieldName, int index, String... fieldNames) {
-    return new StringBuffer().append(arrayFieldName)
+    String ret = new StringBuffer().append(arrayFieldName)
         .append("[")
         .append(index)
         .append("]")
         .append(SEPARATOR_BY_BINDERROR_FIELD)
         .append(getFieldName(fieldNames))
         .toString();
+
+    return ret == null ? "" : ret;
   }
 
   /**
@@ -50,7 +54,7 @@ public class StudyMessageUtil {
    * @param field 対象フィールド名
    * @param code エラーコード
    */
-  public static void addError(BindingResult result, String field, String code) {
+  public static void addError(BindingResult result, @NonNull String field, String code) {
     addError(result, field, code, "");
   }
 
@@ -62,7 +66,7 @@ public class StudyMessageUtil {
    * @param code エラーコード
    * @param arguments エラー文字列内で参照する値
    */
-  public static void addError(BindingResult result, String field, String code,
+  public static void addError(BindingResult result, @NonNull String field, String code,
       Object... arguments) {
     addErrorOnDefMsg(result, field, code, arguments, code);
   }
@@ -76,7 +80,7 @@ public class StudyMessageUtil {
    * @param arguments エラー文字列内で参照する値
    * @param defaultMessage デフォルトメッセージ
    */
-  public static void addErrorOnDefMsg(BindingResult result, String field,
+  public static void addErrorOnDefMsg(BindingResult result, @NonNull String field,
       String code, Object[] arguments, String defaultMessage) {
     result.addError(
         new FieldError(result.getObjectName(), field, null, false, new String[] { code }, arguments,

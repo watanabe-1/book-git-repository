@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -20,8 +21,8 @@ public class ReauestLoggingListener implements HandlerInterceptor {
     private String START_TIME = "startTime";
 
     @Override
-    public boolean preHandle(HttpServletRequest request,
-            HttpServletResponse response, Object handler) {
+    public boolean preHandle(@NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response, @NonNull Object handler) {
         log.trace("1.02.01.1001", () -> {
             if (handler instanceof HandlerMethod handlerMethod) {
                 long startTime = System.nanoTime();
@@ -39,7 +40,8 @@ public class ReauestLoggingListener implements HandlerInterceptor {
     }
 
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
+    public void postHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+            @NonNull Object handler,
             @Nullable ModelAndView modelAndView) throws Exception {
         log.trace("1.02.01.1002", () -> {
             if (handler instanceof HandlerMethod handlerMethod) {

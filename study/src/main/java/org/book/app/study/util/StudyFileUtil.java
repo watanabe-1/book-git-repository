@@ -16,6 +16,7 @@ import org.book.app.common.exception.BusinessException;
 import org.mozilla.universalchardet.UniversalDetector;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
+import org.springframework.lang.NonNull;
 
 import lombok.extern.slf4j.XSlf4j;
 
@@ -196,7 +197,7 @@ public class StudyFileUtil {
    * @param charsetName 文字コード
    * @return 読み込んだファイルの中身
    */
-  public static String readClassPathFile(String path, String charsetName) {
+  public static String readClassPathFile(@NonNull String path, String charsetName) {
     ClassPathResource file = new ClassPathResource(path);
     String ret = null;
 

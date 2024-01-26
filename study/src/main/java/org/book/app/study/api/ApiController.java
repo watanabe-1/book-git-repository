@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
@@ -57,7 +58,7 @@ public class ApiController {
   @ExceptionHandler(BindException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
   @ResponseBody
-  public ErrorResults handleBindException(BindException e, HttpServletRequest request, Locale locale) {
+  public ErrorResults handleBindException(BindException e, HttpServletRequest request, @NonNull Locale locale) {
     log.error("e.ex.fw.7002", e, () -> new Object[] { request.getRequestURL().toString() });
     // エラー情報を返却するためのJavaBeanを生成し、返却
     ErrorResults errorResults = new ErrorResults();
@@ -98,7 +99,7 @@ public class ApiController {
   @ResponseBody
   public ErrorResults handleMethodArgumentNotValidException(MethodArgumentNotValidException e,
       HttpServletRequest request,
-      Locale locale) {
+      @NonNull Locale locale) {
     log.error("e.ex.fw.7001", e, () -> new Object[] { request.getRequestURL().toString() });
     ErrorResults errorResults = new ErrorResults();
     addErrResult(e, locale, errorResults);
@@ -121,7 +122,7 @@ public class ApiController {
   @ResponseBody
   public ErrorResults handleHttpMessageNotReadableException(HttpMessageNotReadableException e,
       HttpServletRequest request,
-      Locale locale) {
+      @NonNull Locale locale) {
     final String code = "e.ex.fw.7001";
     log.error(code, e, () -> new Object[] { request.getRequestURL().toString() });
 
@@ -139,20 +140,32 @@ public class ApiController {
    * @param locale ロケール
    * @param errorResults セット対象
    */
-  private void addErrResult(BindException e, Locale locale, ErrorResults errorResults) {
+  private void addErrResult(BindException e, @NonNull Locale locale, ErrorResults errorResults) {
     e.getBindingResult().getFieldErrors().forEach(fieldError -> {
+      if (fieldError == null) {
+        return;
+      }
+      String code = fieldError.getCode();
+      if (code == null) {
+        return;
+      }
       String msg = messageSource.getMessage(fieldError, locale);
 
-      errorResults.add(true, fieldError.getCode(), msg,
-          fieldError.getField());
-      log.trace(fieldError.getCode(), fieldError.getField());
+      errorResults.add(true, code, msg, fieldError.getField());
+      log.trace(code, fieldError.getField());
     });
     e.getBindingResult().getGlobalErrors().forEach(objectError -> {
+      if (objectError == null) {
+        return;
+      }
+      String code = objectError.getCode();
+      if (code == null) {
+        return;
+      }
       String msg = messageSource.getMessage(objectError, locale);
 
-      errorResults.add(true, objectError.getCode(), msg,
-          objectError.getObjectName());
-      log.trace(objectError.getCode(), objectError.getObjectName());
+      errorResults.add(true, code, msg, objectError.getObjectName());
+      log.trace(code, objectError.getObjectName());
     });
   }
 
@@ -165,6 +178,9 @@ public class ApiController {
    */
   private void addErrResult(BusinessException e, Locale locale, ErrorResults errorResults) {
     String code = e.getMessageKey();
+    if (code == null || locale == null) {
+      return;
+    }
     String msg = messageSource.getMessage(code, e.getArgs(), locale);
     errorResults.add(true, code, msg, code);
     log.trace(code, e.getArgs());
@@ -177,7 +193,7 @@ public class ApiController {
   * @param locale ロケール
   * @param errorResults セット対象
   */
-  private void addErrResult(RuntimeException e, String code, Object[] args, Locale locale,
+  private void addErrResult(RuntimeException e, @NonNull String code, Object[] args, @NonNull Locale locale,
       ErrorResults errorResults) {
     String msg = messageSource.getMessage(code, args, locale);
     errorResults.add(true, code, msg, code);

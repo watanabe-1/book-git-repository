@@ -24,6 +24,7 @@ import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyCodeUtil;
 import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyUtil;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -311,7 +312,7 @@ public class ChartColourHelper {
    * @param form 画面から取得した値
    * @return Books セットされたentity
    */
-  public TemplateChartcolour getTemplateChartcolourByForm(TemplateChartcolourForm form) {
+  public TemplateChartcolour getTemplateChartcolourByForm(@NonNull TemplateChartcolourForm form) {
     // ログインユーザー取得
     String user = StudyUtil.getLoginUser();
 

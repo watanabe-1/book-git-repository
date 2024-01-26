@@ -1,10 +1,13 @@
 package org.book.app.study.service;
 
 import java.util.List;
+
 import org.book.app.study.entity.Category;
 import org.book.app.study.mapper.CategoryMapper;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -106,6 +109,7 @@ public class CategoryService {
    * 
    * @return 検索結果(複数行)
    */
+  @NonNull
   public List<Category> findAlljoinImage() {
     return categoryMapper.findAllJoinImage();
   }

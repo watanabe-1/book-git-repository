@@ -7,6 +7,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import org.book.app.study.dto.list.DefaultCategoryFormList;
 import org.book.app.study.entity.DefaultCategory;
 import org.book.app.study.enums.dbcode.DefaultCategoryTarget;
@@ -19,8 +20,10 @@ import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyCodeUtil;
 import org.book.app.study.util.StudyMessageUtil;
 import org.book.app.study.util.StudyUtil;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -42,9 +45,9 @@ public class DefaultCategoryHelper {
    * @return DefaultCategoryFormList
    */
   public List<DefaultCategoryForm> defaultCategoryListToDefaultCategoryFormList(
-      List<DefaultCategory> target) {
+      @NonNull List<DefaultCategory> target) {
     return StudyBeanUtil.createInstanceFromBeanList(target, DefaultCategoryForm.class,
-        defCat -> defaultCategoryToDefaultCategoryForm(defCat));
+        defCat -> defaultCategoryToDefaultCategoryForm(defCat == null ? new DefaultCategory() : defCat));
   }
 
   /**
@@ -53,7 +56,7 @@ public class DefaultCategoryHelper {
    * @param target 変換対象
    * @return DefaultCategoryForm
    */
-  public DefaultCategoryForm defaultCategoryToDefaultCategoryForm(DefaultCategory target) {
+  public DefaultCategoryForm defaultCategoryToDefaultCategoryForm(@NonNull DefaultCategory target) {
     return StudyBeanUtil.createInstanceFromBean(target, DefaultCategoryForm.class);
   }
 
@@ -82,8 +85,7 @@ public class DefaultCategoryHelper {
   public Optional<DefaultCategory> findOneFromDefaultCeategoryList(String booksPlace,
       String booksType,
       String booksMethod, int booksAmount, List<DefaultCategory> defCatList) {
-    String targetKey =
-        new StringBuffer().append(booksPlace).append(booksType).append(booksMethod).toString();
+    String targetKey = new StringBuffer().append(booksPlace).append(booksType).append(booksMethod).toString();
 
     return defCatList.stream()
         .filter(defCat -> {
@@ -123,6 +125,7 @@ public class DefaultCategoryHelper {
    * 
    * @return デフォルトカテゴリーリストデータ
    */
+  @NonNull
   public List<DefaultCategory> getDefaultCategoryList() {
     return defaultCategoryService.findByUserId(StudyUtil.getLoginUser());
   }
@@ -148,9 +151,8 @@ public class DefaultCategoryHelper {
     int updCnt = 0;
     for (DefaultCategoryForm defCatForm : defCatListParam.getDefCatDataList()) {
       if (DeleteFlag.isDelete(defCatForm.getDelete())) {
-        updCnt +=
-            defaultCategoryService.deleteOne(defCatForm.getDefaultCategoryId(),
-                StudyUtil.getLoginUser());
+        updCnt += defaultCategoryService.deleteOne(defCatForm.getDefaultCategoryId(),
+            StudyUtil.getLoginUser());
       } else {
         String userId = StudyUtil.getLoginUser();
         DefaultCategory defCat = new DefaultCategory();

@@ -7,6 +7,7 @@ import org.book.app.study.service.AccountService;
 import org.book.app.study.service.AppUserDetails;
 import org.book.app.study.util.StudyBeanUtil;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -107,7 +109,7 @@ public class AccountController {
    */
   @RequestMapping(value = "/system/account/store", method = RequestMethod.POST)
   public ModelAndView store(@AuthenticationPrincipal AppUserDetails userDetail,
-      @ModelAttribute @Validated AccountForm form, BindingResult result,
+      @ModelAttribute @Validated @NonNull AccountForm form, BindingResult result,
       ModelAndView model) {
     model.setViewName("account/complete");
 

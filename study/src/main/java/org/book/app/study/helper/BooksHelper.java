@@ -15,11 +15,13 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
 import org.book.app.study.dto.data.BooksChartData;
 import org.book.app.study.dto.data.BooksChartDatasets;
 import org.book.app.study.dto.file.BooksColumn;
 import org.book.app.study.dto.list.BooksFormList;
 import org.book.app.study.entity.Books;
+import org.book.app.study.entity.Category;
 import org.book.app.study.entity.DefaultCategory;
 import org.book.app.study.enums.dbcode.BooksTab;
 import org.book.app.study.enums.flag.DeleteFlag;
@@ -32,8 +34,10 @@ import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyFileUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -189,9 +193,8 @@ public class BooksHelper {
 
           // カテゴリーがデフォルトカテゴリーマスタ変更対象の場合
           if (defCatTargets.contains(catCode)) {
-            Optional<DefaultCategory> mutchDefCat =
-                defaultCategoryHelper.findOneFromDefaultCeategoryList(
-                    booksPlace, booksType, booksMethod, booksAmount, defCatList);
+            Optional<DefaultCategory> mutchDefCat = defaultCategoryHelper.findOneFromDefaultCeategoryList(
+                booksPlace, booksType, booksMethod, booksAmount, defCatList);
             // デフォルトカテゴリーマスタに対象が設定されていたら
             if (mutchDefCat.isPresent()) {
               catCode = mutchDefCat.get().getCatCode();
@@ -285,6 +288,7 @@ public class BooksHelper {
    * @param booksType 家計簿の種類
    * @return 家計簿データ
    */
+  @NonNull
   public List<Books> findByMonthAndType(Date date, String booksType) {
     return booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
         StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date), booksType,
@@ -360,7 +364,8 @@ public class BooksHelper {
     // 支出を取得
     List<Books> booksByExpenses = findOneYearAgoByDateAndType(date, BooksType.EXPENSES.getCode());
     // 収入を取得
-    List<Books> booksByIncome = findOneYearAgoByDateAndType(date, BooksType.INCOME.getCode());;
+    List<Books> booksByIncome = findOneYearAgoByDateAndType(date, BooksType.INCOME.getCode());
+    ;
 
     // セット対象
     List<BooksChartDatasets> dataSets = new ArrayList<>();
@@ -379,8 +384,7 @@ public class BooksHelper {
     int indexByMethod = 0;
     // indexを使用したいためforeachではなくfor文を使用
     for (String keyByMethod : booksByMethodMap.keySet()) {
-      Map<String, Long> booksByMethodAndMonthMap =
-          groupByBooksDateAndSortToLong(booksByMethodMap.get(keyByMethod));
+      Map<String, Long> booksByMethodAndMonthMap = groupByBooksDateAndSortToLong(booksByMethodMap.get(keyByMethod));
 
       setChartDatasetsByYear(dataSets, dataSets.size(), booksByMethodAndMonthMap, date, keyByMethod,
           BAR, backgroundColorsByBar.get(indexByMethod), borderColorsByBar.get(indexByMethod),
@@ -411,16 +415,14 @@ public class BooksHelper {
     }
 
     // 総支出
-    Map<String, Long> booksByMonthSumAmountDataByExpenses =
-        groupByBooksDateAndSortToLong(booksByExpenses);
+    Map<String, Long> booksByMonthSumAmountDataByExpenses = groupByBooksDateAndSortToLong(booksByExpenses);
 
     // lineの先頭に追加
     setChartDatasetsByYear(dataSets, barSize, booksByMonthSumAmountDataByExpenses, date,
         LABEL_MAX_EXPENSES, LINE, RGB_WHITE, borderColorsByLine.get(indexByLine++), false);
 
     // 総収入
-    Map<String, Long> booksByMonthSumAmountDataByIncome =
-        groupByBooksDateAndSortToLong(booksByIncome);
+    Map<String, Long> booksByMonthSumAmountDataByIncome = groupByBooksDateAndSortToLong(booksByIncome);
 
     // lineの先頭に追加
     setChartDatasetsByYear(dataSets, barSize, booksByMonthSumAmountDataByIncome, date,
@@ -500,7 +502,7 @@ public class BooksHelper {
    */
   public Map<String, Long> groupByCatNameAndSortByReversedToLong(List<Books> target) {
     return groupAndSortToLong(target, getCatName, Collectors.summingLong(Books::getBooksAmmount),
-        Map.Entry.<String, Long>comparingByValue().reversed());
+        Map.Entry.<String, Long> comparingByValue().reversed());
   }
 
   /**
@@ -512,7 +514,7 @@ public class BooksHelper {
   public Map<String, Long> groupByBooksMethodAndSortByReversedToLong(List<Books> target) {
     return groupAndSortToLong(target, Books::getBooksMethod,
         Collectors.summingLong(Books::getBooksAmmount),
-        Map.Entry.<String, Long>comparingByValue().reversed());
+        Map.Entry.<String, Long> comparingByValue().reversed());
   }
 
   /**
@@ -523,7 +525,7 @@ public class BooksHelper {
    */
   public Map<String, Long> groupByBooksDateAndSortToLong(List<Books> target) {
     return groupAndSortToLong(target, getYearMonth, Collectors.summingLong(Books::getBooksAmmount),
-        Map.Entry.<String, Long>comparingByKey());
+        Map.Entry.<String, Long> comparingByKey());
   }
 
   /**
@@ -533,7 +535,7 @@ public class BooksHelper {
    * @return 集約、ソート後のmap
    */
   public Map<String, List<Books>> groupByCatNameAndSortToList(List<Books> target) {
-    return groupAndSortToList(target, getCatName, Map.Entry.<String, List<Books>>comparingByKey());
+    return groupAndSortToList(target, getCatName, Map.Entry.<String, List<Books>> comparingByKey());
   }
 
   /**
@@ -544,7 +546,7 @@ public class BooksHelper {
    */
   public Map<String, List<Books>> groupByBooksMethodAndSortToList(List<Books> target) {
     return groupAndSortToList(target, Books::getBooksMethod,
-        Map.Entry.<String, List<Books>>comparingByKey());
+        Map.Entry.<String, List<Books>> comparingByKey());
   }
 
   /**
@@ -609,9 +611,9 @@ public class BooksHelper {
    * @param target 変換対象
    * @return BooksFormList
    */
-  public List<BooksForm> booksListToBooksFormList(List<Books> target) {
+  public List<BooksForm> booksListToBooksFormList(@NonNull List<Books> target) {
     return StudyBeanUtil.createInstanceFromBeanList(target, BooksForm.class,
-        books -> booksToBooksForm(books));
+        books -> booksToBooksForm(books == null ? new Books() : books));
   }
 
   /**
@@ -620,11 +622,12 @@ public class BooksHelper {
    * @param target 変換対象
    * @return BooksForm
    */
-  public BooksForm booksToBooksForm(Books target) {
+  public BooksForm booksToBooksForm(@NonNull Books target) {
     return StudyBeanUtil.createInstanceFromBean(target, BooksForm.class,
         (books, booksForm) -> {
+          Category cat = books.getCatCodes();
           booksForm.setCatCodes(
-              categoryHelper.categoryToCategoryForm(books.getCatCodes()));
+              categoryHelper.categoryToCategoryForm(cat == null ? new Category() : cat));
           return booksForm;
         });
   }

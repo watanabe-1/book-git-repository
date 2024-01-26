@@ -2,6 +2,7 @@ package org.book.app.study.controller.thymeleaf;
 
 import java.util.Date;
 import java.util.List;
+
 import org.book.app.study.dto.file.BooksColumn;
 import org.book.app.study.entity.Books;
 import org.book.app.study.enums.type.BooksType;
@@ -15,6 +16,7 @@ import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
 import org.book.app.study.view.DownloadCsvView;
 import org.springframework.beans.BeanUtils;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -66,7 +69,7 @@ public class BooksThymeleafController {
    * @return 画面表示用モデル
    */
   @RequestMapping(value = "/thymeleaf/books/result", method = RequestMethod.POST)
-  public ModelAndView result(@ModelAttribute @Validated BooksInputForm form, BindingResult result,
+  public ModelAndView result(@ModelAttribute @Validated @NonNull BooksInputForm form, BindingResult result,
       ModelAndView model) {
     BooksForm booksForm = new BooksForm();
     BeanUtils.copyProperties(form, booksForm);
@@ -120,8 +123,7 @@ public class BooksThymeleafController {
   public ModelAndView download(@ModelAttribute BooksForm form, ModelAndView model) {
     model.setViewName(StudyStringUtil.getlowerCaseFirstClassName(DownloadCsvView.class));
 
-    String fileNameType =
-        StudyStringUtil.isNullOrEmpty(form.getBooksYear()) ? "ALL" : form.getBooksYear();
+    String fileNameType = StudyStringUtil.isNullOrEmpty(form.getBooksYear()) ? "ALL" : form.getBooksYear();
     List<BooksColumn> columnList = booksHelper.booksListToBooksColumnList(
         booksHelper.finByYearAndType(form.getBooksYear(), form.getBooksType()));
 
@@ -146,11 +148,9 @@ public class BooksThymeleafController {
     model.setViewName("books/index");
     Date date = form.getDate() == null ? StudyDateUtil.getStartDateByMonth(StudyUtil.getNowDate())
         : form.getDate();
-    String tab =
-        StudyStringUtil.isNullOrEmpty(form.getTab()) ? booksHelper.getDefaltTab() : form.getTab();
+    String tab = StudyStringUtil.isNullOrEmpty(form.getTab()) ? booksHelper.getDefaltTab() : form.getTab();
 
-    List<Books> booksByExpenses =
-        booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode());
+    List<Books> booksByExpenses = booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode());
     List<Books> booksByIncome = booksHelper.findByMonthAndType(date, BooksType.INCOME.getCode());
     int sumAmountByExpenses = booksHelper.sumAmount(booksByExpenses);
     int sumAmountByIncome = booksHelper.sumAmount(booksByIncome);
@@ -164,7 +164,7 @@ public class BooksThymeleafController {
     model.addObject("nextDate", StudyDateUtil.getNextMonth(date));
     model.addObject("backDate", StudyDateUtil.getBackMonth(date));
     model.addObject("tab", tab);
-    model.addObject(tab, "active");
+    model.addObject(tab == null ? "" : tab, "active");
 
     return model;
   }

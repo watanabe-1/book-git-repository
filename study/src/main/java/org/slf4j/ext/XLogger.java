@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.lang.NonNull;
 
 /**
  * slf4jが用意している拡張方法<br/>
@@ -98,7 +99,7 @@ public class XLogger {
    * @param id メッセージID
    * @param args 埋め込み文字
    */
-  public void info(String id, Object... args) {
+  public void info(@NonNull String id, Object... args) {
     if (logger.isInfoEnabled()) {
       logger.info(createLogMessage(id, args));
     }
@@ -112,7 +113,7 @@ public class XLogger {
    * @param id メッセージID
    * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
    */
-  public void info(String id, Supplier<Object[]> argsSupplier) {
+  public void info(@NonNull String id, Supplier<Object[]> argsSupplier) {
     if (!logger.isInfoEnabled()) {
       return;
     }
@@ -129,7 +130,7 @@ public class XLogger {
    * @param id メッセージID
    * @param args 埋め込み文字
    */
-  public void warn(String id, Object... args) {
+  public void warn(@NonNull String id, Object... args) {
     if (logger.isWarnEnabled()) {
       logger.warn(createLogMessage(id, args));
     }
@@ -143,7 +144,7 @@ public class XLogger {
    * @param id メッセージID
    * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
   */
-  public void warn(String id, Supplier<Object[]> argsSupplier) {
+  public void warn(@NonNull String id, Supplier<Object[]> argsSupplier) {
     if (!logger.isWarnEnabled()) {
       return;
     }
@@ -160,7 +161,7 @@ public class XLogger {
    * @param id メッセージID
    * @param args 埋め込み文字
    */
-  public void error(String id, Object... args) {
+  public void error(@NonNull String id, Object... args) {
     if (logger.isErrorEnabled()) {
       logger.error(createLogMessage(id, args));
     }
@@ -174,7 +175,7 @@ public class XLogger {
    * @param id メッセージID
    * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
   */
-  public void error(String id, Supplier<Object[]> argsSupplier) {
+  public void error(@NonNull String id, Supplier<Object[]> argsSupplier) {
     if (!logger.isErrorEnabled()) {
       return;
     }
@@ -191,7 +192,7 @@ public class XLogger {
    * @param id メッセージID
    * @param args 埋め込み文字
    */
-  public void trace(String id, Object... args) {
+  public void trace(@NonNull String id, Object... args) {
     if (logger.isTraceEnabled()) {
       logger.trace(createLogMessage(id, args));
     }
@@ -205,7 +206,7 @@ public class XLogger {
    * @param id メッセージID
    * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
   */
-  public void trace(String id, Supplier<Object[]> argsSupplier) {
+  public void trace(@NonNull String id, Supplier<Object[]> argsSupplier) {
     if (!logger.isTraceEnabled()) {
       return;
     }
@@ -223,7 +224,7 @@ public class XLogger {
    * @param t the exception (throwable) to log
    * @param args 埋め込み文字
    */
-  public void warn(String id, Throwable t, Object... args) {
+  public void warn(@NonNull String id, Throwable t, Object... args) {
     if (logger.isWarnEnabled()) {
       logger.warn(createLogMessage(id, args), t);
     }
@@ -238,7 +239,7 @@ public class XLogger {
    * @param t the exception (throwable) to log
    * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
   */
-  public void warn(String id, Throwable t, Supplier<Object[]> argsSupplier) {
+  public void warn(@NonNull String id, Throwable t, Supplier<Object[]> argsSupplier) {
     if (!logger.isWarnEnabled()) {
       return;
     }
@@ -256,7 +257,7 @@ public class XLogger {
    * @param t the exception (throwable) to log
    * @param args 埋め込み文字
    */
-  public void error(String id, Throwable t, Object... args) {
+  public void error(@NonNull String id, Throwable t, Object... args) {
     if (logger.isErrorEnabled()) {
       logger.error(createLogMessage(id, args), t);
     }
@@ -272,7 +273,7 @@ public class XLogger {
    * @param t the exception (throwable) to log
    * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
   */
-  public void error(String id, Throwable t, Supplier<Object[]> argsSupplier) {
+  public void error(@NonNull String id, Throwable t, Supplier<Object[]> argsSupplier) {
     if (!logger.isErrorEnabled()) {
       return;
     }
@@ -289,7 +290,7 @@ public class XLogger {
    * @param args 埋め込み文字
    * @return ログメッセージ
    */
-  private String createLogMessage(String id, Object... args) {
+  private String createLogMessage(@NonNull String id, Object... args) {
     return MessageFormat.format(LOG_MESSAGE_FORMAT, id, getMessage(id, args));
   }
 
@@ -300,10 +301,11 @@ public class XLogger {
    * @param args 埋め込み文字
    * @return ログメッセージ
    */
-  private String getMessage(String id, Object... args) {
+  private String getMessage(@NonNull String id, Object... args) {
     String message;
     try {
-      message = messageSource.getMessage(id, args, Locale.getDefault());
+      Locale locale = Locale.getDefault();
+      message = locale == null ? "" : messageSource.getMessage(id, args, locale);
     } catch (NoSuchMessageException e) {
       message = MessageFormat.format(UNDEFINED_MESSAGE_FORMAT, id, Arrays.toString(args));
     }
