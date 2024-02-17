@@ -1,7 +1,8 @@
 package org.book.app.study.entity;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
+
 import lombok.Data;
 
 /**
@@ -68,7 +69,7 @@ public class DefaultCategory implements Serializable, Entity {
   /**
    * 登録日時
    */
-  private Date insDate;
+  private LocalDateTime insDate;
 
   /**
    * 登録ユーザー
@@ -78,7 +79,7 @@ public class DefaultCategory implements Serializable, Entity {
   /**
    * 更新日時
    */
-  private Date updDate;
+  private LocalDateTime updDate;
 
   /**
    * 更新ユーザー

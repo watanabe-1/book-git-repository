@@ -1,6 +1,6 @@
 package org.book.app.study.service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.book.app.study.entity.Books;
@@ -118,7 +118,8 @@ public class BooksService {
    * @return delete行数
    */
   @Transactional
-  public int deleteByBooksDateAndBooksTypeAndUserId(Date start, Date end, String booksType,
+  public int deleteByBooksDateAndBooksTypeAndUserId(LocalDateTime start,
+      LocalDateTime end, String booksType,
       String userId) {
     return booksMapper.deleteByBooksDateAndBooksTypeAndUserId(start, end, booksType, userId);
   }
@@ -133,7 +134,9 @@ public class BooksService {
    * @return 検索結果(複数行)
    */
   @NonNull
-  public List<Books> findByBooksDateAndBooksTypeAndUserIdJoinCategory(Date start, Date end,
+  public List<Books> findByBooksDateAndBooksTypeAndUserIdJoinCategory(
+      LocalDateTime start,
+      LocalDateTime end,
       String booksType, String userId) {
     return booksMapper.findByBooksDateAndBooksTypeAndUserIdJoinCategory(start, end, booksType,
         userId);

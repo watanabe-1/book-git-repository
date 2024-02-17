@@ -1,6 +1,6 @@
 package org.book.app.study.controller.thymeleaf;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.book.app.study.dto.file.BooksColumn;
@@ -146,8 +146,8 @@ public class BooksThymeleafController {
   @RequestMapping(value = "/thymeleaf/books/index", method = RequestMethod.GET)
   public ModelAndView list(@ModelAttribute BooksForm form, ModelAndView model) {
     model.setViewName("books/index");
-    Date date = form.getDate() == null ? StudyDateUtil.getStartDateByMonth(StudyUtil.getNowDate())
-        : form.getDate();
+    LocalDateTime date = form.getDate() == null ? StudyDateUtil.getFirstDayOfMonth(StudyUtil.getNowDate())
+        : StudyDateUtil.localDatetoLocalDateTime(form.getDate());
     String tab = StudyStringUtil.isNullOrEmpty(form.getTab()) ? booksHelper.getDefaltTab() : form.getTab();
 
     List<Books> booksByExpenses = booksHelper.findByMonthAndType(date, BooksType.EXPENSES.getCode());

@@ -1,11 +1,14 @@
 package org.book.app.study.dto.file;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+
 import org.book.app.study.util.StudyDateUtil;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,7 +28,7 @@ public class BooksColumn implements Serializable {
    */
   @JsonProperty("日付(収入日、購入日)")
   @JsonFormat(pattern = StudyDateUtil.FMT_YEAR_MONTH_DAY_SLASH, timezone = StudyDateUtil.TIMEZONE_ASIA_TOKYO)
-  private Date booksDate;
+  private LocalDate booksDate;
 
   /**
    * 場所(収入元、購入先)

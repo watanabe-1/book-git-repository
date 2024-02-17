@@ -4,19 +4,13 @@
   // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-    // {
-    //   "type": "java",
-    //   "name": "Current File",
-    //   "request": "launch",
-    //   "mainClass": "${file}"
-    // },
-    // {
-    //   "type": "java",
-    //   "name": "Application",
-    //   "request": "launch",
-    //   "mainClass": "org.book.app.Application",
-    //   "projectName": "study"
-    // },
+    {
+      "type": "java",
+      "name": "Application",
+      "request": "launch",
+      "mainClass": "org.book.app.Application",
+      "projectName": "study"
+    },
     {
       "type": "java",
       "name": "Debug (Attach) - Gradle",

@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import org.book.app.common.exception.BusinessException;
@@ -29,7 +29,7 @@ class StudyBeanUtilTest {
     Books target = new Books();
 
     try (MockedStatic<StudyUtil> mockedStatic = Mockito.mockStatic(StudyUtil.class)) {
-      mockedStatic.when(StudyUtil::getNowDate).thenReturn(new Date());
+      mockedStatic.when(StudyUtil::getNowDate).thenReturn(LocalDateTime.now());
       mockedStatic.when(StudyUtil::getLoginUser).thenReturn("testUser");
 
       StudyBeanUtil.copyAndSetStudyEntityProperties(source, target);
@@ -47,7 +47,7 @@ class StudyBeanUtilTest {
     Books target = new Books();
 
     try (MockedStatic<StudyUtil> mockedStatic = Mockito.mockStatic(StudyUtil.class)) {
-      mockedStatic.when(StudyUtil::getNowDate).thenReturn(new Date());
+      mockedStatic.when(StudyUtil::getNowDate).thenReturn(LocalDateTime.now());
       mockedStatic.when(StudyUtil::getLoginUser).thenReturn("testUser");
 
       StudyBeanUtil.setStudyEntityProperties(target);
@@ -61,7 +61,7 @@ class StudyBeanUtilTest {
   void setStudyEntityPropertiesNull_SetsPropertiesToNull() {
     Books target = new Books();
     target.setInsUser("user");
-    target.setInsDate(new Date());
+    target.setInsDate(LocalDateTime.now());
 
     StudyBeanUtil.setStudyEntityPropertiesNull(target);
 

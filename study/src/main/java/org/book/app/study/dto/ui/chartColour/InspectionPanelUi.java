@@ -1,11 +1,14 @@
 package org.book.app.study.dto.ui.chartColour;
 
-import java.util.Date;
+import java.time.LocalDate;
+
 import org.book.app.study.enums.flag.ActiveFlag;
 import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.util.StudyDateUtil;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 
 /**
@@ -38,8 +41,7 @@ public class InspectionPanelUi {
   /**
    * 日付
    */
-  @JsonFormat(pattern = DATE_FORMAT,
-      timezone = StudyDateUtil.TIMEZONE_ASIA_TOKYO)
-  private Date date;
+  @JsonFormat(pattern = DATE_FORMAT, timezone = StudyDateUtil.TIMEZONE_ASIA_TOKYO)
+  private LocalDate date;
 
 }

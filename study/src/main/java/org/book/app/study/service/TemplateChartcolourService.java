@@ -1,11 +1,13 @@
 package org.book.app.study.service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
+
 import org.book.app.study.entity.TemplateChartcolour;
 import org.book.app.study.mapper.TemplateChartcolourMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -132,7 +134,7 @@ public class TemplateChartcolourService {
    * @return update行数
    */
   @Transactional
-  public int updateActiveAndNameById(String active, String templateName, Date updDate,
+  public int updateActiveAndNameById(String active, String templateName, LocalDateTime updDate,
       String updUser, String templateId) {
     return templateChartcolourMapper.updateActiveAndNameById(active, templateName, updDate, updUser,
         templateId);

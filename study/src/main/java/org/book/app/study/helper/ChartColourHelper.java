@@ -1,8 +1,8 @@
 package org.book.app.study.helper;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +60,7 @@ public class ChartColourHelper {
    */
   public int changeActive(String templateId, String templateName) {
     String user = StudyUtil.getLoginUser();
-    Date date = StudyUtil.getNowDate();
+    LocalDateTime date = StudyUtil.getNowDate();
     int cnt = 0;
 
     // ユーザーごとに作成し設定しているテンプレートを取得
@@ -333,23 +333,23 @@ public class ChartColourHelper {
    * @param map セット対象のmap
    * @return minMonth 基準となる最小月
    */
-  public Map<String, Long> setEntityMapByYear(Map<String, Long> map, Date minMonth) {
-    Map<String, Long> newMap = new LinkedHashMap<>();
-    Date newDate = new Date();
-    String cureentMonth = StudyDateUtil.getYearMonth(minMonth);
+  public Map<String, Long> setEntityMapByYear(Map<String, Long> map, LocalDateTime minMonth) {
+    Map<String, Long> ret = new LinkedHashMap<>();
+    LocalDateTime cureentdate = minMonth;
 
     for (int i = 0; i <= 12; i++) {
-      Long value = map.get(cureentMonth);
+      String yearMonth = StudyDateUtil.getYearMonth(cureentdate);
+      Long value = map.get(yearMonth);
       if (value == null) {
         value = (long) 0;
       }
 
-      newMap.put(cureentMonth, value);
-      newDate = StudyDateUtil.strToDate(cureentMonth, StudyDateUtil.FMT_YEAR_MONTH_SLASH);
-      cureentMonth = StudyDateUtil.getYearMonth(StudyDateUtil.getNextMonth(newDate));
+      ret.put(yearMonth, value);
+
+      cureentdate = StudyDateUtil.getNextMonth(cureentdate);
     }
 
-    return newMap;
+    return ret;
   }
 
   /**

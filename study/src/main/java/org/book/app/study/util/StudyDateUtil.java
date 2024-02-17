@@ -1,17 +1,11 @@
 package org.book.app.study.util;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-
-import org.book.app.common.exception.BusinessException;
 
 /**
  * 日付けを扱うutilクラス
@@ -64,6 +58,11 @@ public class StudyDateUtil {
   public static final String FMT_YEAR_MONTH_DAY_SLASH = "yyyy/MM/dd";
 
   /**
+  * 日付けフォーマット 年/月/日
+  */
+  public static final String FMT_ONEYEAR_ONEMONTH_DAY_SLASH = "yyyy/M/d";
+
+  /**
    * タイムゾーン 世界標準時
    */
   public static final String TIMEZONE_UTC = "UTC";
@@ -74,142 +73,112 @@ public class StudyDateUtil {
   public static final String TIMEZONE_ASIA_TOKYO = "Asia/Tokyo";
 
   /**
-   * 日付けに対して計算を行う
-   * 
-   * @param Date 計算したい日付
-   * @param field 計算したい日付の種類(年、月、日、時間、分) Calendar.YEARなどを利用して指定
-   * @param amount 値
-   * @return String 変換語の日付
-   */
-  public static Date calculateDate(Date date, int field, int amount) {
-    Calendar cal = dateToCalendar(date);
-    // 計算
-    cal.add(field, amount);
-
-    return cal.getTime();
+  * 1月加算してから返却
+  * 
+  * @param date 加算したい日付
+  * @return LocalDateTime 変換後の日付
+  */
+  public static LocalDateTime getNextMonth(LocalDate date) {
+    return getNextMonth(localDatetoLocalDateTime(date));
   }
 
   /**
    * 1月加算してから返却
    * 
    * @param date 加算したい日付
-   * @return Date 変換語の日付
+   * @return LocalDateTime 変換後の日付
    */
-  public static Date getNextMonth(Date date) {
-    return calculateDate(date, Calendar.MONTH, 1);
+  public static LocalDateTime getNextMonth(LocalDateTime date) {
+    return date.plusMonths(1);
   }
 
   /**
-   * 1月減算してしてから返却
+   * 1月減算してから返却
    * 
    * @param date 減算したい日付
-   * @return Date 変換語の日付
+   * @return LocalDateTime 変換後の日付
    */
-  public static Date getBackMonth(Date date) {
-    return calculateDate(date, Calendar.MONTH, -1);
+  public static LocalDateTime getBackMonth(LocalDate date) {
+    return getBackMonth(localDatetoLocalDateTime(date));
+  }
+
+  /**
+   * 1月減算してから返却
+   * 
+   * @param date 減算したい日付
+   * @return LocalDateTime 変換後の日付
+   */
+  public static LocalDateTime getBackMonth(LocalDateTime date) {
+    return date.minusMonths(1);
   }
 
   /**
    * その月の最初の日に変換して返却
    * 
    * @param date 変更したい日付
-   * @return Date 変換語の日付
+   * @return LocalDateTime 変換後の日付
    */
-  public static Date getStartDateByMonth(Date date) {
-    return getEdgeDate(date, START, Calendar.MONTH);
+  public static LocalDateTime getFirstDayOfMonth(LocalDateTime date) {
+    return date.with(TemporalAdjusters.firstDayOfMonth());
   }
 
   /**
    * その月の最後の日に変換して返却
    * 
    * @param date 変更したい日付
-   * @return Date 変換語の日付
+   * @return LocalDateTime 変換後の日付
    */
-  public static Date getEndDateByMonth(Date date) {
-    return getEdgeDate(date, END, Calendar.MONTH);
+  public static LocalDateTime getLastDayOfMonth(LocalDateTime date) {
+    return date.with(TemporalAdjusters.lastDayOfMonth());
   }
 
   /**
    * その年の最初の日に変換して返却
    * 
    * @param date 変更したい日付
-   * @return Date 変換語の日付
+   * @return LocalDateTime 変換後の日付
    */
-  public static Date getStartDateByYear(Date date) {
-    return getStartDateByMonth(getEdgeDate(date, START, Calendar.YEAR));
+  public static LocalDateTime getFirstDayOfYear(LocalDateTime date) {
+    return date.with(TemporalAdjusters.firstDayOfYear());
   }
 
   /**
    * その年の最後の日に変換して返却
    * 
    * @param date 変更したい日付
-   * @return Date 変換語の日付
+   * @return LocalDateTime 変換後の日付
    */
-  public static Date getEndDateByYear(Date date) {
-    return getEndDateByMonth(getEdgeDate(date, END, Calendar.YEAR));
+  public static LocalDateTime getLastDayOfYear(LocalDateTime date) {
+    return date.with(TemporalAdjusters.lastDayOfYear());
   }
 
   /**
    * 1年前の月の最初の日を取得
    * 
    * @param date 変更したい日付
-   * @return Date 変換語の日付
+   * @return LocalDateTime 変換後の日付
    */
-  public static Date getOneYearAgoMonth(Date date) {
-    Date startMonth = calculateDate(date, Calendar.MONTH, -12);
+  public static LocalDateTime getOneYearAgoMonth(LocalDateTime date) {
+    LocalDateTime startMonth = date.minusYears(1);
 
-    return getEdgeDate(startMonth, START, Calendar.MONTH);
+    return getFirstDayOfMonth(startMonth);
   }
 
   /**
-   * 初もしくは末の日付けを取得
-   * 
-   * @param date 変更したい日付
-   * @param type "start" or "end"
-   * @param dateType 計算したい日付の種類(年、月、日、時間、分) Calendar.YEARなどを利用して指定
-   * @return Date 変換語の日付
-   */
-  public static Date getEdgeDate(Date date, String type, int dateType) {
-    int field = 0;
-
-    if (Objects.equals(Calendar.YEAR, dateType)) {
-      field = Calendar.MONTH;
-    } else if (Objects.equals(Calendar.MONTH, dateType)) {
-      field = Calendar.DATE;
-    } else if (Objects.equals(Calendar.DATE, dateType)) {
-      field = Calendar.HOUR;
-    } else if (Objects.equals(Calendar.HOUR, dateType)) {
-      field = Calendar.MINUTE;
-    } else if (Objects.equals(Calendar.MINUTE, dateType)) {
-      field = Calendar.SECOND;
-    } else {
-      throw new BusinessException("1.01.01.1008", "dateTypeにはCalendar.YEARなどを利用して指定されていないため");
-    }
-
-    Calendar cal = dateToCalendar(date);
-    // 初もしくは末の値を取得
-    int value = Objects.equals(START, type) ? cal.getActualMinimum(field) : cal.getActualMaximum(field);
-    // 取得した値をセット
-    cal.set(field, value);
-
-    return cal.getTime();
-  }
-
-  /**
-   * 指定した日付けの最小値と最大値の間の年のリストを取得
+   * 指定した日付の最小値と最大値の間の年のリストを取得
    * 
    * @param min 最小日付
    * @param max 最大日付
    * @return 年のリスト
    */
-  public static List<String> getbetweenYears(Date min, Date max) {
+  public static List<String> getbetweenYears(LocalDateTime min, LocalDateTime max) {
     List<String> result = new ArrayList<>();
-    Date currentDate = min;
-    int maxYear = getYearOfInt(max);
+    LocalDateTime currentDate = min;
+    int maxYear = max.getYear();
 
-    while (getYearOfInt(currentDate) <= maxYear) {
+    while (currentDate.getYear() <= maxYear) {
       result.add(getYearOfStr(currentDate));
-      currentDate = calculateDate(currentDate, Calendar.YEAR, 1);
+      currentDate = currentDate.plusYears(1);
     }
 
     return result;
@@ -219,30 +188,10 @@ public class StudyDateUtil {
    * 引数から年のみ抜き出し返却
    * 
    * @param date 取得対象
-   * @return 年 数値
-   */
-  public static int getYearOfInt(Date date) {
-    return dateToLocalDate(date).getYear();
-  }
-
-  /**
-   * 引数から年のみ抜き出し返却
-   * 
-   * @param date 取得対象
    * @return 年 文字列
    */
-  public static String getYearOfStr(Date date) {
-    return String.valueOf(getYearOfInt(date));
-  }
-
-  /**
-   * 引数から月のみ抜き出し返却
-   * 
-   * @param date 取得対象
-   * @return 月 数値
-   */
-  public static int getMonthOfInt(Date date) {
-    return dateToLocalDate(date).getMonthValue();
+  public static String getYearOfStr(LocalDateTime date) {
+    return String.valueOf(date.getYear());
   }
 
   /**
@@ -251,18 +200,8 @@ public class StudyDateUtil {
    * @param date 取得対象
    * @return 月 文字列
    */
-  public static String getMonthOfStr(Date date) {
-    return String.valueOf(getMonthOfInt(date));
-  }
-
-  /**
-   * 引数から日のみ抜き出し返却
-   * 
-   * @param date 取得対象
-   * @return 日 数値
-   */
-  public static int getDayOfInt(Date date) {
-    return dateToLocalDate(date).getDayOfMonth();
+  public static String getMonthOfStr(LocalDateTime date) {
+    return String.valueOf(date.getMonthValue());
   }
 
   /**
@@ -271,8 +210,18 @@ public class StudyDateUtil {
    * @param date 取得対象
    * @return 日 文字列
    */
-  public static String getDayOfStr(Date date) {
-    return String.valueOf(getDayOfInt(date));
+  public static String getDayOfStr(LocalDateTime date) {
+    return String.valueOf(date.getDayOfMonth());
+  }
+
+  /**
+  * 引数から年/月のみ抜き出し返却
+  * 
+  * @param date 取得対象
+  * @return 年/月 文字列
+  */
+  public static String getYearMonth(LocalDate date) {
+    return getYearMonth(localDatetoLocalDateTime(date));
   }
 
   /**
@@ -281,8 +230,18 @@ public class StudyDateUtil {
    * @param date 取得対象
    * @return 年/月 文字列
    */
-  public static String getYearMonth(Date date) {
-    return dateToStr(date, FMT_YEAR_MONTH_SLASH);
+  public static String getYearMonth(LocalDateTime date) {
+    return LocalDateTimeToStr(date, FMT_YEAR_MONTH_SLASH);
+  }
+
+  /**
+  * 引数から年/月/日のみ抜き出し返却
+  * 
+  * @param date 取得対象
+  * @return 年/月/日 文字列
+  */
+  public static String getYearMonthDay(LocalDate date) {
+    return getYearMonthDay(localDatetoLocalDateTime(date));
   }
 
   /**
@@ -291,8 +250,8 @@ public class StudyDateUtil {
    * @param date 取得対象
    * @return 年/月/日 文字列
    */
-  public static String getYearMonthDay(Date date) {
-    return dateToStr(date, FMT_YEAR_MONTH_DAY_SLASH);
+  public static String getYearMonthDay(LocalDateTime date) {
+    return LocalDateTimeToStr(date, FMT_YEAR_MONTH_DAY_SLASH);
   }
 
   /**
@@ -325,83 +284,52 @@ public class StudyDateUtil {
   }
 
   /**
-   * DateからLocalDateに変換
+   * LocalDateをLocalDateTimeに変換する（その日の始まり、つまり真夜中に設定）
    * 
-   * @param date 変換対象
-   * @return LocalDate
+   * @param date 変換するLocalDate
+   * @return 変換されたLocalDateTime
    */
-  public static LocalDate dateToLocalDate(Date date) {
-    ZoneId timeZone = ZoneId.systemDefault();
-
-    return date.toInstant().atZone(timeZone).toLocalDate();
+  public static LocalDateTime localDatetoLocalDateTime(LocalDate date) {
+    return date.atStartOfDay();
   }
 
   /**
-   * LocalDateからDateに変換
-   * 
-   * @param localDate 変換対象
-   * @return Date
-   */
-  public static Date LocalDateToDate(LocalDate localDate) {
-    return Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+  * StringからLocalDateに変換
+  * 
+  * @param str 変換対象
+  * @param fmtPattern 変換パターン
+  * @return LocalDateTime
+  */
+  public static LocalDate strToLocalDate(String str, String fmtPattern) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(fmtPattern);
+
+    return LocalDate.parse(str, formatter);
   }
 
   /**
-   * DateからCalendarに変換
-   * 
-   * @param date 変換対象
-   * @return Calendar
-   */
-  public static Calendar dateToCalendar(Date date) {
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(date);
-
-    return cal;
-  }
-
-  /**
-   * StringからDateに変換
+   * StringからLocalDateTimeに変換
    * 
    * @param str 変換対象
    * @param fmtPattern 変換パターン
-   * @return Date
+   * @return LocalDateTime
    */
-  public static Date strToDate(String str, String fmtPattern) {
-    SimpleDateFormat sdFormat = new SimpleDateFormat(fmtPattern);
-    Date date = new Date();
+  public static LocalDateTime strToLocalDateTime(String str, String fmtPattern) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(fmtPattern);
 
-    try {
-      date = sdFormat.parse(str);
-    } catch (ParseException e) {
-      throw new BusinessException("1.01.01.1008",
-          new StringBuffer().append(str).append(":").append(fmtPattern).toString());
-    }
-
-    return date;
+    return LocalDateTime.parse(str, formatter);
   }
 
   /**
-   * StringからDateに変換
+   * LocalDateTimeからStringに変換
    * 
-   * @param str 変換対象
+   * @param localDateTimeLocalDateTime 変換対象
    * @param fmtPattern 変換パターン
-   * @return Date
+   * @return 文字列形式の日付
    */
-  public static LocalDate strToDLocalate(String str, String fmtPattern) {
-    return LocalDate.parse(str, DateTimeFormatter.ofPattern(fmtPattern));
-  }
+  public static String LocalDateTimeToStr(LocalDateTime localDateTimeLocalDateTime, String fmtPattern) {
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(fmtPattern);
 
-  /**
-   * DateからStringに変換
-   * 
-   * @param date 変換対象
-   * @param fmtPattern 変換パターン
-   * @return Date
-   */
-  public static String dateToStr(Date date, String fmtPattern) {
-    SimpleDateFormat sdFormat = new SimpleDateFormat(fmtPattern);
-
-    return sdFormat.format(date);
+    return localDateTimeLocalDateTime.format(formatter);
   }
 
 }

@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
+
 import org.book.app.study.dto.file.BooksColumn;
 import org.book.app.study.dto.file.SuicaColumn;
 import org.book.app.study.dto.list.BooksFormList;
@@ -38,8 +39,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
-import lombok.AllArgsConstructor;
 
+import lombok.AllArgsConstructor;
 
 /**
  * 家計簿画面API
@@ -238,8 +239,7 @@ public class BooksApiController extends ApiController {
   public ResponseEntity<StreamingResponseBody> download(@ModelAttribute BooksForm form) {
     List<BooksColumn> columnList = booksHelper.booksListToBooksColumnList(
         booksHelper.finByYearAndType(form.getBooksYear(), form.getBooksType()));
-    String fileNameType =
-        StudyStringUtil.isNullOrEmpty(form.getBooksYear()) ? "ALL" : form.getBooksYear();
+    String fileNameType = StudyStringUtil.isNullOrEmpty(form.getBooksYear()) ? "ALL" : form.getBooksYear();
     String fileNameBase = String.format("家計簿_%s_%s",
         BooksType.codeOf(form.getBooksType()).getName(), fileNameType);
     String fileName = StudyFileUtil.addExtension(fileNameBase,

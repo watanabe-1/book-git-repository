@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -71,6 +72,7 @@ public class StudyJacksonUtilTest {
     @Test
     public void testCreateCsvSchema() {
         CsvMapper mapper = new CsvMapper();
+        mapper.registerModule(new JavaTimeModule());
         Class<TestPojo> pojoType = TestPojo.class;
 
         // 区切り文字とヘッダーありの場合
@@ -88,6 +90,7 @@ public class StudyJacksonUtilTest {
     @Test
     public void testReadValues() throws Exception {
         CsvMapper mapper = new CsvMapper();
+        mapper.registerModule(new JavaTimeModule());
         CsvSchema schema = CsvSchema.emptySchema().withHeader();
         Class<TestPojo> pojoType = TestPojo.class;
         String csvData = "column1,column2\nvalue1,value2";
@@ -134,6 +137,7 @@ public class StudyJacksonUtilTest {
     @Test
     public void testReadValuesWithInvalidInput() {
         CsvMapper mapper = new CsvMapper();
+        mapper.registerModule(new JavaTimeModule());
         CsvSchema schema = CsvSchema.emptySchema().withHeader();
         Class<TestPojo> pojoType = TestPojo.class;
 

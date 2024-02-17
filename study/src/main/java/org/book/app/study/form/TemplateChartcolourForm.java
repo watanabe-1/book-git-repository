@@ -1,7 +1,8 @@
 package org.book.app.study.form;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
@@ -66,7 +67,7 @@ public class TemplateChartcolourForm implements Serializable, Form {
   /**
    * 登録日時
    */
-  private Date insDate;
+  private LocalDateTime insDate;
 
   /**
    * 登録ユーザー
@@ -76,7 +77,7 @@ public class TemplateChartcolourForm implements Serializable, Form {
   /**
    * 更新日時
    */
-  private Date updDate;
+  private LocalDateTime updDate;
 
   /**
    * 更新ユーザー

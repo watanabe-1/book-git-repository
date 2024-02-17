@@ -24,7 +24,9 @@ public class JacksonConfig {
   @NonNull
   public ObjectMapper objectMapper() {
     ObjectMapper objectMapper = new ObjectMapper();
+    objectMapper.findAndRegisterModules();
     objectMapper.setDateFormat(new StdDateFormat());
+
     return objectMapper;
   }
 
@@ -38,6 +40,7 @@ public class JacksonConfig {
   public MappingJackson2HttpMessageConverter jsonMessageConverter() {
     MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
     converter.setObjectMapper(objectMapper());
+
     return converter;
   }
 }

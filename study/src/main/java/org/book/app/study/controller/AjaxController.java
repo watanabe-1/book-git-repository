@@ -2,6 +2,7 @@ package org.book.app.study.controller;
 
 import java.util.List;
 import java.util.Objects;
+
 import org.book.app.study.api.ApiController;
 import org.book.app.study.dto.data.BooksChartData;
 import org.book.app.study.dto.file.SyukujitsuColumn;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -54,7 +56,7 @@ public class AjaxController extends ApiController {
   @RequestMapping(value = "/thymeleaf/books/chart/byMonth/category", method = RequestMethod.POST)
   @ResponseBody
   public BooksChartData chartByMonthCategory(@ModelAttribute BooksForm form, ModelAndView model) {
-    return booksHelper.getChartDataByMonthCategory(form.getDate());
+    return booksHelper.getChartDataByMonthCategory(StudyDateUtil.localDatetoLocalDateTime(form.getDate()));
   }
 
   /**
@@ -68,7 +70,7 @@ public class AjaxController extends ApiController {
   @RequestMapping(value = "/thymeleaf/books/chart/byMonth/method", method = RequestMethod.POST)
   @ResponseBody
   public BooksChartData chartByMonthMethod(@ModelAttribute BooksForm form, ModelAndView model) {
-    return booksHelper.getChartDataByMonthMethod(form.getDate());
+    return booksHelper.getChartDataByMonthMethod(StudyDateUtil.localDatetoLocalDateTime(form.getDate()));
   }
 
   /**
@@ -82,7 +84,7 @@ public class AjaxController extends ApiController {
   @RequestMapping(value = "/thymeleaf/books/chart/byYear/all", method = RequestMethod.POST)
   @ResponseBody
   public BooksChartData chartByYearAll(@ModelAttribute BooksForm form, ModelAndView model) {
-    return booksHelper.getChartDatatByYearAll(form.getDate());
+    return booksHelper.getChartDatatByYearAll(StudyDateUtil.localDatetoLocalDateTime(form.getDate()));
   }
 
   /**
@@ -99,8 +101,7 @@ public class AjaxController extends ApiController {
       ModelAndView model) {
     // 祝日定義ファイルの取得
     ClassPathResource syukujitsuFile = new ClassPathResource("csv/syukujitsu.csv");
-    List<SyukujitsuColumn> syukujitsuList =
-        StudyFileUtil.csvFileToList(syukujitsuFile, SyukujitsuColumn.class, true);
+    List<SyukujitsuColumn> syukujitsuList = StudyFileUtil.csvFileToList(syukujitsuFile, SyukujitsuColumn.class, true);
 
     return syukujitsuList.stream()
         .filter(col -> Objects.equals(StudyDateUtil.getYearMonth(col.getDate()),
@@ -119,7 +120,8 @@ public class AjaxController extends ApiController {
   @RequestMapping(value = "/thymeleaf/books/calendar/AmountByDay", method = RequestMethod.POST)
   @ResponseBody
   public List<Books> calendarByDay(@ModelAttribute BooksForm form, ModelAndView model) {
-    return booksHelper.findByMonthAndType(form.getDate(), BooksType.EXPENSES.getCode());
+    return booksHelper.findByMonthAndType(
+        StudyDateUtil.localDatetoLocalDateTime(form.getDate()), BooksType.EXPENSES.getCode());
   }
 
   /**

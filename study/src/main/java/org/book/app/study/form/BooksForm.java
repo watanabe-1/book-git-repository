@@ -1,10 +1,13 @@
 package org.book.app.study.form;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+
 import org.book.app.study.util.StudyDateUtil;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -36,10 +39,9 @@ public class BooksForm implements Serializable, Form {
   /**
    * 日付(収入日、購入日)
    */
-  @JsonFormat(pattern = BOOKS_DATE_FORMAT,
-      timezone = StudyDateUtil.TIMEZONE_ASIA_TOKYO)
+  @JsonFormat(pattern = BOOKS_DATE_FORMAT, timezone = StudyDateUtil.TIMEZONE_ASIA_TOKYO)
   @NotNull
-  private Date booksDate;
+  private LocalDate booksDate;
 
   /**
    * 場所(収入元、購入先)
@@ -78,7 +80,7 @@ public class BooksForm implements Serializable, Form {
   /**
    * 画面：日付け
    */
-  private Date date;
+  private LocalDate date;
 
   /**
    * 画面：タブ

@@ -1,8 +1,6 @@
 package org.book.app.study.api;
 
-import org.book.app.study.api.js.CategoryApi;
 import org.book.app.study.dto.error.ErrorDetails;
-import org.book.app.study.util.StudyJsUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,11 +21,6 @@ import lombok.extern.slf4j.XSlf4j;
 public class LogApiController extends ApiController {
 
   /**
-  * カテゴリーjs用api
-  */
-  private final CategoryApi categoryApi;
-
-  /**
    * クライアントエラーログ
    * 
    * @return json(画面共通情報)
@@ -37,6 +30,5 @@ public class LogApiController extends ApiController {
   public void logError(@ModelAttribute ErrorDetails errorDetails, HttpServletRequest request) {
     log.error("1.03.01.1006", errorDetails.getError());
     log.error("1.03.01.1007", errorDetails.getStackTrace());
-    log.error("1.03.01.1007", StudyJsUtil.convertLog(request, categoryApi, (String) errorDetails.getStackTrace()));
   }
 }

@@ -2,7 +2,7 @@ package org.book.app.study.util;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -37,7 +37,7 @@ public class StudyBeanUtil {
    */
   public static void setStudyEntityProperties(Entity target) {
     // 現在日時取得
-    Date now = StudyUtil.getNowDate();
+    LocalDateTime now = StudyUtil.getNowDate();
     // ログインユーザー取得
     String user = StudyUtil.getLoginUser();
 

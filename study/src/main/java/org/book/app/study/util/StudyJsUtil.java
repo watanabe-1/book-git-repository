@@ -57,19 +57,9 @@ public class StudyJsUtil {
   private static final String DEPENS_BUNDLE_PATH = "/static/js/depens.bundle.js";
 
   /**
-  * depens.bundle.js.mapのパス
-  */
-  private static final String DEPENS_BUNDLE_MAP_PATH = "/static/js/depens.bundle.js.map";
-
-  /**
    * webapi.bundle.jsのパス
    */
   private static final String WEBAPI_BUNDLE_PATH = "/static/js/webapi.bundle.js";
-
-  /**
-  * convertlog.bundle.jsのパス
-  */
-  private static final String CONVERTLOG_BUNDLE_PATH = "/static/js/convertlog.bundle.js";
 
   /**
    * js実行テンプレートのセット
@@ -312,27 +302,5 @@ public class StudyJsUtil {
    */
   public static boolean isSSR(Form form) {
     return form != null ? !StudyStringUtil.isNullOrEmpty(form.getSsr()) : true;
-  }
-
-  /**
-   * react jsを読み込み実行する<br/>
-   * 
-   * @param request リクエスト
-   * @param scriptPath jsファイルのパス
-   * @param serverApi jsに埋め込むjavaオブジェクト
-   * @return 実行結果
-   */
-  public static String convertLog(HttpServletRequest request,
-      ServerApi serverApi, String stack) {
-    String map = readJsFile(DEPENS_BUNDLE_MAP_PATH);
-    GraalJSScriptEngine engine = initializeEngine(request, CONVERTLOG_BUNDLE_PATH, serverApi);
-    try {
-      return engine
-          .eval(String.format("window.findSourceLocation(`%s`,`%s`,`%s`);", stack, map, DEPENS_BUNDLE_PATH))
-          .toString();
-    } catch (ScriptException e) {
-      log.error("1.03.01.1001", e);
-      throw new BusinessException("1.01.01.1010", e.getMessage());
-    }
   }
 }

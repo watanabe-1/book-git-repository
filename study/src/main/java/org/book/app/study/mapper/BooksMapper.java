@@ -1,6 +1,6 @@
 package org.book.app.study.mapper;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
@@ -91,7 +91,7 @@ public interface BooksMapper {
          * @param userId    USER_ID(ユーザーID)
          * @return delete行数
          */
-        int deleteByBooksDateAndBooksTypeAndUserId(@Param("start") Date start, @Param("end") Date end,
+        int deleteByBooksDateAndBooksTypeAndUserId(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end,
                         @Param("booksType") String booksType, @Param("userId") String userId);
 
         /**
@@ -104,8 +104,9 @@ public interface BooksMapper {
          * @return 検索結果(複数行)
          */
         @NonNull
-        List<Books> findByBooksDateAndBooksTypeAndUserIdJoinCategory(@Param("start") Date start,
-                        @Param("end") Date end, @Param("booksType") String booksType, @Param("userId") String userId);
+        List<Books> findByBooksDateAndBooksTypeAndUserIdJoinCategory(@Param("start") LocalDateTime start,
+                        @Param("end") LocalDateTime end, @Param("booksType") String booksType,
+                        @Param("userId") String userId);
 
         /**
          * ユーザーIDで検索

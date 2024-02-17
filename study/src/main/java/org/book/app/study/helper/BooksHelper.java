@@ -1,10 +1,10 @@
 package org.book.app.study.helper;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -95,7 +95,7 @@ public class BooksHelper {
    * 
    * @return 最大日付(収入日、購入日)
    */
-  public Date getMaxBooksDate(List<Books> booksList) {
+  public LocalDateTime getMaxBooksDate(List<Books> booksList) {
     return booksList.stream().max(Comparator.comparing(Books::getBooksDate)).get().getBooksDate();
   }
 
@@ -104,7 +104,7 @@ public class BooksHelper {
    * 
    * @return 最少日付(収入日、購入日)
    */
-  public Date getMinBooksDate(List<Books> booksList) {
+  public LocalDateTime getMinBooksDate(List<Books> booksList) {
     return booksList.stream().min(Comparator.comparing(Books::getBooksDate)).get().getBooksDate();
   }
 
@@ -121,7 +121,7 @@ public class BooksHelper {
     List<String> defCatTargets = defaultCategoryHelper.getDefaultCategoryTargets();
 
     String catCode = defCatTargets.get(0);
-    Date booksDate = getDate(booksListParam.getDate());
+    LocalDateTime booksDate = getDate(booksListParam.getDate());
 
     Books books = new Books();
     books.setBooksId(UUID.randomUUID().toString());
@@ -160,6 +160,7 @@ public class BooksHelper {
         // フォームの値をエンティティにコピーし、共通項目をセット
         StudyBeanUtil.copyAndSetStudyEntityProperties(booksForm, books);
         books.setUserId(userId);
+        books.setBooksDate(StudyDateUtil.localDatetoLocalDateTime(booksForm.getBooksDate()));
 
         updCnt += booksService.updateOne(books, booksForm.getBooksId(), userId);
       }
@@ -205,7 +206,7 @@ public class BooksHelper {
           books.setBooksId(UUID.randomUUID().toString());
           books.setUserId(user);
           books.setBooksType(booksType);
-          books.setBooksDate(col.getBooksDate());
+          books.setBooksDate(StudyDateUtil.localDatetoLocalDateTime(col.getBooksDate()));
           books.setBooksPlace(booksPlace);
           books.setCatCode(catCode);
           books.setBooksMethod(booksMethod);
@@ -224,7 +225,7 @@ public class BooksHelper {
    * @param booksType 家計簿タイプ
    * @return 家計簿リストデータ
    */
-  public BooksFormList getBooksFormList(Date date, String booksType) {
+  public BooksFormList getBooksFormList(LocalDateTime date, String booksType) {
     BooksFormList booksFromList = new BooksFormList();
     booksFromList.setBooksDataList(
         booksListToBooksFormList(findByMonthAndType(date, booksType)));
@@ -238,7 +239,7 @@ public class BooksHelper {
    * @param date 基準日付
    * @return カテゴリーごとの図用データ
    */
-  public BooksChartData getChartDataByMonthCategory(Date date) {
+  public BooksChartData getChartDataByMonthCategory(LocalDateTime date) {
     // カテゴリーごとに集約し金額の合計を求め、金額が大きい順に並び替え、
     // 順番が保証されるLinkedHashMapに詰める
     Map<String, Long> booksByCatMap = groupByCatNameAndSortByReversedToLong(
@@ -256,7 +257,7 @@ public class BooksHelper {
    * @param date 基準日付
    * @return 方法ごとの図用データ
    */
-  public BooksChartData getChartDataByMonthMethod(Date date) {
+  public BooksChartData getChartDataByMonthMethod(LocalDateTime date) {
     // 支払い方法ごとに集約し金額の合計を求め、金額が大きい順に並び替え、
     // 順番が保証されるLinkedHashMapに詰める
     Map<String, Long> booksByMethodMap = groupByBooksMethodAndSortByReversedToLong(
@@ -274,7 +275,7 @@ public class BooksHelper {
    * @param date 基準日付
    * @return カテゴリーごとの図用データ
    */
-  public BooksChartData getChartDatatByYearAll(Date date) {
+  public BooksChartData getChartDatatByYearAll(LocalDateTime date) {
     BooksChartData bdd = new BooksChartData();
     setChartDataByYear(bdd, date);
 
@@ -289,9 +290,9 @@ public class BooksHelper {
    * @return 家計簿データ
    */
   @NonNull
-  public List<Books> findByMonthAndType(Date date, String booksType) {
+  public List<Books> findByMonthAndType(LocalDateTime date, String booksType) {
     return booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        StudyDateUtil.getStartDateByMonth(date), StudyDateUtil.getEndDateByMonth(date), booksType,
+        StudyDateUtil.getFirstDayOfMonth(date), StudyDateUtil.getLastDayOfMonth(date), booksType,
         StudyUtil.getLoginUser());
   }
 
@@ -302,9 +303,9 @@ public class BooksHelper {
    * @param booksType 家計簿の種類
    * @return 家計簿データ
    */
-  public List<Books> findOneYearAgoByDateAndType(Date date, String booksType) {
+  public List<Books> findOneYearAgoByDateAndType(LocalDateTime date, String booksType) {
     return booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(
-        StudyDateUtil.getOneYearAgoMonth(date), StudyDateUtil.getEndDateByMonth(date), booksType,
+        StudyDateUtil.getOneYearAgoMonth(date), StudyDateUtil.getLastDayOfMonth(date), booksType,
         StudyUtil.getLoginUser());
   }
 
@@ -320,10 +321,10 @@ public class BooksHelper {
     if (StudyStringUtil.isNullOrEmpty(dateStr)) {
       return booksService.findByBooksTypeAndUserIdJoinCategory(booksType, StudyUtil.getLoginUser());
     } else {
-      Date date = StudyDateUtil.strToDate(dateStr, StudyDateUtil.FMT_YEAR);
+      LocalDateTime date = StudyDateUtil.strToLocalDateTime(dateStr, StudyDateUtil.FMT_YEAR);
 
       return booksService.findByBooksDateAndBooksTypeAndUserIdJoinCategory(date,
-          StudyDateUtil.getEndDateByYear(date), booksType, StudyUtil.getLoginUser());
+          StudyDateUtil.getLastDayOfYear(date), booksType, StudyUtil.getLoginUser());
     }
   }
 
@@ -353,7 +354,7 @@ public class BooksHelper {
    * @param bdd セット対象
    * @param booksMap セット元データ
    */
-  public void setChartDataByYear(BooksChartData bdd, Date date) {
+  public void setChartDataByYear(BooksChartData bdd, LocalDateTime date) {
     final String RGB_WHITE = "rgba(255,255,255,1)";
     final String BAR = "bar";
     final String LINE = "line";
@@ -465,7 +466,7 @@ public class BooksHelper {
    * 
    */
   public void setChartDatasetsByYear(List<BooksChartDatasets> dataSets, int dataSetsIndex,
-      Map<String, Long> booksMapByYear, Date date, String label, String type,
+      Map<String, Long> booksMapByYear, LocalDateTime date, String label, String type,
       String backgroundColor, String borderColor, boolean isHidden) {
     List<Long> data = new ArrayList<>();
     booksMapByYear = chartColourHelper.setEntityMapByYear(booksMapByYear,
@@ -491,7 +492,7 @@ public class BooksHelper {
    * @return 金額の合計
    */
   public int sumAmount(List<Books> target) {
-    return target.stream().mapToInt(book -> book.getBooksAmmount()).sum();
+    return target.stream().mapToInt(Books::getBooksAmmount).sum();
   }
 
   /**
@@ -600,7 +601,8 @@ public class BooksHelper {
    */
   public List<BooksColumn> booksListToBooksColumnList(List<Books> target) {
     return target
-        .stream().map(e -> new BooksColumn(e.getBooksDate(), e.getBooksPlace(),
+        .stream().map(e -> new BooksColumn(e
+            .getBooksDate().toLocalDate(), e.getBooksPlace(),
             e.getCatCodes().getCatName(), e.getBooksMethod(), e.getBooksAmmount()))
         .collect(Collectors.toList());
   }
@@ -628,6 +630,8 @@ public class BooksHelper {
           Category cat = books.getCatCodes();
           booksForm.setCatCodes(
               categoryHelper.categoryToCategoryForm(cat == null ? new Category() : cat));
+          booksForm.setBooksDate(books.getBooksDate().toLocalDate());
+
           return booksForm;
         });
   }
@@ -638,8 +642,8 @@ public class BooksHelper {
    * @param form BooksForm
    * @return 日付
    */
-  public Date getDate(BooksForm form) {
-    return form.getDate() == null ? StudyUtil.getNowDate() : form.getDate();
+  public LocalDateTime getDate(BooksForm form) {
+    return form.getDate() == null ? StudyUtil.getNowDate() : StudyDateUtil.localDatetoLocalDateTime(form.getDate());
   }
 
   /**
@@ -648,8 +652,8 @@ public class BooksHelper {
    * @param date
    * @return 日付
    */
-  public Date getDate(LocalDate date) {
-    return date == null ? StudyUtil.getNowDate() : StudyDateUtil.LocalDateToDate(date);
+  public LocalDateTime getDate(LocalDate date) {
+    return date == null ? StudyUtil.getNowDate() : StudyDateUtil.localDatetoLocalDateTime(date);
   }
 
 }

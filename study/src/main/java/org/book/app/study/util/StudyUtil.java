@@ -1,6 +1,6 @@
 package org.book.app.study.util;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.book.app.study.service.AppUserDetails;
@@ -79,8 +79,8 @@ public class StudyUtil {
    * 
    * @return Date 現在の日付
    */
-  public static Date getNowDate() {
-    return new Date();
+  public static LocalDateTime getNowDate() {
+    return LocalDateTime.now();
   }
 
 }

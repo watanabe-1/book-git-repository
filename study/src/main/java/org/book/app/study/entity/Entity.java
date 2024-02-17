@@ -1,6 +1,6 @@
 package org.book.app.study.entity;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * study用の定義
@@ -26,14 +26,14 @@ public interface Entity {
    * 
    * @return 挿入日時
    */
-  public Date getInsDate();
+  public LocalDateTime getInsDate();
 
   /**
    * 挿入日時を設定します.
    * 
    * @param insDate 挿入日時
    */
-  public void setInsDate(Date insDate);
+  public void setInsDate(LocalDateTime insDate);
 
   /**
    * 挿入ユーザーを取得します.
@@ -54,14 +54,14 @@ public interface Entity {
    * 
    * @return 更新日時
    */
-  public Date getUpdDate();
+  public LocalDateTime getUpdDate();
 
   /**
    * 更新日時を設定します.
    * 
    * @param updDate 更新日時
    */
-  public void setUpdDate(Date updDate);
+  public void setUpdDate(LocalDateTime updDate);
 
   /**
    * 更新ユーザーを取得します.

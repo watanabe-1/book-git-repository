@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import org.book.app.study.entity.Account;
 import org.book.app.study.service.AppUserDetails;
@@ -89,18 +89,18 @@ class StudyUtilTest {
   @Test
   public void getNowDate_ReturnsCurrentDate() {
     // メソッドの実行前の日時
-    Date before = new Date();
+    LocalDateTime before = LocalDateTime.now();
 
     // メソッドの実行
-    Date now = StudyUtil.getNowDate();
+    LocalDateTime now = StudyUtil.getNowDate();
 
     // メソッドの実行後の日時
-    Date after = new Date();
+    LocalDateTime after = LocalDateTime.now();
 
     // 期待値との比較
-    assertTrue(now.after(before) || now.equals(before),
+    assertTrue(now.isAfter(before) || now.equals(before),
         "getNowDate should return a date after or equal to the current date before calling the method");
-    assertTrue(now.before(after) || now.equals(after),
+    assertTrue(now.isBefore(after) || now.equals(after),
         "getNowDate should return a date before or equal to the current date after calling the method");
   }
 

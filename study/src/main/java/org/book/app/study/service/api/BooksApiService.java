@@ -1,9 +1,10 @@
 package org.book.app.study.service.api;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+
 import org.book.app.study.dto.file.SyukujitsuColumn;
 import org.book.app.study.dto.list.BooksFormList;
 import org.book.app.study.dto.ui.books.BooksConvertUi;
@@ -25,6 +26,7 @@ import org.book.app.study.util.StudyFileUtil;
 import org.book.app.study.util.StudyUtil;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -99,7 +101,7 @@ public class BooksApiService {
    */
   public HouseholdUi getHouseholdInfo(LocalDate pdate) {
     HouseholdUi ui = new HouseholdUi();
-    Date date = booksHelper.getDate(pdate);
+    LocalDateTime date = booksHelper.getDate(pdate);
     String tab = booksHelper.getDefaltTab();
     List<CategoryForm> catFormList = categoryHelper.getCategoryFormList().getCatDataList();
     ui.setDelete(DeleteFlag.DELETE);
@@ -121,7 +123,7 @@ public class BooksApiService {
    * @return 画面情報
    */
   public BooksFormList getHouseholdData(LocalDate pdate, String booksType) {
-    Date date = booksHelper.getDate(pdate);
+    LocalDateTime date = booksHelper.getDate(pdate);
 
     return booksHelper.getBooksFormList(date, booksType);
   }
@@ -134,7 +136,7 @@ public class BooksApiService {
    */
   public HouseholdChartUi getHouseholdChartInfo(LocalDate pdate) {
     HouseholdChartUi ui = new HouseholdChartUi();
-    Date date = booksHelper.getDate(pdate);
+    LocalDateTime date = booksHelper.getDate(pdate);
     ui.setMonthCategory(booksHelper
         .getChartDataByMonthCategory(date));
     ui.setMonthMethod(booksHelper
@@ -153,11 +155,10 @@ public class BooksApiService {
    */
   public HouseholdCalendarUi getHouseholdCalendarInfo(LocalDate pdate) {
     HouseholdCalendarUi ui = new HouseholdCalendarUi();
-    Date date = booksHelper.getDate(pdate);
+    LocalDateTime date = booksHelper.getDate(pdate);
     // 祝日定義ファイルの取得
     ClassPathResource syukujitsuFile = new ClassPathResource("csv/syukujitsu.csv");
-    List<SyukujitsuColumn> syukujitsuList =
-        StudyFileUtil.csvFileToList(syukujitsuFile, SyukujitsuColumn.class, true);
+    List<SyukujitsuColumn> syukujitsuList = StudyFileUtil.csvFileToList(syukujitsuFile, SyukujitsuColumn.class, true);
 
     ui.setSyukujitsuList(syukujitsuList.stream()
         .filter(col -> Objects.equals(StudyDateUtil.getYearMonth(col.getDate()),

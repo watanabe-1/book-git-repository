@@ -184,9 +184,7 @@ public class BooksConvertHelper {
           BooksColumn col = new BooksColumn();
           // マイナス、プラスの区別はしない
           col.setBooksAmmount(Integer.parseInt(suica.getAmount().replaceAll(",", "").substring(1)));
-          col.setBooksDate(
-              StudyDateUtil.LocalDateToDate(
-                  LocalDate.of(suica.getYear(), suica.getMonth(), (suica.getDay()))));
+          col.setBooksDate(LocalDate.of(suica.getYear(), suica.getMonth(), (suica.getDay())));
           col.setBooksMethod("Suica");
           col.setBooksPlace(new StringBuffer().append(suica.getStation()).append("→")
               .append(suica.getStation2()).toString());

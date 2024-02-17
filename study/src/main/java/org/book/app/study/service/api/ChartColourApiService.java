@@ -6,6 +6,7 @@ import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.helper.ChartColourHelper;
 import org.book.app.study.util.StudyUtil;
 import org.springframework.stereotype.Service;
+
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -33,7 +34,7 @@ public class ChartColourApiService {
     ui.setTab(tab);
     ui.setActive(ActiveFlag.ACTIVE);
     ui.setDelete(DeleteFlag.DELETE);
-    ui.setDate(StudyUtil.getNowDate());
+    ui.setDate(StudyUtil.getNowDate().toLocalDate());
 
     return ui;
   }

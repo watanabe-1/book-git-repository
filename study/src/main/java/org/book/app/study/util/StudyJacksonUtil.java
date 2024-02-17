@@ -10,6 +10,7 @@ import org.book.app.common.exception.BusinessException;
 
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.databind.util.StdDateFormat;
 import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
@@ -28,6 +29,8 @@ public class StudyJacksonUtil {
    */
   public static <T> CsvMapper createCsvMapper(boolean isQuote) {
     CsvMapper mapper = new CsvMapper();
+    mapper.findAndRegisterModules();
+    mapper.setDateFormat(new StdDateFormat());
 
     // ダブルクオートあり
     if (isQuote) {

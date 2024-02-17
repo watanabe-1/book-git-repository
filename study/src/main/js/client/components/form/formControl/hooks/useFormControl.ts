@@ -169,7 +169,7 @@ export const useFormControl = ({
 
   // 初期値から変更されたか判定
   // 配列が比較対象になることがあるため、react-fast-compareを使用して比較
-  const hasChanges = !isEqual(value, initialValue) && dirty;
+  const hasChanges = dirty && !isEqual(value, initialValue);
   // 入力されたデータが有効な形式かどうか(バリデーションに引っかかるとfalseそれ以外true)
   const isValid = touched && !error;
   // 入力されたデータが有効な形式でないかどうか(バリデーションに引っかかるとtrueそれ以外false)

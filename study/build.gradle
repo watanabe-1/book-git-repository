@@ -185,6 +185,8 @@ dependencies {
     implementation 'commons-io:commons-io'
     // jackson-dataformat-csv
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-csv'
+    // jackson.datatype
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
     // apache pdfbox(PDF読み込み用)
     implementation 'org.apache.pdfbox:pdfbox'
     // spring test
