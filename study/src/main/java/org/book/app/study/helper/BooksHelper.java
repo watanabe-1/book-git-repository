@@ -474,6 +474,7 @@ public class BooksHelper {
    * @param isHidden 初期表示をhiddenにするか
    * 
    */
+  @java.lang.SuppressWarnings({ "squid:S107" })
   public void setChartDatasetsByYear(List<BooksChartDatasets> dataSets, int dataSetsIndex,
       Map<String, Long> booksMapByYear, LocalDateTime date, String label, String type,
       String backgroundColor, String borderColor, boolean isHidden) {

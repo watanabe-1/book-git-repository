@@ -129,8 +129,8 @@ class StudyDateUtilTest {
 
     @Test
     void testGetYearMonthDay() {
-        LocalDateTime date = LocalDateTime.of(2023, 1, 1, 0, 0);
-        String expected = "2023/01/01";
+        LocalDateTime date = LocalDateTime.of(2024, 1, 1, 0, 0);
+        String expected = "2024/01/01";
         String actual = StudyDateUtil.getYearMonthDay(date);
         assertEquals(expected, actual, "日付から年/月/日を正しくフォーマットできていません");
     }
