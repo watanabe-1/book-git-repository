@@ -162,7 +162,7 @@ public class BooksThymeleafController {
     model.addObject("differenceSumAmount", sumAmountByIncome - sumAmountByExpenses);
     model.addObject("date", date);
     model.addObject("nextDate", StudyDateUtil.getNextMonth(date));
-    model.addObject("backDate", StudyDateUtil.getBackMonth(date));
+    model.addObject("backDate", StudyDateUtil.getPreviousMonth(date));
     model.addObject("tab", tab);
     model.addObject(tab == null ? "" : tab, "active");
 

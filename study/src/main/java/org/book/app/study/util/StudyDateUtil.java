@@ -78,7 +78,7 @@ public class StudyDateUtil {
   public static final String TIMEZONE_ASIA_TOKYO = "Asia/Tokyo";
 
   /**
-  * 1月加算してから返却
+  * 1月加算してその月の最初の日を取得
   * 
   * @param date 加算したい日付
   * @return LocalDateTime 変換後の日付
@@ -88,33 +88,33 @@ public class StudyDateUtil {
   }
 
   /**
-   * 1月加算してから返却
+   * 1月加算してその月の最初の日を取得
    * 
    * @param date 加算したい日付
    * @return LocalDateTime 変換後の日付
    */
   public static LocalDateTime getNextMonth(LocalDateTime date) {
-    return date.plusMonths(1);
+    return date.with(TemporalAdjusters.firstDayOfNextMonth());
   }
 
   /**
-   * 1月減算してから返却
+   * 1ヶ月減算してその月の最初の日を取得
    * 
    * @param date 減算したい日付
    * @return LocalDateTime 変換後の日付
    */
-  public static LocalDateTime getBackMonth(LocalDate date) {
-    return getBackMonth(localDatetoLocalDateTime(date));
+  public static LocalDateTime getPreviousMonth(LocalDate date) {
+    return getPreviousMonth(localDatetoLocalDateTime(date));
   }
 
   /**
-   * 1月減算してから返却
+   * 1ヶ月減算してその月の最初の日を取得
    * 
    * @param date 減算したい日付
    * @return LocalDateTime 変換後の日付
    */
-  public static LocalDateTime getBackMonth(LocalDateTime date) {
-    return date.minusMonths(1);
+  public static LocalDateTime getPreviousMonth(LocalDateTime date) {
+    return date.minusMonths(1).with(TemporalAdjusters.firstDayOfMonth());
   }
 
   /**
