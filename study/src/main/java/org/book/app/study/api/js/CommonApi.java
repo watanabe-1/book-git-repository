@@ -15,9 +15,10 @@ import org.springframework.stereotype.Component;
 public class CommonApi implements ServerApi {
 
   /**
-   * カテゴリー画面api
+   * カテゴリー画面api 親クラスのためAutowired使用
    */
   @Autowired
+  @java.lang.SuppressWarnings({ "squid:S6813" })
   private CommonApiController commonApiController;
 
   /**

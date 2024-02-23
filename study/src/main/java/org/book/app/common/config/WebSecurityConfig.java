@@ -16,12 +16,22 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.context.SecurityContextHolderFilter;
 import org.springframework.security.web.util.matcher.RequestHeaderRequestMatcher;
 
+import lombok.RequiredArgsConstructor;
+
 /**
  * スプリングセキュリティ設定クラス
  */
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class WebSecurityConfig {
+
+  private final AppUserDetailsService appUserDetailsService;
+
+  /**
+   * ログインURL
+   */
+  private static final String LOGIN_URL = "/login";
 
   /**
    * アカウント登録時のパスワードエンコードで利用するためDI管理する
@@ -39,7 +49,7 @@ public class WebSecurityConfig {
    * @return AppUserDetailsService
    */
   AppUserDetailsService appUserDetailsService() {
-    return new AppUserDetailsService();
+    return appUserDetailsService;
   }
 
   /**
@@ -54,17 +64,18 @@ public class WebSecurityConfig {
     http
         // ログイン
         .formLogin(login -> login
-            .loginProcessingUrl("/login")
-            .loginPage("/login")
+            .loginProcessingUrl(LOGIN_URL)
+            .loginPage(LOGIN_URL)
             .defaultSuccessUrl("/")
             .usernameParameter("userId")
             .passwordParameter("password")
-            .failureUrl("/login?error=true")
+            .failureUrl(new StringBuffer().append(LOGIN_URL).append(
+                "?error=true").toString())
             .permitAll())
         // ログアウト
         .logout(logout -> logout
             .logoutUrl("/logout")
-            .logoutSuccessUrl("/login")
+            .logoutSuccessUrl(LOGIN_URL)
             .invalidateHttpSession(true)
             .deleteCookies("JSESSIONID"))
         // url
@@ -72,7 +83,7 @@ public class WebSecurityConfig {
             .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
             // すべてのユーザーがアクセスできる権限を付与する
             // noneでの除外はセキュリティ敵に非推奨らしいので、すべてpermitAllで管理
-            .requestMatchers("/login/**").permitAll()
+            .requestMatchers(new StringBuffer().append(LOGIN_URL).append("/**").toString()).permitAll()
             .requestMatchers("/js/*.*").permitAll()
             .requestMatchers("/css/*.*").permitAll()
             .requestMatchers("/res/*.*").permitAll()

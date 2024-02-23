@@ -27,7 +27,7 @@ import common.BaseTest;
 import common.util.StudyTestUtil;
 
 @SpringBootTest
-public class UploadHelperTest extends BaseTest {
+class UploadHelperTest extends BaseTest {
 
     private final String TEMP_DIR = "temp";
     private final String TEMP_IMAGE_DIR = "images";
@@ -83,7 +83,7 @@ public class UploadHelperTest extends BaseTest {
     }
 
     @Test
-    public void testSaveIconFile() {
+    void testSaveIconFile() {
         final String ICON_FILE_NAME = "icon";
         final String ICON_FILE_EXT = "png";
         final String ICON_FILE = StudyStringUtil.keyJoin(ICON_FILE_NAME, ICON_FILE_EXT);
@@ -113,7 +113,7 @@ public class UploadHelperTest extends BaseTest {
     }
 
     @Test
-    public void testMoveTemporaryFileToImagesFolder() {
+    void testMoveTemporaryFileToImagesFolder() {
         final String ICON_FILE_NAME = "icon";
         final String ICON_FILE_EXT = "png";
         final String ICON_FILE = StudyStringUtil.keyJoin(ICON_FILE_NAME, ICON_FILE_EXT);
@@ -136,7 +136,7 @@ public class UploadHelperTest extends BaseTest {
     }
 
     @Test
-    public void testMoveTemporaryFileToImagesFolder_noAddPath() {
+    void testMoveTemporaryFileToImagesFolder_noAddPath() {
         final String ICON_FILE_NAME = "icon";
         final String ICON_FILE_EXT = "png";
         final String ICON_FILE = StudyStringUtil.keyJoin(ICON_FILE_NAME, ICON_FILE_EXT);
@@ -159,7 +159,7 @@ public class UploadHelperTest extends BaseTest {
     }
 
     @Test
-    public void testEncodeBase64() throws Exception {
+    void testEncodeBase64() throws Exception {
         final String ICON_FILE_NAME = "icon";
         final String ICON_FILE_EXT = "png";
         final String ICON_FILE = StudyStringUtil.keyJoin(ICON_FILE_NAME, ICON_FILE_EXT);

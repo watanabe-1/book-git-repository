@@ -18,7 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import common.BaseTest;
 
 @SpringBootTest(classes = XLoggerTest.class)
-public class XLoggerTest extends BaseTest {
+class XLoggerTest extends BaseTest {
 
     private Logger mockLogger;
 
@@ -33,7 +33,7 @@ public class XLoggerTest extends BaseTest {
     }
 
     @Test
-    public void testInfo() {
+    void testInfo() {
         when(mockLogger.isInfoEnabled()).thenReturn(true);
         xLogger.info("testId", "arg1", "arg2");
 
@@ -41,7 +41,7 @@ public class XLoggerTest extends BaseTest {
     }
 
     @Test
-    public void testWarn() {
+    void testWarn() {
         when(mockLogger.isWarnEnabled()).thenReturn(true);
         xLogger.warn("testId", "arg1", "arg2");
 
@@ -49,7 +49,7 @@ public class XLoggerTest extends BaseTest {
     }
 
     @Test
-    public void testError() {
+    void testError() {
         when(mockLogger.isErrorEnabled()).thenReturn(true);
         xLogger.error("testId", "arg1", "arg2");
 
@@ -57,7 +57,7 @@ public class XLoggerTest extends BaseTest {
     }
 
     @Test
-    public void testTrace() {
+    void testTrace() {
         when(mockLogger.isTraceEnabled()).thenReturn(true);
         xLogger.trace("testId", "arg1", "arg2");
 
@@ -66,7 +66,7 @@ public class XLoggerTest extends BaseTest {
 
     // Supplier<Object[]> 引数を使用するテスト
     @Test
-    public void testInfoWithSupplier() {
+    void testInfoWithSupplier() {
         when(mockLogger.isInfoEnabled()).thenReturn(true);
         Supplier<Object[]> supplier = () -> new Object[] { "arg1", "arg2" };
         xLogger.info("testId", supplier);
@@ -75,7 +75,7 @@ public class XLoggerTest extends BaseTest {
     }
 
     @Test
-    public void testWarnWithSupplier() {
+    void testWarnWithSupplier() {
         when(mockLogger.isWarnEnabled()).thenReturn(true);
         Supplier<Object[]> supplier = () -> new Object[] { "arg1", "arg2" };
         xLogger.warn("testId", supplier);
@@ -84,7 +84,7 @@ public class XLoggerTest extends BaseTest {
     }
 
     @Test
-    public void testErrorWithSupplier() {
+    void testErrorWithSupplier() {
         when(mockLogger.isErrorEnabled()).thenReturn(true);
         Supplier<Object[]> supplier = () -> new Object[] { "arg1", "arg2" };
         xLogger.error("testId", supplier);
@@ -93,7 +93,7 @@ public class XLoggerTest extends BaseTest {
     }
 
     @Test
-    public void testTraceWithSupplier() {
+    void testTraceWithSupplier() {
         when(mockLogger.isTraceEnabled()).thenReturn(true);
         Supplier<Object[]> supplier = () -> new Object[] { "arg1", "arg2" };
         xLogger.trace("testId", supplier);
@@ -103,7 +103,7 @@ public class XLoggerTest extends BaseTest {
 
     // 例外を扱うメソッドのテスト
     @Test
-    public void testWarnWithException() {
+    void testWarnWithException() {
         when(mockLogger.isWarnEnabled()).thenReturn(true);
         Exception testException = new Exception("Test Exception");
         xLogger.warn("testId", testException, "arg1", "arg2");
@@ -112,7 +112,7 @@ public class XLoggerTest extends BaseTest {
     }
 
     @Test
-    public void testErrorWithException() {
+    void testErrorWithException() {
         when(mockLogger.isErrorEnabled()).thenReturn(true);
         Exception testException = new Exception("Test Exception");
         xLogger.error("testId", testException, "arg1", "arg2");

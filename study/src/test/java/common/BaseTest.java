@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import common.util.StudyTestUtil;
 
 @SpringBootTest
+@java.lang.SuppressWarnings({ "squid:S2187" })
 public class BaseTest {
     @BeforeEach
     protected void setUp() {

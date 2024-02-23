@@ -1,20 +1,22 @@
 package org.book.app.study.service;
 
 import java.util.List;
+
 import org.book.app.study.entity.CodeLookup;
 import org.book.app.study.mapper.CodeLookupMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * CODE_LOOKUP:コードルックアップ(コード定義テーブル(明細))のserviceクラス
  */
 @Service
+@RequiredArgsConstructor
 public class CodeLookupService {
 
-  @Autowired
-  private CodeLookupMapper codelookupMapper;
+  private final CodeLookupMapper codelookupMapper;
 
   /**
    * 全検索
@@ -115,4 +117,3 @@ public class CodeLookupService {
   }
 
 }
-

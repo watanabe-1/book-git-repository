@@ -70,7 +70,7 @@ class StudyBeanUtilTest {
   }
 
   @Test
-  public void testSetStudyEntityListPropertiesNull() {
+  void testSetStudyEntityListPropertiesNull() {
     Books mockEntity1 = mock(Books.class);
     Books mockEntity2 = mock(Books.class);
     List<Books> entities = Arrays.asList(mockEntity1, mockEntity2);
@@ -118,10 +118,10 @@ class StudyBeanUtilTest {
   }
 
   @Test
+  @java.lang.SuppressWarnings({ "squid:S5778" })
   void createInstanceFromBean_ThrowsExceptionForInaccessibleConstructor() {
-    assertThrows(BusinessException.class, () -> {
-      StudyBeanUtil.createInstanceFromBean(new Books(), BooksController.class);
-    });
+    assertThrows(BusinessException.class,
+        () -> StudyBeanUtil.createInstanceFromBean(new Books(), BooksController.class));
   }
 
   @Test

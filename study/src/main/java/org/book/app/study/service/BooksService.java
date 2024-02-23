@@ -140,7 +140,7 @@ public class BooksService {
       String booksType, String userId) {
     return booksMapper.findByBooksDateAndBooksTypeAndUserIdJoinCategory(start, end, booksType,
         userId);
-  };
+  }
 
   /**
    * ユーザーIDで検索

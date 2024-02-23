@@ -28,6 +28,7 @@ import org.book.app.study.enums.flag.DeleteFlag;
 import org.book.app.study.enums.type.BooksType;
 import org.book.app.study.form.BooksForm;
 import org.book.app.study.service.BooksService;
+import org.book.app.study.service.CategoryService;
 import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyCodeUtil;
 import org.book.app.study.util.StudyDateUtil;
@@ -53,6 +54,11 @@ public class BooksHelper {
   private final BooksService booksService;
 
   /**
+   * カテゴリー Service
+   */
+  private final CategoryService categoryService;
+
+  /**
    * 図の色 Helper
    */
   private final ChartColourHelper chartColourHelper;
@@ -70,16 +76,13 @@ public class BooksHelper {
   /**
    * カテゴリーネームを取得するようのファンクション
    */
-  private final Function<Books, String> getCatName = booksByCat -> {
-    return booksByCat.getCatCodes().getCatName();
-  };
+  private final Function<Books, String> getCatName = booksByCat -> booksByCat.getCatCodes().getCatName();
 
   /**
    * 年/月を取得するようのファンクション
    */
-  private final Function<Books, String> getYearMonth = booksByCat -> {
-    return StudyDateUtil.getYearMonth(booksByCat.getBooksDate());
-  };
+  private final Function<Books, String> getYearMonth = booksByCat -> StudyDateUtil
+      .getYearMonth(booksByCat.getBooksDate());
 
   /**
    * 家計簿画面の初期表示のタブを取得
@@ -96,7 +99,7 @@ public class BooksHelper {
    * @return 最大日付(収入日、購入日)
    */
   public LocalDateTime getMaxBooksDate(List<Books> booksList) {
-    return booksList.stream().max(Comparator.comparing(Books::getBooksDate)).get().getBooksDate();
+    return booksList.stream().max(Comparator.comparing(Books::getBooksDate)).orElseGet(Books::new).getBooksDate();
   }
 
   /**
@@ -105,7 +108,7 @@ public class BooksHelper {
    * @return 最少日付(収入日、購入日)
    */
   public LocalDateTime getMinBooksDate(List<Books> booksList) {
-    return booksList.stream().min(Comparator.comparing(Books::getBooksDate)).get().getBooksDate();
+    return booksList.stream().min(Comparator.comparing(Books::getBooksDate)).orElseGet(Books::new).getBooksDate();
   }
 
   /**
@@ -183,11 +186,13 @@ public class BooksHelper {
     // デフォルトカテゴリーマスタ変更対象
     List<String> defCatTargets = defaultCategoryHelper.getDefaultCategoryTargets();
     List<DefaultCategory> defCatList = defaultCategoryHelper.getDefaultCategoryList();
+    // 現在dbに登録されているカテゴリー
+    List<Category> catList = categoryService.findAll();
 
     return StudyFileUtil.csvFileToList(booksFile, BooksColumn.class, false)
         .stream()
         .map(col -> {
-          String catCode = categoryHelper.getCatCode(col.getCatName());
+          String catCode = categoryHelper.getCatCode(catList, col.getCatName());
           String booksPlace = col.getBooksPlace();
           String booksMethod = col.getBooksMethod();
           int booksAmount = col.getBooksAmmount();
@@ -338,13 +343,13 @@ public class BooksHelper {
     BooksChartDatasets bddd = new BooksChartDatasets();
     bddd.setBackgroundColor(
         chartColourHelper.getActiveRgbaList(booksMap.keySet().size(), (float) 0.5));
-    bddd.setBorderColor(chartColourHelper.getActiveRgbaList(booksMap.keySet().size(), (float) 1));
-    bddd.setData(new ArrayList<Long>(booksMap.values()));
+    bddd.setBorderColor(chartColourHelper.getActiveRgbaList(booksMap.keySet().size(), 1));
+    bddd.setData(new ArrayList<>(booksMap.values()));
 
     List<BooksChartDatasets> dataSets = new ArrayList<>();
     dataSets.add(bddd);
 
-    bdd.setLabels(new ArrayList<String>(booksMap.keySet()));
+    bdd.setLabels(new ArrayList<>(booksMap.keySet()));
     bdd.setDatasets(dataSets);
   }
 
@@ -366,7 +371,6 @@ public class BooksHelper {
     List<Books> booksByExpenses = findOneYearAgoByDateAndType(date, BooksType.EXPENSES.getCode());
     // 収入を取得
     List<Books> booksByIncome = findOneYearAgoByDateAndType(date, BooksType.INCOME.getCode());
-    ;
 
     // セット対象
     List<BooksChartDatasets> dataSets = new ArrayList<>();
@@ -379,15 +383,18 @@ public class BooksHelper {
     int barSize = booksByMethodMap.keySet().size();
 
     List<String> backgroundColorsByBar = chartColourHelper.getActiveRgbaList(barSize, (float) 0.5);
-    List<String> borderColorsByBar = chartColourHelper.getActiveRgbaList(barSize, (float) 1);
+    List<String> borderColorsByBar = chartColourHelper.getActiveRgbaList(barSize, 1);
 
     // 方法ごとに集約したのちにさらに月ごとに集約し、月順に並び替え
     int indexByMethod = 0;
-    // indexを使用したいためforeachではなくfor文を使用
-    for (String keyByMethod : booksByMethodMap.keySet()) {
-      Map<String, Long> booksByMethodAndMonthMap = groupByBooksDateAndSortToLong(booksByMethodMap.get(keyByMethod));
+    for (Map.Entry<String, List<Books>> entry : booksByMethodMap.entrySet()) {
+      String key = entry.getKey();
+      List<Books> value = entry.getValue();
 
-      setChartDatasetsByYear(dataSets, dataSets.size(), booksByMethodAndMonthMap, date, keyByMethod,
+      Map<String, Long> booksByMethodAndMonthMap = groupByBooksDateAndSortToLong(value);
+
+      setChartDatasetsByYear(dataSets, dataSets.size(), booksByMethodAndMonthMap, date,
+          key,
           BAR, backgroundColorsByBar.get(indexByMethod), borderColorsByBar.get(indexByMethod),
           false);
 
@@ -400,17 +407,18 @@ public class BooksHelper {
     int lineSize = booksByCategoryMap.keySet().size() + 3;
 
     // 総支出、総収入、貯金額分も使用のため+3
-    List<String> borderColorsByLine = chartColourHelper.getActiveRgbaList(lineSize, (float) 1);
+    List<String> borderColorsByLine = chartColourHelper.getActiveRgbaList(lineSize, 1);
 
     // 方法ごとに集約したのちにさらに月ごとに集約
     int indexByLine = 0;
-    // indexを使用したいためforeachではなくfor文を使用
-    for (String keyByCategoryAndMonth : booksByCategoryMap.keySet()) {
-      Map<String, Long> booksByCategoryAndMonthMap = groupByBooksDateAndSortToLong(
-          booksByCategoryMap.get(keyByCategoryAndMonth));
+    for (Map.Entry<String, List<Books>> entry : booksByCategoryMap.entrySet()) {
+      String key = entry.getKey();
+      List<Books> value = entry.getValue();
+
+      Map<String, Long> booksByCategoryAndMonthMap = groupByBooksDateAndSortToLong(value);
 
       setChartDatasetsByYear(dataSets, dataSets.size(), booksByCategoryAndMonthMap, date,
-          keyByCategoryAndMonth, LINE, RGB_WHITE, borderColorsByLine.get(indexByLine), true);
+          key, LINE, RGB_WHITE, borderColorsByLine.get(indexByLine), true);
 
       indexByLine++;
     }
@@ -442,12 +450,13 @@ public class BooksHelper {
     });
 
     // lineの先頭に追加
+    // 最後なのでインクリメントはなし
     setChartDatasetsByYear(dataSets, barSize, differenceBooksByMonthSumAmountData, date,
-        LABEL_SAVE_AMOUNT, LINE, RGB_WHITE, borderColorsByLine.get(indexByLine++), false);
+        LABEL_SAVE_AMOUNT, LINE, RGB_WHITE, borderColorsByLine.get(indexByLine), false);
 
     // セット
     bdd.setDatasets(dataSets);
-    bdd.setLabels(new ArrayList<String>(chartColourHelper
+    bdd.setLabels(new ArrayList<>(chartColourHelper
         .setEntityMapByYear(new HashMap<>(), StudyDateUtil.getOneYearAgoMonth(date)).keySet()));
   }
 
@@ -471,9 +480,7 @@ public class BooksHelper {
     List<Long> data = new ArrayList<>();
     booksMapByYear = chartColourHelper.setEntityMapByYear(booksMapByYear,
         StudyDateUtil.getOneYearAgoMonth(date));
-    booksMapByYear.forEach((keyByMonth, value) -> {
-      data.add(value);
-    });
+    booksMapByYear.forEach((keyByMonth, value) -> data.add(value));
 
     BooksChartDatasets bddd = new BooksChartDatasets();
     bddd.setLabel(label);
@@ -604,7 +611,7 @@ public class BooksHelper {
         .stream().map(e -> new BooksColumn(e
             .getBooksDate().toLocalDate(), e.getBooksPlace(),
             e.getCatCodes().getCatName(), e.getBooksMethod(), e.getBooksAmmount()))
-        .collect(Collectors.toList());
+        .toList();
   }
 
   /**

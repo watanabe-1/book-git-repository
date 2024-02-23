@@ -6,22 +6,21 @@ import org.book.app.study.entity.DefaultCategory;
 import org.book.app.study.helper.DefaultCategoryHelper;
 import org.book.app.study.service.DefaultCategoryService;
 import org.book.app.study.service.api.DefaultCategoryApiService;
-import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
 import lombok.AllArgsConstructor;
 
 /**
  * デフォルトカテゴリー画面API
  *
  */
-@Controller
+@RestController
 @AllArgsConstructor
 public class DefaultCategoryApiController extends ApiController {
 
@@ -45,8 +44,7 @@ public class DefaultCategoryApiController extends ApiController {
    * 
    * @return json(カテゴリーごとの家計簿情報)
    */
-  @RequestMapping(value = "/defaultCategory/info", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/defaultCategory/info")
   public DefaultCategoryUi getInfo() {
     return defaultCategoryApiService.getInfo();
   }
@@ -56,8 +54,7 @@ public class DefaultCategoryApiController extends ApiController {
    * 
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/defaultCategory/listData", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/defaultCategory/listData")
   public DefaultCategoryFormList getListData() {
     return defaultCategoryHelper.getDefaultCategoryFormList();
   }
@@ -67,8 +64,7 @@ public class DefaultCategoryApiController extends ApiController {
    * 
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/defaultCategory/inputAll", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/defaultCategory/inputAll")
   public DefaultCategoryFormList inputAll() {
     // 家計簿データからデフォルトカテゴリーを登録
     defaultCategoryHelper.insertAllFromBooks();
@@ -84,11 +80,10 @@ public class DefaultCategoryApiController extends ApiController {
    * @param model モデル
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/defaultCategory/listDataUpdate", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/defaultCategory/listDataUpdate")
   public DefaultCategoryFormList listUpdate(
       @ModelAttribute @Validated DefaultCategoryFormList defCatListParam,
-      BindingResult result, ModelAndView model) throws BindException {
+      BindingResult result, ModelAndView model) {
     // デフォルトカテゴリー情報の更新
     defaultCategoryHelper.updatDefaultCeategorys(defCatListParam);
 
@@ -103,13 +98,12 @@ public class DefaultCategoryApiController extends ApiController {
    * @param model モデル
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/defaultCategory/listDataPush", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/defaultCategory/listDataPush")
   public DefaultCategoryFormList listDataPush(
       @ModelAttribute @Validated DefaultCategoryFormList defCatListParam,
-      BindingResult result, ModelAndView model) throws BindException {
+      BindingResult result, ModelAndView model) {
     // デフォルトカテゴリー情報の初期データ登録
-    DefaultCategory defCat = defaultCategoryHelper.getDefault(defCatListParam);
+    DefaultCategory defCat = defaultCategoryHelper.getDefault();
     defaultCategoryService.saveOne(defCat);
 
     return getListData();

@@ -15,13 +15,12 @@ import org.book.app.study.helper.ChartColourHelper;
 import org.book.app.study.util.StudyDateUtil;
 import org.book.app.study.util.StudyFileUtil;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
@@ -30,7 +29,7 @@ import lombok.RequiredArgsConstructor;
  * 図色確認画面で使用するajax応答クラス
  * 
  */
-@Controller
+@RestController
 @RequestMapping(value = "/ajax")
 @RequiredArgsConstructor
 public class AjaxController extends ApiController {
@@ -53,8 +52,7 @@ public class AjaxController extends ApiController {
    * @param date 開いている画面の指定されている日付け
    * @return json(カテゴリーごとの家計簿情報)
    */
-  @RequestMapping(value = "/thymeleaf/books/chart/byMonth/category", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/thymeleaf/books/chart/byMonth/category")
   public BooksChartData chartByMonthCategory(@ModelAttribute BooksForm form, ModelAndView model) {
     return booksHelper.getChartDataByMonthCategory(StudyDateUtil.localDatetoLocalDateTime(form.getDate()));
   }
@@ -67,8 +65,7 @@ public class AjaxController extends ApiController {
    * @param date 開いている画面の指定されている日付け
    * @return json(支払いごとの家計簿情報)
    */
-  @RequestMapping(value = "/thymeleaf/books/chart/byMonth/method", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/thymeleaf/books/chart/byMonth/method")
   public BooksChartData chartByMonthMethod(@ModelAttribute BooksForm form, ModelAndView model) {
     return booksHelper.getChartDataByMonthMethod(StudyDateUtil.localDatetoLocalDateTime(form.getDate()));
   }
@@ -81,8 +78,7 @@ public class AjaxController extends ApiController {
    * @param date 開いている画面の指定されている日付け
    * @return json(カテゴリーごとの家計簿情報)
    */
-  @RequestMapping(value = "/thymeleaf/books/chart/byYear/all", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/thymeleaf/books/chart/byYear/all")
   public BooksChartData chartByYearAll(@ModelAttribute BooksForm form, ModelAndView model) {
     return booksHelper.getChartDatatByYearAll(StudyDateUtil.localDatetoLocalDateTime(form.getDate()));
   }
@@ -95,8 +91,7 @@ public class AjaxController extends ApiController {
    * @param date 開いている画面の指定されている日付け
    * @return json(祝日一覧情報)
    */
-  @RequestMapping(value = "/thymeleaf/books/calendar/syukujitsu", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/thymeleaf/books/calendar/syukujitsu")
   public List<SyukujitsuColumn> calendarBySyukujitsu(@ModelAttribute BooksForm form,
       ModelAndView model) {
     // 祝日定義ファイルの取得
@@ -117,8 +112,7 @@ public class AjaxController extends ApiController {
    * @param date 開いている画面の指定されている日付け
    * @return json(カレンダーで使用する日付けごとの料金一覧情報)
    */
-  @RequestMapping(value = "/thymeleaf/books/calendar/AmountByDay", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/thymeleaf/books/calendar/AmountByDay")
   public List<Books> calendarByDay(@ModelAttribute BooksForm form, ModelAndView model) {
     return booksHelper.findByMonthAndType(
         StudyDateUtil.localDatetoLocalDateTime(form.getDate()), BooksType.EXPENSES.getCode());
@@ -133,8 +127,7 @@ public class AjaxController extends ApiController {
    * @param qty 指定するデータの個数
    * @return json(カテゴリーごとの家計簿情報)
    */
-  @RequestMapping(value = "/thymeleaf/chartColour/chart", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/thymeleaf/chartColour/chart")
   public BooksChartData chartColourByActive(@ModelAttribute @Validated TemplateChartcolourForm form,
       BindingResult result, ModelAndView model) {
     return chartColourHelper.getActiveChartData(chartColourHelper.getQty(form.getQty()));
@@ -148,8 +141,7 @@ public class AjaxController extends ApiController {
    * @param qty 指定するデータの個数
    * @return json(カテゴリーごとの家計簿情報)
    */
-  @RequestMapping(value = "/thymeleaf/chartColour/confirm", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/thymeleaf/chartColour/confirm")
   public BooksChartData chartColourBySeed(@ModelAttribute @Validated TemplateChartcolourForm form,
       ModelAndView model) {
     return chartColourHelper.getChartDataByCoeff(chartColourHelper.getQty(form.getQty()),

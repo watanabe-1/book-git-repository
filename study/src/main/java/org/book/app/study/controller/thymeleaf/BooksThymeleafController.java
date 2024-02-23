@@ -20,9 +20,9 @@ import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
@@ -52,7 +52,7 @@ public class BooksThymeleafController {
    * @param model モデル
    * @return 画面表示用モデル
    */
-  @RequestMapping(value = "/thymeleaf/books/input", method = RequestMethod.GET)
+  @GetMapping(value = "/thymeleaf/books/input")
   public ModelAndView input(@ModelAttribute BooksForm form, ModelAndView model) {
     model.setViewName("books/input");
     model.addObject("booksTypes", BooksType.values());
@@ -68,7 +68,7 @@ public class BooksThymeleafController {
    * @param model モデル
    * @return 画面表示用モデル
    */
-  @RequestMapping(value = "/thymeleaf/books/result", method = RequestMethod.POST)
+  @PostMapping(value = "/thymeleaf/books/result")
   public ModelAndView result(@ModelAttribute @Validated @NonNull BooksInputForm form, BindingResult result,
       ModelAndView model) {
     BooksForm booksForm = new BooksForm();
@@ -98,7 +98,7 @@ public class BooksThymeleafController {
    * @param model モデル
    * @return 画面表示用モデル
    */
-  @RequestMapping(value = "/thymeleaf/books/export", method = RequestMethod.GET)
+  @GetMapping(value = "/thymeleaf/books/export")
   public ModelAndView export(@ModelAttribute BooksForm form, ModelAndView model) {
     model.setViewName("books/export");
 
@@ -119,7 +119,7 @@ public class BooksThymeleafController {
    * @param model モデル
    * @return beenView名(viewパッケージ配下に定義)
    */
-  @RequestMapping(value = "/thymeleaf/books/download", method = RequestMethod.POST)
+  @PostMapping(value = "/thymeleaf/books/download")
   public ModelAndView download(@ModelAttribute BooksForm form, ModelAndView model) {
     model.setViewName(StudyStringUtil.getlowerCaseFirstClassName(DownloadCsvView.class));
 
@@ -143,7 +143,7 @@ public class BooksThymeleafController {
    * @param date 日付け
    * @return 画面表示用モデル
    */
-  @RequestMapping(value = "/thymeleaf/books/index", method = RequestMethod.GET)
+  @GetMapping(value = "/thymeleaf/books/index")
   public ModelAndView list(@ModelAttribute BooksForm form, ModelAndView model) {
     model.setViewName("books/index");
     LocalDateTime date = form.getDate() == null ? StudyDateUtil.getFirstDayOfMonth(StudyUtil.getNowDate())

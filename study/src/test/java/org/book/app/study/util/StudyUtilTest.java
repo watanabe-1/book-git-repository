@@ -69,7 +69,7 @@ class StudyUtilTest {
   }
 
   @Test
-  public void getCommonUser_ReturnsCommonUserId() {
+  void getCommonUser_ReturnsCommonUserId() {
     // メソッドの実行
     String commonUserId = StudyUtil.getCommonUser();
 
@@ -78,7 +78,7 @@ class StudyUtilTest {
   }
 
   @Test
-  public void getNoImageCode_ReturnsNoImageCode() {
+  void getNoImageCode_ReturnsNoImageCode() {
     // メソッドの実行
     String noImageCode = StudyUtil.getNoImageCode();
 
@@ -87,7 +87,7 @@ class StudyUtilTest {
   }
 
   @Test
-  public void getNowDate_ReturnsCurrentDate() {
+  void getNowDate_ReturnsCurrentDate() {
     // メソッドの実行前の日時
     LocalDateTime before = LocalDateTime.now();
 

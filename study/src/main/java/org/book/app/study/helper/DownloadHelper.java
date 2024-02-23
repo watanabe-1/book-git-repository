@@ -2,7 +2,6 @@ package org.book.app.study.helper;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
@@ -28,8 +27,7 @@ public class DownloadHelper {
    * @param headers ヘッダー
    * @param fileName ファイル名
    */
-  public void addContentDisposition(HttpHeaders headers, String fileName)
-      throws UnsupportedEncodingException {
+  public void addContentDisposition(HttpHeaders headers, String fileName) {
     String headerValue = buildContentDisposition(fileName, StandardCharsets.UTF_8);
     headers.add(HttpHeaders.CONTENT_DISPOSITION, headerValue);
   }
@@ -39,14 +37,13 @@ public class DownloadHelper {
    * 
    * @param response レスポンス
    * @param fileName ファイル名
-   * @param ContentType コンテンツタイプ
+   * @param contentType コンテンツタイプ
    */
   public void addContentDisposition(HttpServletResponse response, String fileName,
-      String ContentType)
-      throws UnsupportedEncodingException {
+      String contentType) {
     String headerValue = buildContentDisposition(fileName, StandardCharsets.UTF_8);
     response.setHeader(HttpHeaders.CONTENT_DISPOSITION, headerValue);
-    response.setContentType(ContentType);
+    response.setContentType(contentType);
   }
 
   /**
@@ -68,7 +65,7 @@ public class DownloadHelper {
    * @param outputStream OutputStream
    * @param sbyte ファイルデータ
    */
-  public void setFileData(OutputStream outputStream, byte sbyte[]) {
+  public void setFileData(OutputStream outputStream, byte[] sbyte) {
     for (int i = 0; i < sbyte.length; i++) {
       try {
         outputStream.write(sbyte[i]);
@@ -100,10 +97,8 @@ public class DownloadHelper {
         .header(
             HttpHeaders.CONTENT_DISPOSITION,
             buildContentDisposition(fileName, charset))
-        .body(os -> {
-          setFileData(os,
-              data.getBytes());
-        });
+        .body(os -> setFileData(os,
+            data.getBytes()));
   }
 
 }

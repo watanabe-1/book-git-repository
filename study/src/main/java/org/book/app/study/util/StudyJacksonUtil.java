@@ -15,10 +15,14 @@ import com.fasterxml.jackson.dataformat.csv.CsvGenerator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * jacksonを扱うutilクラス
  * 
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StudyJacksonUtil {
 
   /**
@@ -27,7 +31,7 @@ public class StudyJacksonUtil {
    * @param isQuote 文字列にダブルクオートをつけるか
    * @return CsvMapper
    */
-  public static <T> CsvMapper createCsvMapper(boolean isQuote) {
+  public static CsvMapper createCsvMapper(boolean isQuote) {
     CsvMapper mapper = new CsvMapper();
     mapper.findAndRegisterModules();
     mapper.setDateFormat(new StdDateFormat());
@@ -62,6 +66,7 @@ public class StudyJacksonUtil {
   }
 
   /**
+   * 対象の読み取り
    * 
    * @param mapper CsvMapper
    * @param schema createCsvSchema
@@ -99,19 +104,17 @@ public class StudyJacksonUtil {
    * objctからList形式に変換
    * 
    * @param obj 変換対象(InputStream、Reader、String型のみ)
-   * @param charsetName 文字コード
    * @param pojoType カラム情報が記載されているクラス
    * @param sep 区切り文字
    * @param isHeader ヘッダーをつけるか
    * @param isQuote 文字列にダブルクオートをつけるか
    * @return List
    */
-  public static <T> List<T> objectToListByCsvMapper(Object obj, String charsetName,
+  public static <T> List<T> objectToListByCsvMapper(Object obj,
       Class<T> pojoType, char sep, boolean isHeader, boolean isQuote) {
     CsvMapper mapper = createCsvMapper(isQuote);
     CsvSchema schema = createCsvSchema(mapper, pojoType, sep, isHeader);
 
     return readValues(obj, mapper, schema, pojoType);
   }
-
 }

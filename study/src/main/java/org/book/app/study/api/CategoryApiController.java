@@ -3,6 +3,7 @@ package org.book.app.study.api;
 import java.io.File;
 import java.util.List;
 import java.util.Objects;
+
 import org.apache.commons.io.FilenameUtils;
 import org.book.app.study.dto.list.CategoryFormList;
 import org.book.app.study.dto.ui.category.CategoryUi;
@@ -16,16 +17,16 @@ import org.book.app.study.service.CategoryService;
 import org.book.app.study.service.api.CategoryApiService;
 import org.book.app.study.util.StudyBeanUtil;
 import org.book.app.study.util.StudyUtil;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
@@ -34,7 +35,7 @@ import lombok.extern.slf4j.XSlf4j;
  * カテゴリー画面API
  *
  */
-@Controller
+@RestController
 @AllArgsConstructor
 @XSlf4j
 public class CategoryApiController extends ApiController {
@@ -64,8 +65,7 @@ public class CategoryApiController extends ApiController {
    * 
    * @return json(カテゴリーごとの家計簿情報)
    */
-  @RequestMapping(value = "/category/info", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/category/info")
   public CategoryUi getInfo() {
     return categoryApiService.getInfo();
   }
@@ -79,8 +79,7 @@ public class CategoryApiController extends ApiController {
    * @return json(空データ)
    * @throws null
    */
-  @RequestMapping(value = "/category/confirm", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/category/confirm")
   public String confirm(@ModelAttribute @Validated CategoryForm form,
       BindingResult result, ModelAndView model, HttpServletRequest request) throws BindException {
     categoryHelper.validateIfDoInsert(form, result);
@@ -98,8 +97,7 @@ public class CategoryApiController extends ApiController {
    * @param model モデル
    * @return null
    */
-  @RequestMapping(value = "/category/result", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/category/result")
   public String result(@ModelAttribute @Validated CategoryForm form,
       BindingResult result, ModelAndView model) throws BindException {
     categoryHelper.validateIfDoInsert(form, result);
@@ -149,8 +147,7 @@ public class CategoryApiController extends ApiController {
    * 
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/category/listData", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/category/listData")
   public CategoryFormList getListData() {
     return categoryHelper.getCategoryFormList();
   }
@@ -160,8 +157,7 @@ public class CategoryApiController extends ApiController {
    * 
    * @return json(画像情報一覧)
    */
-  @RequestMapping(value = "/category/imageListData", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/category/imageListData")
   public List<ImageForm> getImageList() {
     return categoryHelper.getCategoryImageList();
   }
@@ -174,8 +170,7 @@ public class CategoryApiController extends ApiController {
    * @param model モデル
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/category/listDataUpdate", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/category/listDataUpdate")
   public CategoryFormList listUpdate(
       @ModelAttribute @Validated CategoryFormList catListParam,
       BindingResult result, ModelAndView model) throws BindException {

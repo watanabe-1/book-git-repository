@@ -1,11 +1,9 @@
 package org.book.app.study.helper;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.apache.commons.io.FilenameUtils;
 import org.book.app.study.dto.data.TypeData;
@@ -55,10 +53,6 @@ public class CategoryHelper {
    * 画像 Helper
    */
   private final ImageHelper imageHelper;
-  /**
-   * カテゴリー情報保存用リスト
-   */
-  private List<Category> catList = new ArrayList<Category>();
 
   /**
    * 複数のカテゴリーをアップデート
@@ -123,12 +117,7 @@ public class CategoryHelper {
    * @param catName カテゴリーネーム
    * @return String カテゴリコード
    */
-  public String getCatCode(String catName) {
-    // まだ一回も呼ばれていない場合
-    if (catList.isEmpty()) {
-      catList = categoryService.findAll();
-    }
-
+  public String getCatCode(List<Category> catList, String catName) {
     // 突きつけ合わせ
     for (Category cat : catList) {
       if (Objects.equals(catName, cat.getCatName())) {
@@ -149,8 +138,10 @@ public class CategoryHelper {
     // 共通項目をセット
     StudyBeanUtil.setStudyEntityProperties(cat);
 
+    // リストに追加
+    catList.add(cat);
+    // dbに登録
     categoryService.saveOne(cat);
-    catList = categoryService.findAll();
 
     return catCode;
   }
@@ -163,7 +154,7 @@ public class CategoryHelper {
   public List<TypeData> getCategoryTypeDataList() {
     return categoryService.findAll().stream()
         .map(cat -> new TypeData(cat.getCatCode(), cat.getCatName()))
-        .collect(Collectors.toList());
+        .toList();
   }
 
   /**
@@ -197,7 +188,7 @@ public class CategoryHelper {
   public List<TypeData> categoryFormListToTypeDataList(List<CategoryForm> target) {
     return target.stream()
         .map(cat -> new TypeData(cat.getCatCode(), cat.getCatName()))
-        .collect(Collectors.toList());
+        .toList();
   }
 
   /**

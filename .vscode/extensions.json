@@ -17,6 +17,7 @@
     "mosapride.zenkaku",
     "mechatroner.rainbow-csv",
     "vscjava.vscode-gradle",
-    "oderwat.indent-rainbow"
+    "oderwat.indent-rainbow",
+    "sonarsource.sonarlint-vscode"
   ]
 }

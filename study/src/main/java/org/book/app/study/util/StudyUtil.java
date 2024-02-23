@@ -9,10 +9,29 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * 便利メソッドクラス
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StudyUtil {
+
+  /**
+   * 共通ユーザー
+   */
+  private static final String COMMON_USER = "common";
+
+  /**
+  * ユーザーなし
+  */
+  private static final String NO_USER = "no_user";
+
+  /**
+  * 画像なし
+  */
+  private static final String NO_IMAGE_CODE = "no_image";
 
   /**
    * ログインユーザーIdを取得する
@@ -53,7 +72,7 @@ public class StudyUtil {
    * @return String 共通ユーザーId
    */
   public static String getCommonUser() {
-    return "common";
+    return COMMON_USER;
   }
 
   /**
@@ -62,7 +81,7 @@ public class StudyUtil {
   * @return String デフォルトユーザId
   */
   public static String getNoUser() {
-    return "no_user";
+    return NO_USER;
   }
 
   /**
@@ -71,7 +90,7 @@ public class StudyUtil {
    * @return String NoImage画像コード
    */
   public static String getNoImageCode() {
-    return "no_image";
+    return NO_IMAGE_CODE;
   }
 
   /**

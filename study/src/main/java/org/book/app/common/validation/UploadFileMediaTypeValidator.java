@@ -3,7 +3,6 @@ package org.book.app.common.validation;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.http.MediaType;
@@ -60,13 +59,13 @@ public class UploadFileMediaTypeValidator
     // 引数に指定されたメディアタイプをリストに変換
     List<MediaType> mediaTypeList = Arrays.stream(mediaTypes.split(","))
         .map(MediaType::parseMediaType)
-        .collect(Collectors.toList());
+        .toList();
 
     // 引数に指定された拡張子をリストに変換
     List<String> extList = Arrays.asList(exts.split(","));
     // メディアタイプと拡張子をチェック
-    return mediaTypeList.stream().anyMatch((mType) -> mediaType.includes(mType))
-        && extList.stream().anyMatch((v) -> Objects.equals(ext.toLowerCase(), v));
+    return mediaTypeList.stream().anyMatch(mediaType::includes)
+        && extList.stream().anyMatch(v -> Objects.equals(ext.toLowerCase(), v));
   }
 
 }

@@ -6,9 +6,13 @@ import org.springframework.lang.NonNull;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * モデルのUtilクラスを作成
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StudyModelUtil {
 
   /**

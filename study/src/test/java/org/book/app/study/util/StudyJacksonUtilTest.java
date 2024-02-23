@@ -42,9 +42,9 @@ class TestPojo {
     private String column3;
 }
 
-public class StudyJacksonUtilTest {
+class StudyJacksonUtilTest {
     @Test
-    public void testCreateCsvMapper() throws Exception {
+    void testCreateCsvMapper() throws Exception {
         // テストデータの準備
         String[] testData = { "test1", "test2" };
 
@@ -70,7 +70,7 @@ public class StudyJacksonUtilTest {
     }
 
     @Test
-    public void testCreateCsvSchema() {
+    void testCreateCsvSchema() {
         CsvMapper mapper = new CsvMapper();
         mapper.registerModule(new JavaTimeModule());
         Class<TestPojo> pojoType = TestPojo.class;
@@ -88,7 +88,7 @@ public class StudyJacksonUtilTest {
     }
 
     @Test
-    public void testReadValues() throws Exception {
+    void testReadValues() throws Exception {
         CsvMapper mapper = new CsvMapper();
         mapper.registerModule(new JavaTimeModule());
         CsvSchema schema = CsvSchema.emptySchema().withHeader();
@@ -135,7 +135,7 @@ public class StudyJacksonUtilTest {
     }
 
     @Test
-    public void testReadValuesWithInvalidInput() {
+    void testReadValuesWithInvalidInput() {
         CsvMapper mapper = new CsvMapper();
         mapper.registerModule(new JavaTimeModule());
         CsvSchema schema = CsvSchema.emptySchema().withHeader();

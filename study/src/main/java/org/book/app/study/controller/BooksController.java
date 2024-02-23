@@ -5,9 +5,8 @@ import org.book.app.study.form.BooksConvertForm;
 import org.book.app.study.form.BooksForm;
 import org.book.app.study.util.StudyJsUtil;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +33,7 @@ public class BooksController {
    * @param model モデル
    * @return 画面表示用モデル
    */
-  @RequestMapping(value = "/books/input", method = RequestMethod.GET)
+  @GetMapping(value = "/books/input")
   public ModelAndView input(HttpServletRequest request, @ModelAttribute BooksForm form,
       ModelAndView model) {
     StudyJsUtil.setJsTemplate(model, "家計簿情報登録", request,
@@ -51,7 +50,7 @@ public class BooksController {
    * @param model モデル
    * @return 画面表示用モデル
    */
-  @RequestMapping(value = "/books/export", method = RequestMethod.GET)
+  @GetMapping(value = "/books/export")
   public ModelAndView export(HttpServletRequest request, @ModelAttribute BooksForm form,
       ModelAndView model) {
     StudyJsUtil.setJsTemplate(model, "家計簿情報出力", request,
@@ -68,7 +67,7 @@ public class BooksController {
    * @param model モデル
    * @return 画面表示用モデル
    */
-  @RequestMapping(value = "/books/household", method = RequestMethod.GET)
+  @GetMapping(value = "/books/household")
   public ModelAndView household(HttpServletRequest request, @ModelAttribute BooksForm form,
       ModelAndView model) {
     StudyJsUtil.setJsTemplate(model, "家計簿確認画面", request,
@@ -85,7 +84,7 @@ public class BooksController {
    * @param model モデル
    * @return 画面表示用モデル
    */
-  @RequestMapping(value = "/books/convert", method = RequestMethod.GET)
+  @GetMapping(value = "/books/convert")
   public ModelAndView convert(HttpServletRequest request, @ModelAttribute BooksConvertForm form,
       ModelAndView model) {
     StudyJsUtil.setJsTemplate(model, "家計簿変換画面", request,

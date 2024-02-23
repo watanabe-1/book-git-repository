@@ -2,6 +2,7 @@ package org.book.app.study.enums.flag;
 
 import java.util.Arrays;
 import java.util.Objects;
+
 import lombok.NonNull;
 
 /**
@@ -12,12 +13,12 @@ interface Flag {
   /**
    * フラグが立っている時の値
    */
-  public final String SET_UP_FLAG_VALUE = "1";
+  public static final String SET_UP_FLAG_VALUE = "1";
 
   /**
    * フラグが立っていない時の値
    */
-  public final String NON_SET_UP_FLAG_VALUE = "0";
+  public static final String NON_SET_UP_FLAG_VALUE = "0";
 
   /**
    * フラグの値を取得します.
@@ -39,9 +40,9 @@ interface Flag {
    * @param value 判定対象
    * @return true = 立っている flase = 立っていない
    */
-  public static Boolean isSetUp(String value) {
+  public static boolean isSetUp(String value) {
     return Objects.equals(SET_UP_FLAG_VALUE, value);
-  };
+  }
 
   /**
    * フラグが立っているか判定
@@ -50,7 +51,7 @@ interface Flag {
    * @param value 判定対象
    * @return true = 立っている flase = 立っていない
    */
-  public static Boolean isSetUp(Flag flag, String value) {
+  public static boolean isSetUp(Flag flag, String value) {
     return Objects.equals(flag.getValue(), value);
   }
 
@@ -60,7 +61,7 @@ interface Flag {
    * @param value 判定対象
    * @return true = 立っていない flase = 立っている
    */
-  public static Boolean isNonSetUp(String value) {
+  public static boolean isNonSetUp(String value) {
     return Objects.equals(NON_SET_UP_FLAG_VALUE, value);
   }
 
@@ -71,7 +72,7 @@ interface Flag {
    * @param value 判定対象
    * @return true = 立っていない flase = 立っている
    */
-  public static Boolean isNonSetUp(Flag flag, String value) {
+  public static boolean isNonSetUp(Flag flag, String value) {
     return Objects.equals(flag.getValue(), value);
   }
 

@@ -22,6 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.oracle.truffle.js.scriptengine.GraalJSScriptEngine;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
 
 /**
@@ -29,6 +31,7 @@ import lombok.extern.slf4j.XSlf4j;
  *
  */
 @XSlf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StudyJsUtil {
 
   /**
@@ -226,12 +229,10 @@ public class StudyJsUtil {
 
     // <script src= から始まるものを先頭に変更し、それ以外は昇順でソート(見栄え用)
     return ret.stream()
-        .sorted(Comparator.comparing((script) -> {
-          return script.indexOf("src=") >= 0
-              ? new StringBuffer().append("a").append(script).toString()
-              : new StringBuffer().append("z").append(script).toString();
-        }))
-        .collect(Collectors.toList());
+        .sorted(Comparator.comparing(script -> script.indexOf("src=") >= 0
+            ? new StringBuffer().append("a").append(script).toString()
+            : new StringBuffer().append("z").append(script).toString()))
+        .toList();
   }
 
   /**
@@ -253,8 +254,6 @@ public class StudyJsUtil {
    */
   private static GraalJSScriptEngine initializeEngine(HttpServletRequest request, @NonNull String scriptPath,
       ServerApi serverApi) {
-    // Source loadcompatibility = Source.create("js",
-    // "load('nashorn:mozilla_compat.js')");
     GraalJSScriptEngine engine = GraalJSScriptEngine.create(
         null,
         Context
@@ -301,6 +300,6 @@ public class StudyJsUtil {
    * @param form フォーム
    */
   public static boolean isSSR(Form form) {
-    return form != null ? !StudyStringUtil.isNullOrEmpty(form.getSsr()) : true;
+    return form != null && !StudyStringUtil.isNullOrEmpty(form.getSsr());
   }
 }

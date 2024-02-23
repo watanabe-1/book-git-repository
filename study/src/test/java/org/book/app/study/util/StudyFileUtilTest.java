@@ -3,7 +3,6 @@ package org.book.app.study.util;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -16,6 +15,8 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.core.io.ClassPathResource;
@@ -42,7 +43,7 @@ class FileRow {
     private String column3;
 }
 
-public class StudyFileUtilTest {
+class StudyFileUtilTest {
 
     private final String RESOURCE_DIR = "org/book/app/study/util/studyFileUtilTest/";
 
@@ -57,48 +58,21 @@ public class StudyFileUtilTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    public void testAddExtension_ExtensionNotPresent() {
-        String fileName = "testfile";
-        String extension = "txt";
-
-        String result = StudyFileUtil.addExtension(fileName, extension);
-
-        assertEquals("testfile.txt", result);
+    @ParameterizedTest
+    @CsvSource({
+            "testfile,txt,testfile.txt",
+            "testfile.txt,txt,testfile.txt",
+            "'',txt,.txt",
+            ",txt,"
+    })
+    void testAddExtension(String fileName, String extension, String expected) {
+        String result = fileName == null ? StudyFileUtil.addExtension(null, extension)
+                : StudyFileUtil.addExtension(fileName, extension);
+        assertEquals(expected, result);
     }
 
     @Test
-    public void testAddExtension_ExtensionAlreadyPresent() {
-        String fileName = "testfile.txt";
-        String extension = "txt";
-
-        String result = StudyFileUtil.addExtension(fileName, extension);
-
-        assertEquals("testfile.txt", result);
-    }
-
-    @Test
-    public void testAddExtension_EmptyFileName() {
-        String fileName = "";
-        String extension = "txt";
-
-        String result = StudyFileUtil.addExtension(fileName, extension);
-
-        assertEquals(".txt", result);
-    }
-
-    @Test
-    public void testAddExtension_NullFileName() {
-        String fileName = null;
-        String extension = "txt";
-
-        String result = StudyFileUtil.addExtension(fileName, extension);
-
-        assertNull(result);
-    }
-
-    @Test
-    public void testCsvFileToList_WithHeader() throws Exception {
+    void testCsvFileToList_WithHeader() throws Exception {
         // CSVファイルの読み込み
         ClassPathResource resource = new ClassPathResource(
                 RESOURCE_DIR + "csvRowWithHeader.csv");
@@ -117,7 +91,7 @@ public class StudyFileUtilTest {
     }
 
     @Test
-    public void testCsvFileToList_WithNoHeader() throws Exception {
+    void testCsvFileToList_WithNoHeader() throws Exception {
         // CSVファイルの読み込み
         ClassPathResource resource = new ClassPathResource(
                 RESOURCE_DIR + "csvRow.csv");
@@ -136,7 +110,7 @@ public class StudyFileUtilTest {
     }
 
     @Test
-    public void testTsvFileToList_WithHeader() throws Exception {
+    void testTsvFileToList_WithHeader() throws Exception {
         // TSVファイルの読み込み
         ClassPathResource resource = new ClassPathResource(
                 RESOURCE_DIR + "tsvRowWithHeader.tsv");
@@ -155,7 +129,7 @@ public class StudyFileUtilTest {
     }
 
     @Test
-    public void testTsvFileToList_WithNoHeader() throws Exception {
+    void testTsvFileToList_WithNoHeader() throws Exception {
         // TSVファイルの読み込み
         ClassPathResource resource = new ClassPathResource(
                 RESOURCE_DIR + "tsvRow.tsv");
@@ -174,7 +148,7 @@ public class StudyFileUtilTest {
     }
 
     @Test
-    public void testTsvFileToList_WithHeader_isQuote() throws Exception {
+    void testTsvFileToList_WithHeader_isQuote() throws Exception {
         // CSVファイルの読み込み
         ClassPathResource resource = new ClassPathResource(
                 RESOURCE_DIR + "csvRowWithHeader.csv");
@@ -193,7 +167,7 @@ public class StudyFileUtilTest {
     }
 
     @Test
-    public void testTsvFileToList_WithNoHeader_isNoQuote() throws Exception {
+    void testTsvFileToList_WithNoHeader_isNoQuote() throws Exception {
         // TSVファイルの読み込み
         ClassPathResource resource = new ClassPathResource(
                 RESOURCE_DIR + "tsvRow.tsv");
@@ -212,7 +186,7 @@ public class StudyFileUtilTest {
     }
 
     @Test
-    public void testDetectFileEncoding_InputStreamSource() throws IOException {
+    void testDetectFileEncoding_InputStreamSource() throws IOException {
         // UTF-8 エンコード
         ClassPathResource utf8File = new ClassPathResource(
                 RESOURCE_DIR + "charset_test_utf8.txt");
@@ -231,7 +205,7 @@ public class StudyFileUtilTest {
     }
 
     @Test
-    public void testDetectFileEncoding_File() throws IOException {
+    void testDetectFileEncoding_File() throws IOException {
         // UTF-8 エンコード
         File utf8File = new ClassPathResource(
                 RESOURCE_DIR + "charset_test_utf8.txt").getFile();
@@ -250,7 +224,7 @@ public class StudyFileUtilTest {
     }
 
     @Test
-    public void testDetectFileEncoding_InputStream() throws IOException {
+    void testDetectFileEncoding_InputStream() throws IOException {
         // UTF-8 エンコード
         ClassPathResource utf8File = new ClassPathResource(
                 RESOURCE_DIR + "charset_test_utf8.txt");
@@ -276,7 +250,7 @@ public class StudyFileUtilTest {
     }
 
     @Test
-    public void testReadClassPathFile() throws Exception {
+    void testReadClassPathFile() throws Exception {
         // テストファイルのパス
         String testFilePath = RESOURCE_DIR + "charset_test_utf8.txt";
         // 期待されるファイルの内容
@@ -290,7 +264,7 @@ public class StudyFileUtilTest {
     }
 
     @Test
-    public void testDeleteFile() throws IOException {
+    void testDeleteFile() throws IOException {
         // 一時ファイルの作成
         File tempFile = Files.createFile(tempDir.resolve("tempFile.txt")).toFile();
 

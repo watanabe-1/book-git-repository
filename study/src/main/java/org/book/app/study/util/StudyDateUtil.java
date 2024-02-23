@@ -6,10 +6,15 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * 日付けを扱うutilクラス
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StudyDateUtil {
 
   /**
@@ -60,7 +65,7 @@ public class StudyDateUtil {
   /**
   * 日付けフォーマット 年/月/日
   */
-  public static final String FMT_ONEYEAR_ONEMONTH_DAY_SLASH = "yyyy/M/d";
+  public static final String FMT_YEAR_ONEMONTH_ONEDAY_SLASH = "yyyy/M/d";
 
   /**
    * タイムゾーン 世界標準時
@@ -231,7 +236,7 @@ public class StudyDateUtil {
    * @return 年/月 文字列
    */
   public static String getYearMonth(LocalDateTime date) {
-    return LocalDateTimeToStr(date, FMT_YEAR_MONTH_SLASH);
+    return localDateTimeToStr(date, FMT_YEAR_MONTH_SLASH);
   }
 
   /**
@@ -251,7 +256,7 @@ public class StudyDateUtil {
    * @return 年/月/日 文字列
    */
   public static String getYearMonthDay(LocalDateTime date) {
-    return LocalDateTimeToStr(date, FMT_YEAR_MONTH_DAY_SLASH);
+    return localDateTimeToStr(date, FMT_YEAR_MONTH_DAY_SLASH);
   }
 
   /**
@@ -260,27 +265,21 @@ public class StudyDateUtil {
    * @param baseDate 基準となる日付
    * @param weeksToGoBack さかのぼる週数
    * @param targetMonth 検索する対象の月
-   * @return 指定された週数だけさかのぼった範囲に含まれる対象の月の年 見つからなかった場合は-1。
+   * @return 指定された週数だけさかのぼった範囲に含まれる対象の月の年 見つからなかった場合は空のOptional。
    */
-  public static int getYearOfMonthInPreviousWeeks(LocalDate baseDate, int weeksToGoBack,
+  public static Optional<Integer> getYearOfMonthInPreviousWeeks(LocalDate baseDate, int weeksToGoBack,
       int targetMonth) {
     LocalDate startDate = baseDate.minusWeeks(weeksToGoBack);
     LocalDate endDate = baseDate;
 
-    int year = startDate.getYear();
-    int month = startDate.getMonthValue();
-
     while (startDate.isBefore(endDate) || startDate.isEqual(endDate)) {
-      if (month == targetMonth) {
-        return year;
+      if (startDate.getMonthValue() == targetMonth) {
+        return Optional.of(startDate.getYear());
       }
-
       startDate = startDate.plusDays(1);
-      year = startDate.getYear();
-      month = startDate.getMonthValue();
     }
 
-    return -1; // マッチする月が見つからなかった場合は-1を返す
+    return Optional.empty(); // マッチする月が見つからなかった場合は空のOptionalを返す
   }
 
   /**
@@ -326,7 +325,7 @@ public class StudyDateUtil {
    * @param fmtPattern 変換パターン
    * @return 文字列形式の日付
    */
-  public static String LocalDateTimeToStr(LocalDateTime localDateTimeLocalDateTime, String fmtPattern) {
+  public static String localDateTimeToStr(LocalDateTime localDateTimeLocalDateTime, String fmtPattern) {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern(fmtPattern);
 
     return localDateTimeLocalDateTime.format(formatter);

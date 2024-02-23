@@ -1,9 +1,10 @@
 package org.book.app.common.validation;
 
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 /**
  * ファイルが選択されていることを検証するためのバリデーションの実装<br>
@@ -14,6 +15,7 @@ public class UploadFileRequiredValidator
 
   @Override
   public void initialize(UploadFileRequired constraint) {
+    // No initialization required for this validator
   }
 
   @Override

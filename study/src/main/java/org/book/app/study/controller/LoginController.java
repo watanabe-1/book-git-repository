@@ -1,8 +1,7 @@
 package org.book.app.study.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -18,7 +17,7 @@ public class LoginController {
    * @param model モデル
    * @return 画面表示用モデル
    */
-  @RequestMapping(value = "/login", method = RequestMethod.GET)
+  @GetMapping(value = "/login")
   public ModelAndView login(ModelAndView model) {
     model.setViewName("login");
 

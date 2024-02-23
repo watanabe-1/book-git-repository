@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,12 +19,15 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.lang.NonNull;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.XSlf4j;
 
 /**
  * ファイルを扱うutilクラス
  */
 @XSlf4j
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StudyFileUtil {
 
   /**
@@ -50,6 +54,11 @@ public class StudyFileUtil {
    * tsvのメディアタイプ
    */
   public static final String MEDIATYPE_BY_TSV = "text/tsv";
+
+  /**
+   * ファイル関係のエラーメッセージ
+   */
+  private static final String FILE_ERROR_MSG_CD = "1.01.01.1009";
 
   /**
    * 拡張子を追加
@@ -113,10 +122,10 @@ public class StudyFileUtil {
 
     try (InputStream in = inSoursc.getInputStream();
         BufferedReader br = new BufferedReader(new InputStreamReader(in, charsetName))) {
-      result = StudyJacksonUtil.objectToListByCsvMapper(br, charsetName, pojoType, sep, isHeader,
+      result = StudyJacksonUtil.objectToListByCsvMapper(br, pojoType, sep, isHeader,
           isQuote);
     } catch (IOException e) {
-      throw new BusinessException("1.01.01.1009", e.getMessage());
+      throw new BusinessException(FILE_ERROR_MSG_CD, e.getMessage());
     }
 
     return result;
@@ -134,7 +143,7 @@ public class StudyFileUtil {
     try (InputStream fis = file.getInputStream()) {
       result = detectFileEncoding(fis);
     } catch (IOException e) {
-      throw new BusinessException("1.01.01.1009", e.getMessage());
+      throw new BusinessException(FILE_ERROR_MSG_CD, e.getMessage());
     }
 
     return result;
@@ -152,7 +161,7 @@ public class StudyFileUtil {
     try (InputStream fis = new FileInputStream(file)) {
       result = detectFileEncoding(fis);
     } catch (IOException e) {
-      throw new BusinessException("1.01.01.1009", e.getMessage());
+      throw new BusinessException(FILE_ERROR_MSG_CD, e.getMessage());
     }
 
     return result;
@@ -178,7 +187,7 @@ public class StudyFileUtil {
       result = detector.getDetectedCharset();
       detector.reset();
     } catch (IOException e) {
-      throw new BusinessException("1.01.01.1009", e.getMessage());
+      throw new BusinessException(FILE_ERROR_MSG_CD, e.getMessage());
     }
 
     // 文字コード判定に失敗した場合はutf8を指定
@@ -211,7 +220,7 @@ public class StudyFileUtil {
       ret = br.lines().collect(Collectors.joining());
       log.info("", new StringBuffer().append(path).append(" file loaded."));
     } catch (IOException e) {
-      throw new BusinessException("1.01.01.1009", e.getMessage());
+      throw new BusinessException(FILE_ERROR_MSG_CD, e.getMessage());
     }
 
     return ret;
@@ -224,8 +233,11 @@ public class StudyFileUtil {
    */
   public static void deleteFile(File file) {
     if (file != null && file.exists()) {
-      file.delete();
+      try {
+        Files.delete(file.toPath());
+      } catch (IOException e) {
+        throw new BusinessException(FILE_ERROR_MSG_CD, e.getMessage());
+      }
     }
   }
-
 }

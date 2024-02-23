@@ -114,12 +114,11 @@ public class XLogger {
    * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
    */
   public void info(@NonNull String id, Supplier<Object[]> argsSupplier) {
-    if (!logger.isInfoEnabled()) {
-      return;
-    }
-    Object[] args = argsSupplier.get();
-    if (args != null) {
-      logger.info(createLogMessage(id, args));
+    if (logger.isInfoEnabled()) {
+      Object[] args = argsSupplier.get();
+      if (args != null) {
+        logger.info(createLogMessage(id, args));
+      }
     }
   }
 
@@ -145,12 +144,11 @@ public class XLogger {
    * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
   */
   public void warn(@NonNull String id, Supplier<Object[]> argsSupplier) {
-    if (!logger.isWarnEnabled()) {
-      return;
-    }
-    Object[] args = argsSupplier.get();
-    if (args != null) {
-      logger.warn(createLogMessage(id, args));
+    if (logger.isWarnEnabled()) {
+      Object[] args = argsSupplier.get();
+      if (args != null) {
+        logger.warn(createLogMessage(id, args));
+      }
     }
   }
 
@@ -176,12 +174,11 @@ public class XLogger {
    * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
   */
   public void error(@NonNull String id, Supplier<Object[]> argsSupplier) {
-    if (!logger.isErrorEnabled()) {
-      return;
-    }
-    Object[] args = argsSupplier.get();
-    if (args != null) {
-      logger.error(createLogMessage(id, args));
+    if (logger.isErrorEnabled()) {
+      Object[] args = argsSupplier.get();
+      if (args != null) {
+        logger.error(createLogMessage(id, args));
+      }
     }
   }
 
@@ -207,12 +204,11 @@ public class XLogger {
    * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
   */
   public void trace(@NonNull String id, Supplier<Object[]> argsSupplier) {
-    if (!logger.isTraceEnabled()) {
-      return;
-    }
-    Object[] args = argsSupplier.get();
-    if (args != null) {
-      logger.trace(createLogMessage(id, args));
+    if (logger.isTraceEnabled()) {
+      Object[] args = argsSupplier.get();
+      if (args != null) {
+        logger.trace(createLogMessage(id, args));
+      }
     }
   }
 
@@ -240,12 +236,11 @@ public class XLogger {
    * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
   */
   public void warn(@NonNull String id, Throwable t, Supplier<Object[]> argsSupplier) {
-    if (!logger.isWarnEnabled()) {
-      return;
-    }
-    Object[] args = argsSupplier.get();
-    if (args != null) {
-      logger.warn(createLogMessage(id, args), t);
+    if (logger.isWarnEnabled()) {
+      Object[] args = argsSupplier.get();
+      if (args != null) {
+        logger.warn(createLogMessage(id, args), t);
+      }
     }
   }
 
@@ -274,12 +269,11 @@ public class XLogger {
    * @param argsSupplier 埋め込み文字引数、ログを出力する時のみ評価 nullの時はログを出力しない
   */
   public void error(@NonNull String id, Throwable t, Supplier<Object[]> argsSupplier) {
-    if (!logger.isErrorEnabled()) {
-      return;
-    }
-    Object[] args = argsSupplier.get();
-    if (args != null) {
-      logger.error(createLogMessage(id, args), t);
+    if (logger.isErrorEnabled()) {
+      Object[] args = argsSupplier.get();
+      if (args != null) {
+        logger.error(createLogMessage(id, args), t);
+      }
     }
   }
 

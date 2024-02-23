@@ -18,7 +18,7 @@ import lombok.extern.slf4j.XSlf4j;
 @PropertySource("classpath:config/properties/logger.properties")
 public class ReauestLoggingListener implements HandlerInterceptor {
 
-    private String START_TIME = "startTime";
+    private static final String START_TIME = "startTime";
 
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request,

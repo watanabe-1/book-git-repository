@@ -1,7 +1,5 @@
 package org.book.app.study.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,9 +10,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * 文字列を扱うutilクラス
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StudyStringUtil {
 
   /**
@@ -81,7 +83,7 @@ public class StudyStringUtil {
     String baseFoot = base.substring(Math.max(0, base.length() - separatorLength));
 
     // 文字列連結用
-    StringBuffer sb = new StringBuffer(base);
+    StringBuilder sb = new StringBuilder(base);
 
     // 'base'の末尾と'add'の先頭がセパレータと一致する場合、一方のセパレータを削除
     if (baseFoot.equals(separator) && addHead.startsWith(separator)) {
@@ -114,6 +116,7 @@ public class StudyStringUtil {
     for (String add : adds) {
       result = joinBase(separator, result, add);
     }
+
     return result;
   }
 
@@ -176,6 +179,7 @@ public class StudyStringUtil {
     if (lastIndex != -1 && lastIndex + target.length() == str.length()) {
       return replaceLast(str, target, replaceMent);
     }
+
     return str;
   }
 
@@ -245,7 +249,6 @@ public class StudyStringUtil {
     }
 
     return json;
-
   }
 
   /**
@@ -338,15 +341,7 @@ public class StudyStringUtil {
 
   public static <T> List<T> strToListByCsvMapper(String str,
       Class<T> pojoType, char sep, boolean isHeader, boolean isQuote) {
-    String charsetName = "";
-
-    try (ByteArrayInputStream in = new ByteArrayInputStream(str.getBytes());) {
-      charsetName = StudyFileUtil.detectFileEncoding(in);
-    } catch (IOException e) {
-      throw new BusinessException("1.01.01.1011", e.getMessage());
-    }
-
-    return StudyJacksonUtil.objectToListByCsvMapper(str, charsetName, pojoType, sep, isHeader,
+    return StudyJacksonUtil.objectToListByCsvMapper(str, pojoType, sep, isHeader,
         isQuote);
   }
 
@@ -379,11 +374,11 @@ public class StudyStringUtil {
   /**
    * 最初の文字を小文字にしたクラス名を取得する
    * 
-   * @param Clazz クラス名取得対象クラス
+   * @param clazz クラス名取得対象クラス
    * @return 最初の文字が小文字のクラス名
    */
-  public static String getlowerCaseFirstClassName(Class<?> Clazz) {
-    return lowerCaseFirst(Clazz.getSimpleName());
+  public static String getlowerCaseFirstClassName(Class<?> clazz) {
+    return lowerCaseFirst(clazz.getSimpleName());
   }
 
   /**

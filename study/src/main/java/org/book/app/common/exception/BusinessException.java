@@ -5,7 +5,7 @@ package org.book.app.common.exception;
  */
 public class BusinessException extends RuntimeException {
     private final String messageKey;
-    private final Object[] args;
+    private final transient Object[] args;
 
     public BusinessException(String messageKey, Object... args) {
         this.messageKey = messageKey;

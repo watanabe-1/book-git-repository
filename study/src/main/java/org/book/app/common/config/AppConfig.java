@@ -69,7 +69,7 @@ public class AppConfig implements WebMvcConfigurer {
    */
   @Bean
   WebServerFactoryCustomizer<ConfigurableServletWebServerFactory> enableDefaultServlet() {
-    return (factory) -> factory.setRegisterDefaultServlet(true);
+    return factory -> factory.setRegisterDefaultServlet(true);
   }
 
   /**
@@ -91,7 +91,7 @@ public class AppConfig implements WebMvcConfigurer {
    */
   @Bean
   @NonNull
-  ReauestLoggingListener TraceReauestInterceptor() {
+  ReauestLoggingListener traceReauestInterceptor() {
     return new ReauestLoggingListener();
   }
 
@@ -101,7 +101,7 @@ public class AppConfig implements WebMvcConfigurer {
    * @return
    */
   @Bean
-  UniqueRequestIDFilter UniqueRequestIDFilter() {
+  UniqueRequestIDFilter uniqueRequestIDFilter() {
     return new UniqueRequestIDFilter();
   }
 
@@ -120,7 +120,7 @@ public class AppConfig implements WebMvcConfigurer {
    */
   @Override
   public void addInterceptors(@NonNull InterceptorRegistry registry) {
-    registry.addInterceptor(TraceReauestInterceptor()).addPathPatterns("/**")
+    registry.addInterceptor(traceReauestInterceptor()).addPathPatterns("/**")
         .excludePathPatterns("/resources/**");
   }
 

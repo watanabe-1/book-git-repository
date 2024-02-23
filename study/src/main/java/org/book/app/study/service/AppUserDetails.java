@@ -1,14 +1,17 @@
 package org.book.app.study.service;
 
-import org.springframework.security.core.authority.AuthorityUtils;
-import org.springframework.security.core.userdetails.User;
 import org.book.app.study.entity.Account;
 import org.book.app.study.enums.type.AccountType;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.User;
+
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 /**
  * ユーザ情報
  */
+@EqualsAndHashCode(callSuper = false)
 public class AppUserDetails extends User {
 
   /**

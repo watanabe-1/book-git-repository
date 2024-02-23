@@ -14,9 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import lombok.RequiredArgsConstructor;
@@ -40,19 +40,24 @@ public class AccountController {
   private final BCryptPasswordEncoder passwordEncoder;
 
   /**
+   * アトリビュート名 アカウントタイプ
+   */
+  private static final String ATTRIBUTE_NAME_ACCOUNT_TYPE_LIST = "accountTypeList";
+
+  /**
    * アカウント情報一覧.
    * 
    * @param form アクションフォーム
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/system/account", method = RequestMethod.GET)
+  @GetMapping(value = "/system/account")
   public ModelAndView index(ModelAndView model) {
     model.setViewName("account/index");
 
     // リスト設定
     model.addObject("accountList", accountService.findAll());
-    model.addObject("accountTypeList", AccountType.values());
+    model.addObject(ATTRIBUTE_NAME_ACCOUNT_TYPE_LIST, AccountType.values());
 
     return model;
   }
@@ -64,11 +69,11 @@ public class AccountController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/system/account/input", method = RequestMethod.GET)
+  @GetMapping(value = "/system/account/input")
   public ModelAndView input(@ModelAttribute AccountForm form, ModelAndView model) {
     model.setViewName("account/input");
     // リスト設定
-    model.addObject("accountTypeList", AccountType.values());
+    model.addObject(ATTRIBUTE_NAME_ACCOUNT_TYPE_LIST, AccountType.values());
 
     return model;
   }
@@ -81,7 +86,7 @@ public class AccountController {
    * @param model モデル
    * @return 入力確認画面HTML名
    */
-  @RequestMapping(value = "/system/account/confirm", method = RequestMethod.POST)
+  @PostMapping(value = "/system/account/confirm")
   public ModelAndView confirm(@ModelAttribute @Validated AccountForm form, BindingResult result,
       ModelAndView model) {
     model.setViewName("account/confirm");
@@ -93,7 +98,7 @@ public class AccountController {
     }
 
     // リスト設定
-    model.addObject("accountTypeList", AccountType.values());
+    model.addObject(ATTRIBUTE_NAME_ACCOUNT_TYPE_LIST, AccountType.values());
 
     return model;
   }
@@ -107,7 +112,7 @@ public class AccountController {
    * @param model モデル
    * @return 登録完了画面HTML名
    */
-  @RequestMapping(value = "/system/account/store", method = RequestMethod.POST)
+  @PostMapping(value = "/system/account/store")
   public ModelAndView store(@AuthenticationPrincipal AppUserDetails userDetail,
       @ModelAttribute @Validated @NonNull AccountForm form, BindingResult result,
       ModelAndView model) {

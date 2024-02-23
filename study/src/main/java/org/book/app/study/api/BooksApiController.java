@@ -28,15 +28,14 @@ import org.book.app.study.util.StudyFileUtil;
 import org.book.app.study.util.StudyStringUtil;
 import org.book.app.study.util.StudyUtil;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
@@ -46,7 +45,7 @@ import lombok.AllArgsConstructor;
  * 家計簿画面API
  *
  */
-@Controller
+@RestController
 @AllArgsConstructor
 public class BooksApiController extends ApiController {
 
@@ -80,8 +79,7 @@ public class BooksApiController extends ApiController {
    * 
    * @return json(アップロード画面情報)
    */
-  @RequestMapping(value = "/books/uploadInfo", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/books/uploadInfo")
   public BooksUi getUploadInfo() {
     return booksApiService.getUploadInfo();
   }
@@ -91,8 +89,7 @@ public class BooksApiController extends ApiController {
    * 
    * @return json(ダウンロード画面情報取得)
    */
-  @RequestMapping(value = "/books/downloadInfo", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/books/downloadInfo")
   public BooksUi getDownloadInfo() {
     return booksApiService.getDownloadInfo();
   }
@@ -102,8 +99,7 @@ public class BooksApiController extends ApiController {
    * 
    * @return json(変換画面情報)
    */
-  @RequestMapping(value = "/books/convertInfo", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/books/convertInfo")
   public BooksConvertUi getConvertInfo() {
     return booksApiService.getConvertInfo();
   }
@@ -114,8 +110,7 @@ public class BooksApiController extends ApiController {
    * @param date 日付
    * @return json(家計簿確認画面情報取得)
    */
-  @RequestMapping(value = "/books/householdInfo", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/books/householdInfo")
   public HouseholdUi getHouseholdInfo(
       @RequestParam(name = "date", required = false) LocalDate date) {
     return booksApiService.getHouseholdInfo(date);
@@ -127,8 +122,7 @@ public class BooksApiController extends ApiController {
    * @param date 日付
    * @return json(家計簿確認画面図情報取得)
    */
-  @RequestMapping(value = "/books/householdChartInfo", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/books/householdChartInfo")
   public HouseholdChartUi getHouseholdChartInfo(
       @RequestParam(name = "date", required = false) LocalDate date) {
     return booksApiService.getHouseholdChartInfo(date);
@@ -140,8 +134,7 @@ public class BooksApiController extends ApiController {
    * @param date 日付
    * @return json(家計簿確認画面カレンダー情報取得)
    */
-  @RequestMapping(value = "/books/householdCalendarInfo", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/books/householdCalendarInfo")
   public HouseholdCalendarUi getHouseholdCalendarInfo(
       @RequestParam(name = "date", required = false) LocalDate date) {
     return booksApiService.getHouseholdCalendarInfo(date);
@@ -154,8 +147,7 @@ public class BooksApiController extends ApiController {
    * @param booksType 家計簿タイプ
    * @return json(家計簿データの一覧)
    */
-  @RequestMapping(value = "/books/listData", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/books/listData")
   public BooksFormList getHouseholdListData(
       @RequestParam(name = "date", required = false) LocalDate date,
       @RequestParam(name = "booksType") String booksType) {
@@ -170,9 +162,8 @@ public class BooksApiController extends ApiController {
    * @param model モデル
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/books/listDataUpdate", method = RequestMethod.POST)
-  @ResponseBody
-  public BooksFormList listUpdate(
+  @PostMapping(value = "/books/listDataUpdate")
+  public BooksFormList listDataUpdate(
       @ModelAttribute @Validated BooksFormList booksListParam,
       BindingResult result, ModelAndView model) throws BindException {
     throwBindExceptionIfHasErrors(result);
@@ -191,8 +182,7 @@ public class BooksApiController extends ApiController {
    * @param model モデル
    * @return null
    */
-  @RequestMapping(value = "/books/result", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/books/result")
   public String result(@ModelAttribute @Validated BooksInputForm form,
       BindingResult result, ModelAndView model) throws BindException {
     throwBindExceptionIfHasErrors(result);
@@ -217,15 +207,13 @@ public class BooksApiController extends ApiController {
    * @param model モデル
    * @return null
    */
-  @RequestMapping(value = "/books/listDataPush", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/books/listDataPush")
   public BooksFormList listDataPush(@ModelAttribute @Validated BooksFormList booksListParam,
-      BindingResult result, ModelAndView model) throws BindException {
+      BindingResult result, ModelAndView model) {
     Books books = booksHelper.getDefault(booksListParam);
     booksService.saveOne(books);
 
     return getHouseholdListData(booksListParam.getDate(), booksListParam.getBooksType());
-
   }
 
   /**
@@ -235,7 +223,7 @@ public class BooksApiController extends ApiController {
    * @param model モデル
    * @return beenView名(viewパッケージ配下に定義)
    */
-  @RequestMapping(value = "/books/download", method = RequestMethod.POST)
+  @PostMapping(value = "/books/download")
   public ResponseEntity<StreamingResponseBody> download(@ModelAttribute BooksForm form) {
     List<BooksColumn> columnList = booksHelper.booksListToBooksColumnList(
         booksHelper.finByYearAndType(form.getBooksYear(), form.getBooksType()));
@@ -251,13 +239,13 @@ public class BooksApiController extends ApiController {
   }
 
   /**
-   * 家計簿ダウンロード
+   * 家計簿 ファイル変換
    * 
    * @param form 送信されたデータ
    * @param model モデル
    * @return beenView名(viewパッケージ配下に定義)
    */
-  @RequestMapping(value = "/books/convertFile", method = RequestMethod.POST)
+  @PostMapping(value = "/books/convertFile")
   public ResponseEntity<StreamingResponseBody> convertFile(@ModelAttribute BooksConvertForm form) {
     String fileNameBase = String.format("家計簿_%s_%s",
         FileType.codeOf(form.getFileType()).getName(), BooksType.EXPENSES.getName());

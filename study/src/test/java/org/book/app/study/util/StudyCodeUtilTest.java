@@ -16,12 +16,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 @SpringBootTest
-public class StudyCodeUtilTest {
+class StudyCodeUtilTest {
     @MockBean
     private CodeLookupService codeLookupService;
 
     @Test
-    public void testGetShort() {
+    void testGetShort() {
         String listName = "testList";
         String code = "testCode";
         String expectedShortValue = "expectedShort";
@@ -37,7 +37,7 @@ public class StudyCodeUtilTest {
     }
 
     @Test
-    public void testGetShorts() {
+    void testGetShorts() {
         String listName = "testList";
         List<CodeLookup> mockCodeLookups = Arrays.asList(
                 createMockCodeLookup("short1"),

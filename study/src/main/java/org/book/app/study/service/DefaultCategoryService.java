@@ -4,19 +4,20 @@ import java.util.List;
 
 import org.book.app.study.entity.DefaultCategory;
 import org.book.app.study.mapper.DefaultCategoryMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * DEFAULT_CATEGORY:デフォルトカテゴリー(家計簿につける項目ごとのデフォルトカテゴリーを設定)のserviceクラス
  */
 @Service
+@RequiredArgsConstructor
 public class DefaultCategoryService {
 
-  @Autowired
-  private DefaultCategoryMapper defaultcategoryMapper;
+  private final DefaultCategoryMapper defaultcategoryMapper;
 
   /**
    * 全検索

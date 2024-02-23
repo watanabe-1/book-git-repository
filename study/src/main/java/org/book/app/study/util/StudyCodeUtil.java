@@ -1,14 +1,20 @@
 package org.book.app.study.util;
 
 import java.util.List;
+
+import org.book.app.study.entity.CodeLookup;
 import org.book.app.study.service.CodeLookupService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * コードのUtilクラスを作成
  */
 @Component
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StudyCodeUtil {
 
   /**
@@ -22,6 +28,7 @@ public class StudyCodeUtil {
    * @param CodeLookupService コード情報 Service
    */
   @Autowired
+  @java.lang.SuppressWarnings({ "squid:S2696" })
   private void setCodeLookupService(CodeLookupService codeLookupService) {
     StudyCodeUtil.codeLookupService = codeLookupService;
   }
@@ -45,6 +52,6 @@ public class StudyCodeUtil {
    */
   public static List<String> getShorts(String listName) {
     return codeLookupService.findByListName(listName).stream()
-        .map((codelkup) -> codelkup.getShortValue()).toList();
+        .map(CodeLookup::getShortValue).toList();
   }
 }

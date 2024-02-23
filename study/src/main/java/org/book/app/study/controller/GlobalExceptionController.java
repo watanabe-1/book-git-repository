@@ -33,6 +33,46 @@ import lombok.extern.slf4j.XSlf4j;
 public class GlobalExceptionController {
 
     /**
+     * ビジネスエラー VIEW
+     */
+    private static final String BUSINESS_ERROR_VIEW_NAME = "errors/businessError";
+
+    /**
+     * JSONエラー VIEW
+     */
+    private static final String JSON_ERROR_VIEW_NAME = "errors/jsonError";
+
+    /**
+     * バリデーションエラー VIEW
+     */
+    private static final String VALIDATION_ERROR_VIEW_NAME = "errors/validationError";
+
+    /**
+     * タイプ不整合エラー VIEW
+     */
+    private static final String TYPE_MISMATCH_ERROR_VIEW_NAME = "errors/typeMismatchError";
+
+    /**
+    * ロックエラー VIEW
+    */
+    private static final String LOCKING_ERROR_VIEW_NAME = "errors/lockingError";
+
+    /**
+    * データアクセスエラー VIEW
+    */
+    private static final String DATA_ACCESS_ERROR_VIEW_NAME = "errors/dataAccessError";
+
+    /**
+    * システムエラー VIEW
+    */
+    private static final String SYSTEM_ERROR_VIEW_NAME = "errors/systemError";
+
+    /**
+     * エラー ATTRIBUTE
+     */
+    private static final String ERROR_ATTRIBUTE_NAME = "exception";
+
+    /**
      * BusinessExceptionが発生した場合のハンドリングを行う
      *
      * @param ex 発生した例外
@@ -42,8 +82,8 @@ public class GlobalExceptionController {
     @ExceptionHandler(BusinessException.class)
     public ModelAndView handleBusinessException(BusinessException ex, HttpServletRequest request) {
         log.error("e.ex.fw.8001", ex, () -> new Object[] { request.getRequestURL().toString() });
-        ModelAndView modelAndView = new ModelAndView("errors/businessError");
-        modelAndView.addObject("exception", ex);
+        ModelAndView modelAndView = new ModelAndView(BUSINESS_ERROR_VIEW_NAME);
+        modelAndView.addObject(ERROR_ATTRIBUTE_NAME, ex);
         modelAndView.setStatus(HttpStatus.CONFLICT);
 
         return modelAndView;
@@ -62,8 +102,8 @@ public class GlobalExceptionController {
     public ModelAndView handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException ex,
             HttpServletRequest request) {
         log.error("e.ex.fw.6001", ex, () -> new Object[] { request.getRequestURL().toString() });
-        ModelAndView modelAndView = new ModelAndView("errors/businessError");
-        modelAndView.addObject("exception", ex);
+        ModelAndView modelAndView = new ModelAndView(BUSINESS_ERROR_VIEW_NAME);
+        modelAndView.addObject(ERROR_ATTRIBUTE_NAME, ex);
         modelAndView.setStatus(HttpStatus.METHOD_NOT_ALLOWED);
 
         return modelAndView;
@@ -80,8 +120,8 @@ public class GlobalExceptionController {
     public ModelAndView handleHttpMediaTypeNotSupportedException(HttpMediaTypeNotSupportedException ex,
             HttpServletRequest request) {
         log.error("e.ex.fw.6003", ex, () -> new Object[] { request.getRequestURL().toString() });
-        ModelAndView modelAndView = new ModelAndView("errors/businessError");
-        modelAndView.addObject("exception", ex);
+        ModelAndView modelAndView = new ModelAndView(BUSINESS_ERROR_VIEW_NAME);
+        modelAndView.addObject(ERROR_ATTRIBUTE_NAME, ex);
         modelAndView.setStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
 
         return modelAndView;
@@ -100,7 +140,7 @@ public class GlobalExceptionController {
             HttpServletRequest request) {
         log.error("e.ex.fw.7001", ex, () -> new Object[] { request.getRequestURL().toString() });
 
-        return new ModelAndView("errors/validationError", "exception", ex);
+        return new ModelAndView(VALIDATION_ERROR_VIEW_NAME, ERROR_ATTRIBUTE_NAME, ex);
     }
 
     /**
@@ -115,7 +155,7 @@ public class GlobalExceptionController {
     public ModelAndView handleBindException(@NonNull BindException ex, HttpServletRequest request) {
         log.error("e.ex.fw.7002", ex, () -> new Object[] { request.getRequestURL().toString() });
 
-        return new ModelAndView("errors/validationError", "exception", ex);
+        return new ModelAndView(VALIDATION_ERROR_VIEW_NAME, ERROR_ATTRIBUTE_NAME, ex);
     }
 
     /**
@@ -130,7 +170,7 @@ public class GlobalExceptionController {
     public ModelAndView handleJsonParseException(@NonNull JsonParseException ex, HttpServletRequest request) {
         log.error("e.ex.fw.7003", ex, () -> new Object[] { request.getRequestURL().toString() });
 
-        return new ModelAndView("errors/jsonError", "exception", ex);
+        return new ModelAndView(JSON_ERROR_VIEW_NAME, ERROR_ATTRIBUTE_NAME, ex);
     }
 
     /**
@@ -146,7 +186,7 @@ public class GlobalExceptionController {
             HttpServletRequest request) {
         log.error("e.ex.fw.7004", ex, () -> new Object[] { request.getRequestURL().toString() });
 
-        return new ModelAndView("errors/jsonError", "exception", ex);
+        return new ModelAndView(JSON_ERROR_VIEW_NAME, ERROR_ATTRIBUTE_NAME, ex);
     }
 
     /**
@@ -161,7 +201,7 @@ public class GlobalExceptionController {
     public ModelAndView handleJsonMappingException(@NonNull JsonMappingException ex, HttpServletRequest request) {
         log.error("e.ex.fw.7005", ex, () -> new Object[] { request.getRequestURL().toString() });
 
-        return new ModelAndView("errors/jsonError", "exception", ex);
+        return new ModelAndView(JSON_ERROR_VIEW_NAME, ERROR_ATTRIBUTE_NAME, ex);
     }
 
     /**
@@ -176,7 +216,7 @@ public class GlobalExceptionController {
     public ModelAndView handleTypeMismatchException(@NonNull TypeMismatchException ex, HttpServletRequest request) {
         log.error("e.ex.fw.7006", ex, () -> new Object[] { request.getRequestURL().toString() });
 
-        return new ModelAndView("errors/typeMismatchError", "exception", ex);
+        return new ModelAndView(TYPE_MISMATCH_ERROR_VIEW_NAME, ERROR_ATTRIBUTE_NAME, ex);
     }
 
     /**
@@ -192,7 +232,7 @@ public class GlobalExceptionController {
             HttpServletRequest request) {
         log.error("e.ex.fw.8002", ex, () -> new Object[] { request.getRequestURL().toString() });
 
-        return new ModelAndView("errors/lockingError", "exception", ex);
+        return new ModelAndView(LOCKING_ERROR_VIEW_NAME, ERROR_ATTRIBUTE_NAME, ex);
     }
 
     /**
@@ -208,7 +248,7 @@ public class GlobalExceptionController {
             HttpServletRequest request) {
         log.error("e.ex.fw.8002", ex, () -> new Object[] { request.getRequestURL().toString() });
 
-        return new ModelAndView("errors/lockingError", "exception", ex);
+        return new ModelAndView(LOCKING_ERROR_VIEW_NAME, ERROR_ATTRIBUTE_NAME, ex);
     }
 
     /**
@@ -223,7 +263,7 @@ public class GlobalExceptionController {
     public ModelAndView handleDataAccessException(@NonNull DataAccessException ex, HttpServletRequest request) {
         log.error("e.ex.fw.9002", ex, () -> new Object[] { request.getRequestURL().toString() });
 
-        return new ModelAndView("errors/dataAccessError", "exception", ex);
+        return new ModelAndView(DATA_ACCESS_ERROR_VIEW_NAME, ERROR_ATTRIBUTE_NAME, ex);
     }
 
     /**
@@ -237,8 +277,8 @@ public class GlobalExceptionController {
     @ExceptionHandler(Exception.class)
     public ModelAndView handleGeneralException(Exception ex, HttpServletRequest request) {
         log.error("e.xx.fw.9001", ex, () -> new Object[] { request.getRequestURL().toString() });
-        ModelAndView modelAndView = new ModelAndView("errors/systemError");
-        modelAndView.addObject("exception", ex);
+        ModelAndView modelAndView = new ModelAndView(SYSTEM_ERROR_VIEW_NAME);
+        modelAndView.addObject(ERROR_ATTRIBUTE_NAME, ex);
         modelAndView.setStatus(HttpStatus.INTERNAL_SERVER_ERROR);
 
         return modelAndView;

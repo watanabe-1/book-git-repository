@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.servlet.ModelAndView;
 
-public class StudyModelUtilTest {
+class StudyModelUtilTest {
     @Test
-    public void testGetModelMapWithModelAndView() {
+    void testGetModelMapWithModelAndView() {
         Map<String, Object> model = new HashMap<>();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("key", "value");
@@ -24,7 +24,7 @@ public class StudyModelUtilTest {
     }
 
     @Test
-    public void testGetModelMapWithoutModelAndView() {
+    void testGetModelMapWithoutModelAndView() {
         Map<String, Object> model = new HashMap<>();
         model.put("key", "value");
 
@@ -33,7 +33,7 @@ public class StudyModelUtilTest {
     }
 
     @Test
-    public void testGetAttribute() {
+    void testGetAttribute() {
         Map<String, Object> model = new HashMap<>();
         model.put("attribute", "value");
 
@@ -45,7 +45,7 @@ public class StudyModelUtilTest {
     }
 
     @Test
-    public void testGetModelMapWithEmptyModelAndView() {
+    void testGetModelMapWithEmptyModelAndView() {
         Map<String, Object> model = new HashMap<>();
         model.put(StudyModelUtil.MODEL_KEY_MODEL_AND_VIEW, new ModelAndView());
 
@@ -54,7 +54,7 @@ public class StudyModelUtilTest {
     }
 
     @Test
-    public void testGetModelMapWithEmptyMap() {
+    void testGetModelMapWithEmptyMap() {
         Map<String, Object> model = new HashMap<>();
 
         ModelMap result = StudyModelUtil.getModelMap(model);
@@ -62,7 +62,7 @@ public class StudyModelUtilTest {
     }
 
     @Test
-    public void testGetAttributeWithModelAndView() {
+    void testGetAttributeWithModelAndView() {
         Map<String, Object> model = new HashMap<>();
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("attribute", "value");

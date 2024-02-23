@@ -9,13 +9,12 @@ import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.XSlf4j;
@@ -24,14 +23,15 @@ import lombok.extern.slf4j.XSlf4j;
  * api用コントローラー親クラス
  *
  */
-@Controller
+@RestController
 @XSlf4j
 public class ApiController {
 
   /**
-   * メッセージソース
+   * メッセージソース 親クラスのためAutowired使用
    */
   @Autowired
+  @java.lang.SuppressWarnings({ "squid:S6813" })
   protected MessageSource messageSource;
 
   /**
@@ -57,14 +57,10 @@ public class ApiController {
    */
   @ExceptionHandler(BindException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-  @ResponseBody
   public ErrorResults handleBindException(BindException e, HttpServletRequest request, @NonNull Locale locale) {
     log.error("e.ex.fw.7002", e, () -> new Object[] { request.getRequestURL().toString() });
-    // エラー情報を返却するためのJavaBeanを生成し、返却
-    ErrorResults errorResults = new ErrorResults();
-    addErrResult(e, locale, errorResults);
 
-    return errorResults;
+    return createErrResult(e, locale);
   }
 
   /**
@@ -76,13 +72,10 @@ public class ApiController {
    */
   @ExceptionHandler(BusinessException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-  @ResponseBody
   public ErrorResults handleBusinessException(BusinessException e, HttpServletRequest request, Locale locale) {
     log.error("e.ex.fw.8001", e, () -> new Object[] { request.getRequestURL().toString() });
-    ErrorResults errorResults = new ErrorResults();
-    addErrResult(e, locale, errorResults);
 
-    return errorResults;
+    return createErrResult(e, locale);
   }
 
   /**
@@ -96,15 +89,12 @@ public class ApiController {
    */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-  @ResponseBody
   public ErrorResults handleMethodArgumentNotValidException(MethodArgumentNotValidException e,
       HttpServletRequest request,
       @NonNull Locale locale) {
     log.error("e.ex.fw.7001", e, () -> new Object[] { request.getRequestURL().toString() });
-    ErrorResults errorResults = new ErrorResults();
-    addErrResult(e, locale, errorResults);
 
-    return errorResults;
+    return createErrResult(e, locale);
   }
 
   /**
@@ -119,18 +109,14 @@ public class ApiController {
    */
   @ExceptionHandler(HttpMessageNotReadableException.class)
   @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-  @ResponseBody
   public ErrorResults handleHttpMessageNotReadableException(HttpMessageNotReadableException e,
       HttpServletRequest request,
       @NonNull Locale locale) {
     final String code = "e.ex.fw.7001";
-    log.error(code, e, () -> new Object[] { request.getRequestURL().toString() });
+    final Object[] args = new Object[] { request.getRequestURL().toString() };
+    log.error(code, e, args);
 
-    ErrorResults errorResults = new ErrorResults();
-    Object[] args = new Object[] { request.getRequestURL().toString() };
-    addErrResult(e, code, args, locale, errorResults);
-
-    return errorResults;
+    return createErrResult(code, args, locale);
   }
 
   /**
@@ -140,7 +126,9 @@ public class ApiController {
    * @param locale ロケール
    * @param errorResults セット対象
    */
-  private void addErrResult(BindException e, @NonNull Locale locale, ErrorResults errorResults) {
+  private ErrorResults createErrResult(BindException e, @NonNull Locale locale) {
+    ErrorResults errorResults = new ErrorResults();
+
     e.getBindingResult().getFieldErrors().forEach(fieldError -> {
       if (fieldError == null) {
         return;
@@ -154,6 +142,7 @@ public class ApiController {
       errorResults.add(true, code, msg, fieldError.getField());
       log.trace(code, fieldError.getField());
     });
+
     e.getBindingResult().getGlobalErrors().forEach(objectError -> {
       if (objectError == null) {
         return;
@@ -167,6 +156,8 @@ public class ApiController {
       errorResults.add(true, code, msg, objectError.getObjectName());
       log.trace(code, objectError.getObjectName());
     });
+
+    return errorResults;
   }
 
   /**
@@ -174,30 +165,37 @@ public class ApiController {
    * 
    * @param e BindException
    * @param locale ロケール
-   * @param errorResults セット対象
    */
-  private void addErrResult(BusinessException e, Locale locale, ErrorResults errorResults) {
+  private ErrorResults createErrResult(BusinessException e, Locale locale) {
+    ErrorResults errorResults = new ErrorResults();
     String code = e.getMessageKey();
     if (code == null || locale == null) {
-      return;
+      return errorResults;
     }
     String msg = messageSource.getMessage(code, e.getArgs(), locale);
     errorResults.add(true, code, msg, code);
     log.trace(code, e.getArgs());
+
+    return errorResults;
   }
 
   /**
-  * BindExceptionのエラー結果をエラー保持用javabeenにセットを行う
-  * 
-  * @param e BindException
-  * @param locale ロケール
-  * @param errorResults セット対象
-  */
-  private void addErrResult(RuntimeException e, @NonNull String code, Object[] args, @NonNull Locale locale,
-      ErrorResults errorResults) {
+   * RuntimeExceptionのエラー結果をエラー保持用javabeenにセットを行う
+   * 
+   * @param e RuntimeException
+   * @param code メッセージコード
+   * @param args メッセージ埋め込み値
+   * @param locale ロケール
+   * @return
+   */
+  private ErrorResults createErrResult(@NonNull String code, Object[] args,
+      @NonNull Locale locale) {
+    ErrorResults errorResults = new ErrorResults();
     String msg = messageSource.getMessage(code, args, locale);
     errorResults.add(true, code, msg, code);
     log.trace(code, args);
+
+    return errorResults;
   }
 
 }

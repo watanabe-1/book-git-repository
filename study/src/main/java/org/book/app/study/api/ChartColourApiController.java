@@ -1,6 +1,7 @@
 package org.book.app.study.api;
 
 import java.util.List;
+
 import org.book.app.study.dto.data.BooksChartData;
 import org.book.app.study.dto.list.ChartColourFormList;
 import org.book.app.study.dto.ui.chartColour.InspectionPanelUi;
@@ -8,21 +9,21 @@ import org.book.app.study.entity.TemplateChartcolour;
 import org.book.app.study.form.TemplateChartcolourForm;
 import org.book.app.study.helper.ChartColourHelper;
 import org.book.app.study.service.api.ChartColourApiService;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
 import lombok.AllArgsConstructor;
 
 /**
  * 画像確認画面API
  *
  */
-@Controller
+@RestController
 @AllArgsConstructor
 public class ChartColourApiController extends ApiController {
 
@@ -41,8 +42,7 @@ public class ChartColourApiController extends ApiController {
    * 
    * @return json(カテゴリーごとの家計簿情報)
    */
-  @RequestMapping(value = "/chartColour/info", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/chartColour/info")
   public InspectionPanelUi getInfo() {
     return chartColourApiService.getInfo();
   }
@@ -54,14 +54,12 @@ public class ChartColourApiController extends ApiController {
    * 
    * @return json(カテゴリーの一覧)
    */
-  @RequestMapping(value = "/chartColour/listData", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/chartColour/listData")
   public ChartColourFormList getListData() {
     // ユーザーごとに設定しているテンプレートを取得
     TemplateChartcolour activeColour = chartColourHelper.getActiveChartColorTemp();
     // ログインユーザーが作成したテンプレート(共通ユーザー分も含む)を取得
-    List<TemplateChartcolour> allTempColours =
-        chartColourHelper.getLoginUsersAllTempColours(activeColour);
+    List<TemplateChartcolour> allTempColours = chartColourHelper.getLoginUsersAllTempColours(activeColour);
 
     ChartColourFormList formList = new ChartColourFormList();
     formList.setChartColourDataList(allTempColours);
@@ -75,8 +73,7 @@ public class ChartColourApiController extends ApiController {
    * @param qty 指定するデータの個数
    * @return json(カテゴリーごとの家計簿情報)
    */
-  @RequestMapping(value = "/chartColour/activeChart", method = RequestMethod.GET)
-  @ResponseBody
+  @GetMapping(value = "/chartColour/activeChart")
   public BooksChartData getChartColourByActive(
       @RequestParam(name = "qty", required = false) Integer qty) {
     return chartColourHelper.getActiveChartData(chartColourHelper.getQty(qty));
@@ -90,8 +87,7 @@ public class ChartColourApiController extends ApiController {
    * @param qty 指定するデータの個数
    * @return json(カテゴリーごとの家計簿情報)
    */
-  @RequestMapping(value = "/chartColour/confirm", method = RequestMethod.POST)
-  @ResponseBody
+  @PostMapping(value = "/chartColour/confirm")
   public BooksChartData chartColourBySeed(@ModelAttribute @Validated TemplateChartcolourForm form,
       ModelAndView model) {
     return chartColourHelper.getChartDataByCoeff(chartColourHelper.getQty(form.getQty()),

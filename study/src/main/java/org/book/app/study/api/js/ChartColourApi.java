@@ -3,6 +3,7 @@ package org.book.app.study.api.js;
 import org.book.app.study.api.ChartColourApiController;
 import org.book.app.study.util.StudyStringUtil;
 import org.springframework.stereotype.Component;
+
 import lombok.AllArgsConstructor;
 
 /**

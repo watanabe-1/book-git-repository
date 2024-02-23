@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.FieldError;
 
-public class StudyMessageUtilTest {
+class StudyMessageUtilTest {
     @Test
-    public void testAddError() {
+    void testAddError() {
         BeanPropertyBindingResult result = new BeanPropertyBindingResult(new Object(), "objectName");
         StudyMessageUtil.addError(result, "field", "error_code");
 
@@ -20,13 +20,13 @@ public class StudyMessageUtilTest {
     }
 
     @Test
-    public void testGetArrayFieldName() {
+    void testGetArrayFieldName() {
         String result = StudyMessageUtil.getArrayFieldName("arrayField", 3, "subField1", "subField2");
         assertEquals("arrayField[3].subField1.subField2", result);
     }
 
     @Test
-    public void testGetFieldName() {
+    void testGetFieldName() {
         String singleFieldResult = StudyMessageUtil.getFieldName("field1");
         assertEquals("field1", singleFieldResult);
 
@@ -38,7 +38,7 @@ public class StudyMessageUtilTest {
     }
 
     @Test
-    public void testAddErrorWithTwoParameters() {
+    void testAddErrorWithTwoParameters() {
         BeanPropertyBindingResult result = new BeanPropertyBindingResult(new Object(), "objectName");
         StudyMessageUtil.addError(result, "field", "error_code");
 
@@ -47,7 +47,7 @@ public class StudyMessageUtilTest {
     }
 
     @Test
-    public void testAddErrorWithArguments() {
+    void testAddErrorWithArguments() {
         BeanPropertyBindingResult result = new BeanPropertyBindingResult(new Object(), "objectName");
         StudyMessageUtil.addError(result, "field", "error_code", "arg1", "arg2");
 
@@ -59,7 +59,7 @@ public class StudyMessageUtilTest {
     }
 
     @Test
-    public void testAddErrorOndefMsg() {
+    void testAddErrorOndefMsg() {
         BeanPropertyBindingResult result = new BeanPropertyBindingResult(new Object(), "objectName");
         StudyMessageUtil.addErrorOnDefMsg(result, "field", "error_code", new Object[] { "arg1" }, "default message");
 

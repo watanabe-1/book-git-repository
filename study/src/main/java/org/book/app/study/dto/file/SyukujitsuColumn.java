@@ -22,7 +22,7 @@ public class SyukujitsuColumn implements Serializable {
    * 祝日フォーマットパターン
    */
   @JsonProperty("dateFormat")
-  private final String DATE_FORMAT = StudyDateUtil.FMT_ONEYEAR_ONEMONTH_DAY_SLASH;
+  private final String DATE_FORMAT = StudyDateUtil.FMT_YEAR_ONEMONTH_ONEDAY_SLASH;
 
   /**
    * 祝日<br/>

@@ -56,7 +56,7 @@
 		<file>${user.dir}${app.log.dir:-/logs}/study-books-monitoring.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${user.dir}${app.log.dir:-/logs}${app.log.bk:-/bk}/study-books-monitoring-%d{yyyyMMdd}.log.zip</fileNamePattern>
-			<!-- <maxHistory>7</maxHistory> -->
+			<!-- <maxHistory>7</maxHistory> ローテーションしたファイルをいくつ残すかを指定する。 今は削除されないようにコメントアウト -->
 		</rollingPolicy>
 		<encoder>
 			<charset>UTF-8</charset>

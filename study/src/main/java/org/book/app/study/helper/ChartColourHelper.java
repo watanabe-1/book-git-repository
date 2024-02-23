@@ -52,6 +52,11 @@ public class ChartColourHelper {
   private static final String STANDARD_DATA_LABEL = "項目";
 
   /**
+   * ランダムな数値作成用
+   */
+  private final Random rand = new Random();
+
+  /**
    * 設定されている色テンプレートを変更
    * 
    * @param templateId テンプレートid
@@ -91,7 +96,7 @@ public class ChartColourHelper {
     BooksChartData bdd = new BooksChartData();
     setDummyChartDatat(bdd, qty,
         getRgbaListWithTransparency(qty, (float) 0.5, coeffR, coeffG, coeffB),
-        getRgbaListWithTransparency(qty, (float) 1, coeffR, coeffG, coeffB));
+        getRgbaListWithTransparency(qty, 1, coeffR, coeffG, coeffB));
 
     return bdd;
   }
@@ -105,7 +110,7 @@ public class ChartColourHelper {
   public BooksChartData getActiveChartData(Integer qty) {
     BooksChartData bdd = new BooksChartData();
     setDummyChartDatat(bdd, qty, getActiveRgbaList(qty, (float) 0.5),
-        getActiveRgbaList(qty, (float) 1));
+        getActiveRgbaList(qty, 1));
 
     return bdd;
   }
@@ -196,10 +201,10 @@ public class ChartColourHelper {
    * @return List<Long> 設定されている色テンプレート
    */
   public List<Long> getDummyChartData(int qty) {
-    List<Long> dummyDataList = new ArrayList<Long>();
+    List<Long> dummyDataList = new ArrayList<>();
 
     for (int i = 0; i < qty; i++) {
-      long data = STANDARD_DATA * (i + 1);
+      long data = (long) STANDARD_DATA * (i + 1);
       dummyDataList.add(data);
     }
     // 降順に並び替え
@@ -215,10 +220,10 @@ public class ChartColourHelper {
    * @return List<String> 設定されている色テンプレート
    */
   public List<String> getDummyChartDataLable(int qty) {
-    List<String> dummyDataLabelList = new ArrayList<String>();
+    List<String> dummyDataLabelList = new ArrayList<>();
 
     for (int i = 0; i < qty; i++) {
-      StringBuffer sb = new StringBuffer();
+      StringBuilder sb = new StringBuilder();
       sb.append(STANDARD_DATA_LABEL).append(i + 1);
       dummyDataLabelList.add(sb.toString());
     }
@@ -254,7 +259,6 @@ public class ChartColourHelper {
   public List<String> getRgbaListWithTransparency(int count, float transparency, int seedCoeffR,
       int seedCoeffG, int seedCoeffB) {
     List<String> result = new ArrayList<>();
-    Random rand = new Random();
 
     if (transparency < 0 || transparency > 1) {
       throw new BusinessException("1.01.01.1002",
@@ -263,9 +267,9 @@ public class ChartColourHelper {
 
     // シード値を固定にすることによりこのメソッドの返す結果を固定にしている
     for (int i = 1; i < count + 1; i++) {
-      int r = generateRandomWithSeed(i * seedCoeffR, rand);
-      int g = generateRandomWithSeed(i * seedCoeffG, rand);
-      int b = generateRandomWithSeed(i * seedCoeffB, rand);
+      int r = generateRandomWithSeed((long) i * seedCoeffR, rand);
+      int g = generateRandomWithSeed((long) i * seedCoeffG, rand);
+      int b = generateRandomWithSeed((long) i * seedCoeffB, rand);
       result.add(String.format("rgba(%s,%s,%s,%s)", r, g, b, transparency));
     }
 
@@ -292,7 +296,6 @@ public class ChartColourHelper {
    */
   public List<TemplateChartcolour> getRandomColourSeedCoef(int maxCnt) {
     List<TemplateChartcolour> ret = new ArrayList<>();
-    Random rand = new Random();
     final int MAX_BOUND = 999999999;
 
     for (int i = 0; i < maxCnt; i++) {
@@ -331,7 +334,8 @@ public class ChartColourHelper {
    * データがない月があった場合、空のデータをセット
    * 
    * @param map セット対象のmap
-   * @return minMonth 基準となる最小月
+   * @param minMonth 基準となる最小月
+   * @return 12か月分すべてセットされたマップ
    */
   public Map<String, Long> setEntityMapByYear(Map<String, Long> map, LocalDateTime minMonth) {
     Map<String, Long> ret = new LinkedHashMap<>();

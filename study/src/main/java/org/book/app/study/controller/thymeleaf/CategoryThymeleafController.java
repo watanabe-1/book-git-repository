@@ -27,9 +27,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -73,7 +73,7 @@ public class CategoryThymeleafController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/thymeleaf/category/input", method = RequestMethod.GET)
+  @GetMapping(value = "/thymeleaf/category/input")
   public ModelAndView input(HttpServletRequest request, @ModelAttribute CategoryForm form,
       ModelAndView model) {
     model.setViewName("/category/input");
@@ -92,7 +92,7 @@ public class CategoryThymeleafController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/thymeleaf/category/confirm", method = RequestMethod.POST)
+  @PostMapping(value = "/thymeleaf/category/confirm")
   public ModelAndView confirm(HttpServletRequest request,
       @ModelAttribute @Validated CategoryForm form, BindingResult result,
       ModelAndView model) {
@@ -142,7 +142,7 @@ public class CategoryThymeleafController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/thymeleaf/category/result", method = RequestMethod.POST)
+  @PostMapping(value = "/thymeleaf/category/result")
   public ModelAndView result(HttpServletRequest request, @ModelAttribute @NonNull CategoryForm form,
       BindingResult result,
       ModelAndView model) {
@@ -178,7 +178,7 @@ public class CategoryThymeleafController {
    * @param model モデル
    * @return 入力画面HTML名
    */
-  @RequestMapping(value = "/thymeleaf/category/index", method = RequestMethod.GET)
+  @GetMapping(value = "/thymeleaf/category/index")
   public ModelAndView displayList(ModelAndView model) {
     model.setViewName("category/index");
     // 画面にセット
@@ -195,7 +195,7 @@ public class CategoryThymeleafController {
    * @param catListParam 画面送信情報
    * @return リダイレクト先
    */
-  @RequestMapping(value = "/thymeleaf/category/listUpdate", method = RequestMethod.POST)
+  @PostMapping(value = "/thymeleaf/category/listUpdate")
   public ModelAndView listUpdate(@Validated @ModelAttribute CategoryFormList catListParam,
       BindingResult result, ModelAndView model) {
     model.setViewName("redirect:/thymeleaf/category/index");

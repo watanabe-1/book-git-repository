@@ -16,8 +16,6 @@ public class CommonApiService {
    * @return 画面情報
    */
   public CommonUi getCommonInfo() {
-    CommonUi ui = new CommonUi();
-
-    return ui;
+    return new CommonUi();
   }
 }

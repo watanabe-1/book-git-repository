@@ -176,10 +176,9 @@ public class DefaultCategoryHelper {
   /**
    * 登録用デフォルトデータの作成
    * 
-   * @param form アップロードされたデータ
    * @return DefaultCategory セットされたentity
    */
-  public DefaultCategory getDefault(DefaultCategoryFormList defCatListParam) {
+  public DefaultCategory getDefault() {
     // ログインユーザー取得
     String user = StudyUtil.getLoginUser();
     // デフォルトカテゴリーマスタ変更対象
@@ -214,19 +213,22 @@ public class DefaultCategoryHelper {
    */
   public void validateIfDoInsert(DefaultCategoryFormList defCatListParam, BindingResult result) {
     List<DefaultCategoryForm> defCatDataList = defCatListParam.getDefCatDataList();
+    final String CATEGORY_NAME_DUPLICATION = "CategoryNameDuplication.message";
+    final String DEF_CAT_DATA_LIST = "defCatDataList";
+
     for (int i = 0; i < defCatDataList.size(); i++) {
       DefaultCategoryForm defCatForm = defCatDataList.get(i);
       if (defaultCategoryService.countOne(StudyUtil.getLoginUser(), defCatForm.getBooksPlace(),
           defCatForm.getBooksType(), defCatForm.getBooksMethod()) > 0) {
         StudyMessageUtil.addError(result,
-            StudyMessageUtil.getArrayFieldName("defCatDataList", i, "booksPlace"),
-            "CategoryNameDuplication.message", defCatForm.getBooksPlace());
+            StudyMessageUtil.getArrayFieldName(DEF_CAT_DATA_LIST, i, "booksPlace"),
+            CATEGORY_NAME_DUPLICATION, defCatForm.getBooksPlace());
         StudyMessageUtil.addError(result,
-            StudyMessageUtil.getArrayFieldName("defCatDataList", i, "booksType"),
-            "CategoryNameDuplication.message", defCatForm.getBooksPlace());
+            StudyMessageUtil.getArrayFieldName(DEF_CAT_DATA_LIST, i, "booksType"),
+            CATEGORY_NAME_DUPLICATION, defCatForm.getBooksPlace());
         StudyMessageUtil.addError(result,
-            StudyMessageUtil.getArrayFieldName("defCatDataList", i, "booksMethod"),
-            "CategoryNameDuplication.message", defCatForm.getBooksPlace());
+            StudyMessageUtil.getArrayFieldName(DEF_CAT_DATA_LIST, i, "booksMethod"),
+            CATEGORY_NAME_DUPLICATION, defCatForm.getBooksPlace());
       }
     }
   }

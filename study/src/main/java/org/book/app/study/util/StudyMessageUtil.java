@@ -4,10 +4,14 @@ import org.springframework.lang.NonNull;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * メッセージ用utilクラス
  *
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StudyMessageUtil {
 
   private static final String SEPARATOR_BY_BINDERROR_FIELD = ".";
@@ -40,7 +44,7 @@ public class StudyMessageUtil {
    * @return フィールド名
    */
   public static String getFieldName(String... fieldNames) {
-    StringBuffer sb = new StringBuffer();
+    StringBuilder sb = new StringBuilder();
     for (String fieldName : fieldNames) {
       sb.append(fieldName).append(SEPARATOR_BY_BINDERROR_FIELD);
     }

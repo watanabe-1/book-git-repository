@@ -2,20 +2,21 @@ package org.book.app.study.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.book.app.study.entity.CodeList;
 import org.book.app.study.mapper.CodeListMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
 
 /**
  * CODE_LIST:コードリスト(コード定義テーブル(ヘッダー))のserviceクラス
  */
 @Service
+@RequiredArgsConstructor
 public class CodeListService {
 
-  @Autowired
-  private CodeListMapper codelistMapper;
+  private final CodeListMapper codelistMapper;
 
   /**
    * 全検索
@@ -97,4 +98,3 @@ public class CodeListService {
   }
 
 }
-

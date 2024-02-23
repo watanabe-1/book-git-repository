@@ -6,16 +6,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import org.book.app.common.exception.BusinessException;
 import org.book.app.study.entity.Entity;
 import org.springframework.beans.BeanUtils;
 import org.springframework.lang.NonNull;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * java beanのUtilクラスを作成
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class StudyBeanUtil {
 
   /**
@@ -67,9 +70,7 @@ public class StudyBeanUtil {
    * @param target セット対象
    */
   public static void setStudyEntityListPropertiesNull(List<? extends Entity> targetList) {
-    targetList.forEach((form) -> {
-      StudyBeanUtil.setStudyEntityPropertiesNull(form);
-    });
+    targetList.forEach(StudyBeanUtil::setStudyEntityPropertiesNull);
   }
 
   /**
@@ -151,7 +152,7 @@ public class StudyBeanUtil {
               ? customeMapping.apply(sourceBean)
               : StudyBeanUtil.createInstanceFromBean(sourceBean, targetClass);
         })
-        .collect(Collectors.toList());
+        .toList();
   }
 
 }

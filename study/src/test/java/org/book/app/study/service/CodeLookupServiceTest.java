@@ -17,7 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-public class CodeLookupServiceTest {
+class CodeLookupServiceTest {
 
     @Mock
     private CodeLookupMapper codeLookupMapper;
@@ -26,12 +26,12 @@ public class CodeLookupServiceTest {
     private CodeLookupService codeLookupService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testFindOne() {
+    void testFindOne() {
         String listName = "testList";
         String code = "testCode";
         CodeLookup mockCodeLookup = new CodeLookup(); // 適切なプロパティを設定
@@ -45,7 +45,7 @@ public class CodeLookupServiceTest {
     }
 
     @Test
-    public void testFindAll() {
+    void testFindAll() {
         // モックデータの準備
         CodeLookup codeLookup1 = new CodeLookup(); // 適切なプロパティを設定
         CodeLookup codeLookup2 = new CodeLookup(); // 適切なプロパティを設定
@@ -64,7 +64,7 @@ public class CodeLookupServiceTest {
     }
 
     @Test
-    public void testSaveBulk() {
+    void testSaveBulk() {
         List<CodeLookup> codeLookups = Arrays.asList(new CodeLookup(), new CodeLookup());
         when(codeLookupMapper.saveBulk(codeLookups)).thenReturn(codeLookups.size());
 
@@ -75,7 +75,7 @@ public class CodeLookupServiceTest {
     }
 
     @Test
-    public void testSaveOne() {
+    void testSaveOne() {
         CodeLookup codeLookup = new CodeLookup();
         when(codeLookupMapper.saveOne(codeLookup)).thenReturn(1);
 
@@ -86,7 +86,7 @@ public class CodeLookupServiceTest {
     }
 
     @Test
-    public void testUpdateAll() {
+    void testUpdateAll() {
         CodeLookup codeLookup = new CodeLookup();
         when(codeLookupMapper.updateAll(codeLookup)).thenReturn(1);
 
@@ -97,7 +97,7 @@ public class CodeLookupServiceTest {
     }
 
     @Test
-    public void testUpdateOne() {
+    void testUpdateOne() {
         CodeLookup codeLookup = new CodeLookup();
         String listName = "testList";
         String code = "testCode";
@@ -110,7 +110,7 @@ public class CodeLookupServiceTest {
     }
 
     @Test
-    public void testDeleteAll() {
+    void testDeleteAll() {
         when(codeLookupMapper.deleteAll()).thenReturn(1);
 
         int result = codeLookupService.deleteAll();
@@ -120,7 +120,7 @@ public class CodeLookupServiceTest {
     }
 
     @Test
-    public void testDeleteOne() {
+    void testDeleteOne() {
         String listName = "testList";
         String code = "testCode";
         when(codeLookupMapper.deleteOne(listName, code)).thenReturn(1);
@@ -132,7 +132,7 @@ public class CodeLookupServiceTest {
     }
 
     @Test
-    public void testFindByListName() {
+    void testFindByListName() {
         String listName = "testList";
         List<CodeLookup> mockCodeLookups = Arrays.asList(new CodeLookup(), new CodeLookup());
         when(codeLookupMapper.findByListName(listName)).thenReturn(mockCodeLookups);

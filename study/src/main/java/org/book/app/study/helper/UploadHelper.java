@@ -100,14 +100,14 @@ public class UploadHelper {
    * @param uploadDirPath 保管ディレクトリパス
    * @param baseNameCode 新ファイル名のベースとなるコード
    * @param imgId 画像ID
-   * @param ImgExt 画像拡張子
+   * @param imgExt 画像拡張子
    * @param ingType 画像タイプ
    * @return String 発番した画像ID
    */
-  public void saveImageFile(String uploadDirPath, String baseNameCode, String imgId, String ImgExt,
+  public void saveImageFile(String uploadDirPath, String baseNameCode, String imgId, String imgExt,
       String ingType) {
     String uploadIconDir = StudyStringUtil.replaceFirstOneLeft(uploadDirPath, "/", "");
-    String newImgName = String.format("%s_%s_%s.%s", baseNameCode, uploadIconDir, imgId, ImgExt);
+    String newImgName = String.format("%s_%s_%s.%s", baseNameCode, uploadIconDir, imgId, imgExt);
 
     // 仮保存していた画像を本保存
     String newImgFilePath = moveTemporaryFileToImagesFolder(newImgName, imgId, uploadIconDir);
@@ -126,8 +126,6 @@ public class UploadHelper {
       // dbのimagesテーブルに登録
       imageService.saveOne(img);
     } catch (DuplicateKeyException e) {
-      // result.addError(new FieldError(result.getObjectName(), "imgId",
-      // "採番された画像IDは既に登録されています。"));
       throw new BusinessException("1.01.01.1005", e.getMessage());
     }
   }

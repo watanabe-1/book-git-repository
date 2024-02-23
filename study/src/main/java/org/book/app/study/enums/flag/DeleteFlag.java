@@ -1,6 +1,7 @@
 package org.book.app.study.enums.flag;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NonNull;
@@ -32,7 +33,7 @@ public enum DeleteFlag implements Flag {
    * 
    * @return true = 立っている flase = 立っていない
    */
-  public static Boolean isDelete(String value) {
+  public static boolean isDelete(String value) {
     return Flag.isSetUp(value);
   }
 
@@ -41,7 +42,7 @@ public enum DeleteFlag implements Flag {
    * 
    * @return true = 立っていない flase = 立っている
    */
-  public static Boolean isNonDelete(String value) {
+  public static boolean isNonDelete(String value) {
     return Flag.isNonSetUp(value);
   }
 
